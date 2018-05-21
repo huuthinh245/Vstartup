@@ -6,13 +6,17 @@ const strings = new LocalizedStrings({
     name: 'name',
     mail: 'mail',
     phone: 'phone number',
-    contactWith: 'Contact with agency'
+    contactWith: 'Contact with agency',
+    allProject: 'All project',
+    sendInfo: 'send information'
   },
   vni: {
     name: 'họ và tên',
     mail: 'mail',
     phone: 'số điện thoại',
-    contactWith: 'Liên lạc với nhà môi giới'
+    contactWith: 'Liên lạc với nhà môi giới',
+    allProject: 'tất cả dự án',
+    sendInfo: 'gửi thông tin'
   },
 
 });

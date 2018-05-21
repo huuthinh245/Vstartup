@@ -46,9 +46,9 @@
     /**
      * The base URL against which to resolve every API call's (relative) path.
      * @type {String}
-     * @default https://rems.dfm-engineering.com/api/v1
+     * @default http://rems.dfm-engineering.com/api/v1
      */
-    this.basePath = 'https://rems.dfm-engineering.com/api/v1'.replace(/\/+$/, '');
+    this.basePath = 'http://rems.dfm-engineering.com/api/v1'.replace(/\/+$/, '');
 
     /**
      * The authentication methods to be included for all API calls.

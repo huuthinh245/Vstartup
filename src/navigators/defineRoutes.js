@@ -7,3 +7,5 @@ export const forgot = 'SC_FORGOT';
 export const agencyDetail = 'SC_AGENCY_DETAIL';
 export const projectDetail = 'SC_PROJECT_DETAIL';
 export const realtyDetail = 'SC_REALTY_DETAIL';
+export const listAgency = 'SC_LIST_AGENCY';
+export const filterProject = 'SC_FILTER_PROJECT';

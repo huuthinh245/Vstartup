@@ -12,7 +12,8 @@ import MenuTab from '../routes/MenuTab';
 import ProjectDetail from '../components/ProjectDetail';
 import RealtyDetail from '../components/RealtyDetail';
 import AgencyDetail from '../components/AgencyDetail';
-
+import ListAgency from '../components/tabs/ListAgency';
+import FilterProject from '../components/tabs/FilterProject';
 import Register from '../components/authorization/register';
 import Forgot from '../components/authorization/Forgot';
 
@@ -58,11 +59,14 @@ const stackConfig = {
   [routes.tabs]: { screen: Tabs },
   [routes.projectDetail]: { screen: ProjectDetail },
   [routes.agencyDetail]: { screen: AgencyDetail },
-  [routes.realtyDetail]: { screen: RealtyDetail }
+  [routes.realtyDetail]: { screen: RealtyDetail },
+  [routes.listAgency]: { screen: ListAgency },
+  [routes.filterProject]: { screen: FilterProject }
 };
 
 const navConfig = {
-  navigationOptions: { header: null }
+  navigationOptions: { header: null },
+  initialRouteName: routes.filterProject
 };
 
 const Main = createStackNavigator(stackConfig, navConfig);
