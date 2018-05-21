@@ -1,0 +1,61 @@
+{
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "plugins": [
+        "react",
+        "jsx-a11y",
+        "import"
+    ],
+    "rules": {
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx"
+                ]
+            }
+        ],
+        "arrow-body-style": 0,
+        "no-use-before-define": 0,
+        "eol-last": 0,
+        "no-shadow": 0,
+        "react/no-multi-comp": 0,
+        "no-underscore-dangle": 0,
+        "no-undef": 0,
+        "react/prop-types": 0,
+        "comma-dangle": 0,
+        "function-paren-newline": 0,
+        "import/prefer-default-export": 0,
+        "arrow-parens": 0,
+        "no-trailing-spaces": 0,
+        "no-case-declarations": 0,
+        "object-curly-newline": 0,
+        "no-empty": 0,
+        "guard-for-in": 0,
+        "no-restricted-syntax": 0,
+        "no-loop-func": 0,
+        "keyword-spacing": 0,
+        "react/prefer-stateless-function": 0,
+        "camelcase": 0,
+        "no-param-reassign": 0,
+        "no-mixed-operators": 0,
+        "react/jsx-pascal-case": [
+            0,
+            {
+                "allowAllCaps": true,
+                "ignore": true
+            }
+        ],
+        "react/jsx-no-bind": [
+            0,
+            {
+                "ignoreRefs": 0,
+                "allowArrowFunctions": 0,
+                "allowFunctions": 0,
+                "allowBind": 0
+            }
+        ]
+    }
+  }
+  

@@ -1,0 +1,471 @@
+# RemsApi.RealtyApi
+
+All URIs are relative to *https://rems.dfm-engineering.com/api/v1*
+
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**deleteFavorite**](RealtyApi.md#deleteFavorite) | **DELETE** /realty/favorite/{realty_id} | 
+[**deleteKeyword**](RealtyApi.md#deleteKeyword) | **DELETE** /realty/keyword/{id} | 
+[**listFavorite**](RealtyApi.md#listFavorite) | **GET** /realty/favorite | 
+[**listKeyword**](RealtyApi.md#listKeyword) | **GET** /realty/keyword | 
+[**listRealty**](RealtyApi.md#listRealty) | **GET** /realty | 
+[**mapRealty**](RealtyApi.md#mapRealty) | **GET** /realty/map | 
+[**postFavorite**](RealtyApi.md#postFavorite) | **POST** /realty/favorite | 
+[**postRealty**](RealtyApi.md#postRealty) | **POST** /realty | 
+[**viewRealty**](RealtyApi.md#viewRealty) | **GET** /realty/{id} | 
+
+
+<a name="deleteFavorite"></a>
+# **deleteFavorite**
+> GenericSuscess deleteFavorite(realtyId)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+var defaultClient = RemsApi.ApiClient.instance;
+
+// Configure API key authorization: Bearer
+var Bearer = defaultClient.authentications['Bearer'];
+Bearer.apiKey = 'YOUR API KEY';
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.apiKeyPrefix = 'Token';
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var realtyId = 56; // Number | 
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.deleteFavorite(realtyId, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **realtyId** | **Number**|  | 
+
+### Return type
+
+[**GenericSuscess**](GenericSuscess.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+<a name="deleteKeyword"></a>
+# **deleteKeyword**
+> GenericSuscess deleteKeyword(id)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+var defaultClient = RemsApi.ApiClient.instance;
+
+// Configure API key authorization: Bearer
+var Bearer = defaultClient.authentications['Bearer'];
+Bearer.apiKey = 'YOUR API KEY';
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.apiKeyPrefix = 'Token';
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var id = 56; // Number | 
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.deleteKeyword(id, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **Number**|  | 
+
+### Return type
+
+[**GenericSuscess**](GenericSuscess.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+<a name="listFavorite"></a>
+# **listFavorite**
+> [RealtyList] listFavorite(opts)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+var defaultClient = RemsApi.ApiClient.instance;
+
+// Configure API key authorization: Bearer
+var Bearer = defaultClient.authentications['Bearer'];
+Bearer.apiKey = 'YOUR API KEY';
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.apiKeyPrefix = 'Token';
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var opts = { 
+  'page': 56, // Number | 
+  'sort': "sort_example" // String | 
+};
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.listFavorite(opts, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **page** | **Number**|  | [optional] 
+ **sort** | **String**|  | [optional] 
+
+### Return type
+
+[**[RealtyList]**](RealtyList.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="listKeyword"></a>
+# **listKeyword**
+> [RealtyKeyword] listKeyword()
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+var defaultClient = RemsApi.ApiClient.instance;
+
+// Configure API key authorization: Bearer
+var Bearer = defaultClient.authentications['Bearer'];
+Bearer.apiKey = 'YOUR API KEY';
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.apiKeyPrefix = 'Token';
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.listKeyword(callback);
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**[RealtyKeyword]**](RealtyKeyword.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="listRealty"></a>
+# **listRealty**
+> [RealtyList] listRealty(opts)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var opts = { 
+  'page': 56, // Number | 
+  'keyword': 56, // Number | 
+  'method': 56, // Number | 
+  'type': 56, // Number | 
+  'authorId': 56 // Number | 
+};
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.listRealty(opts, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **page** | **Number**|  | [optional] 
+ **keyword** | **Number**|  | [optional] 
+ **method** | **Number**|  | [optional] 
+ **type** | **Number**|  | [optional] 
+ **authorId** | **Number**|  | [optional] 
+
+### Return type
+
+[**[RealtyList]**](RealtyList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="mapRealty"></a>
+# **mapRealty**
+> [RealtyMap] mapRealty(opts)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var opts = { 
+  'page': 56, // Number | 
+  'lat': 8.14, // Number | 
+  'lng': 8.14, // Number | 
+  'price': 8.14, // Number | 
+  'type': 8.14 // Number | 
+};
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.mapRealty(opts, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **page** | **Number**|  | [optional] 
+ **lat** | **Number**|  | [optional] 
+ **lng** | **Number**|  | [optional] 
+ **price** | **Number**|  | [optional] 
+ **type** | **Number**|  | [optional] 
+
+### Return type
+
+[**[RealtyMap]**](RealtyMap.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="postFavorite"></a>
+# **postFavorite**
+> RealtyList postFavorite(realtyId)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+var defaultClient = RemsApi.ApiClient.instance;
+
+// Configure API key authorization: Bearer
+var Bearer = defaultClient.authentications['Bearer'];
+Bearer.apiKey = 'YOUR API KEY';
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.apiKeyPrefix = 'Token';
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var realtyId = 56; // Number | 
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.postFavorite(realtyId, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **realtyId** | **Number**|  | 
+
+### Return type
+
+[**RealtyList**](RealtyList.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+<a name="postRealty"></a>
+# **postRealty**
+> Realty postRealty(opts)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+var defaultClient = RemsApi.ApiClient.instance;
+
+// Configure API key authorization: Bearer
+var Bearer = defaultClient.authentications['Bearer'];
+Bearer.apiKey = 'YOUR API KEY';
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.apiKeyPrefix = 'Token';
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var opts = { 
+  'body': new RemsApi.Realty() // Realty | 
+};
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.postRealty(opts, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**Realty**](Realty.md)|  | [optional] 
+
+### Return type
+
+[**Realty**](Realty.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="viewRealty"></a>
+# **viewRealty**
+> Realty viewRealty(id)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var id = 56; // Number | 
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.viewRealty(id, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **Number**|  | 
+
+### Return type
+
+[**Realty**](Realty.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+

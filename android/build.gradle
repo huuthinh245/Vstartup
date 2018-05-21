@@ -1,0 +1,31 @@
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.google.gms:google-services:3.0.0'
+    }
+}
+
+
+allprojects {
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven { url "$rootDir/../node_modules/react-native/android" }
+        google()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+ext {
+    compileSdkVersion   = 26
+    targetSdkVersion    = 26
+    buildToolsVersion   = "26.0.2"
+    supportLibVersion   = "26.1.0"
+    googlePlayServicesVersion = "11.8.0"
+    androidMapsUtilsVersion = "0.5+"
+}

@@ -1,0 +1,9 @@
+export const splashScreen = 'SC_SPLASH_SCREEN';
+export const tabs = 'SC_TABS';
+export const main = 'SC_MAIN';
+export const mainWithModal = 'SC_MAIN_WITH_MODAL';
+export const register = 'SC_REGISTER';
+export const forgot = 'SC_FORGOT';
+export const agencyDetail = 'SC_AGENCY_DETAIL';
+export const projectDetail = 'SC_PROJECT_DETAIL';
+export const realtyDetail = 'SC_REALTY_DETAIL';
