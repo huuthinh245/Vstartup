@@ -125,26 +125,30 @@ class RealtyDetail extends Component {
             />
             <FeatherIcons name="share-2" style={styles.socialButton} color={_colors.mainColor} />
           </View>
-          <Text style={styles.address}>{realty.address}</Text>
+          <Text style={styles.colorGray}>{realty.address}</Text>
           <View style={styles.infoWrapper}>
             <View style={styles.info}>
-              <Text style={styles.fontBold}>{realty.bedroom}</Text>
-              <Text>{pluralNoun(realty.bedroom, strings.bedroom)}</Text>
+              <Text style={[styles.infoText, styles.fontBold]}>{realty.bedroom}</Text>
+              <Text style={[styles.infoText, styles.color4]}>
+                {pluralNoun(realty.bedroom, strings.bedroom)}
+              </Text>
             </View>
             <View style={styles.info}>
-              <Text style={styles.fontBold}>{realty.bathroom}</Text>
-              <Text>{pluralNoun(realty.bathroom, strings.bathroom)}</Text>
+              <Text style={[styles.infoText, styles.fontBold]}>{realty.bathroom}</Text>
+              <Text style={[styles.infoText, styles.color4]}>
+                {pluralNoun(realty.bathroom, strings.bathroom)}
+              </Text>
             </View>
             <View style={[styles.info, styles.noBorderRight]}>
-              <Text style={styles.fontBold}>
+              <Text style={[styles.infoText, styles.fontBold]}>
                 {realty.area}
-                <Text style={styles.fontNormal}> m²</Text>
+                <Text style={[styles.infoText, styles.fontNormal]}> m²</Text>
               </Text>
-              <Text>{strings.area}</Text>
+              <Text style={[styles.infoText, styles.color4]}>{strings.area}</Text>
             </View>
           </View>
           <View style={styles.priceWrapper}>
-            <Text style={[styles.fontTitle, styles.fontBold]}>{realty.method}</Text>
+            <Text style={[styles.priceMethod, styles.color4]}>{realty.method}</Text>
             <Text style={styles.price}>
               {realty.price} {realty.price_unit}
             </Text>
@@ -254,8 +258,8 @@ class RealtyDetail extends Component {
   };
 
   _renderHeader = (section, index, isActive) => {
-    const plus = isActive ? 8 : 4;
-    const size = responsiveFontSize(_dims.defaultFontTitle + plus);
+    const plus = isActive ? 6 : 2;
+    const size = responsiveFontSize(_dims.defaultFontSize + plus);
     return (
       <View style={styles.header}>
         <Text style={[styles.headerText, isActive && { fontWeight: 'bold' }]}>{section.title}</Text>
@@ -278,7 +282,11 @@ class RealtyDetail extends Component {
     if (i === 0) {
       return (
         <View style={styles.content}>
-          <Text style={{ textAlign: 'center' }}>{section.content || _content}</Text>
+          {section.content ? (
+            <Text style={styles.colorGray}>{section.content}</Text>
+          ) : (
+            <Text style={[styles.colorGray, { textAlign: 'center' }]}>{_content}</Text>
+          )}
         </View>
       );
     }
@@ -286,7 +294,7 @@ class RealtyDetail extends Component {
       if (section.content.length === 0) {
         return (
           <View style={styles.content}>
-            <Text style={{ textAlign: 'center' }}>{_content}</Text>
+            <Text style={[styles.colorGray, { textAlign: 'center' }]}>{_content}</Text>
           </View>
         );
       }
@@ -295,7 +303,7 @@ class RealtyDetail extends Component {
           <FlatList
             data={section.content}
             renderItem={({ item }) => (
-              <Text style={{ paddingVertical: _dims.defaultPadding * 2 }}>{item}</Text>
+              <Text style={{ paddingVertical: _dims.defaultPadding * 2 }}>{item.name}</Text>
             )}
             keyExtractor={() => `${Math.random()}`}
             ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'silver' }} />}
@@ -319,7 +327,11 @@ class RealtyDetail extends Component {
     }
     return (
       <View style={styles.content}>
-        <Text style={{ textAlign: 'center' }}>{section.content || _content}</Text>
+        {section.content ? (
+          <Text style={styles.colorGray}>{section.content}</Text>
+        ) : (
+          <Text style={[styles.colorGray, { textAlign: 'center' }]}>{_content}</Text>
+        )}
       </View>
     );
   };
@@ -333,7 +345,7 @@ class RealtyDetail extends Component {
     const realty = this.props.realtyDetail.data[params.data.id];
 
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header navigation={this.props.navigation} title={params.data.title} />
         <KeyboardAwareScrollView
           style={{ flex: 1 }}

@@ -27,6 +27,9 @@ const loginEpic = actions$ =>
       ApiClient.instance.authentications.Bearer.apiKeyPrefix = 'Bearer';
       ApiClient.instance.authentications.Bearer.apiKey = resp.body.token;
       AsyncStorage.setItem('token', resp.body.token);
+      if (action.payload.callback) {
+        action.payload.callback();
+      }
       return { type: LOGIN_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);

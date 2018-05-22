@@ -4,14 +4,11 @@ import { connect } from 'react-redux';
 
 import Login from '../components/authorization/login';
 import HistoryAuth from '../components/tabs/HistoryAuth';
-import Header from '../navigators/headers/CommonHeader';
-import headerStrings from '../localization/header';
 
 class HistoryTab extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <Header outer title={headerStrings.historyTitle} />
         {this.props.auth.user.id ? <HistoryAuth {...this.props} /> : <Login {...this.props} />}
       </View>
     );

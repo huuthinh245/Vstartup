@@ -29,8 +29,9 @@ export const realtyDetailReducer = handleActions(
     [GET_REALTY_DETAIL_SUCCESS]: (state, { payload }) => {
       if (!state.data[payload.id]) {
         state.data[payload.id] = payload;
+      } else {
+        Object.assign(state.data, { [payload.id]: payload });
       }
-      Object.assign(state.data, { [payload.id]: payload });
       return Object.assign({}, state, { fetching: false });
     },
     [LIKE_REALTY]: (state, { payload }) => {

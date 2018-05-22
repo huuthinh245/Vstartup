@@ -6,6 +6,7 @@ import { authReducer } from './auth/reducer';
 import { AppNavigator } from '../navigators/Root';
 import { listRealtyReducer } from './listRealty/reducer';
 import { realtyDetailReducer } from './realtyDetail/reducer';
+import { listKeywordReducer } from './listKeyword/reducer';
 
 const navReducer = createNavigationReducer(AppNavigator);
 
@@ -14,5 +15,6 @@ export const reducers = combineReducers({
   form: formReducer,
   auth: authReducer,
   listRealty: listRealtyReducer,
-  realtyDetail: realtyDetailReducer
+  realtyDetail: realtyDetailReducer,
+  listKeyword: listKeywordReducer
 });

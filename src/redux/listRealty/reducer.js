@@ -35,6 +35,8 @@ export const listRealtyReducer = handleActions(
         const index = arr.findIndex(i => i.id === item.id);
         if (index === -1) {
           arr.splice(0, 0, item);
+        } else {
+          Object.assign(arr[index], item);
         }
       });
       return Object.assign({}, state, { fetching: false, refreshing: false, data: arr });

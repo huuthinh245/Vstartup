@@ -76,9 +76,13 @@ class Login extends Component {
       });
       this.password.focus();
     } else {
+      const callback = this.props.navigation.state.params
+        ? () => this.props.navigation.goBack()
+        : null;
       loginAction({
         email: this.state.email,
-        password: this.state.password
+        password: this.state.password,
+        callback
       });
     }
   };

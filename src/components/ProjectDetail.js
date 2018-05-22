@@ -14,6 +14,9 @@ import strings from '../localization/projectDetail';
 import Header from '../navigators/headers/CommonHeader';
 import { _alert } from '../utils/alert';
 
+const buttonColor = '#f1f9ff';
+const priceColor = '#ff9240';
+
 export const ENTRIES1 = [
   {
     title: 'Beautiful and dramatic Antelope Canyon',
@@ -345,6 +348,9 @@ export const styles = StyleSheet.create({
   fontNormal: {
     fontWeight: 'normal'
   },
+  color4: {
+    color: '#444'
+  },
   fab: {
     position: 'absolute',
     flexDirection: 'row',
@@ -374,14 +380,13 @@ export const styles = StyleSheet.create({
   title: {
     flex: 1,
     fontWeight: 'bold',
-    fontSize: responsiveFontSize(_dims.defaultFontTitle + 4)
+    fontSize: responsiveFontSize(_dims.defaultFontTitle + 2)
   },
-  address: {
-    fontSize: responsiveFontSize(_dims.defaultFontTitle),
-    marginTop: responsiveWidth(5)
+  colorGray: {
+    color: '#777'
   },
   socialButton: {
-    fontSize: responsiveFontSize(_dims.defaultFontTitle + 6),
+    fontSize: responsiveFontSize(_dims.defaultFontTitle + 3),
     padding: 5,
     marginLeft: 5
   },
@@ -397,24 +402,32 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  infoText: {
+    fontSize: responsiveFontSize(_dims.defaultFontSubTitle)
+  },
   noBorderRight: {
     borderRightWidth: 0
   },
   priceWrapper: {
     alignSelf: 'center',
-    padding: responsiveWidth(5),
-    marginVertical: responsiveWidth(5),
+    paddingHorizontal: responsiveWidth(5),
+    paddingVertical: responsiveWidth(2),
+    marginTop: responsiveWidth(5),
+    marginBottom: responsiveWidth(2),
     minWidth: responsiveWidth(50),
-    backgroundColor: 'lightblue',
+    backgroundColor: buttonColor,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center'
   },
   price: {
-    color: 'orange',
-    fontSize: responsiveFontSize(_dims.defaultFontTitle + 10),
+    color: priceColor,
+    fontSize: responsiveFontSize(_dims.defaultFontTitle + 4),
     marginTop: responsiveWidth(2),
     fontWeight: 'bold'
+  },
+  priceMethod: {
+    fontSize: responsiveFontSize(_dims.defaultFontTitle)
   },
   container: {
     flex: 1,
@@ -423,13 +436,11 @@ export const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    backgroundColor: 'lightblue',
+    backgroundColor: buttonColor,
     padding: 20
   },
   headerText: {
     flex: 1,
-    textAlign: 'center',
-    fontSize: responsiveFontSize(_dims.defaultFontTitle),
     color: _colors.mainColor
   },
   headerIcon: {
@@ -473,10 +484,10 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   contact: {
-    fontSize: responsiveFontSize(_dims.defaultFontTitle),
     fontWeight: 'bold',
     marginHorizontal: _dims.defaultPadding,
-    marginTop: _dims.defaultPadding * 2
+    marginTop: _dims.defaultPadding * 2,
+    color: _colors.mainColor
   },
   userContact: {
     flexDirection: 'row',
@@ -492,7 +503,7 @@ export const styles = StyleSheet.create({
   callWrapper: {
     width: responsiveWidth(16),
     height: responsiveWidth(16),
-    borderColor: _colors.mainColor,
+    borderColor: '#3bcce1',
     borderWidth: 1,
     borderRadius: responsiveWidth(16) / 2,
     alignItems: 'center',
@@ -526,7 +537,7 @@ export const styles = StyleSheet.create({
     padding: 20,
     minWidth: responsiveWidth(50),
     alignSelf: 'center',
-    backgroundColor: _colors.mainColor,
+    backgroundColor: '#3bcce1',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 3,

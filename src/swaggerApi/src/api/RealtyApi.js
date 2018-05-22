@@ -181,7 +181,7 @@
         '/realty/favorite', 'GET',
         pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
-      );
+      ); 
     }
 
     /**

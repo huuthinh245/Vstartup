@@ -8,7 +8,9 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    alignContent: 'center'
+    alignContent: 'center',
+    borderBottomWidth: 0.5,
+    borderColor: 'silver'
   },
   searchBarInputWrapper: {
     backgroundColor: 'transparent',

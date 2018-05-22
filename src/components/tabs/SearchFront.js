@@ -15,7 +15,7 @@ class SearchFront extends React.Component {
       this.props.navigation.navigate(routes.login, { modal: true });
       return;
     }
-    if (!this.props.realtyDetail.postingFavorite) {
+    if (!this.props.listRealty.postingFavorite) {
       if (realty.is_favorite) {
         unlikeRealtyAction(realty);
       } else {
@@ -37,15 +37,13 @@ class SearchFront extends React.Component {
   };
 
   render() {
+    const { listRealty } = this.props;
     return (
       <View style={{ flex: 1 }}>
-        {this.props.listRealty.fetching && <Spin />}
+        {listRealty.fetching && <Spin />}
         <FlatList
-          style={{
-            flex: 1,
-            marginHorizontal: _dims.defaultPadding
-          }}
-          data={this.props.listRealty.data}
+          style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
+          data={listRealty.data}
           renderItem={this._renderItem}
           keyExtractor={item => `${item.id}`}
           ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
@@ -54,7 +52,7 @@ class SearchFront extends React.Component {
           onMomentumScrollBegin={() => {
             this.onEndReachedCalledDuringMomentum = false;
           }}
-          refreshing={this.props.listRealty.refreshing}
+          refreshing={listRealty.refreshing}
           onEndReachedThreshold={0}
           onRefresh={this._onRefresh}
           onEndReached={this._onLoadMore}
