@@ -6,17 +6,13 @@ import {
   TextInput,
   Image,
   KeyboardAvoidingView,
-  StyleSheet,
-  AsyncStorage
+  StyleSheet
 } from 'react-native';
 import { connect } from 'react-redux';
 
 import strings from '../../../localization/authorization';
 import { EMAIL_REGEX } from '../../../utils/validation';
 import alertStrings from '../../../localization/alert';
-import { authApi } from '../../../utils/api';
-import { SAVE_AUTH } from '../../../redux/auth/reducer';
-import { ApiClient } from '../../../swaggerApi/src';
 import {
   _colors,
   _dims,
@@ -29,7 +25,10 @@ import * as routes from '../../../navigators/defineRoutes';
 import { _requestFB } from './facebook';
 import Overlay from '../../common/Overlay';
 import { _setupGoogleSignin, _signInGoogle, _signOutGoogle } from './google';
-import { getConnectionInfo } from '../../../utils/checkNetInfo';
+import Header from '../../../navigators/headers/CommonHeader';
+import headerStrings from '../../../localization/header';
+import { loginAction, socialAction } from '../../../redux/auth/actions';
+import emitter from '../../../emitter';
 
 const logo = require('../../../assets/images/logo.png');
 const background = require('../../../assets/images/Loading.png');
@@ -42,7 +41,6 @@ class Login extends Component {
     this.state = {
       email: 'admin@admin.com',
       password: '123',
-      fetching: false,
       googleUser: null
     };
   }
@@ -64,65 +62,29 @@ class Login extends Component {
 
   _signIn = async () => {
     if (!EMAIL_REGEX.test(this.state.email)) {
-      _alert(alertStrings.warning, alertStrings.emailInvalid, [
-        {
-          text: alertStrings.ok,
-          onPress: () => this.email.focus()
-        }
-      ]);
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.emailInvalid
+      });
+      this.email.focus();
     } else if (this.state.password.length < 1) {
-      _alert(alertStrings.warning, alertStrings.passwordTooShort, [
-        {
-          text: alertStrings.ok,
-          onPress: () => this.password.focus()
-        }
-      ]);
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.passwordTooShort
+      });
+      this.password.focus();
     } else {
-      const login = () => {
-        this.setState({ fetching: true });
-        authApi.login(
-          {
-            email: this.state.email,
-            password: this.state.password
-          },
-          (error, data, response) => {
-            console.log(response, error.message, error.code);
-            this.setState({ fetching: false });
-            if (error) {
-              _alert(alertStrings.error, response.body.message);
-            } else {
-              // add Authorization to header
-              ApiClient.instance.authentications.Bearer.apiKeyPrefix = 'Bearer';
-              ApiClient.instance.authentications.Bearer.apiKey = data.token;
-              this.props.dispatch({ type: SAVE_AUTH, payload: data.user });
-              AsyncStorage.setItem('token', data.token);
-            }
-          }
-        );
-      };
-
-      getConnectionInfo(login);
+      loginAction({
+        email: this.state.email,
+        password: this.state.password
+      });
     }
   };
 
-  _registerSocial = opts => {
-    this.setState({ fetching: true });
-    authApi.registerSocial(opts, (error, data, response) => {
-      this.setState({ fetching: false });
-      if (error) {
-        _alert(alertStrings.error, response.body.message);
-      } else {
-        // add Authorization to header
-        ApiClient.instance.authentications.Bearer.apiKeyPrefix = 'Bearer';
-        ApiClient.instance.authentications.Bearer.apiKey = data.token;
-        this.props.dispatch({ type: SAVE_AUTH, payload: data.user });
-        AsyncStorage.setItem('token', data.token);
-      }
-    });
-  };
-
   _handleGoogle = () => {
-    if (!this.state.googleUser) {
+    const callback = () => {
       _signInGoogle(user => {
         this.setState({ googleUser: user });
         const opts = {
@@ -134,102 +96,108 @@ class Login extends Component {
             photo: user.photo
           }
         };
-        this._registerSocial(opts);
+        socialAction(opts);
       });
+    };
+
+    if (this.state.googleUser) {
+      _signOutGoogle(callback);
     } else {
-      const user = this.state.googleUser;
-      const opts = {
-        body: {
-          provider: 'google',
-          provider_id: user.id,
-          name: user.name,
-          email: user.email,
-          photo: user.photo
-        }
-      };
-      this._registerSocial(opts);
+      callback();
     }
   };
 
   render() {
-    const isFetching = this.state.fetching;
     return (
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
-        <Overlay visible={isFetching} />
-        <Image style={styles.bg} resizeMode="cover" source={background} />
-        <View style={styles.logoContainer}>
-          <Image resizeMode="cover" source={logo} style={styles.logo} />
-        </View>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            ref={email => {
-              this.email = email;
+      <View style={{ flex: 1 }}>
+        {this.props.navigation.state.params && (
+          <Header
+            title={headerStrings.loginScreen}
+            modal
+            onRightPress={() => this.props.navigation.goBack()}
+            containerStyle={{
+              borderBottomWidth: 0.5,
+              borderColor: 'silver'
             }}
-            value={this.state.email}
-            placeholder={strings.email}
-            onChangeText={email => this.setState({ email })}
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-            clearButtonMode="always"
           />
-        </View>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            ref={password => {
-              this.password = password;
-            }}
-            value={this.state.password}
-            placeholder={strings.password}
-            secureTextEntry
-            onChangeText={password => this.setState({ password })}
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-        </View>
+        )}
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
+          {this.props.auth.fetching && <Overlay />}
+          <Image style={styles.bg} resizeMode="cover" source={background} />
+          <View style={styles.logoContainer}>
+            <Image resizeMode="cover" source={logo} style={styles.logo} />
+          </View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              ref={email => {
+                this.email = email;
+              }}
+              value={this.state.email}
+              placeholder={strings.email}
+              onChangeText={email => this.setState({ email })}
+              style={styles.input}
+              autoCapitalize="none"
+              autoCorrect={false}
+              clearButtonMode="always"
+            />
+          </View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              ref={password => {
+                this.password = password;
+              }}
+              value={this.state.password}
+              placeholder={strings.password}
+              secureTextEntry
+              onChangeText={password => this.setState({ password })}
+              style={styles.input}
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+          </View>
 
-        <TouchableOpacity onPress={this._signIn} style={styles.inputWrapper}>
-          <Text style={[styles.input, styles.requestButtonText, { color: _colors.mainColor }]}>
-            {strings.sendRequest}
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={this._signIn} style={styles.inputWrapper}>
+            <Text style={[styles.input, styles.requestButtonText, { color: _colors.mainColor }]}>
+              {strings.sendRequest}
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={this._signOut} style={styles.inputWrapper}>
-          <Text style={[styles.input, styles.requestButtonText, { color: _colors.mainColor }]}>
-            Logout
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={this._signOut} style={styles.inputWrapper}>
+            <Text style={[styles.input, styles.requestButtonText, { color: _colors.mainColor }]}>
+              Logout
+            </Text>
+          </TouchableOpacity>
 
-        <View style={styles.controlWrapper}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate(routes.forgot)}>
-            <Text style={styles.controlText}>{strings.forgot}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate(routes.register)}>
-            <Text style={styles.controlText}>{strings.register}</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.controlWrapper}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate(routes.forgot)}>
+              <Text style={styles.controlText}>{strings.forgot}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate(routes.register)}>
+              <Text style={styles.controlText}>{strings.register}</Text>
+            </TouchableOpacity>
+          </View>
 
-        <View style={[styles.controlWrapper, styles.center]}>
-          <TouchableOpacity
-            style={styles.social}
-            onPress={() => _requestFB(opts => this._registerSocial(opts))}
-          >
-            <Image source={facebook} style={styles.socialImage} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={this._handleGoogle}
-            style={[styles.social, styles.socialRight]}
-          >
-            <Image source={google} style={styles.socialImage} />
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+          <View style={[styles.controlWrapper, styles.center]}>
+            <TouchableOpacity
+              style={styles.social}
+              onPress={() => _requestFB(opts => this._registerSocial(opts))}
+            >
+              <Image source={facebook} style={styles.socialImage} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={this._handleGoogle}
+              style={[styles.social, styles.socialRight]}
+            >
+              <Image source={google} style={styles.socialImage} />
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </View>
     );
   }
 }
 
-export default connect()(Login);
+export default connect(state => ({ auth: state.auth }))(Login);
 
 export const styles = StyleSheet.create({
   wrapper: {
@@ -327,6 +295,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   hoishiInput: {
-    flex: 1
+    flex: 1,
+    paddingLeft: _dims.defaultPadding
   }
 });

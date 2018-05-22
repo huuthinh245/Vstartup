@@ -7,13 +7,6 @@ import RealtyItem from '../RealtyItem';
 import { _dims } from '../../utils/constants';
 import * as routes from '../../navigators/defineRoutes';
 import Spin from '../common/Spinner';
-import {
-  GET_LIST_FAVORITE_SUCCESS,
-  REFRESH_LIST_FAVORITE_SUCCESS
-} from '../../redux/listFavorite/reducer';
-
-import { realtyApi } from '../../utils/api';
-import alertStrings from '../../localization/alert';
 
 class FavoriteAuth extends React.Component {
   constructor(props) {
@@ -22,21 +15,6 @@ class FavoriteAuth extends React.Component {
       refreshing: false,
       loading: true
     };
-  }
-
-  componentDidMount() {
-    const callback = (error, data, response) => {
-      this.setState({ loading: false });
-      if (error) {
-        _alert(alertStrings.error, response.body.message);
-      } else {
-        this.props.dispatch({
-          type: GET_LIST_FAVORITE_SUCCESS,
-          payload: data
-        });
-      }
-    };
-    realtyApi.listFavorite({ page: 1 }, callback);
   }
 
   _renderItem = ({ item }) => {
@@ -58,7 +36,7 @@ class FavoriteAuth extends React.Component {
             flex: 1,
             marginHorizontal: _dims.defaultPadding
           }}
-          data={this.props.listFavorite}
+          data={this.props.listRealty}
           renderItem={this._renderItem}
           keyExtractor={item => `${Math.random()}`}
           ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
@@ -77,4 +55,4 @@ class FavoriteAuth extends React.Component {
   }
 }
 
-export default connect(state => ({ listFavorite: state.listFavorite }))(FavoriteAuth);
+export default connect(state => ({ listRealty: state.listRealty }))(FavoriteAuth);

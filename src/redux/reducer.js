@@ -4,7 +4,6 @@ import { reducer as formReducer } from 'redux-form';
 
 import { authReducer } from './auth/reducer';
 import { AppNavigator } from '../navigators/Root';
-import { listFavoriteReducer } from './listFavorite/reducer';
 import { listRealtyReducer } from './listRealty/reducer';
 import { realtyDetailReducer } from './realtyDetail/reducer';
 
@@ -14,7 +13,6 @@ export const reducers = combineReducers({
   nav: navReducer,
   form: formReducer,
   auth: authReducer,
-  listFavorite: listFavoriteReducer,
   listRealty: listRealtyReducer,
   realtyDetail: realtyDetailReducer
 });

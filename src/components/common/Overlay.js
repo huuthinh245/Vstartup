@@ -21,7 +21,7 @@ export default class Overlay extends React.Component {
   };
   render() {
     return (
-      <View style={{ zIndex: Number.MAX_SAFE_INTEGER, backgroundColor: 'red', flex: 1 }}>
+      <View style={{ zIndex: Number.MAX_SAFE_INTEGER }}>
         {this.props.visible && (
           <View
             style={{

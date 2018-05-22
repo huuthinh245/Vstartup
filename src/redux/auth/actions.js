@@ -1,46 +1,37 @@
-import 'rxjs';
-import { makeFetchAction } from 'redux-api-call';
-import { API_AUTH } from '../../utils/api';
+import { store } from '../../app';
 
+export const LOGIN = 'LOGIN';
+export const FORGOT = 'FORGOT';
 export const REGISTER = 'REGISTER';
-export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
-export const GET_AUTH_TOKEN = 'GET_AUTH_TOKEN';
-export const GET_SOCIAL_TOKEN = 'GET_SOCIAL_TOKEN';
+export const SOCIAL = 'SOCIAL';
 
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const FORGOT_SUCCESS = 'FORGOT_SUCCESS';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-export const FORGOT_PASSWORD_SUCCESS = 'FORGOT_PASSWORD_SUCCESS';
-export const GET_AUTH_TOKEN_SUCCESS = 'GET_AUTH_TOKEN_SUCCESS';
-export const GET_SOCIAL_TOKEN_SUCCESS = 'GET_SOCIAL_TOKEN_SUCCESS';
+export const SOCIAL_SUCCESS = 'SOCIAL_SUCCESS';
 
-export const REGISTER_FAIL = 'REGISTER_FAIL';
-export const FORGOT_PASSWORD_FAIL = 'FORGOT_PASSWORD_FAIL';
-export const GET_AUTH_TOKEN_FAIL = 'GET_AUTH_TOKEN_FAIL';
-export const GET_SOCIAL_TOKEN_FAIL = 'GET_SOCIAL_TOKEN_FAIL';
+export const AUTH_FAILURE = 'AUTH_FAILURE';
 
-export const {
-  actionCreator: registerAction,
-  isFetchingSelector: isRegisteringSelector,
-  dataSelector: dataRegisterSelector,
-  errorSelector: errorRegisterSelector
-} = makeFetchAction(REGISTER, obj => {
-  return {
-    endpoint: API_AUTH.register,
-    headers: setDefaultHeader,
-    method: 'GET',
-    body: JSON.stringify(obj)
-  };
-});
+export const loginAction = payload =>
+  store.dispatch({
+    type: LOGIN,
+    payload
+  });
 
-export const {
-  actionCreator: loginAction,
-  isFetchingSelector: isLoggingInSelector,
-  dataSelector: dataLoginSelector,
-  errorSelector: errorLoginSelector
-} = makeFetchAction(GET_AUTH_TOKEN, obj => {
-  return {
-    endpoint: API_AUTH.login,
-    headers: setDefaultHeader,
-    method: 'GET',
-    body: JSON.stringify(obj)
-  };
-});
+export const forgotAction = payload =>
+  store.dispatch({
+    type: FORGOT,
+    payload
+  });
+
+export const registerAction = payload =>
+  store.dispatch({
+    type: REGISTER,
+    payload
+  });
+
+export const socialAction = payload =>
+  store.dispatch({
+    type: SOCIAL,
+    payload
+  });

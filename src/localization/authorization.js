@@ -10,7 +10,8 @@ const strings = new LocalizedStrings({
     phone: 'Phone',
     address: 'Address',
     forgot: 'Forgot password',
-    register: 'Register account'
+    register: 'Register account',
+    name: 'Name'
   },
   vni: {
     email: 'Email',
@@ -20,8 +21,9 @@ const strings = new LocalizedStrings({
     phone: 'Phone',
     address: 'Address',
     forgot: 'Forgot password',
-    register: 'Register account'
-  },
+    register: 'Register account',
+    name: 'Họ tên'
+  }
 });
 
 setLanguage(strings);

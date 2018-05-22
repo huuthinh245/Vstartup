@@ -1,6 +1,6 @@
 # RemsApi.ProjectApi
 
-All URIs are relative to *https://rems.dfm-engineering.com/api/v1*
+All URIs are relative to *http://rems.dfm-engineering.com/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import Spin from '../common/Spinner';
 
@@ -7,18 +7,22 @@ import Separator from '../flatlistHelpers/Separator';
 import RealtyItem from '../RealtyItem';
 import { _dims, json, LIMIT_SERVICES } from '../../utils/constants';
 import * as routes from '../../navigators/defineRoutes';
+import { likeRealtyAction, unlikeRealtyAction } from '../../redux/realtyDetail/actions';
 
 class SearchFront extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      page: 0
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
-  }
+  _likeRealty = async realty => {
+    if (!this.props.auth.user.id) {
+      this.props.navigation.navigate(routes.login, { modal: true });
+      return;
+    }
+    if (!this.props.realtyDetail.postingFavorite) {
+      if (realty.is_favorite) {
+        unlikeRealtyAction(realty);
+      } else {
+        likeRealtyAction(realty);
+      }
+    }
+  };
 
   _renderItem = ({ item }) => {
     return (
@@ -27,6 +31,7 @@ class SearchFront extends React.Component {
         {...this.props}
         showPin={item.id % 2 === 0 && { color: 'gold' }}
         onPress={() => this.props.navigation.navigate(routes.realtyDetail, { data: item })}
+        onLikeRealty={() => this._likeRealty(item)}
       />
     );
   };
@@ -34,7 +39,7 @@ class SearchFront extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        {this.props.listRealty.loading && <Spin />}
+        {this.props.listRealty.fetching && <Spin />}
         <FlatList
           style={{
             flex: 1,
@@ -58,4 +63,4 @@ class SearchFront extends React.Component {
     );
   }
 }
-export default connect(state => ({ listRealty: state.listRealty }))(SearchFront);
+export default connect(state => ({ listRealty: state.listRealty, auth: state.auth }))(SearchFront);

@@ -50,10 +50,10 @@
   }
 
   describe('RealtyApi', function() {
-    describe('agencyRealty', function() {
-      it('should call agencyRealty successfully', function(done) {
-        //uncomment below and update the code to test agencyRealty
-        //instance.agencyRealty(function(error) {
+    describe('deleteFavorite', function() {
+      it('should call deleteFavorite successfully', function(done) {
+        //uncomment below and update the code to test deleteFavorite
+        //instance.deleteFavorite(function(error) {
         //  if (error) throw error;
         //expect().to.be();
         //});

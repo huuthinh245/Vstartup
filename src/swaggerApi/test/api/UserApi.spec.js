@@ -60,6 +60,26 @@
         done();
       });
     });
+    describe('getUser', function() {
+      it('should call getUser successfully', function(done) {
+        //uncomment below and update the code to test getUser
+        //instance.getUser(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
+    describe('me', function() {
+      it('should call me successfully', function(done) {
+        //uncomment below and update the code to test me
+        //instance.me(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
     describe('uploadAvatar', function() {
       it('should call uploadAvatar successfully', function(done) {
         //uncomment below and update the code to test uploadAvatar

@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, findNodeHandle } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { connect } from 'react-redux';
 
 import emitter from '../../../emitter';
 import strings from '../../../localization/authorization';
 import { styles } from '../login';
+import Spin from '../../common/Spinner';
 import { EMAIL_REGEX } from '../../../utils/validation';
 import alertStrings from '../../../localization/alert';
-import _alert from '../../../utils/alert';
-import { _dims, _colors } from '../../../utils/constants';
+import { _dims } from '../../../utils/constants';
+import { registerAction } from '../../../redux/auth/actions';
 
-export default class CustomerRegister extends Component {
+class CustomerRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: '',
       email: '',
       password: '',
       rePassword: ''
@@ -22,9 +25,16 @@ export default class CustomerRegister extends Component {
   }
 
   componentDidMount() {
-    this.event = emitter.addListener('registerAccount', index => {
-      if (!index || index.i === 0) {
-        const callback = () => alert('validate');
+    this.event = emitter.addListener('registerAccount', obj => {
+      if (!obj.index || obj.index.i === 0) {
+        const opts = {
+          body: {
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password
+          }
+        };
+        const callback = () => registerAction(opts);
         this._validate(callback);
       }
     });
@@ -35,27 +45,34 @@ export default class CustomerRegister extends Component {
   }
 
   _validate = callback => {
-    if (!EMAIL_REGEX.test(this.state.email)) {
-      _alert(alertStrings.warning, alertStrings.emailInvalid, [
-        {
-          text: alertStrings.ok,
-          onPress: () => this.email.focus()
-        }
-      ]);
+    if (!this.state.name) {
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.nameEmpty
+      });
+      this.name.focus();
+    } else if (!EMAIL_REGEX.test(this.state.email)) {
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.emailInvalid
+      });
+      this.email.focus();
     } else if (this.state.password.length < 6) {
-      _alert(alertStrings.warning, alertStrings.passwordTooShort, [
-        {
-          text: alertStrings.ok,
-          onPress: () => this.password.focus()
-        }
-      ]);
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.passwordTooShort
+      });
+      this.password.focus();
     } else if (this.state.password !== this.state.rePassword) {
-      _alert(alertStrings.warning, alertStrings.passwordNotTheSame, [
-        {
-          text: alertStrings.ok,
-          onPress: () => this.rePassword.focus()
-        }
-      ]);
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.passwordNotTheSame
+      });
+      this.rePassword.focus();
     } else {
       callback();
     }
@@ -71,6 +88,26 @@ export default class CustomerRegister extends Component {
           this.scroll = o;
         }}
       >
+        {this.props.auth.fetching && <Spin />}
+        <View style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}>
+          <Ionicons name="ios-contact" style={styles.hoishiIcon} />
+          <TextInput
+            ref={name => {
+              this.name = name;
+            }}
+            style={styles.hoishiInput}
+            placeholder={strings.name}
+            onChangeText={name => this.setState({ name })}
+            returnKeyType="next"
+            autoCapitalize="none"
+            autoCorrect={false}
+            clearButtonMode="always"
+            onFocus={event => {
+              this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
+            }}
+          />
+        </View>
+
         <View style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}>
           <Ionicons name="ios-mail" style={styles.hoishiIcon} />
           <TextInput
@@ -85,11 +122,14 @@ export default class CustomerRegister extends Component {
             autoCapitalize="none"
             autoCorrect={false}
             clearButtonMode="always"
+            onFocus={event => {
+              this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
+            }}
           />
         </View>
 
         <View style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}>
-          <Ionicons name="ios-key" style={styles.hoishiIcon} />
+          <Ionicons name="ios-lock" style={styles.hoishiIcon} />
           <TextInput
             ref={password => {
               this.password = password;
@@ -102,11 +142,14 @@ export default class CustomerRegister extends Component {
             secureTextEntry
             autoCapitalize="none"
             autoCorrect={false}
+            onFocus={event => {
+              this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
+            }}
           />
         </View>
 
         <View style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}>
-          <Ionicons name="ios-key" style={styles.hoishiIcon} />
+          <Ionicons name="ios-lock" style={styles.hoishiIcon} />
           <TextInput
             ref={rePassword => {
               this.rePassword = rePassword;
@@ -119,9 +162,14 @@ export default class CustomerRegister extends Component {
             secureTextEntry
             autoCapitalize="none"
             autoCorrect={false}
+            onFocus={event => {
+              this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
+            }}
           />
         </View>
       </KeyboardAwareScrollView>
     );
   }
 }
+
+export default connect(state => ({ auth: state.auth }))(CustomerRegister);

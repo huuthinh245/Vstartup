@@ -27,9 +27,12 @@ export const _dims = {
   defaultFontSize: 16,
   defaultFontInput: 18,
   defaultFontTitle: 20,
-  defaultFontSubTitle: 14
+  defaultFontSubTitle: 14,
+  indicator: responsiveFontSize(22)
 };
 
 export const json = obj => JSON.stringify(obj);
 
 export const LIMIT_SERVICES = 10;
+
+export const pluralNoun = (number, noun) => (number <= 1 ? noun : `${noun}s`);

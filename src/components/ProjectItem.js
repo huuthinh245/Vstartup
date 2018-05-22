@@ -25,7 +25,6 @@ export default class ProjectItem extends React.Component {
       <TouchableOpacity
         style={styles.wrapper}
         onLongPress={this.props.onLongPress}
-        onPress={this.props.onPress}
         activeOpacity={0.8}
       >
         {this.props.selected && (
@@ -49,6 +48,7 @@ export default class ProjectItem extends React.Component {
             name={`md-heart${data.is_favorite === 1 ? '' : '-outline'}`}
           />
         </View>
+        <TouchableOpacity style={styles.touch} onPress={this.props.onPress} activeOpacity={1} />
         <View style={styles.infoWrapper}>
           <View style={{ flexDirection: 'row' }}>
             {this.props.showPin && (
@@ -93,11 +93,14 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     color: 'red'
   },
+  touch: {
+    height: responsiveHeight(10)
+  },
   infoWrapper: {
     backgroundColor: _colors.overlay,
-    marginTop: responsiveHeight(10),
     width: '100%',
     padding: 10,
+    marginTop: responsiveHeight(10),
     borderBottomLeftRadius: borderRadius,
     borderBottomRightRadius: borderRadius
   },

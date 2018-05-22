@@ -13,9 +13,9 @@ const strings = new LocalizedStrings({
     phone: 'Phone',
     submit: 'Send information',
     contactAgency: 'Contact Agency',
-    bedroom: 'Bed room',
-    bathroom: 'Bath room',
-    area: 'Area'
+    bedroom: 'bedroom',
+    bathroom: 'bathroom',
+    area: 'area'
   },
   vni: {
     describe: 'Mô tả',
@@ -28,9 +28,9 @@ const strings = new LocalizedStrings({
     phone: 'Số điện thoại',
     submit: 'Gửi thông tin',
     contactAgency: 'Liên hệ nhà môi giới',
-    bedroom: 'Phòng ngủ',
-    bathroom: 'Phòng tắm',
-    area: 'Diện tích'
+    bedroom: 'phòng ngủ',
+    bathroom: 'phòng tắm',
+    area: 'diện tích'
   }
 });
 

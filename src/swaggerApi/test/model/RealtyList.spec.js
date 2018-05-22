@@ -110,6 +110,12 @@
       //expect(instance).to.be();
     });
 
+    it('should have the property isFavorite (base name: "is_favorite")', function() {
+      // uncomment below and update the code to test the property isFavorite
+      //var instane = new RemsApi.RealtyList();
+      //expect(instance).to.be();
+    });
+
   });
 
 }));

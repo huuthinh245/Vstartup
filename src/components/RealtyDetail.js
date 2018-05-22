@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity, findNodeHandle } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeatherIcons from 'react-native-vector-icons/Feather';
@@ -8,17 +8,20 @@ import FastImage from 'react-native-fast-image';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import call from 'react-native-phone-call';
 import { connect } from 'react-redux';
+import Spinner from 'react-native-spinkit';
 
-import { _colors, _dims, responsiveFontSize } from '../utils/constants';
+import * as routes from '../navigators/defineRoutes';
+import { _colors, _dims, responsiveFontSize, pluralNoun } from '../utils/constants';
 import SliderEntry from './SliderEntry';
 import strings from '../localization/projectDetail';
 import Header from '../navigators/headers/CommonHeader';
 import { _alert } from '../utils/alert';
 import { styles } from './ProjectDetail';
-import { realtyApi } from '../utils/api';
-import alertStrings from '../localization/alert';
-import { GET_REALTY_DETAIL, GET_REALTY_DETAIL_SUCCESS } from '../redux/realtyDetail/reducer';
-import Spin from './common/Spinner';
+import {
+  getRealtyDetailAction,
+  likeRealtyAction,
+  unlikeRealtyAction
+} from '../redux/realtyDetail/actions';
 
 class RealtyDetail extends Component {
   constructor(props) {
@@ -26,29 +29,33 @@ class RealtyDetail extends Component {
     this.state = {
       slider1ActiveSlide: 1,
       fabVisible: true,
-      error: null
+      name: '',
+      email: '',
+      phone: ''
     };
   }
 
   componentDidMount() {
     const { id } = this.props.navigation.state.params.data;
-    const callback = (error, data, response) => {
-      if (error) {
-        _alert(alertStrings.error, response.body.message);
-        this.setState({ error });
-      } else {
-        this.props.dispatch({
-          type: GET_REALTY_DETAIL_SUCCESS,
-          payload: data
-        });
-      }
-    };
-    this.props.dispatch({ type: GET_REALTY_DETAIL });
-    realtyApi.viewRealty(id, callback);
+    getRealtyDetailAction({ id });
   }
 
+  _likeRealty = async realty => {
+    if (!this.props.auth.user.id) {
+      this.props.navigation.navigate(routes.login, { modal: true });
+      return;
+    }
+    if (!this.props.realtyDetail.postingFavorite) {
+      if (realty.is_favorite) {
+        unlikeRealtyAction(realty);
+      } else {
+        likeRealtyAction(realty);
+      }
+    }
+  };
+
   _renderLoadDone = realty => {
-    if (this.state.error || !realty) {
+    if (!realty) {
       return null;
     }
     const SECTIONS = [
@@ -58,18 +65,11 @@ class RealtyDetail extends Component {
       },
       {
         title: strings.utils,
-        content: ['Gan truong hoc', 'Gan cho', 'Co garage oto']
-      },
-      {
-        title: strings.investors,
-        content: [
-          'https://bikenconnect.com/landing/images/bike/1.jpg',
-          'https://bikenconnect.com/landing/images/bike/1.jpg'
-        ]
+        content: realty.utility
       },
       {
         title: strings.location,
-        content: realty.thumb
+        content: realty.thumb_map
       },
       {
         title: strings.video,
@@ -117,27 +117,37 @@ class RealtyDetail extends Component {
             <Text style={styles.title} numberOfLines={1}>
               {realty.title}
             </Text>
-            <Ionicons name="md-heart-outline" style={styles.socialButton} color="red" />
+            <Ionicons
+              name={`ios-heart${realty.is_favorite ? '-outline' : ''}`}
+              style={styles.socialButton}
+              color="red"
+              onPress={() => this._likeRealty(realty)}
+            />
             <FeatherIcons name="share-2" style={styles.socialButton} color={_colors.mainColor} />
           </View>
           <Text style={styles.address}>{realty.address}</Text>
           <View style={styles.infoWrapper}>
             <View style={styles.info}>
               <Text style={styles.fontBold}>{realty.bedroom}</Text>
-              <Text>{strings.bedroom}</Text>
+              <Text>{pluralNoun(realty.bedroom, strings.bedroom)}</Text>
             </View>
             <View style={styles.info}>
               <Text style={styles.fontBold}>{realty.bathroom}</Text>
-              <Text>{strings.bathroom}</Text>
+              <Text>{pluralNoun(realty.bathroom, strings.bathroom)}</Text>
             </View>
-            <View style={styles.info}>
-              <Text style={styles.fontBold}>{realty.area}</Text>
+            <View style={[styles.info, styles.noBorderRight]}>
+              <Text style={styles.fontBold}>
+                {realty.area}
+                <Text style={styles.fontNormal}> m²</Text>
+              </Text>
               <Text>{strings.area}</Text>
             </View>
           </View>
           <View style={styles.priceWrapper}>
             <Text style={[styles.fontTitle, styles.fontBold]}>{realty.method}</Text>
-            <Text style={styles.price}>{realty.price}</Text>
+            <Text style={styles.price}>
+              {realty.price} {realty.price_unit}
+            </Text>
           </View>
         </View>
         <View style={{ paddingHorizontal: _dims.defaultPadding }}>
@@ -171,15 +181,59 @@ class RealtyDetail extends Component {
         <View style={styles.form}>
           <View style={styles.line}>
             <Ionicons name="ios-person" style={styles.lineIcon} />
-            <TextInput style={styles.input} placeholder={strings.name} />
+            <TextInput
+              ref={name => {
+                this.name = name;
+              }}
+              style={styles.input}
+              placeholder={strings.name}
+              onChangeText={name => this.setState({ name })}
+              returnKeyType="next"
+              autoCapitalize="none"
+              autoCorrect={false}
+              clearButtonMode="always"
+              onFocus={event => {
+                this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
+              }}
+            />
           </View>
           <View style={styles.line}>
             <Ionicons name="ios-mail" style={styles.lineIcon} />
-            <TextInput style={styles.input} placeholder={strings.email} />
+            <TextInput
+              ref={email => {
+                this.email = email;
+              }}
+              style={styles.input}
+              placeholder={strings.email}
+              onChangeText={email => this.setState({ email })}
+              returnKeyType="next"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              clearButtonMode="always"
+              onFocus={event => {
+                this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
+              }}
+            />
           </View>
           <View style={styles.line}>
             <Ionicons name="ios-call" style={styles.lineIcon} />
-            <TextInput style={styles.input} placeholder={strings.phone} />
+            <TextInput
+              ref={phone => {
+                this.phone = phone;
+              }}
+              style={styles.input}
+              placeholder={strings.name}
+              onChangeText={phone => this.setState({ phone })}
+              returnKeyType="go"
+              autoCapitalize="none"
+              keyboardType="phone-pad"
+              autoCorrect={false}
+              clearButtonMode="always"
+              onFocus={event => {
+                this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
+              }}
+            />
           </View>
         </View>
         <TouchableOpacity
@@ -220,14 +274,22 @@ class RealtyDetail extends Component {
   };
 
   _renderContent = (section, i, isActive, sections) => {
+    const _content = '---------------------';
     if (i === 0) {
       return (
         <View style={styles.content}>
-          <Text>{section.content}</Text>
+          <Text style={{ textAlign: 'center' }}>{section.content || _content}</Text>
         </View>
       );
     }
     if (i === 1) {
+      if (section.content.length === 0) {
+        return (
+          <View style={styles.content}>
+            <Text style={{ textAlign: 'center' }}>{_content}</Text>
+          </View>
+        );
+      }
       return (
         <View style={styles.content}>
           <FlatList
@@ -243,31 +305,6 @@ class RealtyDetail extends Component {
     }
     if (i === 2) {
       return (
-        <View style={styles.content}>
-          <FlatList
-            style={{ alignSelf: 'center' }}
-            data={section.content}
-            renderItem={({ item }) => {
-              return (
-                <FastImage
-                  style={styles.investor}
-                  source={{
-                    uri: item,
-                    priority: FastImage.priority.high
-                  }}
-                  resizeMode={FastImage.resizeMode.center}
-                />
-              );
-            }}
-            keyExtractor={() => `${Math.random()}`}
-            horizontal
-            ItemSeparatorComponent={() => <View style={{ width: _dims.defaultPadding }} />}
-          />
-        </View>
-      );
-    }
-    if (i === 3) {
-      return (
         <TouchableOpacity style={styles.content}>
           <FastImage
             style={styles.onMap}
@@ -275,14 +312,14 @@ class RealtyDetail extends Component {
               uri: section.content,
               priority: FastImage.priority.high
             }}
-            resizeMode={FastImage.resizeMode.center}
+            resizeMode={FastImage.resizeMode.cover}
           />
         </TouchableOpacity>
       );
     }
     return (
       <View style={styles.content}>
-        <Text>{section.content}</Text>
+        <Text style={{ textAlign: 'center' }}>{section.content || _content}</Text>
       </View>
     );
   };
@@ -304,6 +341,7 @@ class RealtyDetail extends Component {
             this.scroll = scroll;
           }}
           onScroll={event => {
+            return;
             const { height } = event.nativeEvent.contentSize;
             const offsetY = event.nativeEvent.contentOffset.y;
             if (_dims.screenHeight + offsetY >= height - _dims.defaultPadding * 4) {
@@ -313,11 +351,23 @@ class RealtyDetail extends Component {
             }
           }}
         >
-          {this.props.realtyDetail.loading ? <ActivityIndicator /> : this._renderLoadDone(realty)}
+          {this.props.realtyDetail.fetching ? (
+            <Spinner
+              isVisible
+              type="Circle"
+              color="orange"
+              size={_dims.indicator}
+              style={{ alignSelf: 'center', marginTop: 10 }}
+            />
+          ) : (
+            this._renderLoadDone(realty)
+          )}
         </KeyboardAwareScrollView>
       </View>
     );
   }
 }
 
-export default connect(state => ({ realtyDetail: state.realtyDetail }))(RealtyDetail);
+export default connect(state => ({ realtyDetail: state.realtyDetail, auth: state.auth }))(
+  RealtyDetail
+);

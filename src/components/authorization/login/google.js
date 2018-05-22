@@ -26,7 +26,10 @@ export const _signInGoogle = callback => {
       callback(user);
     })
     .catch(err => {
-      _alert(alertStrings.error, `${err.code}: ${err.message}`);
+      // user cancel
+      if (err.code !== -5) {
+        _alert(alertStrings.error, `${err.code}: ${err.message}`);
+      }
     })
     .done();
 };

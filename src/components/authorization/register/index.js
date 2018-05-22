@@ -11,6 +11,7 @@ import Header from '../../../navigators/headers/CommonHeader';
 import headerStrings from '../../../localization/header';
 import strings from '../../../localization/authorization';
 import emitter from '../../../emitter';
+import Overlay from '../../common/Overlay';
 
 class Register extends Component {
   render() {
@@ -25,6 +26,7 @@ class Register extends Component {
             borderColor: 'silver'
           }}
         />
+        {this.props.auth.loading && <Overlay opacity={0} />}
         <ScrollableTabView
           onChangeTab={index => {
             this.activeIndex = index;
@@ -36,13 +38,17 @@ class Register extends Component {
           tabBarActiveTextColor={_colors.mainColor}
           tabBarInactiveTextColor="gray"
         >
-          <Customer tabLabel={headerStrings.customer} />
-          <Agency tabLabel={headerStrings.agency} />
+          <Customer tabLabel={headerStrings.customer} navigation={this.props.navigation} />
+          <Agency tabLabel={headerStrings.agency} navigation={this.props.navigation} />
         </ScrollableTabView>
         <TouchableOpacity
           style={styles.requestButton}
           onPress={() => {
-            emitter.emit('registerAccount', this.activeIndex);
+            if (!this.props.auth.loading) {
+              emitter.emit('registerAccount', {
+                index: this.activeIndex
+              });
+            }
           }}
         >
           <Text style={styles.requestButtonText}>{strings.sendRequest}</Text>
@@ -52,4 +58,4 @@ class Register extends Component {
   }
 }
 
-export default connect()(Register);
+export default connect(state => ({ auth: state.auth }))(Register);

@@ -38,10 +38,12 @@ export default class ProjectItem extends React.Component {
           resizeMode={FastImage.resizeMode.cover}
         />
         <View style={styles.header}>
-          <Ionicons
-            style={styles.favoriteButton}
-            name={`md-heart${data.is_favorite === 1 ? '' : '-outline'}`}
-          />
+          <TouchableOpacity activeOpacity={1} onPress={this.props.onLikeRealty}>
+            <Ionicons
+              style={styles.favoriteButton}
+              name={`ios-heart${data.is_favorite ? '-outline' : ''}`}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.infoWrapper}>
           <View style={{ flexDirection: 'row' }}>

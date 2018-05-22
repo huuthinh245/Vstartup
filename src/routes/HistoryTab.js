@@ -12,7 +12,7 @@ class HistoryTab extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <Header outer title={headerStrings.historyTitle} />
-        {this.props.auth.id ? <HistoryAuth {...this.props} /> : <Login {...this.props} />}
+        {this.props.auth.user.id ? <HistoryAuth {...this.props} /> : <Login {...this.props} />}
       </View>
     );
   }

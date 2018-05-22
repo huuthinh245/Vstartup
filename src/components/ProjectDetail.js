@@ -342,6 +342,9 @@ export const styles = StyleSheet.create({
   fontBold: {
     fontWeight: 'bold'
   },
+  fontNormal: {
+    fontWeight: 'normal'
+  },
   fab: {
     position: 'absolute',
     flexDirection: 'row',
@@ -483,7 +486,8 @@ export const styles = StyleSheet.create({
   },
   userNameContact: {
     fontSize: responsiveFontSize(_dims.defaultFontTitle),
-    flex: 1
+    flex: 1,
+    fontWeight: 'bold'
   },
   callWrapper: {
     width: responsiveWidth(16),

@@ -1,21 +1,75 @@
 import { handleActions } from 'redux-actions';
 
-export const GET_REALTY_DETAIL = 'GET_REALTY_DETAIL';
-export const GET_REALTY_DETAIL_SUCCESS = 'GET_REALTY_DETAIL_SUCCESS';
+import {
+  GET_REALTY_DETAIL,
+  GET_REALTY_DETAIL_SUCCESS,
+  GET_REALTY_DETAIL_FAILURE,
+  LIKE_REALTY,
+  LIKE_REALTY_SUCCESS,
+  LIKE_REALTY_FAILURE,
+  UNLIKE_REALTY,
+  UNLIKE_REALTY_SUCCESS,
+  UNLIKE_REALTY_FAILURE
+} from './actions';
 
 const initial = {
-  loading: false,
+  fetching: false,
+  postingFavorite: false,
   data: {}
 };
 
 export const realtyDetailReducer = handleActions(
   {
     [GET_REALTY_DETAIL]: state => {
-      return Object.assign({}, state, { loading: true });
+      return Object.assign({}, state, { fetching: true });
+    },
+    [GET_REALTY_DETAIL_FAILURE]: state => {
+      return Object.assign({}, state, { fetching: false });
     },
     [GET_REALTY_DETAIL_SUCCESS]: (state, { payload }) => {
+      if (!state.data[payload.id]) {
+        state.data[payload.id] = payload;
+      }
       Object.assign(state.data, { [payload.id]: payload });
-      return Object.assign({}, state, { loading: false });
+      return Object.assign({}, state, { fetching: false });
+    },
+    [LIKE_REALTY]: (state, { payload }) => {
+      const { id, is_favorite } = payload;
+      const realty = state.data[id];
+      if (realty) {
+        Object.assign(realty, { is_favorite: !is_favorite });
+      }
+      return Object.assign({}, state, { postingFavorite: true });
+    },
+    [LIKE_REALTY_SUCCESS]: state => {
+      return Object.assign({}, state, { postingFavorite: false });
+    },
+    [LIKE_REALTY_FAILURE]: (state, { payload }) => {
+      const { id, is_favorite } = payload;
+      const realty = state.data[id];
+      if (realty) {
+        Object.assign(realty, { is_favorite: !is_favorite });
+      }
+      return Object.assign({}, state, { postingFavorite: false });
+    },
+    [UNLIKE_REALTY]: (state, { payload }) => {
+      const { id, is_favorite } = payload;
+      const realty = state.data[id];
+      if (realty) {
+        Object.assign(realty, { is_favorite: !is_favorite });
+      }
+      return Object.assign({}, state, { postingFavorite: true });
+    },
+    [UNLIKE_REALTY_SUCCESS]: state => {
+      return Object.assign({}, state, { postingFavorite: false });
+    },
+    [UNLIKE_REALTY_FAILURE]: (state, { payload }) => {
+      const { id, is_favorite } = payload;
+      const realty = state.data[id];
+      if (realty) {
+        Object.assign(realty, { is_favorite: !is_favorite });
+      }
+      return Object.assign({}, state, { postingFavorite: false });
     }
   },
   initial

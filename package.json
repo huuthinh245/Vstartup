@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "postinstall": "rndebugger-open",
-    "start":
-      "watchman watch-del-all && (adb reverse tcp:8081 tcp:8081 || true) && node node_modules/react-native/local-cli/cli.js start --reset-cache",
+    "start": "watchman watch-del-all && (adb reverse tcp:8081 tcp:8081 || true) && node node_modules/react-native/local-cli/cli.js start --reset-cache",
     "xcode": "open ios/example.xcodeproj",
     "android": "cd android && ./gradlew installDebug",
     "e2e": "detox test --configuration ios.sim.debug",
@@ -30,6 +29,7 @@
     "react-native-collapsible": "^0.11.2",
     "react-native-communications": "^2.2.1",
     "react-native-dropdown": "0.0.6",
+    "react-native-dropdownalert": "^3.4.0",
     "react-native-elements": "^0.19.1",
     "react-native-fast-image": "^4.0.12",
     "react-native-fbsdk": "^0.7.0",

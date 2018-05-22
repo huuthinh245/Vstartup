@@ -308,6 +308,18 @@
       //expect(instance).to.be();
     });
 
+    it('should have the property isFavorite (base name: "is_favorite")', function() {
+      // uncomment below and update the code to test the property isFavorite
+      //var instane = new RemsApi.Realty();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property utility (base name: "utility")', function() {
+      // uncomment below and update the code to test the property utility
+      //var instane = new RemsApi.Realty();
+      //expect(instance).to.be();
+    });
+
   });
 
 }));

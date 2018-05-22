@@ -3,15 +3,11 @@ import { View, StatusBar, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import FlipView from 'react-native-flip-view-next';
 
-import { json, _colors } from '../utils/constants';
+import { _colors } from '../utils/constants';
 import Header from '../navigators/headers/SearchTab';
 import SearchFront from '../components/tabs/SearchFront';
 import SearchBack from '../components/tabs/SearchBack';
-import { realtyApi } from '../utils/api';
-import alertStrings from '../localization/alert';
-import { _alert } from '../utils/alert';
-
-import { GET_LIST_REALTY, GET_LIST_REALTY_SUCCESS } from '../redux/listRealty/reducer';
+import { getListRealtyAction } from '../redux/listRealty/actions';
 
 class SearchTab extends React.Component {
   constructor(props) {
@@ -22,19 +18,7 @@ class SearchTab extends React.Component {
   }
 
   componentDidMount() {
-    const callback = (error, data, response) => {
-      if (error) {
-        console.log(error);
-        // _alert(alertStrings.error, response.body.message);
-      } else {
-        this.props.dispatch({
-          type: GET_LIST_REALTY_SUCCESS,
-          payload: data
-        });
-      }
-    };
-    this.props.dispatch({ type: GET_LIST_REALTY });
-    realtyApi.listRealty({ page: 1 }, callback);
+    getListRealtyAction({ page: 1 });
   }
 
   _flip = () => {
