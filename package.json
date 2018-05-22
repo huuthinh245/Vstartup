@@ -58,6 +58,7 @@
     "react-native-text-input-mask": "^0.7.0",
     "react-native-textinput-effects": "^0.4.2",
     "react-native-vector-icons": "^4.4.2",
+    "react-native-youtube": "^1.1.0",
     "react-navigation": "^2.0.1",
     "react-navigation-redux-helpers": "^1.0.6",
     "react-redux": "^5.0.6",

@@ -55,6 +55,8 @@ target 'VStartup' do
 
   pod 'RNImageCropPicker', :path =>  '../node_modules/react-native-image-crop-picker'
 
+  pod 'react-native-youtube', :path => '../node_modules/react-native-youtube'
+
 end
 
 post_install do |installer|

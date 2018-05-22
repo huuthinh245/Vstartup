@@ -13,6 +13,7 @@
 #import <React/RCTRootView.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <RNGoogleSignin/RNGoogleSignin.h>
+#import <AVFoundation/AVFoundation.h>
 @import GoogleMaps;
 
 @implementation AppDelegate
@@ -21,6 +22,8 @@
 {
   NSURL *jsCodeLocation;
   
+  // enable sound of react-native-youtube on vibrate mode
+  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];
   // change customer's key for goog-maps here before release
   [GMSServices provideAPIKey:@"AIzaSyBkzL1WzN-G5SL0ZrgoRRAeCe3M7rniPEg"];
 

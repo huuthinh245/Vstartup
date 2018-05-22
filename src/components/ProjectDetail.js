@@ -548,5 +548,10 @@ export const styles = StyleSheet.create({
     color: '#fff',
     fontSize: responsiveFontSize(_dims.defaultFontTitle + 2),
     fontWeight: 'bold'
+  },
+  youtube: {
+    alignSelf: 'stretch',
+    height: (_dims.screenWidth - _dims.defaultPadding * 2) * 0.75,
+    marginTop: 5
   }
 });

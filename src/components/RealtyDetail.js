@@ -9,6 +9,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import call from 'react-native-phone-call';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-spinkit';
+import YouTube from 'react-native-youtube';
 
 import * as routes from '../navigators/defineRoutes';
 import { _colors, _dims, responsiveFontSize, pluralNoun } from '../utils/constants';
@@ -326,13 +327,11 @@ class RealtyDetail extends Component {
       );
     }
     return (
-      <View style={styles.content}>
-        {section.content ? (
-          <Text style={styles.colorGray}>{section.content}</Text>
-        ) : (
-          <Text style={[styles.colorGray, { textAlign: 'center' }]}>{_content}</Text>
-        )}
-      </View>
+      <YouTube
+        apiKey="AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis"
+        videoId="KVZ-P-ZI6W4"
+        style={styles.youtube}
+      />
     );
   };
 

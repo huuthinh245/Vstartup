@@ -73,6 +73,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-youtube')
     // compile project(':react-native-google-signin')
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-spinkit')
