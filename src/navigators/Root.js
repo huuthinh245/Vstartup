@@ -10,7 +10,7 @@ const routeConfig = {
 };
 
 const navConfig = {
-  initialRouteName: routes.mainWithModal,
+  initialRouteName: routes.SplashScreen,
   navigationOptions: { header: null }
 };
 

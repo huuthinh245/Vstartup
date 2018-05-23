@@ -64,6 +64,7 @@ const tabsOptions = {
       }
       return (
         <Text
+          numberOfLines={1}
           style={{
             color: focused ? tintColor : 'gray',
             fontSize: responsiveFontSize(_dims.defaultFontSize - 4)

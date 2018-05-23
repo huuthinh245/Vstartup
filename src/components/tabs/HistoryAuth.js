@@ -55,12 +55,16 @@ class HistoryAuth extends React.Component {
           outer
           title={headerStrings.historyTitle}
           right={this.state.edit ? 'Delete' : 'Edit'}
+          left={this.state.edit ? 'Cancel' : undefined}
           onRightPress={() => {
             if (this.state.edit) {
               this.setState({ edit: false });
             } else {
               this.setState({ edit: true });
             }
+          }}
+          onLeftPress={() => {
+            this.setState({ edit: false });
           }}
         />
         {listKeyword.fetching ? (

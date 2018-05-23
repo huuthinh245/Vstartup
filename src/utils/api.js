@@ -1,10 +1,17 @@
+import RNRestart from 'react-native-restart';
+
 import * as API from '../swaggerApi/src';
 import { _alert } from './alert';
 import alertStrings from '../localization/alert';
 
 export const handleError = (error, callback) => {
-  if (!error.response) {
-    _alert(alertStrings.error, error.message);
+  if (!error.response && callback !== false) {
+    _alert(alertStrings.deviceOffline, error.message, [
+      {
+        text: alertStrings.restart,
+        onPress: () => RNRestart.Restart()
+      }
+    ]);
   } else if (callback === true) {
     _alert(`${alertStrings.error} ${error.response.status}`, error.response.body.message);
   } else if (callback) {

@@ -6,6 +6,7 @@ const strings = new LocalizedStrings({
     error: 'Error',
     success: 'Success',
     warning: 'Warning',
+    restart: 'Try restart application',
 
     ok: 'OK',
     cancel: 'Cancel',
@@ -25,6 +26,7 @@ const strings = new LocalizedStrings({
     error: 'Lỗi',
     success: 'Thành công',
     warning: 'Cảnh báo',
+    restart: 'Thử khởi động lại ứng dụng',
 
     ok: 'OK',
     cancel: 'Huỷ',

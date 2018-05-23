@@ -57,16 +57,19 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 10
   },
   overlay: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.2)',
     zIndex: 100,
     top: 0,
-    left: 0
+    left: 0,
+    borderRadius: 10
   },
   check: {
     position: 'absolute',
@@ -88,7 +91,8 @@ const styles = StyleSheet.create({
   },
   image: {
     height: responsiveHeight(18),
-    width: responsiveHeight(18)
+    width: responsiveHeight(18),
+    borderRadius: 10
   },
   title: {
     fontWeight: 'bold',
@@ -97,6 +101,8 @@ const styles = StyleSheet.create({
   },
   infoWrapper: {
     marginLeft: _dims.defaultPadding,
-    flex: 1
+    flex: 1,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10
   }
 });
