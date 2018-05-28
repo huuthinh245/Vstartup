@@ -126,7 +126,8 @@ class Login extends Component {
           />
         )}
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
-          {this.props.auth.fetching && <Overlay />}
+          { // this.props.auth.fetching && <Overlay />
+          }
           <Image style={styles.bg} resizeMode="cover" source={background} />
           <View style={styles.logoContainer}>
             <Image resizeMode="cover" source={logo} style={styles.logo} />

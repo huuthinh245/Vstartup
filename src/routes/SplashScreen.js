@@ -14,6 +14,7 @@ import {
 } from '../redux/preload/actions';
 import { loginAction } from '../redux/auth/actions';
 import strings from '../localization/authorization';
+import { ApiClient } from '../swaggerApi/src';
 
 const bg = require('../assets/images/bg.jpg');
 
@@ -33,8 +34,11 @@ class SplashScreen extends React.Component {
       setListCityAction(JSON.parse(city));
     }
     if (token) {
+      ApiClient.instance.authentications.Bearer.apiKeyPrefix = 'Bearer';
+      ApiClient.instance.authentications.Bearer.apiKey = token;
       loginAction({ email: 'admin@admin.com', password: '123' });
     }
+    this.props.dispatch({ type: 'GET_LIST_OPTIONS' });
     getListCityAction();
     getListOptionsAction();
   }
@@ -53,7 +57,7 @@ class SplashScreen extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <StatusBar hidden />
-        <Overlay visible />
+        {/* <Overlay visible /> */}
         <Image
           source={bg}
           style={{

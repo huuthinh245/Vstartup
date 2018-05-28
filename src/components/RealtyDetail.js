@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TextInput, TouchableOpacity, findNodeHandle } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+  findNodeHandle,
+  Share
+} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeatherIcons from 'react-native-vector-icons/Feather';
@@ -53,6 +61,22 @@ class RealtyDetail extends Component {
         likeRealtyAction(realty);
       }
     }
+  };
+
+  _share = () => {
+    Share.share(
+      {
+        message: "BAM: we're helping your business with awesome React Native apps",
+        url: 'http://bam.tech',
+        title: 'Wow, did you see that?'
+      },
+      {
+        // Android only:
+        dialogTitle: 'Share BAM goodness',
+        // iOS only:
+        excludedActivityTypes: ['com.apple.UIKit.activity.PostToTwitter']
+      }
+    );
   };
 
   _renderLoadDone = realty => {
@@ -124,7 +148,12 @@ class RealtyDetail extends Component {
               color="red"
               onPress={() => this._likeRealty(realty)}
             />
-            <FeatherIcons name="share-2" style={styles.socialButton} color={_colors.mainColor} />
+            <FeatherIcons
+              onPress={this._share}
+              name="share-2"
+              style={styles.socialButton}
+              color={_colors.mainColor}
+            />
           </View>
           <Text style={styles.colorGray}>{realty.address}</Text>
           <View style={styles.infoWrapper}>
@@ -345,9 +374,8 @@ class RealtyDetail extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        <Header navigation={this.props.navigation} title={params.data.title} />
+        <Header onLeftPress={() => this.props.navigation.goBack()} title={params.data.title} />
         <KeyboardAwareScrollView
-          style={{ flex: 1 }}
           ref={scroll => {
             this.scroll = scroll;
           }}

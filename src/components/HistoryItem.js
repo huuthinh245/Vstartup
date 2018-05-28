@@ -16,10 +16,7 @@ export default class ProjectItem extends React.Component {
             style={styles.overlay}
           >
             {this.props.selected ? (
-              <TouchableOpacity
-                onPress={this.props.onSelect}
-                style={[styles.check, styles.unchecked]}
-              />
+              <View style={[styles.check, styles.unchecked]} />
             ) : (
               <View style={[styles.check, styles.checked]}>
                 <Ionicons

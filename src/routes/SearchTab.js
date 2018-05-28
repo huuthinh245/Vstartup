@@ -8,6 +8,7 @@ import Header from '../navigators/headers/SearchTab';
 import SearchFront from '../components/tabs/SearchFront';
 import SearchBack from '../components/tabs/SearchBack';
 import { getListRealtyAction } from '../redux/listRealty/actions';
+import * as routes from '../navigators/defineRoutes';
 
 class SearchTab extends React.Component {
   constructor(props) {
@@ -28,11 +29,15 @@ class SearchTab extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: _colors.viewBG }}>
-        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <Header
           flipIcon={!this.state.isFlipped ? 'md-list' : 'md-pin'}
           onFlipPress={this._flip}
-          onFilterPress={() => this.setState({ editing: !this.state.editing })}
+          onTitlePress={() => this.props.navigation.navigate(routes.suggestPlace)}
+          onFilterPress={() =>
+            this.props.navigation.navigate(routes.filterScreen, {
+              onDone: value => alert(value.toString())
+            })
+          }
           editText={!this.state.editing ? 'Edit' : 'Done'}
         />
         <FlipView

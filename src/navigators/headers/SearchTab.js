@@ -21,8 +21,8 @@ export default class Header extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
-          style={styles.searchBarInputWrapper}
-          onPress={() => {}}
+          style={styles.searchBarInputContainer}
+          onPress={this.props.onTitlePress}
         >
           <Ionicons
             size={18}

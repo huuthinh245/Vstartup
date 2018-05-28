@@ -1,9 +1,7 @@
-import { createStore, applyMiddleware } from 'redux';
-import { View } from 'react-native';
-
+import { createStore, applyMiddleware, compose } from 'redux';
+import { View, StatusBar } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import React from 'react';
-import logger from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
 import DropdownAlert from 'react-native-dropdownalert';
 
@@ -12,6 +10,7 @@ import { AppNavigator } from './navigators/Root';
 import { addListener, middleware } from './utils/navigationRedux';
 import { reducers } from './redux/reducer';
 import emitter from './emitter';
+import { _ios, _colors } from './utils/constants';
 
 class App extends React.Component {
   render() {
@@ -34,7 +33,11 @@ const mapStateToProps = state => ({
 const epicMiddleware = createEpicMiddleware(epics);
 const AppWithNavigationState = connect(mapStateToProps)(App);
 
-export const store = createStore(reducers, applyMiddleware(middleware, epicMiddleware, logger));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const enhancers = [applyMiddleware(middleware, epicMiddleware)];
+
+export const store = createStore(reducers, {}, composeEnhancers(...enhancers));
 
 class Root extends React.Component {
   componentDidMount() {
@@ -49,6 +52,10 @@ class Root extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor={_ios ? 'transparent' : _colors.header}
+        />
         <DropdownAlert
           ref={ref => {
             this.dropdown = ref;

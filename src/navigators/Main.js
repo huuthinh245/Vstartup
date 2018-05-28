@@ -14,6 +14,10 @@ import MenuTab from '../routes/MenuTab';
 import ProjectDetail from '../components/ProjectDetail';
 import RealtyDetail from '../components/RealtyDetail';
 import AgencyDetail from '../components/AgencyDetail';
+import SuggestPlace from '../components/SuggestPlace';
+import AdditionalInformation from '../routes/AdditionalInformation';
+import Sort from '../routes/Sort';
+import Filter from '../routes/Filter';
 
 import Register from '../components/authorization/register';
 import Forgot from '../components/authorization/Forgot';
@@ -67,7 +71,8 @@ const tabsOptions = {
           numberOfLines={1}
           style={{
             color: focused ? tintColor : 'gray',
-            fontSize: responsiveFontSize(_dims.defaultFontSize - 4)
+            fontSize: responsiveFontSize(_dims.defaultFontSize - 4),
+            textAlign: 'center'
           }}
         >
           {iconName}
@@ -79,7 +84,7 @@ const tabsOptions = {
     activeTintColor: 'tomato',
     inactiveTintColor: 'gray'
   },
-  initialRouteName: 'SearchTab'
+  initialRouteName: 'FavoriteTab'
 };
 
 export const Tabs = createBottomTabNavigator(tabsConfig, tabsOptions);
@@ -88,7 +93,11 @@ const stackConfig = {
   [routes.tabs]: { screen: Tabs },
   [routes.projectDetail]: { screen: ProjectDetail },
   [routes.agencyDetail]: { screen: AgencyDetail },
-  [routes.realtyDetail]: { screen: RealtyDetail }
+  [routes.realtyDetail]: { screen: RealtyDetail },
+  [routes.suggestPlace]: { screen: SuggestPlace },
+  [routes.additionalInformation]: { screen: AdditionalInformation },
+  [routes.sortScreen]: { screen: Sort },
+  [routes.filterScreen]: { screen: Filter }
 };
 
 const navConfig = {

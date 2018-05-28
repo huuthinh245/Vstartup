@@ -26,7 +26,9 @@ class Register extends Component {
             borderColor: 'silver'
           }}
         />
-        {this.props.auth.loading && <Overlay opacity={0} />}
+        {
+          // this.props.auth.loading && <Overlay opacity={0} />
+        }
         <ScrollableTabView
           onChangeTab={index => {
             this.activeIndex = index;

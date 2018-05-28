@@ -16,7 +16,7 @@ export default class Header extends React.Component {
             </Text>
           </View>
           <TouchableOpacity style={styles.left} onPress={this.props.onRightPress}>
-            <Ionicons name="ios-close" style={styles.icon} />
+            <Ionicons name="ios-close" style={[styles.icon, { fontSize: 30 }]} />
           </TouchableOpacity>
         </View>
       );
@@ -34,19 +34,13 @@ export default class Header extends React.Component {
           <Text numberOfLines={1} style={styles.title}>
             {this.props.title}
           </Text>
-          <View style={styles.left}>
-            {this.props.right && (
-              <TouchableOpacity style={styles.left} onPress={this.props.onRightPress}>
-                <Text>{this.props.right}</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+          <View style={styles.left}>{this.props.right}</View>
         </View>
       );
     }
     return (
       <View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity style={styles.left} onPress={() => this.props.navigation.goBack()}>
+        <TouchableOpacity style={styles.left} onPress={this.props.onLeftPress}>
           <Ionicons name="md-arrow-back" style={styles.icon} />
         </TouchableOpacity>
         <View style={styles.titleWrapper}>
@@ -54,7 +48,11 @@ export default class Header extends React.Component {
             {this.props.title}
           </Text>
         </View>
-        <View style={styles.left} />
+        {this.props.right ? (
+          <View style={styles.left}>{this.props.right}</View>
+        ) : (
+          <View style={styles.left} />
+        )}
       </View>
     );
   };

@@ -13,6 +13,7 @@ export const responsiveFontSize = fontSize => fontSize * PixelRatio.getFontScale
 
 export const _colors = {
   viewBG: '#eee',
+  header: '#c9c9ce',
   mainColor: 'rgb(0,122,255)',
   overlay: 'rgba(0,0,0,0.5)'
 };
@@ -22,7 +23,7 @@ export const _ios = Platform.OS === 'ios';
 export const _dims = {
   screenWidth: width,
   screenHeight: height,
-  navBarHeight: _ios ? 80 : 60,
+  navBarHeight: _ios ? 64 : 44,
   defaultPadding: responsiveWidth(3),
   defaultFontSize: 16,
   defaultFontInput: 18,

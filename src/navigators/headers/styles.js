@@ -5,28 +5,44 @@ export const styles = StyleSheet.create({
   wrapper: {
     height: _dims.navBarHeight,
     paddingTop: _ios ? 20 : 0,
-    backgroundColor: '#fff',
+    backgroundColor: _colors.header,
     alignItems: 'center',
     justifyContent: 'center',
     alignContent: 'center',
     borderBottomWidth: 0.5,
-    borderColor: 'silver'
+    borderColor: 'silver',
+    zIndex: Number.MAX_SAFE_INTEGER,
+    flexDirection: 'row'
   },
-  searchBarInputWrapper: {
-    backgroundColor: 'transparent',
+  suggestHeader: {
+    height: _dims.navBarHeight,
+    paddingTop: _ios ? 20 : 0,
+    justifyContent: 'center',
+    borderWidth: 0
+  },
+  searchBarInputContainer: {
+    backgroundColor: '#fff',
+    height: 28,
+    borderRadius: 5,
+    paddingTop: 4.5,
+    paddingBottom: 4.5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginLeft: 8,
+    marginRight: 8,
     flex: 1,
     flexDirection: 'row',
-    borderWidth: 1,
-    borderRadius: 2,
-    borderColor: 'silver',
-    paddingHorizontal: 10,
-    marginVertical: 8
+    alignSelf: 'center'
   },
   searchBarInput: {
-    fontSize: responsiveFontSize(_dims.defaultFontSize),
-    flex: 1,
-    padding: 5,
-    backgroundColor: 'transparent'
+    backgroundColor: '#FFFFFF',
+    fontSize: 15,
+    flex: 1
+  },
+  suggestInput: {
+    margin: 0,
+    padding: 0,
+    backgroundColor: 'red'
   },
   searchBarInputClear: {
     paddingHorizontal: 5,
@@ -35,7 +51,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   left: {
-    padding: 10,
+    paddingHorizontal: 10,
     justifyContent: 'center',
     alignItems: 'center',
     minWidth: _dims.navBarHeight * 0.75
@@ -44,7 +60,7 @@ export const styles = StyleSheet.create({
     flex: 1
   },
   icon: {
-    fontSize: 30,
+    fontSize: 24,
     color: _colors.mainColor,
     fontWeight: 'bold'
   },

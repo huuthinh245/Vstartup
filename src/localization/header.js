@@ -5,6 +5,7 @@ const strings = new LocalizedStrings({
   eng: {
     close: 'Close',
     back: 'Back',
+    save: 'Save',
     searchLabel: 'Search',
     historyLabel: 'History',
     historyTitle: 'Saved Searches',
@@ -18,6 +19,8 @@ const strings = new LocalizedStrings({
     searchCityPlaceholder: 'Search address',
     customer: 'Customer',
     agency: 'Agency',
+    sortScreen: 'Sort',
+    filterScreen: 'Filters',
 
     loginScreen: 'Login',
     registerScreen: 'Register',
@@ -26,6 +29,7 @@ const strings = new LocalizedStrings({
   vni: {
     close: 'Huỷ',
     back: 'Quay lại',
+    save: 'Lưu',
     searchLabel: 'Tìm kiếm',
     historyLabel: 'Đã tìm',
     favoriteLabel: 'Yêu thích',
@@ -35,6 +39,8 @@ const strings = new LocalizedStrings({
     searchCityPlaceholder: 'Tìm kiếm theo địa chỉ',
     customer: 'Khách hàng',
     agency: 'Nhà môi giới',
+    sortScreen: 'Sắp xếp',
+    filterScreen: 'Lọc',
 
     loginScreen: 'Đăng nhập',
     registerScreen: 'Đăng ký',
