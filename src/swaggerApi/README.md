@@ -129,7 +129,6 @@ Class | Method | HTTP request | Description
 *RemsApi.ContactApi* | [**postContact**](docs/ContactApi.md#postContact) | **POST** /contact | 
 *RemsApi.ListApi* | [**city**](docs/ListApi.md#city) | **GET** /list/city | 
 *RemsApi.ListApi* | [**option**](docs/ListApi.md#option) | **GET** /list/option | 
-*RemsApi.ProjectApi* | [**agencyProject**](docs/ProjectApi.md#agencyProject) | **GET** /project/agency | 
 *RemsApi.ProjectApi* | [**listProject**](docs/ProjectApi.md#listProject) | **GET** /project | 
 *RemsApi.ProjectApi* | [**viewProject**](docs/ProjectApi.md#viewProject) | **GET** /project/{id} | 
 *RemsApi.RealtyApi* | [**deleteFavorite**](docs/RealtyApi.md#deleteFavorite) | **DELETE** /realty/favorite/{realty_id} | 
@@ -140,6 +139,7 @@ Class | Method | HTTP request | Description
 *RemsApi.RealtyApi* | [**mapRealty**](docs/RealtyApi.md#mapRealty) | **GET** /realty/map | 
 *RemsApi.RealtyApi* | [**postFavorite**](docs/RealtyApi.md#postFavorite) | **POST** /realty/favorite | 
 *RemsApi.RealtyApi* | [**postRealty**](docs/RealtyApi.md#postRealty) | **POST** /realty | 
+*RemsApi.RealtyApi* | [**saveKeyword**](docs/RealtyApi.md#saveKeyword) | **POST** /realty/keyword | 
 *RemsApi.RealtyApi* | [**viewRealty**](docs/RealtyApi.md#viewRealty) | **GET** /realty/{id} | 
 *RemsApi.SettingApi* | [**changeLanguage**](docs/SettingApi.md#changeLanguage) | **POST** /setting/language/{lang} | 
 *RemsApi.UserApi* | [**forgot**](docs/UserApi.md#forgot) | **POST** /user/forgot | 

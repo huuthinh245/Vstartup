@@ -48,51 +48,6 @@
 
 
     /**
-     * Callback function to receive the result of the agencyProject operation.
-     * @callback module:api/ProjectApi~agencyProjectCallback
-     * @param {String} error Error message, if any.
-     * @param {Array.<module:model/ProjectList>} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
-
-    /**
-     * @param {Object} opts Optional parameters
-     * @param {Number} opts.page 
-     * @param {Number} opts.userId 
-     * @param {module:api/ProjectApi~agencyProjectCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Array.<module:model/ProjectList>}
-     */
-    this.agencyProject = function(opts, callback) {
-      opts = opts || {};
-      var postBody = null;
-
-
-      var pathParams = {
-      };
-      var queryParams = {
-        'page': opts['page'],
-        'user_id': opts['userId'],
-      };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
-      var formParams = {
-      };
-
-      var authNames = [];
-      var contentTypes = ['application/json'];
-      var accepts = ['application/json'];
-      var returnType = [ProjectList];
-
-      return this.apiClient.callApi(
-        '/project/agency', 'GET',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
-      );
-    }
-
-    /**
      * Callback function to receive the result of the listProject operation.
      * @callback module:api/ProjectApi~listProjectCallback
      * @param {String} error Error message, if any.

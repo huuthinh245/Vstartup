@@ -101,7 +101,8 @@ const stackConfig = {
 };
 
 const navConfig = {
-  navigationOptions: { header: null }
+  navigationOptions: { header: null },
+  initialRouteName: routes.Tabs
 };
 
 const Main = createStackNavigator(stackConfig, navConfig);

@@ -82,7 +82,7 @@
       };
 
       var authNames = ['Bearer'];
-      var contentTypes = ['application/x-www-form-urlencoded'];
+      var contentTypes = ['application/json'];
       var accepts = ['application/json'];
       var returnType = GenericSuscess;
 
@@ -128,7 +128,7 @@
       };
 
       var authNames = ['Bearer'];
-      var contentTypes = ['application/x-www-form-urlencoded'];
+      var contentTypes = ['application/json'];
       var accepts = ['application/json'];
       var returnType = GenericSuscess;
 
@@ -181,7 +181,7 @@
         '/realty/favorite', 'GET',
         pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
-      ); 
+      );
     }
 
     /**
@@ -289,6 +289,7 @@
      * @param {Number} opts.lng 
      * @param {Number} opts.price 
      * @param {Number} opts.type 
+     * @param {String} opts.method 
      * @param {module:api/RealtyApi~mapRealtyCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/RealtyMap>}
      */
@@ -305,6 +306,7 @@
         'lng': opts['lng'],
         'price': opts['price'],
         'type': opts['type'],
+        'method': opts['method'],
       };
       var collectionQueryParams = {
       };
@@ -360,7 +362,7 @@
       };
 
       var authNames = ['Bearer'];
-      var contentTypes = ['application/x-www-form-urlencoded'];
+      var contentTypes = ['application/json'];
       var accepts = ['application/json'];
       var returnType = RealtyList;
 
@@ -408,6 +410,66 @@
 
       return this.apiClient.callApi(
         '/realty', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the saveKeyword operation.
+     * @callback module:api/RealtyApi~saveKeywordCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/RealtyKeyword} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {String} address 
+     * @param {Number} lat 
+     * @param {Number} lng 
+     * @param {module:api/RealtyApi~saveKeywordCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/RealtyKeyword}
+     */
+    this.saveKeyword = function(address, lat, lng, callback) {
+      var postBody = null;
+
+      // verify the required parameter 'address' is set
+      if (address === undefined || address === null) {
+        throw new Error("Missing the required parameter 'address' when calling saveKeyword");
+      }
+
+      // verify the required parameter 'lat' is set
+      if (lat === undefined || lat === null) {
+        throw new Error("Missing the required parameter 'lat' when calling saveKeyword");
+      }
+
+      // verify the required parameter 'lng' is set
+      if (lng === undefined || lng === null) {
+        throw new Error("Missing the required parameter 'lng' when calling saveKeyword");
+      }
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+        'address': address,
+        'lat': lat,
+        'lng': lng
+      };
+
+      var authNames = ['Bearer'];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = RealtyKeyword;
+
+      return this.apiClient.callApi(
+        '/realty/keyword', 'POST',
         pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );

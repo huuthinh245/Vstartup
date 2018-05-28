@@ -1,7 +1,7 @@
 import { Dimensions, PixelRatio, Platform } from 'react-native';
 import JSON from 'circular-json';
 
-const { width, height } = Dimensions.get('window');
+export const { width, height } = Dimensions.get('window');
 
 export const responsiveWidth = widthPercent =>
   PixelRatio.roundToNearestPixel(width * widthPercent / 100);

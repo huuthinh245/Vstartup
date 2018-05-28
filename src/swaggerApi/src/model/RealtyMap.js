@@ -50,6 +50,8 @@
 
 
 
+
+
   };
 
   /**
@@ -66,6 +68,12 @@
       if (data.hasOwnProperty('id')) {
         obj['id'] = ApiClient.convertToType(data['id'], 'Number');
       }
+      if (data.hasOwnProperty('price')) {
+        obj['price'] = ApiClient.convertToType(data['price'], 'Number');
+      }
+      if (data.hasOwnProperty('price_unit')) {
+        obj['price_unit'] = ApiClient.convertToType(data['price_unit'], 'String');
+      }
       if (data.hasOwnProperty('coordinate')) {
         obj['coordinate'] = Coordinate.constructFromObject(data['coordinate']);
       }
@@ -80,6 +88,14 @@
    * @member {Number} id
    */
   exports.prototype['id'] = undefined;
+  /**
+   * @member {Number} price
+   */
+  exports.prototype['price'] = undefined;
+  /**
+   * @member {String} price_unit
+   */
+  exports.prototype['price_unit'] = undefined;
   /**
    * @member {module:model/Coordinate} coordinate
    */

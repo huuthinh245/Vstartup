@@ -16,18 +16,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/Coordinate'], factory);
+    define(['ApiClient', 'model/Coordinate', 'model/User', 'model/Utility'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('./Coordinate'));
+    module.exports = factory(require('../ApiClient'), require('./Coordinate'), require('./User'), require('./Utility'));
   } else {
     // Browser globals (root is window)
     if (!root.RemsApi) {
       root.RemsApi = {};
     }
-    root.RemsApi.Project = factory(root.RemsApi.ApiClient, root.RemsApi.Coordinate);
+    root.RemsApi.Project = factory(root.RemsApi.ApiClient, root.RemsApi.Coordinate, root.RemsApi.User, root.RemsApi.Utility);
   }
-}(this, function(ApiClient, Coordinate) {
+}(this, function(ApiClient, Coordinate, User, Utility) {
   'use strict';
 
 
@@ -46,6 +46,16 @@
    */
   var exports = function() {
     var _this = this;
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -98,6 +108,9 @@
       if (data.hasOwnProperty('thumb')) {
         obj['thumb'] = ApiClient.convertToType(data['thumb'], 'String');
       }
+      if (data.hasOwnProperty('thumb_map')) {
+        obj['thumb_map'] = ApiClient.convertToType(data['thumb_map'], 'String');
+      }
       if (data.hasOwnProperty('image')) {
         obj['image'] = ApiClient.convertToType(data['image'], ['String']);
       }
@@ -109,6 +122,27 @@
       }
       if (data.hasOwnProperty('price')) {
         obj['price'] = ApiClient.convertToType(data['price'], 'String');
+      }
+      if (data.hasOwnProperty('block')) {
+        obj['block'] = ApiClient.convertToType(data['block'], 'Number');
+      }
+      if (data.hasOwnProperty('floor')) {
+        obj['floor'] = ApiClient.convertToType(data['floor'], 'Number');
+      }
+      if (data.hasOwnProperty('apartment')) {
+        obj['apartment'] = ApiClient.convertToType(data['apartment'], 'Number');
+      }
+      if (data.hasOwnProperty('project_status')) {
+        obj['project_status'] = ApiClient.convertToType(data['project_status'], 'String');
+      }
+      if (data.hasOwnProperty('start_date')) {
+        obj['start_date'] = ApiClient.convertToType(data['start_date'], 'String');
+      }
+      if (data.hasOwnProperty('finish_date')) {
+        obj['finish_date'] = ApiClient.convertToType(data['finish_date'], 'String');
+      }
+      if (data.hasOwnProperty('video')) {
+        obj['video'] = ApiClient.convertToType(data['video'], 'String');
       }
       if (data.hasOwnProperty('address')) {
         obj['address'] = ApiClient.convertToType(data['address'], 'String');
@@ -127,6 +161,12 @@
       }
       if (data.hasOwnProperty('coordinate')) {
         obj['coordinate'] = Coordinate.constructFromObject(data['coordinate']);
+      }
+      if (data.hasOwnProperty('utility')) {
+        obj['utility'] = Utility.constructFromObject(data['utility']);
+      }
+      if (data.hasOwnProperty('agency')) {
+        obj['agency'] = ApiClient.convertToType(data['agency'], [User]);
       }
     }
     return obj;
@@ -161,6 +201,10 @@
    */
   exports.prototype['thumb'] = undefined;
   /**
+   * @member {String} thumb_map
+   */
+  exports.prototype['thumb_map'] = undefined;
+  /**
    * @member {Array.<String>} image
    */
   exports.prototype['image'] = undefined;
@@ -176,6 +220,34 @@
    * @member {String} price
    */
   exports.prototype['price'] = undefined;
+  /**
+   * @member {Number} block
+   */
+  exports.prototype['block'] = undefined;
+  /**
+   * @member {Number} floor
+   */
+  exports.prototype['floor'] = undefined;
+  /**
+   * @member {Number} apartment
+   */
+  exports.prototype['apartment'] = undefined;
+  /**
+   * @member {String} project_status
+   */
+  exports.prototype['project_status'] = undefined;
+  /**
+   * @member {String} start_date
+   */
+  exports.prototype['start_date'] = undefined;
+  /**
+   * @member {String} finish_date
+   */
+  exports.prototype['finish_date'] = undefined;
+  /**
+   * @member {String} video
+   */
+  exports.prototype['video'] = undefined;
   /**
    * @member {String} address
    */
@@ -200,6 +272,14 @@
    * @member {module:model/Coordinate} coordinate
    */
   exports.prototype['coordinate'] = undefined;
+  /**
+   * @member {module:model/Utility} utility
+   */
+  exports.prototype['utility'] = undefined;
+  /**
+   * @member {Array.<module:model/User>} agency
+   */
+  exports.prototype['agency'] = undefined;
 
 
 
