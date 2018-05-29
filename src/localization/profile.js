@@ -7,14 +7,16 @@ const strings = new LocalizedStrings({
     mail: 'mail',
     phone: 'phone number',
     contactWith: 'Contact with agency',
-    unset: 'Not added yet'
+    unset: 'Not added yet',
+    showProj: 'All projects'
   },
   vni: {
     name: 'họ và tên',
     mail: 'mail',
     phone: 'số điện thoại',
     contactWith: 'Liên lạc với nhà môi giới',
-    unset: 'Chưa bổ sung'
+    unset: 'Chưa bổ sung',
+    showProj: 'Tất cả dự án'
   }
 });
 

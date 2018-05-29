@@ -12,19 +12,20 @@ import {
   UNLIKE_REALTY_FAILURE
 } from './actions';
 
-const initial = {
+const flag = {
   fetching: false,
-  postingFavorite: false,
-  data: {}
+  postingFavorite: false
 };
+
+const initial = Object.assign(flag, { data: {} });
 
 export const realtyDetailReducer = handleActions(
   {
     [GET_REALTY_DETAIL]: state => {
-      return Object.assign({}, state, { fetching: true });
+      return Object.assign({}, state, flag, { fetching: true });
     },
     [GET_REALTY_DETAIL_FAILURE]: state => {
-      return Object.assign({}, state, { fetching: false });
+      return Object.assign({}, state, flag);
     },
     [GET_REALTY_DETAIL_SUCCESS]: (state, { payload }) => {
       if (!state.data[payload.id]) {
@@ -32,7 +33,7 @@ export const realtyDetailReducer = handleActions(
       } else {
         Object.assign(state.data, { [payload.id]: payload });
       }
-      return Object.assign({}, state, { fetching: false });
+      return Object.assign({}, state, flag);
     },
     [LIKE_REALTY]: (state, { payload }) => {
       const { id, is_favorite } = payload;
@@ -40,10 +41,10 @@ export const realtyDetailReducer = handleActions(
       if (realty) {
         Object.assign(realty, { is_favorite: !is_favorite });
       }
-      return Object.assign({}, state, { postingFavorite: true });
+      return Object.assign({}, state, flag, { postingFavorite: true });
     },
     [LIKE_REALTY_SUCCESS]: state => {
-      return Object.assign({}, state, { postingFavorite: false });
+      return Object.assign({}, state, flag);
     },
     [LIKE_REALTY_FAILURE]: (state, { payload }) => {
       const { id, is_favorite } = payload;
@@ -51,7 +52,7 @@ export const realtyDetailReducer = handleActions(
       if (realty) {
         Object.assign(realty, { is_favorite: !is_favorite });
       }
-      return Object.assign({}, state, { postingFavorite: false });
+      return Object.assign({}, state, flag);
     },
     [UNLIKE_REALTY]: (state, { payload }) => {
       const { id, is_favorite } = payload;
@@ -59,10 +60,10 @@ export const realtyDetailReducer = handleActions(
       if (realty) {
         Object.assign(realty, { is_favorite: !is_favorite });
       }
-      return Object.assign({}, state, { postingFavorite: true });
+      return Object.assign({}, state, flag, { postingFavorite: true });
     },
     [UNLIKE_REALTY_SUCCESS]: state => {
-      return Object.assign({}, state, { postingFavorite: false });
+      return Object.assign({}, state, flag);
     },
     [UNLIKE_REALTY_FAILURE]: (state, { payload }) => {
       const { id, is_favorite } = payload;
@@ -70,7 +71,7 @@ export const realtyDetailReducer = handleActions(
       if (realty) {
         Object.assign(realty, { is_favorite: !is_favorite });
       }
-      return Object.assign({}, state, { postingFavorite: false });
+      return Object.assign({}, state, flag);
     }
   },
   initial

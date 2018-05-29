@@ -10,6 +10,9 @@ export const handleError = (error, callback) => {
       {
         text: alertStrings.restart,
         onPress: () => RNRestart.Restart()
+      },
+      {
+        text: alertStrings.cancel
       }
     ]);
   } else if (callback === true) {
@@ -17,6 +20,15 @@ export const handleError = (error, callback) => {
   } else if (callback) {
     callback();
   }
+};
+
+export const handleLikeOrUnlikeRealty = (state, payload) => {
+  const { id, is_favorite } = payload;
+  const index = state.data.findIndex(item => item.id === id);
+  if (index !== -1) {
+    Object.assign(state.data[index], { is_favorite: !is_favorite });
+  }
+  return Object.assign({}, state);
 };
 
 const agencyApi = new API.AgencyApi();

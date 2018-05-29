@@ -1,7 +1,8 @@
 import 'rxjs';
 import { combineEpics } from 'redux-observable';
 import { AsyncStorage } from 'react-native';
-import { StackActions } from 'react-navigation';
+import { StackActions, NavigationActions } from 'react-navigation';
+import * as routes from '../../routes/routes';
 
 import {
   LOGIN,
@@ -12,6 +13,10 @@ import {
   FORGOT_SUCCESS,
   REGISTER_SUCCESS,
   SOCIAL_SUCCESS,
+  GET_ME,
+  GET_ME_SUCCESS,
+  LOGOUT,
+  LOGOUT_SUCCESS,
   AUTH_FAILURE
 } from './actions';
 import { authApi, userApi, handleError } from '../../utils/api';
@@ -20,20 +25,70 @@ import { _alert } from '../../utils/alert';
 import alertStrings from '../../localization/alert';
 import { store } from '../../app';
 
+const reset = () => {
+  const resetAction = StackActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: routes.mainWithModal })]
+  });
+  const interval = setInterval(() => {
+    const { city } = store.getState().city.data;
+    const { utils } = store.getState().options.data;
+    if (city && city[0] && utils[0]) {
+      clearInterval(interval);
+      store.dispatch(resetAction);
+    }
+  }, 200);
+};
+
 const loginEpic = actions$ =>
   actions$.ofType(LOGIN).switchMap(async action => {
     try {
       const resp = await authApi.login(action.payload);
+      ApiClient.instance.authentications.Bearer.type = 'apiKey';
       ApiClient.instance.authentications.Bearer.apiKeyPrefix = 'Bearer';
       ApiClient.instance.authentications.Bearer.apiKey = resp.body.token;
       AsyncStorage.setItem('token', resp.body.token);
       if (action.payload.callback) {
         action.payload.callback();
       }
+      reset();
       return { type: LOGIN_SUCCESS, payload: resp.body };
     } catch (error) {
+      console.log(error);
+      AsyncStorage.setItem('token', '');
       handleError(error, true);
-      return { type: AUTH_FAILURE };
+      return { type: AUTH_FAILURE, payload: error };
+    }
+  });
+
+const logoutEpic = actions$ =>
+  actions$.ofType(LOGOUT).switchMap(async action => {
+    try {
+      const resp = await authApi.logout(action.payload);
+      ApiClient.instance.authentications.Bearer.apiKeyPrefix = '';
+      ApiClient.instance.authentications.Bearer.apiKey = '';
+      AsyncStorage.setItem('token', '');
+      return { type: LOGOUT_SUCCESS, payload: resp.body };
+    } catch (error) {
+      handleError(error, true);
+      return { type: AUTH_FAILURE, payload: error };
+    }
+  });
+
+const getMeEpic = actions$ =>
+  actions$.ofType(GET_ME).switchMap(async action => {
+    try {
+      console.log('here');
+      const resp = await userApi.me();
+      console.log(resp);
+      ApiClient.instance.authentications.Bearer.apiKeyPrefix = '';
+      ApiClient.instance.authentications.Bearer.apiKey = '';
+      AsyncStorage.setItem('token', '');
+      return { type: GET_ME_SUCCESS, payload: resp.body };
+    } catch (error) {
+      console.log(error);
+      handleError(error, true);
+      return { type: AUTH_FAILURE, payload: error };
     }
   });
 
@@ -53,7 +108,7 @@ const forgotEpic = actions$ =>
       return { type: FORGOT_SUCCESS };
     } catch (error) {
       handleError(error, true);
-      return { type: AUTH_FAILURE };
+      return { type: AUTH_FAILURE, payload: error };
     }
   });
 
@@ -76,7 +131,7 @@ const registerEpic = actions$ =>
       return { type: REGISTER_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
-      return { type: AUTH_FAILURE };
+      return { type: AUTH_FAILURE, payload: error };
     }
   });
 
@@ -90,8 +145,15 @@ const socialEpic = actions$ =>
       return { type: SOCIAL_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
-      return { type: AUTH_FAILURE };
+      return { type: AUTH_FAILURE, payload: error };
     }
   });
 
-export const authEpic = combineEpics(loginEpic, forgotEpic, registerEpic, socialEpic);
+export const authEpic = combineEpics(
+  loginEpic,
+  forgotEpic,
+  registerEpic,
+  socialEpic,
+  getMeEpic,
+  logoutEpic
+);

@@ -50,6 +50,9 @@
 
 
 
+
+
+
   };
 
   /**
@@ -66,11 +69,20 @@
       if (data.hasOwnProperty('id')) {
         obj['id'] = ApiClient.convertToType(data['id'], 'Number');
       }
+      if (data.hasOwnProperty('price')) {
+        obj['price'] = ApiClient.convertToType(data['price'], 'Number');
+      }
+      if (data.hasOwnProperty('price_unit')) {
+        obj['price_unit'] = ApiClient.convertToType(data['price_unit'], 'String');
+      }
       if (data.hasOwnProperty('coordinate')) {
         obj['coordinate'] = Coordinate.constructFromObject(data['coordinate']);
       }
       if (data.hasOwnProperty('is_favorite')) {
         obj['is_favorite'] = ApiClient.convertToType(data['is_favorite'], 'Number');
+      }
+      if (data.hasOwnProperty('group')) {
+        obj['group'] = ApiClient.convertToType(data['group'], 'String');
       }
     }
     return obj;
@@ -81,6 +93,14 @@
    */
   exports.prototype['id'] = undefined;
   /**
+   * @member {Number} price
+   */
+  exports.prototype['price'] = undefined;
+  /**
+   * @member {String} price_unit
+   */
+  exports.prototype['price_unit'] = undefined;
+  /**
    * @member {module:model/Coordinate} coordinate
    */
   exports.prototype['coordinate'] = undefined;
@@ -88,6 +108,10 @@
    * @member {Number} is_favorite
    */
   exports.prototype['is_favorite'] = undefined;
+  /**
+   * @member {String} group
+   */
+  exports.prototype['group'] = undefined;
 
 
 

@@ -3,7 +3,7 @@ import { View, Image, StatusBar, AsyncStorage, Text } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import * as routes from '../navigators/defineRoutes';
+import * as routes from './routes';
 import { _dims } from '../utils/constants';
 import Overlay from '../components/common/Overlay';
 import {
@@ -12,7 +12,7 @@ import {
   setListCityAction,
   setListOptionsAction
 } from '../redux/preload/actions';
-import { loginAction } from '../redux/auth/actions';
+import { loginAction, getMeAction } from '../redux/auth/actions';
 import strings from '../localization/authorization';
 import { ApiClient } from '../swaggerApi/src';
 
@@ -34,23 +34,28 @@ class SplashScreen extends React.Component {
       setListCityAction(JSON.parse(city));
     }
     if (token) {
+      ApiClient.instance.authentications.Bearer.type = 'apiKey';
       ApiClient.instance.authentications.Bearer.apiKeyPrefix = 'Bearer';
       ApiClient.instance.authentications.Bearer.apiKey = token;
       loginAction({ email: 'admin@admin.com', password: '123' });
-    }
-    this.props.dispatch({ type: 'GET_LIST_OPTIONS' });
-    getListCityAction();
-    getListOptionsAction();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.auth.fetching && nextProps.city.data.city && nextProps.options.data.utils[0]) {
+      // getMeAction();
+      // getListKeywordAction();
+    } else {
       const resetAction = StackActions.reset({
         index: 0,
         actions: [NavigationActions.navigate({ routeName: routes.mainWithModal })]
       });
-      this.props.dispatch(resetAction);
+      const interval = setInterval(() => {
+        const { city } = this.props.city.data;
+        const { utils } = this.props.options.data;
+        if (city && city[0] && utils[0]) {
+          clearInterval(interval);
+          this.props.dispatch(resetAction);
+        }
+      }, 200);
     }
+    getListCityAction();
+    getListOptionsAction();
   }
 
   render() {

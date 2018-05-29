@@ -57,6 +57,7 @@
 
 
 
+
   };
 
   /**
@@ -81,6 +82,9 @@
       }
       if (data.hasOwnProperty('price_unit')) {
         obj['price_unit'] = ApiClient.convertToType(data['price_unit'], 'Number');
+      }
+      if (data.hasOwnProperty('area')) {
+        obj['area'] = ApiClient.convertToType(data['area'], 'Number');
       }
       if (data.hasOwnProperty('thumb')) {
         obj['thumb'] = ApiClient.convertToType(data['thumb'], 'String');
@@ -120,6 +124,10 @@
    * @member {Number} price_unit
    */
   exports.prototype['price_unit'] = undefined;
+  /**
+   * @member {Number} area
+   */
+  exports.prototype['area'] = undefined;
   /**
    * @member {String} thumb
    */

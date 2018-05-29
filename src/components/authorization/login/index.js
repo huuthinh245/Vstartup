@@ -21,14 +21,17 @@ import {
   responsiveHeight
 } from '../../../utils/constants';
 import { _alert } from '../../../utils/alert';
-import * as routes from '../../../navigators/defineRoutes';
+import * as routes from '../../../routes/routes';
 import { _requestFB } from './facebook';
 import Overlay from '../../common/Overlay';
 import { _setupGoogleSignin, _signInGoogle, _signOutGoogle } from './google';
 import Header from '../../../navigators/headers/CommonHeader';
 import headerStrings from '../../../localization/header';
-import { loginAction, socialAction } from '../../../redux/auth/actions';
+import { loginAction, socialAction, logoutAction } from '../../../redux/auth/actions';
 import emitter from '../../../emitter';
+
+import { authApi } from '../../../utils/api';
+import ApiClient from '../../../swaggerApi/src/ApiClient';
 
 const logo = require('../../../assets/images/logo.png');
 const background = require('../../../assets/images/Loading.png');
@@ -49,15 +52,15 @@ class Login extends Component {
     _setupGoogleSignin(user => this.setState({ googleUser: user }));
   }
 
-  _signOut = () => {
-    authApi.logout((error, data, response) => {
-      if (error) {
-        _alert(alertStrings.error, response.body.message);
-      } else {
-        ApiClient.instance.authentications.Bearer.apiKeyPrefix = '';
-        ApiClient.instance.authentications.Bearer.apiKey = '';
-      }
-    });
+  _signOut = async () => {
+    logoutAction();
+    return;
+    try {
+      const resp = await authApi.logout();
+      console.log(resp);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   _signIn = async () => {
@@ -76,6 +79,15 @@ class Login extends Component {
       });
       this.password.focus();
     } else {
+      const resp = await authApi.login({
+        email: this.state.email,
+        password: this.state.password,
+        callback
+      });
+
+      ApiClient.instance.authentications.Bearer.apiKeyPrefix = 'Bearer';
+      ApiClient.instance.authentications.Bearer.apiKey = resp.body.token;
+
       const callback = this.props.navigation.state.params
         ? () => this.props.navigation.goBack()
         : null;
@@ -126,7 +138,8 @@ class Login extends Component {
           />
         )}
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
-          { // this.props.auth.fetching && <Overlay />
+          {
+            // this.props.auth.fetching && <Overlay />
           }
           <Image style={styles.bg} resizeMode="cover" source={background} />
           <View style={styles.logoContainer}>

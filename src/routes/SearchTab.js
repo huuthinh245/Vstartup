@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, StatusBar, Easing } from 'react-native';
+import { View, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import FlipView from 'react-native-flip-view-next';
+import RNGooglePlacePicker from 'react-native-google-place-picker';
 
 import { _colors } from '../utils/constants';
 import Header from '../navigators/headers/SearchTab';
 import SearchFront from '../components/tabs/SearchFront';
 import SearchBack from '../components/tabs/SearchBack';
 import { getListRealtyAction } from '../redux/listRealty/actions';
-import * as routes from '../navigators/defineRoutes';
+import * as routes from './routes';
 
 class SearchTab extends React.Component {
   constructor(props) {
@@ -32,7 +33,17 @@ class SearchTab extends React.Component {
         <Header
           flipIcon={!this.state.isFlipped ? 'md-list' : 'md-pin'}
           onFlipPress={this._flip}
-          onTitlePress={() => this.props.navigation.navigate(routes.suggestPlace)}
+          onTitlePress={() => {
+            RNGooglePlacePicker.show(response => {
+              if (response.didCancel) {
+                console.log('User cancelled GooglePlacePicker');
+              } else if (response.error) {
+                console.log('GooglePlacePicker Error: ', response.error);
+              } else {
+                console.log(response);
+              }
+            });
+          }}
           onFilterPress={() =>
             this.props.navigation.navigate(routes.filterScreen, {
               onDone: value => alert(value.toString())

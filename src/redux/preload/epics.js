@@ -25,7 +25,7 @@ const listOptionsEpic = actions$ =>
       } else {
         handleError(error);
       }
-      return { type: GET_LIST_OPTIONS_FAILURE };
+      return { type: GET_LIST_OPTIONS_FAILURE, payload: error };
     }
   });
 
@@ -41,7 +41,7 @@ const listCityEpic = actions$ =>
       } else {
         handleError(error);
       }
-      return { type: GET_LIST_CITY_FAILURE };
+      return { type: GET_LIST_CITY_FAILURE, payload: error };
     }
   });
 

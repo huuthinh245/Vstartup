@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import Placeholder from 'rn-placeholder';
 
 import AirbnbRating from '../components/rating';
 
@@ -36,6 +37,20 @@ export default class AgencyItem extends React.Component {
     );
   }
 }
+
+export const PlaceHolder = props => {
+  return (
+    <View style={styles.placeHolder}>
+      <Placeholder.ImageContent
+        size={_dims.screenWidth / 2 - _dims.defaultPadding * 1.5}
+        animate="fade"
+        lineNumber={4}
+        lineSpacing={5}
+        lastLineWidth="30%"
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   wrapper: {

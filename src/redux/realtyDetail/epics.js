@@ -47,4 +47,4 @@ const unlikeRealty = actions$ =>
     }
   });
 
-export const realtyDetail = combineEpics(getRealtyDetail, likeRealty, unlikeRealty);
+export const realtyDetailEpic = combineEpics(getRealtyDetail, likeRealty, unlikeRealty);

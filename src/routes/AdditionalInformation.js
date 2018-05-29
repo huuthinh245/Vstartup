@@ -22,7 +22,7 @@ export default class AdditionalInformation extends React.Component {
       <View style={styles.wrapper}>
         <Header
           onLeftPress={() => this.props.navigation.goBack()}
-          title="bo sung thong tin"
+          title={strings.additionalInformation}
           right={
             <TouchableOpacity>
               <Text style={{ color: _colors.mainColor }}>Luu</Text>

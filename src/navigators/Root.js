@@ -1,6 +1,6 @@
 import { createStackNavigator } from 'react-navigation';
 
-import * as routes from './defineRoutes';
+import * as routes from '../routes/routes';
 import { MainWithModal } from './Main';
 import SplashScreen from '../routes/SplashScreen';
 

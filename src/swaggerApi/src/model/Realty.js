@@ -64,6 +64,7 @@
 
 
 
+
     _this['method'] = method;
     _this['type_id'] = typeId;
 
@@ -81,6 +82,7 @@
 
 
     _this['address'] = address;
+
 
 
 
@@ -132,6 +134,9 @@
       }
       if (data.hasOwnProperty('thumb')) {
         obj['thumb'] = ApiClient.convertToType(data['thumb'], 'String');
+      }
+      if (data.hasOwnProperty('thumb_map')) {
+        obj['thumb_map'] = ApiClient.convertToType(data['thumb_map'], 'String');
       }
       if (data.hasOwnProperty('image')) {
         obj['image'] = ApiClient.convertToType(data['image'], ['String']);
@@ -241,6 +246,9 @@
       if (data.hasOwnProperty('utility')) {
         obj['utility'] = Utility.constructFromObject(data['utility']);
       }
+      if (data.hasOwnProperty('video')) {
+        obj['video'] = ApiClient.convertToType(data['video'], 'String');
+      }
     }
     return obj;
   }
@@ -277,6 +285,10 @@
    * @member {String} thumb
    */
   exports.prototype['thumb'] = undefined;
+  /**
+   * @member {String} thumb_map
+   */
+  exports.prototype['thumb_map'] = undefined;
   /**
    * @member {Array.<String>} image
    */
@@ -421,6 +433,10 @@
    * @member {module:model/Utility} utility
    */
   exports.prototype['utility'] = undefined;
+  /**
+   * @member {String} video
+   */
+  exports.prototype['video'] = undefined;
 
 
 

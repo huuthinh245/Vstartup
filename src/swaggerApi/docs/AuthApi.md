@@ -5,7 +5,7 @@ All URIs are relative to *http://rems.dfm-engineering.com/api/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**login**](AuthApi.md#login) | **POST** /auth/login | 
-[**logout**](AuthApi.md#logout) | **GET** /auth/logout/ | 
+[**logout**](AuthApi.md#logout) | **GET** /auth/logout | 
 [**register**](AuthApi.md#register) | **POST** /auth/register | 
 [**registerSocial**](AuthApi.md#registerSocial) | **POST** /auth/register-social | 
 

@@ -3,13 +3,21 @@ import { combineEpics } from 'redux-observable';
 import { listEpic } from './preload/epics';
 import { authEpic } from './auth/epics';
 import { listRealtyEpic } from './listRealty/epics';
-import { realtyDetail } from './realtyDetail/epics';
-import { listKeywordEpic } from './listKeyword/epics';
+import { realtyDetailEpic } from './realtyDetail/epics';
+import { listHistoryEpic } from './listHistory/epics';
+import { myRealtyEpic } from './myRealty/epics';
+import { listFavoriteEpic } from './listFavorite/epics';
+import { listAgencyEpic } from './listAgency/epics';
+import { agencyDetailEpic } from './agencyDetail/epics';
 
 export default (epics = combineEpics(
   listEpic,
   authEpic,
   listRealtyEpic,
-  realtyDetail,
-  listKeywordEpic
+  realtyDetailEpic,
+  listHistoryEpic,
+  myRealtyEpic,
+  listFavoriteEpic,
+  listAgencyEpic,
+  agencyDetailEpic
 ));

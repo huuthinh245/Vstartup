@@ -25,6 +25,7 @@ class Filter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      scrollEnabled: true,
       utils: [],
       priceRange: [2, 8],
       areaRange: [2, 8],
@@ -105,6 +106,9 @@ class Filter extends React.Component {
     );
   };
 
+  _disableScroll = () => this.setState({ scrollEnabled: false });
+  _enableScroll = () => this.setState({ scrollEnabled: true });
+
   render() {
     return (
       <View style={styles.wrapper}>
@@ -117,14 +121,14 @@ class Filter extends React.Component {
             </TouchableOpacity>
           }
         />
-        <ScrollView>
+        <ScrollView scrollEnabled={this.state.scrollEnabled}>
           <View style={styles.innerWrapper}>
             <Text style={styles.title}>{strings.price}</Text>
             <View style={styles.sliderWrapper}>
               <MultiSlider
                 sliderLength={_dims.screenWidth - _dims.defaultPadding * 2}
-                onValuesChangeStart={this.disableScroll}
-                onValuesChangeFinish={this.enableScroll}
+                onValuesChangeStart={this._disableScroll}
+                onValuesChangeFinish={this._enableScroll}
                 onValuesChange={values => this.setState({ priceRange: values })}
                 selectedStyle={styles.selectedStyle}
                 unselectedStyle={styles.unselectedStyle}
@@ -145,12 +149,18 @@ class Filter extends React.Component {
               </View>
             </View>
 
-            <Text style={styles.title}>{strings.area}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <MaterialIcons
+                name="check-box"
+              />
+              <Text style={styles.title}>{strings.area}</Text>
+              
+            </View>
             <View style={styles.sliderWrapper}>
               <MultiSlider
                 sliderLength={_dims.screenWidth - _dims.defaultPadding * 2}
-                onValuesChangeStart={this.disableScroll}
-                onValuesChangeFinish={this.enableScroll}
+                onValuesChangeStart={this._disableScroll}
+                onValuesChangeFinish={this._enableScroll}
                 onValuesChange={values => this.setState({ areaRange: values })}
                 selectedStyle={styles.selectedStyle}
                 unselectedStyle={styles.unselectedStyle}
@@ -339,7 +349,7 @@ const styles = StyleSheet.create({
     width: responsiveWidth(80),
     borderWidth: 0,
     borderRadius: 3,
-    backgroundColor: '#3bcce1'
+    backgroundColor: 'lightblue'
   },
   dropdownBed: {
     width: responsiveWidth(50) - _dims.defaultPadding * 1.5

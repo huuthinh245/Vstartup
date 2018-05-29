@@ -5,7 +5,7 @@ import Carousel from 'react-native-snap-carousel';
 import { _dims } from '../utils/constants';
 import SliderEntry from './SliderEntry';
 import RealtyItem from './RealtyItem';
-import * as routes from '../navigators/defineRoutes';
+import * as routes from '../routes/routes';
 
 export const ENTRIES1 = [
   {

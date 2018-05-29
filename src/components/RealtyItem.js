@@ -3,10 +3,12 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import PropsTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
+import Placeholder from 'rn-placeholder';
 
 import { styles } from './ProjectItem';
+import { responsiveHeight } from '../utils/constants';
 
-export default class ProjectItem extends React.Component {
+export default class RealtyItem extends React.Component {
   static propsType = {
     selected: PropsTypes.bool,
     showPin: PropsTypes.object
@@ -41,7 +43,7 @@ export default class ProjectItem extends React.Component {
           <TouchableOpacity activeOpacity={1} onPress={this.props.onLikeRealty}>
             <Ionicons
               style={styles.favoriteButton}
-              name={`ios-heart${data.is_favorite ? '-outline' : ''}`}
+              name={`ios-heart${!data.is_favorite ? '-outline' : ''}`}
             />
           </TouchableOpacity>
         </View>
@@ -65,3 +67,17 @@ export default class ProjectItem extends React.Component {
     );
   }
 }
+
+export const PlaceHolder = () => {
+  return (
+    <View style={styles.placeHolder}>
+      <Placeholder.ImageContent
+        size={responsiveHeight(15)}
+        animate="fade"
+        lineNumber={5}
+        lineSpacing={5}
+        lastLineWidth="30%"
+      />
+    </View>
+  );
+};

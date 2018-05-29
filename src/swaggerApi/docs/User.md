@@ -13,5 +13,7 @@ Name | Type | Description | Notes
 **districtId** | **Number** |  | [optional] 
 **wardId** | **Number** |  | [optional] 
 **avatar** | **String** |  | [optional] 
+**bio** | **String** |  | [optional] 
+**rating** | **Number** |  | [optional] 
 
 

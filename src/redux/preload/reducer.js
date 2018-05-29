@@ -21,12 +21,8 @@ const initialOptions = {
     methods: {},
     directions: {},
     priceUnits: {}
-  }
-};
-
-const initialCities = {
-  fetching: false,
-  data: {}
+  },
+  error: null
 };
 
 export const optionsReducer = handleActions(
@@ -34,8 +30,8 @@ export const optionsReducer = handleActions(
     [GET_LIST_OPTIONS]: state => {
       return Object.assign({}, state, { fetching: true });
     },
-    [GET_LIST_OPTIONS_FAILURE]: state => {
-      return Object.assign({}, state, { fetching: false });
+    [GET_LIST_OPTIONS_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, { fetching: false, error: payload });
     },
     [GET_LIST_OPTIONS_SUCCESS]: (state, { payload }) => {
       Object.assign(state.data, { utils: payload.utility });
@@ -55,13 +51,15 @@ export const optionsReducer = handleActions(
   initialOptions
 );
 
+const initialCities = { fetching: false, data: {}, error: null };
+
 export const cityReducer = handleActions(
   {
     [GET_LIST_CITY]: state => {
       return Object.assign({}, state, { fetching: true });
     },
-    [GET_LIST_CITY_FAILURE]: state => {
-      return Object.assign({}, state, { fetching: false });
+    [GET_LIST_CITY_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, { fetching: false, error: payload });
     },
     [GET_LIST_CITY_SUCCESS]: (state, { payload }) => {
       const rs = Object.assign({}, state, { fetching: false, data: payload });

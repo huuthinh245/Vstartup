@@ -125,7 +125,7 @@
       var returnType = GenericSuscess;
 
       return this.apiClient.callApi(
-        '/auth/logout/', 'GET',
+        '/auth/logout', 'GET',
         pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );

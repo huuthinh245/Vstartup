@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Separator from '../flatlistHelpers/Separator';
 import HistoryItem from '../HistoryItem';
 import { _dims } from '../../utils/constants';
-import * as routes from '../../navigators/defineRoutes';
+import * as routes from '../../routes/routes';
 import Header from '../../navigators/headers/CommonHeader';
 import headerStrings from '../../localization/header';
 import Spin from '../common/Spinner';

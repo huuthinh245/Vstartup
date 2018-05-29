@@ -48,7 +48,6 @@ export default class ProjectItem extends React.Component {
             name={`md-heart${data.is_favorite === 1 ? '' : '-outline'}`}
           />
         </View>
-        <TouchableOpacity style={styles.touch} onPress={this.props.onPress} activeOpacity={1} />
         <View style={styles.infoWrapper}>
           <View style={{ flexDirection: 'row' }}>
             {this.props.showPin && (
@@ -76,6 +75,16 @@ export const styles = StyleSheet.create({
   wrapper: {
     borderRadius
   },
+  placeHolder: {
+    borderRadius,
+    height:
+      responsiveHeight(10) +
+      38 +
+      responsiveFontSize(_dims.defaultFontTitle) +
+      responsiveFontSize(_dims.defaultFontSize),
+    backgroundColor: '#fff',
+    padding: _dims.defaultPadding
+  },
   image: {
     width: '100%',
     height: '100%',
@@ -101,6 +110,14 @@ export const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     marginTop: responsiveHeight(10),
+    borderBottomLeftRadius: borderRadius,
+    borderBottomRightRadius: borderRadius
+  },
+  infoWrapperPlaceHolder: {
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    width: '100%',
+    padding: 10,
+    alignContent: 'flex-end',
     borderBottomLeftRadius: borderRadius,
     borderBottomRightRadius: borderRadius
   },

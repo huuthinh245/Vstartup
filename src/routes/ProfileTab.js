@@ -4,12 +4,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import ModalDropdown from 'react-native-modal-dropdown';
 
-import { responsiveFontSize, _dims, responsiveHeight, _colors } from '../utils/constants';
+import {
+  responsiveFontSize,
+  _dims,
+  responsiveHeight,
+  _colors,
+  responsiveWidth
+} from '../utils/constants';
 import Header from '../navigators/headers/CommonHeader';
-import * as routes from '../navigators/defineRoutes';
+import * as routes from './routes';
 import Login from '../components/authorization/login';
 import { _alert } from '../utils/alert';
-import AgencyDetail from '../components/AgencyDetail';
+import AgencyDetail from './AgencyDetail';
+import headerStrings from '../localization/header';
 
 class ProfileTab extends React.Component {
   _renderDropdownRow = (option, index, isSelected) => {
@@ -47,7 +54,7 @@ class ProfileTab extends React.Component {
     return (
       <View style={styles.wrapper}>
         <Header
-          title="Thong tin ca nhan"
+          title={headerStrings.profileTitle}
           outer
           right={
             <ModalDropdown
@@ -73,12 +80,12 @@ class ProfileTab extends React.Component {
             </ModalDropdown>
           }
         />
-        <AgencyDetail />
+        <AgencyDetail navigation={this.props.navigation} />
       </View>
     );
   };
   render() {
-    return this.props.auth.user.id ? this._renderWithAuth() : <Login {...this.props} />;
+    return this.props.auth.token ? this._renderWithAuth() : <Login {...this.props} />;
   }
 }
 
@@ -109,15 +116,14 @@ const styles = StyleSheet.create({
     paddingLeft: _dims.defaultPadding
   },
   dropdown: {
-    borderWidth: 1 / PixelRatio.get(),
-    borderColor: 'lightblue',
+    backgroundColor: 'lightblue',
     borderRadius: 4,
-    height: 120
+    height: 150
   },
   row: {
     flexDirection: 'row',
-    height: 40,
-    width: 200,
+    height: 50,
+    width: responsiveWidth(70),
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 1 / PixelRatio.get(),

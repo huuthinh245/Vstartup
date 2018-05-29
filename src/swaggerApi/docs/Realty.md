@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **excerpt** | **String** |  | [optional] 
 **body** | **String** |  | [optional] 
 **thumb** | **String** |  | [optional] 
+**thumbMap** | **String** |  | [optional] 
 **image** | **[String]** |  | [optional] 
 **featured** | **Number** |  | [optional] 
 **startDate** | **Number** |  | [optional] 
@@ -47,5 +48,6 @@ Name | Type | Description | Notes
 **updatedAt** | **String** |  | [optional] 
 **isFavorite** | **Number** |  | [optional] 
 **utility** | [**Utility**](Utility.md) |  | [optional] 
+**video** | **String** |  | [optional] 
 
 

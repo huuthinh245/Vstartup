@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**mapRealty**](RealtyApi.md#mapRealty) | **GET** /realty/map | 
 [**postFavorite**](RealtyApi.md#postFavorite) | **POST** /realty/favorite | 
 [**postRealty**](RealtyApi.md#postRealty) | **POST** /realty | 
+[**saveKeyword**](RealtyApi.md#saveKeyword) | **POST** /realty/keyword | 
 [**viewRealty**](RealtyApi.md#viewRealty) | **GET** /realty/{id} | 
 
 
@@ -63,7 +64,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/x-www-form-urlencoded
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 <a name="deleteKeyword"></a>
@@ -114,7 +115,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/x-www-form-urlencoded
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 <a name="listFavorite"></a>
@@ -286,7 +287,8 @@ var opts = {
   'lat': 8.14, // Number | 
   'lng': 8.14, // Number | 
   'price': 8.14, // Number | 
-  'type': 8.14 // Number | 
+  'type': 56, // Number | 
+  'method': "method_example" // String | 
 };
 
 var callback = function(error, data, response) {
@@ -308,6 +310,7 @@ Name | Type | Description  | Notes
  **lng** | **Number**|  | [optional] 
  **price** | **Number**|  | [optional] 
  **type** | **Number**|  | [optional] 
+ **method** | **String**|  | [optional] 
 
 ### Return type
 
@@ -423,6 +426,63 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="saveKeyword"></a>
+# **saveKeyword**
+> RealtyKeyword saveKeyword(address, lat, lng)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+var defaultClient = RemsApi.ApiClient.instance;
+
+// Configure API key authorization: Bearer
+var Bearer = defaultClient.authentications['Bearer'];
+Bearer.apiKey = 'YOUR API KEY';
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.apiKeyPrefix = 'Token';
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var address = "address_example"; // String | 
+
+var lat = 8.14; // Number | 
+
+var lng = 8.14; // Number | 
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.saveKeyword(address, lat, lng, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **address** | **String**|  | 
+ **lat** | **Number**|  | 
+ **lng** | **Number**|  | 
+
+### Return type
+
+[**RealtyKeyword**](RealtyKeyword.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
  - **Accept**: application/json
 
 <a name="viewRealty"></a>

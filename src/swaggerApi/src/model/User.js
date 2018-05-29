@@ -57,6 +57,8 @@
 
 
 
+
+
   };
 
   /**
@@ -99,6 +101,12 @@
       }
       if (data.hasOwnProperty('avatar')) {
         obj['avatar'] = ApiClient.convertToType(data['avatar'], 'String');
+      }
+      if (data.hasOwnProperty('bio')) {
+        obj['bio'] = ApiClient.convertToType(data['bio'], 'String');
+      }
+      if (data.hasOwnProperty('rating')) {
+        obj['rating'] = ApiClient.convertToType(data['rating'], 'Number');
       }
     }
     return obj;
@@ -144,6 +152,14 @@
    * @member {String} avatar
    */
   exports.prototype['avatar'] = undefined;
+  /**
+   * @member {String} bio
+   */
+  exports.prototype['bio'] = undefined;
+  /**
+   * @member {Number} rating
+   */
+  exports.prototype['rating'] = undefined;
 
 
 

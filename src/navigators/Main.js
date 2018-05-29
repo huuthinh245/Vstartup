@@ -4,20 +4,24 @@ import { Text } from 'react-native';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import * as routes from './defineRoutes';
+import * as routes from '../routes/routes';
 import SearchTab from '../routes/SearchTab';
 import HistoryTab from '../routes/HistoryTab';
 import FavoriteTab from '../routes/FavoriteTab';
 import ProfileTab from '../routes/ProfileTab';
 import MenuTab from '../routes/MenuTab';
 
-import ProjectDetail from '../components/ProjectDetail';
-import RealtyDetail from '../components/RealtyDetail';
-import AgencyDetail from '../components/AgencyDetail';
-import SuggestPlace from '../components/SuggestPlace';
+import ProjectDetail from '../routes/ProjectDetail';
+import RealtyDetail from '../routes/RealtyDetail';
+import AgencyDetail from '../routes/AgencyDetail';
+import SuggestPlace from '../routes/SuggestPlace';
 import AdditionalInformation from '../routes/AdditionalInformation';
 import Sort from '../routes/Sort';
 import Filter from '../routes/Filter';
+import ListAgency from '../routes/ListAgency';
+import ListProject from '../routes/ListProject';
+import ListInvestor from '../routes/ListInvestor';
+import Settings from '../routes/Settings';
 
 import Register from '../components/authorization/register';
 import Forgot from '../components/authorization/Forgot';
@@ -97,11 +101,16 @@ const stackConfig = {
   [routes.suggestPlace]: { screen: SuggestPlace },
   [routes.additionalInformation]: { screen: AdditionalInformation },
   [routes.sortScreen]: { screen: Sort },
-  [routes.filterScreen]: { screen: Filter }
+  [routes.filterScreen]: { screen: Filter },
+  [routes.listAgency]: { screen: ListAgency },
+  [routes.listInvestor]: { screen: ListInvestor },
+  [routes.listProject]: { screen: ListProject },
+  [routes.settings]: { screen: Settings },
 };
 
 const navConfig = {
-  navigationOptions: { header: null }
+  navigationOptions: { header: null },
+  initialRouteName: routes.Tabs
 };
 
 const Main = createStackNavigator(stackConfig, navConfig);

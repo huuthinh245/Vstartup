@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Separator from '../flatlistHelpers/Separator';
 import RealtyItem from '../RealtyItem';
 import { _dims } from '../../utils/constants';
-import * as routes from '../../navigators/defineRoutes';
+import * as routes from '../../routes/routes';
 import Spin from '../common/Spinner';
 
 class FavoriteAuth extends React.Component {

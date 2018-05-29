@@ -1,14 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { View, StyleSheet, FlatList } from 'react-native';
+import { connect } from 'react-redux';
 
 import { responsiveFontSize, _dims, responsiveHeight, _colors } from '../utils/constants';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
-import strings from '../localization/authorization';
-import AgencyItem from '../components/AgencyItem';
+import AgencyItem, { PlaceHolder } from '../components/AgencyItem';
+import Separator from '../components/flatlistHelpers/Separator';
+import * as routes from './routes';
+import {
+  getListAgencyAction,
+  refreshListAgencyAction,
+  loadMoreListAgencyAction
+} from '../redux/listAgency/actions';
 
-export default class AdditionalInformation extends React.Component {
+class ListAgency extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onEndReachedCalledDuringMomentum = true;
+  }
+
+  componentDidMount() {
+    getListAgencyAction({ page: 1 });
+  }
   _renderItem = ({ item, index }) => {
     const style =
       index % 2 === 0
@@ -16,24 +30,65 @@ export default class AdditionalInformation extends React.Component {
         : { marginLeft: _dims.defaultPadding / 2 };
     return <AgencyItem data={item} style={style} />;
   };
+
+  _onLoadMore = () => {
+    if (this.props.listAgency.loadMore || this.onEndReachedCalledDuringMomentum) return;
+
+    const len = this.props.listAgency.data.length;
+    const page = Math.round(len / LIMIT_SERVICES) + 1;
+    loadMoreListAgencyAction({ page });
+    this.onEndReachedCalledDuringMomentum = true;
+  };
+
+  _onRefresh = () => {
+    if (this.props.listAgency.refreshing) return;
+    refreshListAgencyAction();
+  };
+
   render() {
+    const { listAgency } = this.props;
     return (
       <View style={styles.wrapper}>
-        <Header onLeftPress={() => this.props.navigation.goBack()} title="Danh sach agency" />
-        <FlatList
-          style={{ marginHorizontal: _dims.defaultPadding }}
-          data={[1, 2, 3, 4, 5, 6, 7, 8]}
-          keyExtractor={item => `${item}`}
-          renderItem={this._renderItem}
-          numColumns={2}
-          ListFooterComponent={() => <View style={{ height: _dims.defaultPadding }} />}
-          ListHeaderComponent={() => <View style={{ height: _dims.defaultPadding }} />}
-          ItemSeparatorComponent={() => <View style={{ height: _dims.defaultPadding }} />}
+        <Header
+          onLeftPress={() => this.props.navigation.goBack()}
+          title={headerStrings.listAgency}
         />
+        {listAgency.fetching || listAgency.refreshing ? (
+          <View>
+            <PlaceHolder />
+            <Separator height={_dims.defaultPadding} />
+            <PlaceHolder />
+            <Separator height={_dims.defaultPadding} />
+            <PlaceHolder />
+            <Separator height={_dims.defaultPadding} />
+            <PlaceHolder />
+            <Separator height={_dims.defaultPadding} />
+            <PlaceHolder />
+          </View>
+        ) : (
+          <FlatList
+            style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
+            data={listAgency.data}
+            renderItem={this._renderItem}
+            keyExtractor={item => `${item.id}`}
+            ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
+            ListFooterComponent={this._renderFooter}
+            ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
+            onMomentumScrollBegin={() => {
+              this.onEndReachedCalledDuringMomentum = false;
+            }}
+            refreshing={listAgency.refreshing}
+            onEndReachedThreshold={0}
+            onRefresh={this._onRefresh}
+            onEndReached={this._onLoadMore}
+          />
+        )}
       </View>
     );
   }
 }
+
+export default connect(state => ({ listAgency: state.listAgency }))(ListAgency);
 
 const styles = StyleSheet.create({
   wrapper: {
