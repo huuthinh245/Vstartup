@@ -13,7 +13,7 @@
  *
  */
 
-(function(root, factory) {
+(function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define(['ApiClient', 'model/Coordinate'], factory);
@@ -27,12 +27,7 @@
     }
     root.RemsApi.RealtyMap = factory(root.RemsApi.ApiClient, root.RemsApi.Coordinate);
   }
-}(this, function(ApiClient, Coordinate) {
-  'use strict';
-
-
-
-
+}(this, (ApiClient, Coordinate) => {
   /**
    * The RealtyMap model module.
    * @module model/RealtyMap
@@ -44,15 +39,8 @@
    * @alias module:model/RealtyMap
    * @class
    */
-  var exports = function() {
-    var _this = this;
-
-
-
-
-
-
-
+  const exports = function () {
+    const _this = this;
   };
 
   /**
@@ -62,60 +50,56 @@
    * @param {module:model/RealtyMap} obj Optional instance to populate.
    * @return {module:model/RealtyMap} The populated <code>RealtyMap</code> instance.
    */
-  exports.constructFromObject = function(data, obj) {
+  exports.constructFromObject = function (data, obj) {
     if (data) {
       obj = obj || new exports();
 
       if (data.hasOwnProperty('id')) {
-        obj['id'] = ApiClient.convertToType(data['id'], 'Number');
+        obj.id = ApiClient.convertToType(data.id, 'Number');
       }
       if (data.hasOwnProperty('price')) {
-        obj['price'] = ApiClient.convertToType(data['price'], 'Number');
+        obj.price = ApiClient.convertToType(data.price, 'Number');
       }
       if (data.hasOwnProperty('price_unit')) {
-        obj['price_unit'] = ApiClient.convertToType(data['price_unit'], 'String');
+        obj.price_unit = ApiClient.convertToType(data.price_unit, 'String');
       }
       if (data.hasOwnProperty('coordinate')) {
-        obj['coordinate'] = Coordinate.constructFromObject(data['coordinate']);
+        obj.coordinate = Coordinate.constructFromObject(data.coordinate);
       }
       if (data.hasOwnProperty('is_favorite')) {
-        obj['is_favorite'] = ApiClient.convertToType(data['is_favorite'], 'Number');
+        obj.is_favorite = ApiClient.convertToType(data.is_favorite, 'Number');
       }
       if (data.hasOwnProperty('group')) {
-        obj['group'] = ApiClient.convertToType(data['group'], ['Number']);
+        obj.group = ApiClient.convertToType(data.group, ['Number']);
       }
     }
     return obj;
-  }
+  };
 
   /**
    * @member {Number} id
    */
-  exports.prototype['id'] = undefined;
+  exports.prototype.id = undefined;
   /**
    * @member {Number} price
    */
-  exports.prototype['price'] = undefined;
+  exports.prototype.price = undefined;
   /**
    * @member {String} price_unit
    */
-  exports.prototype['price_unit'] = undefined;
+  exports.prototype.price_unit = undefined;
   /**
    * @member {module:model/Coordinate} coordinate
    */
-  exports.prototype['coordinate'] = undefined;
+  exports.prototype.coordinate = undefined;
   /**
    * @member {Number} is_favorite
    */
-  exports.prototype['is_favorite'] = undefined;
+  exports.prototype.is_favorite = undefined;
   /**
    * @member {Array.<Number>} group
    */
-  exports.prototype['group'] = undefined;
-
-
+  exports.prototype.group = undefined;
 
   return exports;
 }));
-
-
