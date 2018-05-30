@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**forgot**](UserApi.md#forgot) | **POST** /user/forgot | 
 [**getUser**](UserApi.md#getUser) | **GET** /user/{id} | 
 [**me**](UserApi.md#me) | **GET** /user/me | 
+[**updateUser**](UserApi.md#updateUser) | **POST** /user/me | 
 [**uploadAvatar**](UserApi.md#uploadAvatar) | **POST** /user/avatar | 
 
 
@@ -107,6 +108,13 @@ No authorization required
 ### Example
 ```javascript
 var RemsApi = require('rems_api');
+var defaultClient = RemsApi.ApiClient.instance;
+
+// Configure API key authorization: Bearer
+var Bearer = defaultClient.authentications['Bearer'];
+Bearer.apiKey = 'YOUR API KEY';
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.apiKeyPrefix = 'Token';
 
 var apiInstance = new RemsApi.UserApi();
 
@@ -129,7 +137,59 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="updateUser"></a>
+# **updateUser**
+> LoginView updateUser(opts)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+var defaultClient = RemsApi.ApiClient.instance;
+
+// Configure API key authorization: Bearer
+var Bearer = defaultClient.authentications['Bearer'];
+Bearer.apiKey = 'YOUR API KEY';
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.apiKeyPrefix = 'Token';
+
+var apiInstance = new RemsApi.UserApi();
+
+var opts = { 
+  'body': new RemsApi.UserRegister() // UserRegister | 
+};
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.updateUser(opts, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**UserRegister**](UserRegister.md)|  | [optional] 
+
+### Return type
+
+[**LoginView**](LoginView.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
 
 ### HTTP request headers
 

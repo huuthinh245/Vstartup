@@ -17,7 +17,10 @@ import {
   GET_ME_SUCCESS,
   LOGOUT,
   LOGOUT_SUCCESS,
-  AUTH_FAILURE
+  AUTH_FAILURE,
+  UPDATE_INFO,
+  UPDATE_INFO_SUCCESS,
+  UPDATE_INFO_FAILURE
 } from './actions';
 import { authApi, userApi, handleError } from '../../utils/api';
 import { ApiClient } from '../../swaggerApi/src';
@@ -51,10 +54,11 @@ const loginEpic = actions$ =>
       if (action.payload.callback) {
         action.payload.callback();
       }
-      reset();
+      if (action.payload.reset === true) {
+        reset();
+      }
       return { type: LOGIN_SUCCESS, payload: resp.body };
     } catch (error) {
-      console.log(error);
       AsyncStorage.setItem('token', '');
       handleError(error, true);
       return { type: AUTH_FAILURE, payload: error };
@@ -64,11 +68,11 @@ const loginEpic = actions$ =>
 const logoutEpic = actions$ =>
   actions$.ofType(LOGOUT).switchMap(async action => {
     try {
-      const resp = await authApi.logout(action.payload);
+      await authApi.logout(action.payload);
       ApiClient.instance.authentications.Bearer.apiKeyPrefix = '';
       ApiClient.instance.authentications.Bearer.apiKey = '';
       AsyncStorage.setItem('token', '');
-      return { type: LOGOUT_SUCCESS, payload: resp.body };
+      return { type: LOGOUT_SUCCESS };
     } catch (error) {
       handleError(error, true);
       return { type: AUTH_FAILURE, payload: error };
@@ -78,15 +82,12 @@ const logoutEpic = actions$ =>
 const getMeEpic = actions$ =>
   actions$.ofType(GET_ME).switchMap(async action => {
     try {
-      console.log('here');
       const resp = await userApi.me();
-      console.log(resp);
       ApiClient.instance.authentications.Bearer.apiKeyPrefix = '';
       ApiClient.instance.authentications.Bearer.apiKey = '';
       AsyncStorage.setItem('token', '');
       return { type: GET_ME_SUCCESS, payload: resp.body };
     } catch (error) {
-      console.log(error);
       handleError(error, true);
       return { type: AUTH_FAILURE, payload: error };
     }
@@ -149,11 +150,23 @@ const socialEpic = actions$ =>
     }
   });
 
+const updateInfoEpic = actions$ =>
+  actions$.ofType(UPDATE_INFO).switchMap(async action => {
+    try {
+      const resp = await userApi.updateUser(action.payload);
+      return { type: UPDATE_INFO_SUCCESS, payload: resp.body };
+    } catch (error) {
+      handleError(error, true);
+      return { type: UPDATE_INFO_FAILURE, payload: error };
+    }
+  });
+
 export const authEpic = combineEpics(
   loginEpic,
   forgotEpic,
   registerEpic,
   socialEpic,
   getMeEpic,
-  logoutEpic
+  logoutEpic,
+  updateInfoEpic
 );

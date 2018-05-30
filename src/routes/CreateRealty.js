@@ -12,7 +12,7 @@ import emitter from '../emitter';
 import { PHONE_REGEX } from '../utils/validation';
 import { updateInfoAction } from '../redux/auth/actions';
 
-class AdditionalInformation extends React.Component {
+class CreateRealty extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -105,7 +105,7 @@ class AdditionalInformation extends React.Component {
   }
 }
 
-export default connect(state => ({ auth: state.auth }))(AdditionalInformation);
+export default connect(state => ({ auth: state.auth }))(CreateRealty);
 
 const styles = StyleSheet.create({
   wrapper: {

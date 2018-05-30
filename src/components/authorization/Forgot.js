@@ -11,7 +11,7 @@ import headerStrings from '../../localization/header';
 import { _dims } from '../../utils/constants';
 import { EMAIL_REGEX } from '../../utils/validation';
 import alertStrings from '../../localization/alert';
-import Spin from '../common/Spinner';
+import Overlay from '../common/Overlay';
 import { forgotAction } from '../../redux/auth/actions';
 import emitter from '../../emitter';
 
@@ -24,6 +24,7 @@ class Forgot extends Component {
   }
 
   _requestForgot = async () => {
+    if (this.props.auth.fetching) return;
     if (!EMAIL_REGEX.test(this.state.email)) {
       emitter.emit('alert', {
         type: 'warn',
@@ -49,7 +50,7 @@ class Forgot extends Component {
               borderColor: 'silver'
             }}
           />
-          {this.props.auth.fetching && <Spin />}
+          <Overlay visible={this.props.auth.fetching} />
           <View>
             <View style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}>
               <Ionicons name="ios-mail" style={styles.hoishiIcon} />

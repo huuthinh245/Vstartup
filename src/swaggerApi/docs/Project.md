@@ -29,5 +29,6 @@ Name | Type | Description | Notes
 **coordinate** | [**Coordinate**](Coordinate.md) |  | [optional] 
 **utility** | [**Utility**](Utility.md) |  | [optional] 
 **agency** | [**[User]**](User.md) |  | [optional] 
+**linkShare** | **String** |  | [optional] 
 
 

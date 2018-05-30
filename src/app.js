@@ -56,6 +56,7 @@ class Root extends React.Component {
           barStyle="dark-content"
           backgroundColor={_ios ? 'transparent' : _colors.header}
         />
+
         <DropdownAlert
           ref={ref => {
             this.dropdown = ref;

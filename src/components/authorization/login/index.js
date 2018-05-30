@@ -52,18 +52,8 @@ class Login extends Component {
     _setupGoogleSignin(user => this.setState({ googleUser: user }));
   }
 
-  _signOut = async () => {
-    logoutAction();
-    return;
-    try {
-      const resp = await authApi.logout();
-      console.log(resp);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   _signIn = async () => {
+    if (this.props.auth.fetching) return;
     if (!EMAIL_REGEX.test(this.state.email)) {
       emitter.emit('alert', {
         type: 'warn',
@@ -138,9 +128,7 @@ class Login extends Component {
           />
         )}
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
-          {
-            // this.props.auth.fetching && <Overlay />
-          }
+          <Overlay visible={this.props.auth.fetching} />
           <Image style={styles.bg} resizeMode="cover" source={background} />
           <View style={styles.logoContainer}>
             <Image resizeMode="cover" source={logo} style={styles.logo} />
@@ -177,12 +165,6 @@ class Login extends Component {
           <TouchableOpacity onPress={this._signIn} style={styles.inputWrapper}>
             <Text style={[styles.input, styles.requestButtonText, { color: _colors.mainColor }]}>
               {strings.sendRequest}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={this._signOut} style={styles.inputWrapper}>
-            <Text style={[styles.input, styles.requestButtonText, { color: _colors.mainColor }]}>
-              Logout
             </Text>
           </TouchableOpacity>
 

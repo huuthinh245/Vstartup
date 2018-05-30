@@ -24,13 +24,7 @@ export default class Header extends React.Component {
     if (this.props.outer) {
       return (
         <View style={styles.titleWrapper}>
-          <View style={styles.left}>
-            {this.props.left && (
-              <TouchableOpacity style={styles.left} onPress={this.props.onLeftPress}>
-                <Text>{this.props.left}</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+          <View style={styles.left}>{this.props.left}</View>
           <Text numberOfLines={1} style={styles.title}>
             {this.props.title}
           </Text>

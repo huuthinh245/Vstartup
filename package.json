@@ -48,6 +48,8 @@
     "react-native-permissions": "^1.1.1",
     "react-native-phone-call": "^1.0.4",
     "react-native-popover": "^0.2.0",
+    "react-native-popover-menu": "0.0.12",
+    "react-native-popup-menu": "^0.13.1",
     "react-native-progress": "^3.4.0",
     "react-native-ratings": "^5.3.0",
     "react-native-restart": "0.0.6",

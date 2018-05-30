@@ -1,57 +1,64 @@
 import React from 'react';
-import { View, FlatList, ActivityIndicator } from 'react-native';
+import { FlatList, ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import Separator from '../flatlistHelpers/Separator';
-import RealtyItem, { PlaceHolder } from '../RealtyItem';
-import { _dims, LIMIT_SERVICES } from '../../utils/constants';
-import * as routes from '../../routes/routes';
-import { likeRealtyAction, unlikeRealtyAction } from '../../redux/realtyDetail/actions';
-import { loadMoreListRealtyAction, refreshListRealtyAction } from '../../redux/listRealty/actions';
+import Header from '../navigators/headers/CommonHeader';
+import headerStrings from '../localization/header';
+import Separator from '../components/flatlistHelpers/Separator';
+import { _dims, LIMIT_SERVICES, _colors } from '../utils/constants';
+import FavoriteItem, { PlaceHolder } from '../components/RealtyItem';
+import { likeRealtyAction, unlikeRealtyAction } from '../redux/realtyDetail/actions';
+import {
+  getListFavoriteAction,
+  loadMoreListFavoriteAction,
+  refreshListFavoriteAction
+} from '../redux/listFavorite/actions';
+import * as routes from '../routes/routes';
 
-class SearchFront extends React.Component {
+class ListFavorite extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      options: {}
-    };
     this.onEndReachedCalledDuringMomentum = true;
   }
+  componentDidMount() {
+    getListFavoriteAction();
+  }
+
   _likeRealty = async realty => {
-    if (!this.props.auth.user.id) {
-      this.props.navigation.navigate(routes.login, { modal: true });
-      return;
-    }
-    if (!this.props.listRealty.postingFavorite) {
-      if (realty.is_favorite) {
-        unlikeRealtyAction(realty);
-      } else {
-        likeRealtyAction(realty);
-      }
+    if (this.props.realtyDetail.postingFavorite) return;
+    if (realty.is_favorite) {
+      unlikeRealtyAction(realty);
+    } else {
+      likeRealtyAction(realty);
     }
   };
 
   _onLoadMore = () => {
-    if (this.props.listRealty.loadMore || this.onEndReachedCalledDuringMomentum) return;
-    const len = this.props.listRealty.data.length;
-    const page = Math.round(len / LIMIT_SERVICES) + 1;
-    this.setState({ options: Object.assign(this.state.options, { page }) }, () =>
-      loadMoreListRealtyAction(this.state.options)
-    );
+    if (
+      this.props.listFavorite.loadMore ||
+      this.props.listFavorite.fetching ||
+      this.props.listFavorite.refreshing ||
+      this.onEndReachedCalledDuringMomentum
+    ) {
+      return;
+    }
 
+    const len = this.props.listFavorite.data.length;
+    const page = Math.round(len / LIMIT_SERVICES) + 1;
+    loadMoreListFavoriteAction({ page });
     this.onEndReachedCalledDuringMomentum = true;
   };
 
   _onRefresh = () => {
-    if (this.props.listRealty.refreshing) return;
-    refreshListRealtyAction(this.state.options);
+    if (this.props.listFavorite.refreshing) return;
+    refreshListFavoriteAction();
   };
 
   _renderItem = ({ item }) => {
     return (
-      <RealtyItem
+      <FavoriteItem
         data={item}
-        showPin={item.id % 2 === 0 && { color: 'gold' }}
         onPress={() => this.props.navigation.navigate(routes.realtyDetail, { data: item })}
         onLikeRealty={() => this._likeRealty(item)}
       />
@@ -59,7 +66,7 @@ class SearchFront extends React.Component {
   };
 
   _renderFooter = () => {
-    if (this.props.listRealty.loadMore) {
+    if (this.props.listFavorite.loadMore) {
       return (
         <ActivityIndicator
           style={{
@@ -72,11 +79,12 @@ class SearchFront extends React.Component {
     return null;
   };
 
-  render() {
-    const { listRealty } = this.props;
+  render = () => {
+    const { listFavorite } = this.props;
     return (
       <View style={{ flex: 1 }}>
-        {listRealty.fetching ? (
+        <Header title={headerStrings.favoriteTitle} outer />
+        {listFavorite.fetching ? (
           <View>
             <PlaceHolder />
             <Separator height={_dims.defaultPadding} />
@@ -91,7 +99,7 @@ class SearchFront extends React.Component {
         ) : (
           <FlatList
             style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
-            data={listRealty.data}
+            data={this.props.listFavorite.data}
             renderItem={this._renderItem}
             keyExtractor={item => `${item.id}`}
             ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
@@ -100,7 +108,7 @@ class SearchFront extends React.Component {
             onMomentumScrollBegin={() => {
               this.onEndReachedCalledDuringMomentum = false;
             }}
-            refreshing={listRealty.refreshing}
+            refreshing={this.props.listFavorite.refreshing}
             onEndReachedThreshold={0}
             onRefresh={this._onRefresh}
             onEndReached={this._onLoadMore}
@@ -108,6 +116,10 @@ class SearchFront extends React.Component {
         )}
       </View>
     );
-  }
+  };
 }
-export default connect(state => ({ listRealty: state.listRealty, auth: state.auth }))(SearchFront);
+
+export default connect(state => ({
+  listFavorite: state.listFavorite,
+  realtyDetail: state.realtyDetail
+}))(ListFavorite);

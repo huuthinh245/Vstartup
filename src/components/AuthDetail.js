@@ -10,14 +10,16 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
-import ModalDropdown from 'react-native-modal-dropdown';
+import RNPopover from 'react-native-popover-menu';
 
 import Overlay from '../components/common/Overlay';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
+import alertStrings from '../localization/alert';
 import { PlaceHolder } from '../components/RealtyItem';
-import * as routes from './routes';
+import * as routes from '../routes/routes';
 import strings from '../localization/profile';
 import AirbnbRating from '../components/rating';
 import Separator from '../components/flatlistHelpers/Separator';
@@ -31,16 +33,95 @@ import {
 import { getMyRealtyAction, loadMoreMyRealtyAction } from '../redux/myRealty/actions';
 import { imagePicker } from '../utils/imagePicker';
 import { userApi } from '../utils/api';
+import { logoutAction } from '../redux/auth/actions';
+import { _alert } from '../utils/alert';
 
-class AgencyDetail extends React.Component {
+class AuthDetail extends React.Component {
   constructor(props) {
     super(props);
     this.onEndReachedCalledDuringMomentum = true;
   }
+
   componentDidMount() {
     const { user } = this.props.auth;
     getMyRealtyAction({ author_id: user.id });
   }
+
+  _showHeaderPopup = ref => {
+    const edit = (
+      <Icon name="edit" style={{ width: 40 }} size={24} color="#fff" family="FontAwesome" />
+    );
+    const changePassword = (
+      <Icon name="lock" style={{ width: 40 }} size={24} color="#fff" family="FontAwesome" />
+    );
+    const logOut = (
+      <Icon name="sign-out" style={{ width: 40 }} size={24} color="#fff" family="FontAwesome" />
+    );
+
+    const menus = [
+      {
+        menus: [
+          { label: strings.editAccount, icon: edit },
+          { label: strings.changePassword, icon: changePassword },
+          { label: strings.logOut, icon: logOut }
+        ]
+      }
+    ];
+
+    RNPopover.Show(ref, {
+      menus,
+      onDone: index => {
+        if (index === 0) {
+          this.props.navigation.navigate(routes.additionalInformation, {
+            user: this.props.auth.user
+          });
+        } else if (index === 1) {
+          this.props.navigation.navigate(routes.changePassword);
+        } else {
+          _alert(strings.logOut, strings.areYouSure, [
+            {
+              text: alertStrings.ok,
+              onPress: () => logoutAction()
+            },
+            {
+              text: alertStrings.cancel
+            }
+          ]);
+        }
+      },
+      theme: 'dark',
+      tintColor: 'rgb(0,0,0)',
+      rowHeight: 50,
+      perferedWidth: responsiveWidth(70)
+    });
+  };
+
+  _showItemPopup = ref => {
+    const hide = <Icon name="eye-slash" size={24} color="#fff" family="FontAwesome" />;
+    const edit = <Icon name="edit" size={24} color="#fff" family="FontAwesome" />;
+
+    const menus = [
+      {
+        menus: [
+          { label: strings.hideRealty, icon: hide },
+          { label: strings.editRealty, icon: edit }
+        ]
+      }
+    ];
+
+    RNPopover.Show(ref, {
+      menus,
+      onDone: index => {
+        if (index === 0) {
+        } else if (index === 1) {
+        }
+      },
+      tintColor: 'haha',
+      theme: 'dark',
+      rowHeight: 50,
+      perferedWidth: responsiveWidth(70)
+    });
+  };
 
   _renderHeader = () => {
     return (
@@ -48,27 +129,14 @@ class AgencyDetail extends React.Component {
         title={headerStrings.profileTitle}
         outer
         right={
-          <ModalDropdown
-            ref={el => {
-              this._dropdown = el;
+          <TouchableOpacity
+            ref={ref => {
+              this.headerPopup = ref;
             }}
-            options={[strings.editAccount, strings.changePassword, strings.signOut]}
-            dropdownStyle={styles.dropdown}
-            renderRow={this._renderDropdownRow}
-            renderSeparator={() => null}
-            onSelect={this._onDropdownSelect}
-            dropdownTextHighlightStyle={styles.highlight}
-            adjustFrame={style => this._drpFrame(style)}
+            onPress={() => this._showHeaderPopup(this.headerPopup)}
           >
-            <TouchableOpacity onPress={() => this._dropdown.show()}>
-              <Ionicons
-                name="md-more"
-                size={30}
-                color={_colors.mainColor}
-                style={{ padding: 10 }}
-              />
-            </TouchableOpacity>
-          </ModalDropdown>
+            <Ionicons name="md-more" size={30} color={_colors.mainColor} style={{ padding: 10 }} />
+          </TouchableOpacity>
         }
       />
     );
@@ -82,41 +150,14 @@ class AgencyDetail extends React.Component {
     loadMoreMyRealtyAction({ author_id: user.id, page });
   };
 
-  _renderDropdownRow = (option, index) => {
-    let name;
-    if (index === '0') name = 'ios-eye-off';
-    else if (index === '1') name = 'ios-create';
-
-    return (
-      <View style={[styles.row, index === '2' && { borderBottomWidth: 0 }]}>
-        <Ionicons name={name} size={20} color="#555" />
-        <Text style={styles.rowText}>{option}</Text>
-      </View>
-    );
-  };
-
-  _drpFrame = style => {
-    style.top -= 5;
-    return style;
-  };
-
-  _onDropdownSelect = index => {
-    if (index === '0') {
-      this.props.navigation.navigate(routes.additionalInformation, {
-        user: this.props.auth.user
-      });
-    } else if (index === '1') {
-      this.props.navigation.navigate(routes.changePassword);
-    } else {
-      setTimeout(() => _alert('Logout', 'Are you sure ?'), 0);
-    }
-  };
-
   _renderItem = ({ item }) => {
     return (
       <TouchableOpacity
         onPress={() => {
           this.props.navigation.navigate(routes.realtyDetail, { data: item });
+        }}
+        ref={ref => {
+          this[`realty(${item.id})`] = ref;
         }}
         onLongPress={() => this._dropdown.show()}
         style={styles.item}
@@ -135,20 +176,11 @@ class AgencyDetail extends React.Component {
             <Text numberOfLines={2} style={styles.itemName}>
               {item.title}
             </Text>
-            <ModalDropdown
-              ref={el => {
-                this._dropdown = el;
-              }}
-              options={['An tin', 'Chinh sua tin']}
-              dropdownStyle={styles.dropdown}
-              renderRow={this._renderDropdownRow}
-              renderSeparator={() => null}
-              onSelect={this._onDropdownSelect}
-              dropdownTextHighlightStyle={styles.highlight}
-              adjustFrame={style => this._drpFrame(style)}
-            >
-              <Ionicons name="md-more" style={styles.itemIcon} />
-            </ModalDropdown>
+            <Ionicons
+              name="md-more"
+              style={styles.itemIcon}
+              onPress={() => this._showItemPopup(this[`realty(${item.id})`])}
+            />
           </View>
 
           <Text numberOfLines={1} style={styles.itemPrice}>
@@ -221,18 +253,26 @@ class AgencyDetail extends React.Component {
         </View>
 
         <Text style={styles.showProj}>{strings.showProj}</Text>
+
+        {this.props.myRealty.fetching && (
+          <View>
+            <PlaceHolder />
+            <Separator height={_dims.defaultPadding} />
+            <PlaceHolder />
+          </View>
+        )}
       </View>
     );
   };
 
   _renderFooter = () => {
-    if (!this.props.myRealty.fetching) return null;
-    return <ActivityIndicator style={styles.indicator} />;
+    if (this.props.myRealty.fetching || !this.props.myRealty.loadMore) return null;
+    return <ActivityIndicator animating style={styles.indicator} />;
   };
 
   _renderEmpty = () => {
     if (this.props.myRealty.fetching || this.props.myRealty.data.length === 0) return null;
-    return <ActivityIndicator style={styles.indicator} />;
+    return <Text>Empty</Text>;
   };
 
   render() {
@@ -247,42 +287,27 @@ class AgencyDetail extends React.Component {
             size={responsiveFontSize(_dims.defaultFontSize * 4)}
           />
         </TouchableOpacity>
-        <View>
-          <FlatList
-            style={{ marginHorizontal: _dims.defaultPadding }}
-            data={this.props.myRealty.data}
-            renderItem={this._renderItem}
-            keyExtractor={item => `${item.id}`}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
-            ListEmptyComponent={this._renderEmpty}
-            ListHeaderComponent={this._renderProfile}
-            ListFooterComponent={this._renderFooter}
-            onEndReached={this._onLoadMore}
-            onEndReachedThreshold={0}
-            onMomentumScrollBegin={() => {
-              this.onEndReachedCalledDuringMomentum = false;
-            }}
-          />
-          {this.props.myRealty.fetching && (
-            <View>
-              <PlaceHolder />
-              <Separator height={_dims.defaultPadding} />
-              <PlaceHolder />
-              <Separator height={_dims.defaultPadding} />
-              <PlaceHolder />
-              <Separator height={_dims.defaultPadding} />
-              <PlaceHolder />
-              <Separator height={_dims.defaultPadding} />
-              <PlaceHolder />
-            </View>
-          )}
-        </View>
+        <FlatList
+          style={{ marginHorizontal: _dims.defaultPadding, paddingBottom: 100 }}
+          data={this.props.myRealty.data}
+          renderItem={this._renderItem}
+          keyExtractor={item => `${item.id}`}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          ListEmptyComponent={this._renderEmpty}
+          ListHeaderComponent={this._renderProfile}
+          ListFooterComponent={this._renderFooter}
+          onEndReached={this._onLoadMore}
+          onEndReachedThreshold={0}
+          onMomentumScrollBegin={() => {
+            this.onEndReachedCalledDuringMomentum = false;
+          }}
+        />
       </View>
     );
   }
 }
 
-export default connect(state => ({ auth: state.auth, myRealty: state.myRealty }))(AgencyDetail);
+export default connect(state => ({ auth: state.auth, myRealty: state.myRealty }))(AuthDetail);
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -412,7 +437,8 @@ const styles = StyleSheet.create({
   dropdown: {
     backgroundColor: 'lightblue',
     borderRadius: 4,
-    height: 100
+    height: 100,
+    zIndex: Number.MAX_SAFE_INTEGER - 2
   },
   row: {
     flexDirection: 'row',

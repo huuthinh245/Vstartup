@@ -26,9 +26,7 @@ class Register extends Component {
             borderColor: 'silver'
           }}
         />
-        {
-          // this.props.auth.loading && <Overlay opacity={0} />
-        }
+        <Overlay visible={this.props.auth.fetching} />
         <ScrollableTabView
           onChangeTab={index => {
             this.activeIndex = index;
@@ -46,7 +44,7 @@ class Register extends Component {
         <TouchableOpacity
           style={styles.requestButton}
           onPress={() => {
-            if (!this.props.auth.loading) {
+            if (!this.props.auth.fetching) {
               emitter.emit('registerAccount', {
                 index: this.activeIndex
               });

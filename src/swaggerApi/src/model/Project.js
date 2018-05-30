@@ -73,6 +73,7 @@
 
 
 
+
   };
 
   /**
@@ -163,6 +164,9 @@
       }
       if (data.hasOwnProperty('agency')) {
         obj['agency'] = ApiClient.convertToType(data['agency'], [User]);
+      }
+      if (data.hasOwnProperty('link_share')) {
+        obj['link_share'] = ApiClient.convertToType(data['link_share'], 'String');
       }
     }
     return obj;
@@ -272,6 +276,10 @@
    * @member {Array.<module:model/User>} agency
    */
   exports.prototype['agency'] = undefined;
+  /**
+   * @member {String} link_share
+   */
+  exports.prototype['link_share'] = undefined;
 
 
 

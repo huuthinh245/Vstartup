@@ -18,6 +18,8 @@ const requestPermissions = async () => {
   }
 };
 
+console.disableYellowBox = true;
+
 configProps();
 requestPermissions();
 

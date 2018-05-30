@@ -16,18 +16,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/GenericError', 'model/User'], factory);
+    define(['ApiClient', 'model/GenericError', 'model/LoginView', 'model/User', 'model/UserRegister'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('../model/GenericError'), require('../model/User'));
+    module.exports = factory(require('../ApiClient'), require('../model/GenericError'), require('../model/LoginView'), require('../model/User'), require('../model/UserRegister'));
   } else {
     // Browser globals (root is window)
     if (!root.RemsApi) {
       root.RemsApi = {};
     }
-    root.RemsApi.UserApi = factory(root.RemsApi.ApiClient, root.RemsApi.GenericError, root.RemsApi.User);
+    root.RemsApi.UserApi = factory(root.RemsApi.ApiClient, root.RemsApi.GenericError, root.RemsApi.LoginView, root.RemsApi.User, root.RemsApi.UserRegister);
   }
-}(this, function(ApiClient, GenericError, User) {
+}(this, function(ApiClient, GenericError, LoginView, User, UserRegister) {
   'use strict';
 
   /**
@@ -165,13 +165,55 @@
       var formParams = {
       };
 
-      var authNames = [];
+      var authNames = ['Bearer'];
       var contentTypes = ['application/json'];
       var accepts = ['application/json'];
       var returnType = User;
 
       return this.apiClient.callApi(
         '/user/me', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the updateUser operation.
+     * @callback module:api/UserApi~updateUserCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/LoginView} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Object} opts Optional parameters
+     * @param {module:model/UserRegister} opts.body 
+     * @param {module:api/UserApi~updateUserCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/LoginView}
+     */
+    this.updateUser = function(opts, callback) {
+      opts = opts || {};
+      var postBody = opts['body'];
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = ['Bearer'];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = LoginView;
+
+      return this.apiClient.callApi(
+        '/user/me', 'POST',
         pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );

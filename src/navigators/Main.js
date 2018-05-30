@@ -22,6 +22,7 @@ import ListAgency from '../routes/ListAgency';
 import ListProject from '../routes/ListProject';
 import ListInvestor from '../routes/ListInvestor';
 import Settings from '../routes/Settings';
+import ChangePassword from '../routes/ChangePassword';
 
 import Register from '../components/authorization/register';
 import Forgot from '../components/authorization/Forgot';
@@ -106,6 +107,7 @@ const stackConfig = {
   [routes.listInvestor]: { screen: ListInvestor },
   [routes.listProject]: { screen: ListProject },
   [routes.settings]: { screen: Settings },
+  [routes.changePassword]: { screen: ChangePassword }
 };
 
 const navConfig = {

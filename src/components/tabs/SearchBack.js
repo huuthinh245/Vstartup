@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 import MapView from 'react-native-maps';
 
-import { json } from '../../utils/constants';
 import Carousel from '../Carousel';
 
 export default class SearchBack extends React.Component {

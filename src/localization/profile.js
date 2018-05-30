@@ -8,7 +8,13 @@ const strings = new LocalizedStrings({
     phone: 'phone number',
     contactWith: 'Contact with agency',
     unset: 'Not added yet',
-    showProj: 'All projects'
+    showProj: 'All projects',
+    editAccount: 'Edit your account',
+    changePassword: 'Change passwod',
+    logOut: 'Logout',
+    areYouSure: 'Are you sure to logout ?',
+    hideRealty: 'Hide this realty',
+    editRealty: 'Edit this realty'
   },
   vni: {
     name: 'họ và tên',
@@ -16,7 +22,13 @@ const strings = new LocalizedStrings({
     phone: 'số điện thoại',
     contactWith: 'Liên lạc với nhà môi giới',
     unset: 'Chưa bổ sung',
-    showProj: 'Tất cả dự án'
+    showProj: 'Tất cả dự án',
+    editAccount: 'Chỉnh sửa tài khoản',
+    changePassword: 'Đổi mật khẩu',
+    logOut: 'Đăng xuất',
+    areYouSure: 'Bạn chắc chắn muốn đăng xuất ?',
+    hideRealty: 'Ẩn tin bất động sản',
+    editRealty: 'Chỉnh sửa tin bất động sản'
   }
 });
 

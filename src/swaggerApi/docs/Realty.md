@@ -49,5 +49,6 @@ Name | Type | Description | Notes
 **isFavorite** | **Number** |  | [optional] 
 **utility** | [**Utility**](Utility.md) |  | [optional] 
 **video** | **String** |  | [optional] 
+**linkShare** | **String** |  | [optional] 
 
 

@@ -5,6 +5,7 @@ const strings = new LocalizedStrings({
   eng: {
     loadingData: 'Loading data, please wait ...',
     email: 'Email',
+    currentPassword: 'Current password',
     password: 'Password',
     rePassword: 'Confirm password',
     sendRequest: 'Send request',
@@ -12,11 +13,14 @@ const strings = new LocalizedStrings({
     address: 'Address',
     forgot: 'Forgot password',
     register: 'Register account',
-    name: 'Name'
+    name: 'Name',
+    inputInfo: 'Enter your information',
+    inputPassword: 'Enter your password'
   },
   vni: {
     loadingData: 'Đang tải dữ liệu, vui lòng đợi ...',
     email: 'Email',
+    currentPassword: 'Mật khẩu hiện tại',
     password: 'Password',
     rePassword: 'Confirm password',
     sendRequest: 'Send request',
@@ -24,7 +28,9 @@ const strings = new LocalizedStrings({
     address: 'Address',
     forgot: 'Forgot password',
     register: 'Register account',
-    name: 'Họ tên'
+    name: 'Họ tên',
+    inputInfo: 'Nhập thông tin của bạn',
+    inputPassword: 'Nhập mật khẩu của bạn'
   }
 });
 

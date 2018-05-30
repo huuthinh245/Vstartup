@@ -15,10 +15,12 @@ const strings = new LocalizedStrings({
     emailInvalid: 'Email invalid',
     passwordTooShort: 'Passwords must be at least 6 characters',
     passwordNotTheSame: 'Password is not the same',
+    emptyField: 'Field cannot be empty',
     nameEmpty: 'Field name is require',
     phoneEmpty: 'Field phone is require',
     addressEmpty: 'Field address is require',
     deviceOffline: 'No network connection.',
+    phoneInvalid: 'Incorrect phone number',
 
     registerSuccess: 'Register account successfully !'
   },
@@ -35,10 +37,12 @@ const strings = new LocalizedStrings({
     emailInvalid: 'Email không đúng định dạng',
     passwordTooShort: 'Mật khẩu cần ít nhất 6 ký tự',
     passwordNotTheSame: 'Mật khẩu không trùng khớp',
+    emptyField: 'Trường không được bỏ trống',
     nameEmpty: 'Tên không được bỏ trống',
     phoneEmpty: 'Số điện thoại không được bỏ trống',
     addressEmpty: 'Địa chỉ không được bỏ trống',
     deviceOffline: 'Không có kết nối internet.',
+    phoneInvalid: 'Số điện thoại không đúng định dạng',
 
     registerSuccess: 'Đăng ký tài khoản thành công !'
   }

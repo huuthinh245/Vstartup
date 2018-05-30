@@ -490,7 +490,7 @@
     //     callback(error, data, response);
     //   }
     // });
-    console.log('request', request);
+
     return request;
   };
 

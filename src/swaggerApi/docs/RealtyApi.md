@@ -5,7 +5,7 @@ All URIs are relative to *http://rems.dfm-engineering.com/api/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deleteFavorite**](RealtyApi.md#deleteFavorite) | **DELETE** /realty/favorite/{realty_id} | 
-[**deleteKeyword**](RealtyApi.md#deleteKeyword) | **DELETE** /realty/keyword/{id} | 
+[**deleteKeyword**](RealtyApi.md#deleteKeyword) | **DELETE** /realty/keyword | 
 [**listFavorite**](RealtyApi.md#listFavorite) | **GET** /realty/favorite | 
 [**listKeyword**](RealtyApi.md#listKeyword) | **GET** /realty/keyword | 
 [**listRealty**](RealtyApi.md#listRealty) | **GET** /realty | 
@@ -13,7 +13,8 @@ Method | HTTP request | Description
 [**postFavorite**](RealtyApi.md#postFavorite) | **POST** /realty/favorite | 
 [**postRealty**](RealtyApi.md#postRealty) | **POST** /realty | 
 [**saveKeyword**](RealtyApi.md#saveKeyword) | **POST** /realty/keyword | 
-[**viewRealty**](RealtyApi.md#viewRealty) | **GET** /realty/{id} | 
+[**viewRealty**](RealtyApi.md#viewRealty) | **GET** /realty/mapView | 
+[**viewRealty_0**](RealtyApi.md#viewRealty_0) | **GET** /realty/{id} | 
 
 
 <a name="deleteFavorite"></a>
@@ -69,7 +70,7 @@ Name | Type | Description  | Notes
 
 <a name="deleteKeyword"></a>
 # **deleteKeyword**
-> GenericSuscess deleteKeyword(id)
+> GenericSuscess deleteKeyword(ids)
 
 
 
@@ -86,7 +87,7 @@ Bearer.apiKey = 'YOUR API KEY';
 
 var apiInstance = new RemsApi.RealtyApi();
 
-var id = 56; // Number | 
+var ids = "ids_example"; // String | 
 
 
 var callback = function(error, data, response) {
@@ -96,14 +97,14 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-apiInstance.deleteKeyword(id, callback);
+apiInstance.deleteKeyword(ids, callback);
 ```
 
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **Number**|  | 
+ **ids** | **String**|  | 
 
 ### Return type
 
@@ -487,7 +488,51 @@ Name | Type | Description  | Notes
 
 <a name="viewRealty"></a>
 # **viewRealty**
-> Realty viewRealty(id)
+> [RealtyMap] viewRealty(ids)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var ids = "ids_example"; // String | 
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.viewRealty(ids, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ids** | **String**|  | 
+
+### Return type
+
+[**[RealtyMap]**](RealtyMap.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="viewRealty_0"></a>
+# **viewRealty_0**
+> Realty viewRealty_0(id)
 
 
 
@@ -507,7 +552,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-apiInstance.viewRealty(id, callback);
+apiInstance.viewRealty_0(id, callback);
 ```
 
 ### Parameters

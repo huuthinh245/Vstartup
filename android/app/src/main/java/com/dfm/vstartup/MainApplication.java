@@ -3,6 +3,7 @@ package com.dfm.vstartup;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import ui.popovermenu.RNPopoverMenuPackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.facebook.react.ReactNativeHost;
@@ -48,6 +49,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNPopoverMenuPackage(),
             new ReactNativeYouTube(),
           new VectorIconsPackage(),
           new ReactNativeRestartPackage(),

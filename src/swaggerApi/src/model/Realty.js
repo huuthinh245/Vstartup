@@ -98,6 +98,7 @@
 
 
 
+
   };
 
   /**
@@ -248,6 +249,9 @@
       }
       if (data.hasOwnProperty('video')) {
         obj['video'] = ApiClient.convertToType(data['video'], 'String');
+      }
+      if (data.hasOwnProperty('link_share')) {
+        obj['link_share'] = ApiClient.convertToType(data['link_share'], 'String');
       }
     }
     return obj;
@@ -437,6 +441,10 @@
    * @member {String} video
    */
   exports.prototype['video'] = undefined;
+  /**
+   * @member {String} link_share
+   */
+  exports.prototype['link_share'] = undefined;
 
 
 

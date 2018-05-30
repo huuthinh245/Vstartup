@@ -9,41 +9,42 @@ import headerStrings from '../localization/header';
 import alertStrings from '../localization/alert';
 import strings from '../localization/authorization';
 import emitter from '../emitter';
-import { PHONE_REGEX } from '../utils/validation';
 import { updateInfoAction } from '../redux/auth/actions';
 
-class AdditionalInformation extends React.Component {
+class ChangePassword extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: this.props.auth.user.name,
-      phone: this.props.auth.user.phone,
-      address: this.props.auth.user.address
+      currentPassword: '',
+      password: '',
+      confirmPassword: ''
     };
   }
 
-  _validate = () => {
-    if (!this.state.name) {
+  _submit = () => {
+    if (this.state.currentPassword.length < 6) {
       emitter.emit('alert', {
         type: 'warn',
         title: alertStrings.invalidField,
-        error: alertStrings.emailInvalid
+        error: alertStrings.passwordTooShort
       });
-      this.email.focus();
-    } else if (!PHONE_REGEX.test(this.state.phone)) {
+      this.currentPassword.focus();
+    } else if (this.state.password.length < 6) {
       emitter.emit('alert', {
         type: 'warn',
         title: alertStrings.invalidField,
-        error: alertStrings.phoneInvalid
+        error: alertStrings.passwordTooShort
       });
-    } else if (!this.state.address) {
+      this.password.focus();
+    } else if (this.state.confirmPassword !== this.state.password) {
       emitter.emit('alert', {
         type: 'warn',
         title: alertStrings.invalidField,
-        error: alertStrings.addressEmpty
+        error: alertStrings.passwordNotTheSame
       });
+      this.confirmPassword.focus();
     } else {
-      updateInfoAction(this.state);
+      updateInfoAction({ password: this.state.password });
     }
   };
 
@@ -52,52 +53,59 @@ class AdditionalInformation extends React.Component {
       <View style={styles.wrapper}>
         <Header
           onLeftPress={() => this.props.navigation.goBack()}
-          title={headerStrings.additionalInformation}
+          title={headerStrings.changePassword}
           right={
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this._submit}>
               <Text style={{ color: _colors.mainColor }}>{headerStrings.save}</Text>
             </TouchableOpacity>
           }
-          onRightPress={() => alert(1)}
         />
         <View style={styles.innerWrapper}>
-          <Text style={styles.title}>{strings.inputInfo}</Text>
+          <Text style={styles.title}>{strings.inputPassword}</Text>
           <View style={styles.hoishiWrapper}>
-            <Ionicons style={styles.hoishiIcon} name="ios-contact" />
+            <Ionicons style={styles.hoishiIcon} name="ios-lock" />
             <TextInput
               ref={ref => {
-                this.name = ref;
+                this.currentPassword = ref;
               }}
               style={styles.hoishiInput}
-              placeholder={strings.name}
-              onChangeText={name => this.setState({ name })}
+              placeholder={strings.currentPassword}
+              onChangeText={currentPassword => this.setState({ currentPassword })}
               returnKeyType="next"
+              secureTextEntry
               autoCapitalize="none"
               autoCorrect={false}
-              clearButtonMode="always"
             />
           </View>
           <View style={styles.hoishiWrapper}>
-            <Ionicons style={styles.hoishiIcon} name="ios-call" />
+            <Ionicons style={styles.hoishiIcon} name="ios-lock" />
             <TextInput
               ref={ref => {
-                this.phone = ref;
+                this.password = ref;
               }}
               style={styles.hoishiInput}
-              placeholder={strings.phone}
-              onChangeText={phone => this.setState({ phone })}
+              placeholder={strings.password}
+              onChangeText={password => this.setState({ password })}
               returnKeyType="next"
-              keyboardType="phone-pad"
+              secureTextEntry
               autoCapitalize="none"
               autoCorrect={false}
-              clearButtonMode="always"
             />
           </View>
           <View style={styles.hoishiWrapper}>
-            <Ionicons style={styles.hoishiIcon} name="md-pin" />
-            <Text style={[styles.hoishiInput, this.state.address ? {} : { color: 'silver' }]}>
-              {this.state.address || strings.address}
-            </Text>
+            <Ionicons style={styles.hoishiIcon} name="ios-lock" />
+            <TextInput
+              ref={ref => {
+                this.confirmPassword = ref;
+              }}
+              style={styles.hoishiInput}
+              placeholder={strings.rePassword}
+              onChangeText={confirmPassword => this.setState({ confirmPassword })}
+              returnKeyType="go"
+              secureTextEntry
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
           </View>
         </View>
       </View>
@@ -105,7 +113,7 @@ class AdditionalInformation extends React.Component {
   }
 }
 
-export default connect(state => ({ auth: state.auth }))(AdditionalInformation);
+export default connect(state => ({ auth: state.auth }))(ChangePassword);
 
 const styles = StyleSheet.create({
   wrapper: {

@@ -81,7 +81,9 @@ const imagePickerIos = async (mediaType = 'photo', multiple = true, callback = (
         callback(images);
       })
       .catch(error => {
-        _alert('ERROR', error.message);
+        if (error.code !== 'E_PICKER_CANCELLED') {
+          _alert('ERROR', error.message);
+        }
       });
   } else if (cameraPer === 'undetermined') {
     Permissions.request('camera');
@@ -107,7 +109,9 @@ const imagePickerAndroid = (mediaType = 'photo', multiple = true, callback = () 
             callback(images);
           })
           .catch(error => {
-            console.log(error);
+            if (error.code !== 'E_PICKER_CANCELLED') {
+              _alert('ERROR', error.message);
+            }
           });
       } else if (grantedCamera === _never && grantedStorage === _granted) {
         openSettingsAndroid('Camera');

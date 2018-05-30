@@ -7,7 +7,10 @@ import {
   GET_LIST_HISTORY_FAILURE,
   REFRESH_LIST_HISTORY,
   REFRESH_LIST_HISTORY_SUCCESS,
-  REFRESH_LIST_HISTORY_FAILURE
+  REFRESH_LIST_HISTORY_FAILURE,
+  DELETE_HISTORY,
+  DELETE_HISTORY_SUCCESS,
+  DELETE_HISTORY_FAILURE
 } from './actions';
 import { realtyApi, handleError } from '../../utils/api';
 
@@ -33,4 +36,20 @@ const refreshListHistoryEpic = actions$ =>
     }
   });
 
-export const listHistoryEpic = combineEpics(getListHistoryEpic, refreshListHistoryEpic);
+const deleteHistoryEpic = actions$ =>
+  actions$.ofType(DELETE_HISTORY).switchMap(async action => {
+    try {
+      const resp = await realtyApi.deleteKeyword(action.payload);
+      action.payload.callback();
+      return { type: DELETE_HISTORY_SUCCESS, payload: resp.body };
+    } catch (error) {
+      handleError(error, true);
+      return { type: DELETE_HISTORY_FAILURE, payload: error };
+    }
+  });
+
+export const listHistoryEpic = combineEpics(
+  getListHistoryEpic,
+  refreshListHistoryEpic,
+  deleteHistoryEpic
+);

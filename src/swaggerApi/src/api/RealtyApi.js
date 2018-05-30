@@ -102,23 +102,23 @@
      */
 
     /**
-     * @param {Number} id 
+     * @param {String} ids 
      * @param {module:api/RealtyApi~deleteKeywordCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/GenericSuscess}
      */
-    this.deleteKeyword = function(id, callback) {
+    this.deleteKeyword = function(ids, callback) {
       var postBody = null;
 
-      // verify the required parameter 'id' is set
-      if (id === undefined || id === null) {
-        throw new Error("Missing the required parameter 'id' when calling deleteKeyword");
+      // verify the required parameter 'ids' is set
+      if (ids === undefined || ids === null) {
+        throw new Error("Missing the required parameter 'ids' when calling deleteKeyword");
       }
 
 
       var pathParams = {
-        'id': id
       };
       var queryParams = {
+        'ids': ids,
       };
       var collectionQueryParams = {
       };
@@ -133,7 +133,7 @@
       var returnType = GenericSuscess;
 
       return this.apiClient.callApi(
-        '/realty/keyword/{id}', 'DELETE',
+        '/realty/keyword', 'DELETE',
         pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
@@ -479,21 +479,67 @@
      * Callback function to receive the result of the viewRealty operation.
      * @callback module:api/RealtyApi~viewRealtyCallback
      * @param {String} error Error message, if any.
+     * @param {Array.<module:model/RealtyMap>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {String} ids 
+     * @param {module:api/RealtyApi~viewRealtyCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/RealtyMap>}
+     */
+    this.viewRealty = function(ids, callback) {
+      var postBody = null;
+
+      // verify the required parameter 'ids' is set
+      if (ids === undefined || ids === null) {
+        throw new Error("Missing the required parameter 'ids' when calling viewRealty");
+      }
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+        'ids': ids,
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = [RealtyMap];
+
+      return this.apiClient.callApi(
+        '/realty/mapView', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the viewRealty_0 operation.
+     * @callback module:api/RealtyApi~viewRealty_0Callback
+     * @param {String} error Error message, if any.
      * @param {module:model/Realty} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {Number} id 
-     * @param {module:api/RealtyApi~viewRealtyCallback} callback The callback function, accepting three arguments: error, data, response
+     * @param {module:api/RealtyApi~viewRealty_0Callback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/Realty}
      */
-    this.viewRealty = function(id, callback) {
+    this.viewRealty_0 = function(id, callback) {
       var postBody = null;
 
       // verify the required parameter 'id' is set
       if (id === undefined || id === null) {
-        throw new Error("Missing the required parameter 'id' when calling viewRealty");
+        throw new Error("Missing the required parameter 'id' when calling viewRealty_0");
       }
 
 

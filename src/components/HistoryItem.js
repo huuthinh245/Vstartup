@@ -4,17 +4,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FastImage from 'react-native-fast-image';
 import { responsiveFontSize, _dims, responsiveHeight, _colors } from '../utils/constants';
 
-export default class ProjectItem extends React.Component {
+export default class HistoryItem extends React.Component {
   render() {
     const { data } = this.props;
     return (
-      <View style={styles.wrapper}>
+      <TouchableOpacity
+        onPress={!this.props.edit ? this.props.onPress : this.props.onSelect}
+        onLongPress={!this.props.edit ? this.props.onLongPress : null}
+        style={styles.wrapper}
+      >
         {this.props.edit && (
-          <TouchableOpacity
-            onPress={this.props.onSelect}
-            activeOpacity={0.8}
-            style={styles.overlay}
-          >
+          <View style={styles.overlay}>
             {this.props.selected ? (
               <View style={[styles.check, styles.unchecked]} />
             ) : (
@@ -26,26 +26,24 @@ export default class ProjectItem extends React.Component {
                 />
               </View>
             )}
-          </TouchableOpacity>
+          </View>
         )}
 
-        <TouchableOpacity onPress={this.props.onPress}>
-          <FastImage
-            style={styles.image}
-            source={{
-              uri: data.thumb_map,
-              priority: FastImage.priority.high
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-        </TouchableOpacity>
+        <FastImage
+          style={styles.image}
+          source={{
+            uri: data.thumb_map,
+            priority: FastImage.priority.high
+          }}
+          resizeMode={FastImage.resizeMode.cover}
+        />
         <View style={styles.infoWrapper}>
           <Text style={styles.title} numberOfLines={2}>
             {data.address}
           </Text>
           <Text numberOfLines={3}>{data.filter}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

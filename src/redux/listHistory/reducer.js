@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions';
+import _ from 'lodash';
 
 import {
   GET_LIST_HISTORY,
@@ -6,7 +7,10 @@ import {
   GET_LIST_HISTORY_FAILURE,
   REFRESH_LIST_HISTORY,
   REFRESH_LIST_HISTORY_SUCCESS,
-  REFRESH_LIST_HISTORY_FAILURE
+  REFRESH_LIST_HISTORY_FAILURE,
+  DELETE_HISTORY,
+  DELETE_HISTORY_SUCCESS,
+  DELETE_HISTORY_FAILURE
 } from './actions';
 
 const initial = {
@@ -45,6 +49,21 @@ export const listHistoryReducer = handleActions(
     },
     [REFRESH_LIST_HISTORY_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { refreshing: false, error: payload });
+    },
+    [DELETE_HISTORY]: state => {
+      return Object.assign({}, state, { deleting: false });
+    },
+    [DELETE_HISTORY_SUCCESS]: (state, { payload }) => {
+      let arr = state.data;
+      state.data.forEach(item => {
+        if (_.some(payload, { id: item.id })) {
+          arr = _.reject(arr, obj => obj.id === item.id);
+        }
+      });
+      return Object.assign({}, state, { deleting: false, data: arr, error: null });
+    },
+    [DELETE_HISTORY_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, { deleting: false, error: payload });
     }
   },
   initial

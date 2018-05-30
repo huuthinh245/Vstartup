@@ -82,7 +82,7 @@
         obj['is_favorite'] = ApiClient.convertToType(data['is_favorite'], 'Number');
       }
       if (data.hasOwnProperty('group')) {
-        obj['group'] = ApiClient.convertToType(data['group'], 'String');
+        obj['group'] = ApiClient.convertToType(data['group'], ['Number']);
       }
     }
     return obj;
@@ -109,7 +109,7 @@
    */
   exports.prototype['is_favorite'] = undefined;
   /**
-   * @member {String} group
+   * @member {Array.<Number>} group
    */
   exports.prototype['group'] = undefined;
 

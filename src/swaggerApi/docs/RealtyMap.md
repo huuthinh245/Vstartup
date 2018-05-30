@@ -8,6 +8,6 @@ Name | Type | Description | Notes
 **priceUnit** | **String** |  | [optional] 
 **coordinate** | [**Coordinate**](Coordinate.md) |  | [optional] 
 **isFavorite** | **Number** |  | [optional] 
-**group** | **String** |  | [optional] 
+**group** | **[Number]** |  | [optional] 
 
 

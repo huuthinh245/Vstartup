@@ -132,7 +132,7 @@ Class | Method | HTTP request | Description
 *RemsApi.ProjectApi* | [**listProject**](docs/ProjectApi.md#listProject) | **GET** /project | 
 *RemsApi.ProjectApi* | [**viewProject**](docs/ProjectApi.md#viewProject) | **GET** /project/{id} | 
 *RemsApi.RealtyApi* | [**deleteFavorite**](docs/RealtyApi.md#deleteFavorite) | **DELETE** /realty/favorite/{realty_id} | 
-*RemsApi.RealtyApi* | [**deleteKeyword**](docs/RealtyApi.md#deleteKeyword) | **DELETE** /realty/keyword/{id} | 
+*RemsApi.RealtyApi* | [**deleteKeyword**](docs/RealtyApi.md#deleteKeyword) | **DELETE** /realty/keyword | 
 *RemsApi.RealtyApi* | [**listFavorite**](docs/RealtyApi.md#listFavorite) | **GET** /realty/favorite | 
 *RemsApi.RealtyApi* | [**listKeyword**](docs/RealtyApi.md#listKeyword) | **GET** /realty/keyword | 
 *RemsApi.RealtyApi* | [**listRealty**](docs/RealtyApi.md#listRealty) | **GET** /realty | 
@@ -140,11 +140,13 @@ Class | Method | HTTP request | Description
 *RemsApi.RealtyApi* | [**postFavorite**](docs/RealtyApi.md#postFavorite) | **POST** /realty/favorite | 
 *RemsApi.RealtyApi* | [**postRealty**](docs/RealtyApi.md#postRealty) | **POST** /realty | 
 *RemsApi.RealtyApi* | [**saveKeyword**](docs/RealtyApi.md#saveKeyword) | **POST** /realty/keyword | 
-*RemsApi.RealtyApi* | [**viewRealty**](docs/RealtyApi.md#viewRealty) | **GET** /realty/{id} | 
+*RemsApi.RealtyApi* | [**viewRealty**](docs/RealtyApi.md#viewRealty) | **GET** /realty/mapView | 
+*RemsApi.RealtyApi* | [**viewRealty_0**](docs/RealtyApi.md#viewRealty_0) | **GET** /realty/{id} | 
 *RemsApi.SettingApi* | [**changeLanguage**](docs/SettingApi.md#changeLanguage) | **POST** /setting/language/{lang} | 
 *RemsApi.UserApi* | [**forgot**](docs/UserApi.md#forgot) | **POST** /user/forgot | 
 *RemsApi.UserApi* | [**getUser**](docs/UserApi.md#getUser) | **GET** /user/{id} | 
 *RemsApi.UserApi* | [**me**](docs/UserApi.md#me) | **GET** /user/me | 
+*RemsApi.UserApi* | [**updateUser**](docs/UserApi.md#updateUser) | **POST** /user/me | 
 *RemsApi.UserApi* | [**uploadAvatar**](docs/UserApi.md#uploadAvatar) | **POST** /user/avatar | 
 
 
