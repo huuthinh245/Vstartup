@@ -10,6 +10,7 @@ import alertStrings from '../localization/alert';
 import strings from '../localization/authorization';
 import emitter from '../emitter';
 import { updateInfoAction } from '../redux/auth/actions';
+import { _alert } from '../utils/alert';
 
 class ChangePassword extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class ChangePassword extends React.Component {
   }
 
   _submit = () => {
-    if (this.state.currentPassword.length < 6) {
+    if (!this.state.currentPassword.length) {
       emitter.emit('alert', {
         type: 'warn',
         title: alertStrings.invalidField,
@@ -44,7 +45,18 @@ class ChangePassword extends React.Component {
       });
       this.confirmPassword.focus();
     } else {
-      updateInfoAction({ password: this.state.password });
+      const callback = () =>
+        _alert(alertStrings.success, alertStrings.updateInfoSuccess, [
+          {
+            text: alertStrings.ok,
+            onPress: () => this.props.navigation.goBack()
+          }
+        ]);
+      updateInfoAction({
+        password: this.state.password,
+        current_password: this.state.currentPassword,
+        callback
+      });
     }
   };
 

@@ -11,6 +11,9 @@ import { myRealtyReducer } from './myRealty/reducer';
 import { listFavoriteReducer } from './listFavorite/reducer';
 import { listAgencyReducer } from './listAgency/reducer';
 import { agencyDetailReducer } from './agencyDetail/reducer';
+import { listProjectReducer } from './listProject/reducer';
+import { projectDetailReducer } from './projectDetail/reducer';
+import { agencyRealtyReducer } from './agencyRealty/reducer';
 
 const navReducer = createNavigationReducer(AppNavigator);
 
@@ -25,5 +28,8 @@ export const reducers = combineReducers({
   myRealty: myRealtyReducer,
   listFavorite: listFavoriteReducer,
   listAgency: listAgencyReducer,
-  agencyDetail: agencyDetailReducer
+  agencyDetail: agencyDetailReducer,
+  listProject: listProjectReducer,
+  projectDetail: projectDetailReducer,
+  agencyRealty: agencyRealtyReducer
 });

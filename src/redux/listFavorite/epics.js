@@ -31,7 +31,7 @@ const loadMoreListFavoriteEpic = actions$ =>
       const resp = await realtyApi.listFavorite(action.payload);
       return { type: LOAD_MORE_LIST_FAVORITE_SUCCESS, payload: resp.body };
     } catch (error) {
-      handleError(error, true);
+      handleError(error);
       return { type: LOAD_MORE_LIST_FAVORITE_FAILURE, payload: error };
     }
   });

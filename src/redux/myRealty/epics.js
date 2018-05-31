@@ -28,7 +28,7 @@ const loadMoreMyRealtyEpic = actions$ =>
       const resp = await realtyApi.listRealty(action.payload);
       return { type: LOAD_MORE_MY_REALTY_SUCCESS, payload: resp.body };
     } catch (error) {
-      handleError(error, true);
+      handleError(error);
       return { type: LOAD_MORE_MY_REALTY_FAILURE, payload: error };
     }
   });

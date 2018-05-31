@@ -9,6 +9,9 @@ import { myRealtyEpic } from './myRealty/epics';
 import { listFavoriteEpic } from './listFavorite/epics';
 import { listAgencyEpic } from './listAgency/epics';
 import { agencyDetailEpic } from './agencyDetail/epics';
+import { listProjectEpic } from './listProject/epics';
+import { projectDetailEpic } from './projectDetail/epics';
+import { agencyRealtyEpic } from './agencyRealty/epics';
 
 export default (epics = combineEpics(
   listEpic,
@@ -19,5 +22,8 @@ export default (epics = combineEpics(
   myRealtyEpic,
   listFavoriteEpic,
   listAgencyEpic,
-  agencyDetailEpic
+  agencyDetailEpic,
+  listProjectEpic,
+  projectDetailEpic,
+  agencyRealtyEpic
 ));

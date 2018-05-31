@@ -31,6 +31,15 @@ export const handleLikeOrUnlikeRealty = (state, payload) => {
   return Object.assign({}, state);
 };
 
+export const handleLikeOrUnlikeRealtyFailure = (state, payload) => {
+  const { id, is_favorite } = payload.realty;
+  const index = state.data.findIndex(item => item.id === id);
+  if (index !== -1) {
+    Object.assign(state.data[index], { is_favorite: !is_favorite });
+  }
+  return Object.assign({}, state);
+};
+
 const agencyApi = new API.AgencyApi();
 const authApi = new API.AuthApi();
 const contactApi = new API.ContactApi();

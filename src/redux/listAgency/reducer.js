@@ -12,27 +12,27 @@ import {
   LOAD_MORE_LIST_AGENCY_FAILURE
 } from './actions';
 
-const flag = {
+const initial = {
   fetching: false,
   refreshing: false,
-  loadMore: false
+  loadMore: false,
+  data: [],
+  error: null
 };
-
-const initial = Object.assign(flag, { data: [] });
 
 export const listAgencyReducer = handleActions(
   {
     [GET_LIST_AGENCY]: state => {
-      return Object.assign({}, state, flag, { fetching: true });
+      return Object.assign({}, state, { fetching: true });
     },
     [GET_LIST_AGENCY_SUCCESS]: (state, { payload }) => {
-      return Object.assign({}, state, flag, { data: payload });
+      return Object.assign({}, state, { data: payload, fetching: false, error: null });
     },
-    [GET_LIST_AGENCY_FAILURE]: state => {
-      return Object.assign({}, state, flag);
+    [GET_LIST_AGENCY_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, { fetching: false, error: payload });
     },
     [LOAD_MORE_LIST_AGENCY]: state => {
-      return Object.assign({}, state, flag, { loadMore: true });
+      return Object.assign({}, state, { loadMore: true });
     },
     [LOAD_MORE_LIST_AGENCY_SUCCESS]: (state, { payload }) => {
       const arr = state.data;
@@ -44,19 +44,19 @@ export const listAgencyReducer = handleActions(
           Object.assign(arr[index], item);
         }
       });
-      return Object.assign({}, state, flag, { data: arr });
+      return Object.assign({}, state, { data: arr, loadMore: false, error: null });
     },
-    [LOAD_MORE_LIST_AGENCY_FAILURE]: state => {
-      return Object.assign({}, state, flag);
+    [LOAD_MORE_LIST_AGENCY_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, { loadMore: false, error: payload });
     },
     [REFRESH_LIST_AGENCY]: state => {
-      return Object.assign({}, state, flag, { refreshing: true });
+      return Object.assign({}, state, { refreshing: true });
     },
     [REFRESH_LIST_AGENCY_SUCCESS]: (state, { payload }) => {
-      return Object.assign({}, state, flag, { data: payload });
+      return Object.assign({}, state, { data: payload, refreshing: false, error: null });
     },
-    [REFRESH_LIST_AGENCY_FAILURE]: state => {
-      return Object.assign({}, state, flag);
+    [REFRESH_LIST_AGENCY_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, { refreshing: false, error: payload });
     }
   },
   initial

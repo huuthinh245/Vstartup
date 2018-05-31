@@ -1,5 +1,4 @@
 import { handleActions } from 'redux-actions';
-import _ from 'lodash';
 
 import {
   LIKE_REALTY,
@@ -20,7 +19,7 @@ import {
   LOAD_MORE_LIST_FAVORITE_SUCCESS,
   LOAD_MORE_LIST_FAVORITE_FAILURE
 } from './actions';
-import { handleLikeOrUnlikeRealty } from '../../utils/api';
+import { handleLikeOrUnlikeRealty, handleLikeOrUnlikeRealtyFailure } from '../../utils/api';
 
 const initial = {
   fetching: false,
@@ -69,9 +68,10 @@ export const listFavoriteReducer = handleActions(
       return Object.assign({}, state, { refreshing: false, error: payload });
     },
     [LIKE_REALTY]: (state, { payload }) => handleLikeOrUnlikeRealty(state, payload),
-    [LIKE_REALTY_FAILURE]: (state, { payload }) => handleLikeOrUnlikeRealty(state, payload),
+    [LIKE_REALTY_FAILURE]: (state, { payload }) => handleLikeOrUnlikeRealtyFailure(state, payload),
     [UNLIKE_REALTY]: (state, { payload }) => handleLikeOrUnlikeRealty(state, payload),
-    [UNLIKE_REALTY_FAILURE]: (state, { payload }) => handleLikeOrUnlikeRealty(state, payload),
+    [UNLIKE_REALTY_FAILURE]: (state, { payload }) =>
+      handleLikeOrUnlikeRealtyFailure(state, payload),
     [LIKE_REALTY_SUCCESS]: (state, { payload }) => {
       const index = state.data.findIndex(item => item.id === payload.id);
       if (index === -1) {

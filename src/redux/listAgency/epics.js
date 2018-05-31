@@ -21,7 +21,7 @@ const getListAgencyEpic = actions$ =>
       return { type: GET_LIST_AGENCY_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
-      return { type: GET_LIST_AGENCY_FAILURE };
+      return { type: GET_LIST_AGENCY_FAILURE, payload: error };
     }
   });
 
@@ -31,8 +31,8 @@ const loadMoreListAgencyEpic = actions$ =>
       const resp = await agencyApi.listAgency(action.payload);
       return { type: LOAD_MORE_LIST_AGENCY_SUCCESS, payload: resp.body };
     } catch (error) {
-      handleError(error, true);
-      return { type: LOAD_MORE_LIST_AGENCY_FAILURE };
+      handleError(error);
+      return { type: LOAD_MORE_LIST_AGENCY_FAILURE, payload: error };
     }
   });
 
@@ -43,7 +43,7 @@ const refreshListAgencyEpic = actions$ =>
       return { type: REFRESH_LIST_AGENCY_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
-      return { type: REFRESH_LIST_AGENCY_FAILURE };
+      return { type: REFRESH_LIST_AGENCY_FAILURE, payload: error };
     }
   });
 

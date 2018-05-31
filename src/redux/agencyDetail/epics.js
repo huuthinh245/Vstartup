@@ -11,7 +11,7 @@ const getAgencyDetail = actions$ =>
       return { type: GET_AGENCY_DETAIL_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
-      return { type: GET_AGENCY_DETAIL_FAILURE };
+      return { type: GET_AGENCY_DETAIL_FAILURE, payload: error };
     }
   });
 

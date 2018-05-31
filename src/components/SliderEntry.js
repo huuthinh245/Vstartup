@@ -1,36 +1,26 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet, Text, PixelRatio } from 'react-native';
 import PropTypes from 'prop-types';
 import { ParallaxImage } from 'react-native-snap-carousel';
 
-import {
-  _ios,
-  _dims,
-  _colors,
-  responsiveHeight,
-  responsiveWidth,
-  responsiveFontSize
-} from '../utils/constants';
+import { _ios, responsiveHeight, responsiveWidth } from '../utils/constants';
 
 export default class SliderEntry extends Component {
   static propTypes = {
-    data: PropTypes.object.isRequired,
+    data: PropTypes.string.isRequired,
     even: PropTypes.bool,
     parallax: PropTypes.bool,
     parallaxProps: PropTypes.object
   };
 
   get image() {
-    const {
-      data: { illustration },
-      parallax,
-      parallaxProps,
-      even
-    } = this.props;
+    const { data, parallax, parallaxProps, even } = this.props;
+
+    console.log(this.props);
 
     return parallax ? (
       <ParallaxImage
-        source={{ uri: illustration }}
+        source={{ uri: data }}
         containerStyle={styles.imageContainer}
         style={styles.image}
         parallaxFactor={0.35}
@@ -101,12 +91,16 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: _ios ? 0 : -1, // Prevent a random Android rendering issue
     backgroundColor: 'white',
-    borderRadius: entryBorderRadius
+    borderRadius: entryBorderRadius,
+    borderWidth: 1 / PixelRatio.get(),
+    borderColor: 'silver'
   },
   image: {
     ...StyleSheet.absoluteFillObject,
     resizeMode: 'center',
-    borderRadius: _ios ? entryBorderRadius : 0
+    borderRadius: _ios ? entryBorderRadius : 0,
+    borderWidth: 1 / PixelRatio.get(),
+    borderColor: 'silver'
   },
   count: {
     color: '#fff',

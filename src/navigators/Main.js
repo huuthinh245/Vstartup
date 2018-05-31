@@ -27,6 +27,7 @@ import ChangePassword from '../routes/ChangePassword';
 import Register from '../components/authorization/register';
 import Forgot from '../components/authorization/Forgot';
 import Login from '../components/authorization/login';
+import CreateRealty from '../routes/CreateRealty';
 
 import strings from '../localization/header';
 import { _dims, responsiveFontSize } from '../utils/constants';
@@ -41,6 +42,9 @@ const tabsConfig = {
 
 const tabsOptions = {
   navigationOptions: ({ navigation }) => ({
+    tabBarOnPress: (a, b) => {
+      console.log(a, b);
+    },
     tabBarIcon: ({ focused, tintColor }) => {
       const { routeName } = navigation.state;
       let iconName;
@@ -89,7 +93,10 @@ const tabsOptions = {
     activeTintColor: 'tomato',
     inactiveTintColor: 'gray'
   },
-  initialRouteName: 'FavoriteTab'
+  initialRouteName: 'FavoriteTab',
+  lazy: false,
+  animationEnabled: true,
+  swipeEnabled: true
 };
 
 export const Tabs = createBottomTabNavigator(tabsConfig, tabsOptions);
@@ -122,7 +129,8 @@ export const MainWithModal = createStackNavigator(
     [routes.main]: { screen: Main },
     [routes.login]: { screen: Login },
     [routes.register]: { screen: Register },
-    [routes.forgot]: { screen: Forgot }
+    [routes.forgot]: { screen: Forgot },
+    [routes.createRealty]: { screen: CreateRealty }
   },
   {
     mode: 'modal',

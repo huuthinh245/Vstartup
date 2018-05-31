@@ -145,7 +145,7 @@ class RealtyDetail extends Component {
             <Ionicons
               name={`ios-heart${realty.is_favorite ? '-outline' : ''}`}
               style={styles.socialButton}
-              color="red"
+              color="tomato"
               onPress={() => this._likeRealty(realty)}
             />
             <FeatherIcons

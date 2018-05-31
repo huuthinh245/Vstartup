@@ -11,18 +11,18 @@ export default class AgencyItem extends React.Component {
   render() {
     const { data, style } = this.props;
     return (
-      <TouchableOpacity style={[styles.wrapper, style]}>
+      <TouchableOpacity style={[styles.wrapper, style]} onPress={this.props.onPress}>
         <FastImage
           style={styles.image}
           source={{
-            uri: 'https://i.imgur.com/UYiroysl.jpg',
+            uri: data.avatar,
             priority: FastImage.priority.high
           }}
           resizeMode={FastImage.resizeMode.cover}
         />
         <View style={styles.infoWrapper}>
           <Text numberOfLines={1} style={styles.text}>
-            Tran Thuy Vy
+            {data.name}
           </Text>
           <AirbnbRating
             count={data % 5}
@@ -30,7 +30,7 @@ export default class AgencyItem extends React.Component {
             showRating={false}
           />
           <Text numberOfLines={1} style={[styles.text, styles.sub]}>
-            091943999
+            {data.phone}
           </Text>
         </View>
       </TouchableOpacity>

@@ -10,31 +10,23 @@ import { responsiveHeight } from '../utils/constants';
 
 export default class RealtyItem extends React.Component {
   static propsType = {
-    selected: PropsTypes.bool,
     showPin: PropsTypes.object
   };
 
   static defaultProps = {
     showPin: {
-      color: 'red'
-    },
-    selected: false
+      color: 'tomato'
+    }
   };
 
   render() {
     const { data } = this.props;
     return (
       <TouchableOpacity style={styles.wrapper} onPress={this.props.onPress} activeOpacity={0.8}>
-        {this.props.selected && (
-          <View style={styles.checkedOverlay}>
-            <Ionicons name="md-checkmark-circle" style={styles.checked} />
-          </View>
-        )}
-
         <FastImage
           style={styles.image}
           source={{
-            uri: 'https://unsplash.it/400/400?image=1',
+            uri: data.thumb,
             priority: FastImage.priority.high
           }}
           resizeMode={FastImage.resizeMode.cover}

@@ -11,6 +11,8 @@ import strings from '../localization/authorization';
 import emitter from '../emitter';
 import { PHONE_REGEX } from '../utils/validation';
 import { updateInfoAction } from '../redux/auth/actions';
+import Overlay from '../components/common/Overlay';
+import { _alert } from '../utils/alert';
 
 class AdditionalInformation extends React.Component {
   constructor(props) {
@@ -18,7 +20,7 @@ class AdditionalInformation extends React.Component {
     this.state = {
       name: this.props.auth.user.name,
       phone: this.props.auth.user.phone,
-      address: this.props.auth.user.address
+      address: this.props.auth.user.address || 'Ho Chi Minh city'
     };
   }
 
@@ -27,9 +29,9 @@ class AdditionalInformation extends React.Component {
       emitter.emit('alert', {
         type: 'warn',
         title: alertStrings.invalidField,
-        error: alertStrings.emailInvalid
+        error: alertStrings.nameInvalid
       });
-      this.email.focus();
+      this.name.focus();
     } else if (!PHONE_REGEX.test(this.state.phone)) {
       emitter.emit('alert', {
         type: 'warn',
@@ -43,7 +45,16 @@ class AdditionalInformation extends React.Component {
         error: alertStrings.addressEmpty
       });
     } else {
-      updateInfoAction(this.state);
+      const opts = {};
+      const callback = () =>
+        _alert(alertStrings.success, alertStrings.updateInfoSuccess, [
+          {
+            text: alertStrings.ok,
+            onPress: () => this.props.navigation.goBack()
+          }
+        ]);
+      Object.assign(opts, this.state, { callback });
+      updateInfoAction(opts);
     }
   };
 
@@ -54,12 +65,12 @@ class AdditionalInformation extends React.Component {
           onLeftPress={() => this.props.navigation.goBack()}
           title={headerStrings.additionalInformation}
           right={
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this._validate}>
               <Text style={{ color: _colors.mainColor }}>{headerStrings.save}</Text>
             </TouchableOpacity>
           }
-          onRightPress={() => alert(1)}
         />
+        <Overlay visible={this.props.auth.updating} />
         <View style={styles.innerWrapper}>
           <Text style={styles.title}>{strings.inputInfo}</Text>
           <View style={styles.hoishiWrapper}>
@@ -68,6 +79,7 @@ class AdditionalInformation extends React.Component {
               ref={ref => {
                 this.name = ref;
               }}
+              value={this.state.name}
               style={styles.hoishiInput}
               placeholder={strings.name}
               onChangeText={name => this.setState({ name })}
@@ -83,6 +95,7 @@ class AdditionalInformation extends React.Component {
               ref={ref => {
                 this.phone = ref;
               }}
+              value={this.state.phone}
               style={styles.hoishiInput}
               placeholder={strings.phone}
               onChangeText={phone => this.setState({ phone })}

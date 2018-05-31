@@ -3,10 +3,13 @@ import { View, FlatList, TouchableOpacity, Text } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
+import Overlay from '../components/common/Overlay';
 import Separator from '../components/flatlistHelpers/Separator';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
+import alertStrings from '../localization/alert';
 import { _dims, _colors } from '../utils/constants';
+import emitter from '../emitter';
 import { PlaceHolder } from '../components/RealtyItem';
 import * as routes from '../routes/routes';
 import HistoryItem from '../components/HistoryItem';
@@ -15,6 +18,7 @@ import {
   refreshListHistoryAction,
   deleteHistoryAction
 } from '../redux/listHistory/actions';
+import { _alert } from '../utils/alert';
 
 const textStyle = color => ({ color: color || _colors.mainColor });
 
@@ -69,8 +73,26 @@ class ListHistory extends React.Component {
         right={
           <TouchableOpacity
             onPress={() => {
-              const ids = this.state.selected.map(item => item.id).toString();
-              deleteHistoryAction({ ids, callback: () => this.setState({ edit: false }) });
+              _alert(alertStrings.delete, alertStrings.confirmDelete, [
+                {
+                  text: alertStrings.ok,
+                  onPress: () => {
+                    const ids = this.state.selected.map(item => item.id).toString();
+                    const callback = () => {
+                      this.setState({ edit: false });
+                      emitter.emit('alert', {
+                        type: 'success',
+                        title: alertStrings.success,
+                        error: alertStrings.deleteSuccess
+                      });
+                    };
+                    deleteHistoryAction({ ids, callback });
+                  }
+                },
+                {
+                  text: alertStrings.cancel
+                }
+              ]);
             }}
           >
             <Text style={textStyle('red')}>
@@ -88,6 +110,7 @@ class ListHistory extends React.Component {
     const { listHistory } = this.props;
     return (
       <View style={{ flex: 1 }}>
+        <Overlay visible={this.props.listHistory.deleting} />
         {this._renderHeader()}
         {listHistory.fetching ? (
           <View>

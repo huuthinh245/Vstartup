@@ -2,7 +2,13 @@ import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 
-import { responsiveFontSize, _dims, responsiveHeight, _colors } from '../utils/constants';
+import {
+  responsiveFontSize,
+  _dims,
+  responsiveHeight,
+  _colors,
+  LIMIT_SERVICES
+} from '../utils/constants';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import AgencyItem, { PlaceHolder } from '../components/AgencyItem';
@@ -28,7 +34,13 @@ class ListAgency extends React.Component {
       index % 2 === 0
         ? { marginRight: _dims.defaultPadding / 2 }
         : { marginLeft: _dims.defaultPadding / 2 };
-    return <AgencyItem data={item} style={style} />;
+    return (
+      <AgencyItem
+        onPress={() => this.props.navigation.navigate(routes.agencyDetail, { data: item })}
+        data={item}
+        style={style}
+      />
+    );
   };
 
   _onLoadMore = () => {
@@ -53,22 +65,39 @@ class ListAgency extends React.Component {
           onLeftPress={() => this.props.navigation.goBack()}
           title={headerStrings.listAgency}
         />
-        {listAgency.fetching || listAgency.refreshing ? (
-          <View>
-            <PlaceHolder />
+        {listAgency.fetching ? (
+          <View style={{ padding: _dims.defaultPadding }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <PlaceHolder />
+              <PlaceHolder />
+            </View>
             <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <PlaceHolder />
+              <PlaceHolder />
+            </View>
             <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <PlaceHolder />
+              <PlaceHolder />
+            </View>
             <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <PlaceHolder />
+              <PlaceHolder />
+            </View>
             <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <PlaceHolder />
+              <PlaceHolder />
+            </View>
+            <Separator height={_dims.defaultPadding} />
           </View>
         ) : (
           <FlatList
             style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
             data={listAgency.data}
+            numColumns={2}
             renderItem={this._renderItem}
             keyExtractor={item => `${item.id}`}
             ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}

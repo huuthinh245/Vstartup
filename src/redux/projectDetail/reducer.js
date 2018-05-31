@@ -1,6 +1,10 @@
 import { handleActions } from 'redux-actions';
 
-import { GET_AGENCY_DETAIL, GET_AGENCY_DETAIL_SUCCESS, GET_AGENCY_DETAIL_FAILURE } from './actions';
+import {
+  GET_PROJECT_DETAIL,
+  GET_PROJECT_DETAIL_SUCCESS,
+  GET_PROJECT_DETAIL_FAILURE
+} from './actions';
 
 const initial = {
   fetching: false,
@@ -8,15 +12,15 @@ const initial = {
   error: null
 };
 
-export const agencyDetailReducer = handleActions(
+export const projectDetailReducer = handleActions(
   {
-    [GET_AGENCY_DETAIL]: state => {
+    [GET_PROJECT_DETAIL]: state => {
       return Object.assign({}, state, { fetching: true });
     },
-    [GET_AGENCY_DETAIL_FAILURE]: (state, { payload }) => {
+    [GET_PROJECT_DETAIL_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { fetching: false, error: payload });
     },
-    [GET_AGENCY_DETAIL_SUCCESS]: (state, { payload }) => {
+    [GET_PROJECT_DETAIL_SUCCESS]: (state, { payload }) => {
       if (!state.data[payload.id]) {
         state.data[payload.id] = payload;
       } else {

@@ -13,8 +13,8 @@ Method | HTTP request | Description
 [**postFavorite**](RealtyApi.md#postFavorite) | **POST** /realty/favorite | 
 [**postRealty**](RealtyApi.md#postRealty) | **POST** /realty | 
 [**saveKeyword**](RealtyApi.md#saveKeyword) | **POST** /realty/keyword | 
-[**viewRealty**](RealtyApi.md#viewRealty) | **GET** /realty/mapView | 
-[**viewRealty_0**](RealtyApi.md#viewRealty_0) | **GET** /realty/{id} | 
+[**viewMapRealty**](RealtyApi.md#viewMapRealty) | **GET** /realty/mapView | 
+[**viewRealty**](RealtyApi.md#viewRealty) | **GET** /realty/{id} | 
 
 
 <a name="deleteFavorite"></a>
@@ -486,9 +486,9 @@ Name | Type | Description  | Notes
  - **Content-Type**: application/x-www-form-urlencoded
  - **Accept**: application/json
 
-<a name="viewRealty"></a>
-# **viewRealty**
-> [RealtyMap] viewRealty(ids)
+<a name="viewMapRealty"></a>
+# **viewMapRealty**
+> [RealtyMap] viewMapRealty(ids)
 
 
 
@@ -508,7 +508,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-apiInstance.viewRealty(ids, callback);
+apiInstance.viewMapRealty(ids, callback);
 ```
 
 ### Parameters
@@ -530,9 +530,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="viewRealty_0"></a>
-# **viewRealty_0**
-> Realty viewRealty_0(id)
+<a name="viewRealty"></a>
+# **viewRealty**
+> Realty viewRealty(id)
 
 
 
@@ -552,7 +552,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-apiInstance.viewRealty_0(id, callback);
+apiInstance.viewRealty(id, callback);
 ```
 
 ### Parameters

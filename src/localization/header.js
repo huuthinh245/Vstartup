@@ -27,7 +27,10 @@ const strings = new LocalizedStrings({
     changePassword: 'Change password',
     loginScreen: 'Login',
     registerScreen: 'Register',
-    forgotScreen: 'Forgot'
+    forgotScreen: 'Forgot',
+    listProject: 'List Project',
+    listAgency: 'List Agency',
+    agencyDetail: 'Agency detail'
   },
   vni: {
     close: 'Huỷ',
@@ -50,7 +53,10 @@ const strings = new LocalizedStrings({
     changePassword: 'Thay đổi mật khẩu',
     loginScreen: 'Đăng nhập',
     registerScreen: 'Đăng ký',
-    forgotScreen: 'Quên mật khẩu'
+    forgotScreen: 'Quên mật khẩu',
+    listProject: 'Danh sách dự án',
+    listAgency: 'Danh sách nhà môi giới',
+    agencyDetail: 'Chi tiết nhà môi giới'
   }
 });
 

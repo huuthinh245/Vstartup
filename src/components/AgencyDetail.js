@@ -10,14 +10,8 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
-import RNPopover from 'react-native-popover-menu';
 
-import Overlay from '../components/common/Overlay';
-import Header from '../navigators/headers/CommonHeader';
-import headerStrings from '../localization/header';
-import alertStrings from '../localization/alert';
 import { PlaceHolder } from '../components/RealtyItem';
 import * as routes from '../routes/routes';
 import strings from '../localization/profile';
@@ -30,136 +24,33 @@ import {
   LIMIT_SERVICES,
   responsiveWidth
 } from '../utils/constants';
-import { getMyRealtyAction, loadMoreMyRealtyAction } from '../redux/myRealty/actions';
-import { imagePicker } from '../utils/imagePicker';
-import { userApi } from '../utils/api';
-import { logoutAction } from '../redux/auth/actions';
-import { _alert } from '../utils/alert';
+import { getAgencyRealtyAction, loadMoreAgencyRealtyAction } from '../redux/agencyRealty/actions';
 
-class AuthDetail extends React.Component {
+class AgencyDetail extends React.Component {
   constructor(props) {
     super(props);
     this.onEndReachedCalledDuringMomentum = true;
   }
 
   componentDidMount() {
-    const { user } = this.props.auth;
-    getMyRealtyAction({ author_id: user.id });
+    const { user } = this.props;
+    getAgencyRealtyAction({ author_id: user.id });
   }
 
-  _showHeaderPopup = ref => {
-    const edit = (
-      <Icon name="edit" style={{ width: 40 }} size={24} color="#fff" family="FontAwesome" />
-    );
-    const changePassword = (
-      <Icon name="lock" style={{ width: 40 }} size={24} color="#fff" family="FontAwesome" />
-    );
-    const logOut = (
-      <Icon name="sign-out" style={{ width: 40 }} size={24} color="#fff" family="FontAwesome" />
-    );
-
-    const menus = [
-      {
-        menus: [
-          { label: strings.editAccount, icon: edit },
-          { label: strings.changePassword, icon: changePassword },
-          { label: strings.logOut, icon: logOut }
-        ]
-      }
-    ];
-
-    RNPopover.Show(ref, {
-      menus,
-      onDone: index => {
-        if (index === 0) {
-          this.props.navigation.navigate(routes.additionalInformation, {
-            user: this.props.auth.user
-          });
-        } else if (index === 1) {
-          this.props.navigation.navigate(routes.changePassword);
-        } else {
-          _alert(strings.logOut, strings.areYouSure, [
-            {
-              text: alertStrings.ok,
-              onPress: () => logoutAction()
-            },
-            {
-              text: alertStrings.cancel
-            }
-          ]);
-        }
-      },
-      theme: 'dark',
-      tintColor: _colors.popup,
-      rowHeight: 50,
-      perferedWidth: responsiveWidth(70)
-    });
-  };
-
-  _showItemPopup = ref => {
-    const hide = <Icon name="eye-slash" size={24} color="#fff" family="FontAwesome" />;
-    const edit = <Icon name="edit" size={24} color="#fff" family="FontAwesome" />;
-
-    const menus = [
-      {
-        menus: [
-          { label: strings.hideRealty, icon: hide },
-          { label: strings.editRealty, icon: edit }
-        ]
-      }
-    ];
-
-    RNPopover.Show(ref, {
-      menus,
-      onDone: index => {
-        if (index === 0) {
-        } else if (index === 1) {
-        }
-      },
-      tintColor: _colors.popup,
-      theme: 'dark',
-      rowHeight: 50,
-      perferedWidth: responsiveWidth(70)
-    });
-  };
-
-  _renderHeader = () => {
-    return (
-      <Header
-        title={headerStrings.profileTitle}
-        outer
-        right={
-          <TouchableOpacity
-            ref={ref => {
-              this.headerPopup = ref;
-            }}
-            onPress={() => this._showHeaderPopup(this.headerPopup)}
-          >
-            <Ionicons name="md-more" size={30} color={_colors.mainColor} style={{ padding: 10 }} />
-          </TouchableOpacity>
-        }
-      />
-    );
-  };
-
   _onLoadMore = () => {
-    if (this.props.myRealty.fetching || this.onEndReachedCalledDuringMomentum) return;
-    const { user } = this.props.auth;
-    const len = this.props.myRealty.data.length;
+    if (this.props.agencyRealty.loadMore || this.onEndReachedCalledDuringMomentum) return;
+    const { user } = this.props;
+    const len = this.props.agencyRealty.data[user.id].length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
-    loadMoreMyRealtyAction({ author_id: user.id, page });
+    loadMoreAgencyRealtyAction({ author_id: user.id, page });
   };
 
   _renderItem = ({ item }) => {
     return (
       <TouchableOpacity
-        ref={ref => {
-          this[`realty(${item.id})`] = ref;
-        }}
         onPress={() => {
           this.props.navigation.navigate(routes.realtyDetail, { data: item });
         }}
-        onLongPress={() => this._showItemPopup(this[`realty(${item.id})`])}
         style={styles.item}
       >
         <FastImage
@@ -185,7 +76,7 @@ class AuthDetail extends React.Component {
   };
 
   _renderProfile = () => {
-    const { user } = this.props.auth;
+    const { user } = this.props;
     return (
       <View>
         <View style={styles.imageWrapper}>
@@ -197,21 +88,6 @@ class AuthDetail extends React.Component {
             }}
             resizeMode={FastImage.resizeMode.cover}
           />
-          <TouchableOpacity
-            style={styles.cameraWrapper}
-            onPress={() =>
-              imagePicker('photo', false, image => {
-                userApi
-                  .uploadAvatar({ avatar: { uri: image.sourceURL } })
-                  .then(value => console.log(value))
-                  .catch(error => {
-                    console.log(error);
-                  });
-              })
-            }
-          >
-            <Ionicons name="ios-camera" style={styles.camera} />
-          </TouchableOpacity>
         </View>
         <Text style={styles.name}>{user.name}</Text>
 
@@ -241,10 +117,9 @@ class AuthDetail extends React.Component {
             </Text>
           </View>
         </View>
+        {user.role_id === 3 && <Text style={styles.showProj}>{strings.showProj}</Text>}
 
-        <Text style={styles.showProj}>{strings.showProj}</Text>
-
-        {this.props.myRealty.fetching && (
+        {this.props.agencyRealty.fetching && (
           <View>
             <PlaceHolder />
             <Separator height={_dims.defaultPadding} />
@@ -256,33 +131,29 @@ class AuthDetail extends React.Component {
   };
 
   _renderFooter = () => {
-    if (this.props.myRealty.fetching || !this.props.myRealty.loadMore) return null;
+    if (this.props.agencyRealty.fetching || !this.props.agencyRealty.loadMore) return null;
     return <ActivityIndicator animating style={styles.indicator} />;
   };
 
   _renderEmpty = () => {
-    if (this.props.myRealty.fetching || this.props.myRealty.data.length === 0) return null;
+    const { user } = this.props;
+    if (
+      this.props.agencyRealty.fetching ||
+      !this.props.agencyRealty.data[user.id] ||
+      this.props.agencyRealty.data[user.id].length === 0
+    ) {
+      return null;
+    }
     return <Text>Empty</Text>;
   };
 
   render() {
+    const { user, agencyRealty } = this.props;
     return (
       <View style={styles.wrapper}>
-        <Overlay visible={this.props.auth.fetching} />
-        {this._renderHeader()}
-        <TouchableOpacity
-          style={styles.fab}
-          onPress={() => this.props.navigation.navigate(routes.createRealty)}
-        >
-          <Ionicons
-            name="ios-add-circle"
-            color="#65b6fb"
-            size={responsiveFontSize(_dims.defaultFontSize * 4)}
-          />
-        </TouchableOpacity>
         <FlatList
-          style={{ marginHorizontal: _dims.defaultPadding, paddingBottom: 100 }}
-          data={this.props.myRealty.data}
+          style={{ marginHorizontal: _dims.defaultPadding }}
+          data={!agencyRealty.fetching && agencyRealty.data[user.id]}
           renderItem={this._renderItem}
           keyExtractor={item => `${item.id}`}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -300,7 +171,9 @@ class AuthDetail extends React.Component {
   }
 }
 
-export default connect(state => ({ auth: state.auth, myRealty: state.myRealty }))(AuthDetail);
+export default connect(state => ({
+  agencyRealty: state.agencyRealty
+}))(AgencyDetail);
 
 const styles = StyleSheet.create({
   wrapper: {
