@@ -362,7 +362,7 @@
       };
 
       var authNames = ['Bearer'];
-      var contentTypes = ['application/x-www-form-urlencoded'];
+      var contentTypes = ['application/json'];
       var accepts = ['application/json'];
       var returnType = RealtyList;
 
