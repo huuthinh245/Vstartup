@@ -59,6 +59,7 @@ class SplashScreen extends React.Component {
   }
 
   render() {
+    console.log(strings);
     return (
       <View style={{ flex: 1 }}>
         <StatusBar hidden />

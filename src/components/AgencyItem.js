@@ -18,14 +18,14 @@ export default class AgencyItem extends React.Component {
             uri: data.avatar,
             priority: FastImage.priority.high
           }}
-          resizeMode={FastImage.resizeMode.cover}
+          resizeMode={FastImage.resizeMode.contain}
         />
         <View style={styles.infoWrapper}>
           <Text numberOfLines={1} style={styles.text}>
             {data.name}
           </Text>
           <AirbnbRating
-            count={data % 5}
+            count={data.rating}
             size={responsiveFontSize(_dims.defaultFontSubTitle + 2)}
             showRating={false}
           />
@@ -55,9 +55,9 @@ export const PlaceHolder = props => {
 const styles = StyleSheet.create({
   wrapper: {
     width: _dims.screenWidth / 2 - _dims.defaultPadding * 1.5,
-    height: _dims.screenWidth / 2 - _dims.defaultPadding * 1.5,
+    height: (_dims.screenWidth / 2 - _dims.defaultPadding * 1.5) * 1.25,
     borderRadius: 20,
-    backgroundColor: 'green'
+    backgroundColor: '#ddd'
   },
   image: {
     height: '100%',

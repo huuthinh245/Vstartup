@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  PixelRatio
-} from 'react-native';
+import { View, TouchableOpacity, Text, FlatList, ActivityIndicator } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
@@ -17,14 +9,9 @@ import * as routes from '../routes/routes';
 import strings from '../localization/profile';
 import AirbnbRating from '../components/rating';
 import Separator from '../components/flatlistHelpers/Separator';
-import {
-  responsiveFontSize,
-  _dims,
-  _colors,
-  LIMIT_SERVICES,
-  responsiveWidth
-} from '../utils/constants';
+import { responsiveFontSize, _dims, LIMIT_SERVICES } from '../utils/constants';
 import { getAgencyRealtyAction, loadMoreAgencyRealtyAction } from '../redux/agencyRealty/actions';
+import { styles } from './AuthDetail';
 
 class AgencyDetail extends React.Component {
   constructor(props) {
@@ -53,17 +40,20 @@ class AgencyDetail extends React.Component {
         }}
         style={styles.item}
       >
-        <FastImage
-          style={styles.itemImage}
-          source={{
-            uri: item.thumb,
-            priority: FastImage.priority.high
-          }}
-          resizeMode={FastImage.resizeMode.cover}
-        />
+        <View style={styles.itemImage}>
+          <FastImage
+            source={{
+              uri: item.thumb,
+              priority: FastImage.priority.high
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
+        </View>
 
         <View style={styles.itemInfo}>
-          <Text numberOfLines={2} style={styles.itemName}>{item.title}</Text>
+          <Text numberOfLines={2} style={styles.itemName}>
+            {item.title}
+          </Text>
           <Text numberOfLines={1} style={styles.itemPrice}>
             {item.price} {item.price_unit}
           </Text>
@@ -174,151 +164,3 @@ class AgencyDetail extends React.Component {
 export default connect(state => ({
   agencyRealty: state.agencyRealty
 }))(AgencyDetail);
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    backgroundColor: '#fbfbfb'
-  },
-  fab: {
-    zIndex: 100,
-    position: 'absolute',
-    bottom: _dims.defaultPadding,
-    right: _dims.defaultPadding
-  },
-  infoWrapper: {
-    margin: _dims.defaultPadding,
-    borderRadius: 20,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: _dims.defaultPadding * 2,
-    paddingVertical: _dims.defaultPadding,
-    shadowColor: '#777',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 1
-  },
-  name: {
-    alignSelf: 'center',
-    fontSize: responsiveFontSize(_dims.defaultFontTitle),
-    fontWeight: 'bold',
-    marginBottom: 5
-  },
-  cameraWrapper: {
-    position: 'absolute',
-    bottom: _dims.defaultPadding,
-    right: _dims.defaultPadding
-  },
-  camera: {
-    fontSize: responsiveFontSize(_dims.defaultFontTitle + 20),
-    color: _colors.mainColor
-  },
-  imageWrapper: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  image: {
-    alignSelf: 'center',
-    width: _dims.screenWidth / 2,
-    height: _dims.screenWidth / 2,
-    borderRadius: _dims.screenWidth / 4,
-    marginVertical: _dims.defaultPadding
-  },
-  line: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 0.5,
-    borderColor: 'silver'
-  },
-  lineIcon: {
-    fontSize: responsiveFontSize(_dims.defaultFontSubTitle + 4),
-    color: _colors.mainColor,
-    marginLeft: -_dims.defaultPadding / 2,
-    marginRight: _dims.defaultPadding * 2
-  },
-  lineText: {
-    flex: 1,
-    color: '#555'
-  },
-  noBorderBottom: {
-    borderBottomWidth: 0
-  },
-  showProj: {
-    marginLeft: _dims.defaultPadding * 2,
-    color: _colors.mainColor,
-    marginTop: _dims.defaultPadding * 2,
-    marginBottom: _dims.defaultPadding
-  },
-  item: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  itemImage: {
-    width: (_dims.screenWidth - _dims.defaultPadding * 2) / 4,
-    height: (_dims.screenWidth - _dims.defaultPadding * 2) / 4,
-    borderRadius: 20
-  },
-  itemInfo: {
-    flex: 1,
-    marginLeft: _dims.defaultPadding
-  },
-  titleItem: {
-    flexDirection: 'row'
-  },
-  itemName: {
-    color: '#333',
-    flex: 1
-  },
-  itemPrice: {
-    color: '#44cee2',
-    fontWeight: 'bold'
-  },
-  itemAddress: {
-    color: '#777'
-  },
-  itemIcon: {
-    paddingHorizontal: _dims.defaultPadding,
-    color: _colors.mainColor,
-    fontSize: responsiveFontSize(_dims.defaultFontTitle + 8)
-  },
-  separator: {
-    height: 0.5,
-    backgroundColor: '#44cee2',
-    marginVertical: 5,
-    marginHorizontal: _dims.defaultPadding
-  },
-  indicator: {
-    alignSelf: 'center',
-    marginVertical: 10
-  },
-  empty: {
-    alignSelf: 'center',
-    marginVertical: 10
-  },
-  dropdown: {
-    backgroundColor: 'lightblue',
-    borderRadius: 4,
-    height: 100,
-    zIndex: Number.MAX_SAFE_INTEGER - 2
-  },
-  row: {
-    flexDirection: 'row',
-    height: 50,
-    width: responsiveWidth(70),
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomWidth: 1 / PixelRatio.get(),
-    borderColor: 'silver',
-    marginHorizontal: _dims.defaultPadding
-  },
-  rowText: {
-    flex: 1,
-    marginLeft: _dims.defaultPadding,
-    color: '#555'
-  }
-});

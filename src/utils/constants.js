@@ -16,7 +16,7 @@ export const _colors = {
   header: '#c9c9ce',
   mainColor: 'rgb(0,122,255)',
   overlay: 'rgba(0,0,0,0.5)',
-  popup: '#BFEFFF'
+  popup: '#393939'
 };
 
 export const _ios = Platform.OS === 'ios';

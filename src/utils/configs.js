@@ -9,6 +9,7 @@ import { responsiveFontSize, _dims, _ios } from './constants';
 
 const customTextInputProps = {
   underlineColorAndroid: 'rgba(0,0,0,0)',
+  placeholderTextColor: 'silver',
   style: {
     padding: 10,
     backgroundColor: 'white',

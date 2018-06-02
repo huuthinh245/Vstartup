@@ -14,9 +14,12 @@ export const _setupGoogleSignin = async callback => {
     });
 
     const user = await GoogleSignin.currentUserAsync();
-    callback(user);
+    if (callback) {
+      callback(user);
+    }
   } catch (err) {
-    _alert(alertStrings.error, `${err.code}: ${err.message}`);
+    console.log(err);
+    // _alert(alertStrings.error, `${err.code}: ${err.message}`);
   }
 };
 

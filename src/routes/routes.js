@@ -18,3 +18,4 @@ export const listProject = 'SC_LIST_PROJECT';
 export const listInvestor = 'SC_LIST_INVESTOR';
 export const settings = 'SC_SETTINGS';
 export const createRealty = 'SC_CREATE_REALTY';
+export const feedBack = 'SC_FEEDBACK';

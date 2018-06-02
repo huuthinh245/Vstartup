@@ -41,7 +41,9 @@ const borderRadius = 10;
 export const styles = StyleSheet.create({
   wrapper: {
     borderRadius,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    width: _dims.screenWidth - 2 * _dims.defaultPadding,
+    height: (_dims.screenWidth - 2 * _dims.defaultPadding) * 0.5
   },
   placeHolder: {
     borderRadius,
@@ -74,10 +76,12 @@ export const styles = StyleSheet.create({
     height: responsiveHeight(10)
   },
   infoWrapper: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
     backgroundColor: _colors.overlay,
     width: '100%',
     padding: 10,
-    marginTop: responsiveHeight(10),
     borderBottomLeftRadius: borderRadius,
     borderBottomRightRadius: borderRadius
   },

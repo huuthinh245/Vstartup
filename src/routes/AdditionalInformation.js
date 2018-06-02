@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
   },
   hoishiInput: {
     flex: 1,
-    paddingLeft: _dims.defaultPadding
+    paddingVertical: 10,
+    paddingLeft: _dims.defaultPadding,
   }
 });

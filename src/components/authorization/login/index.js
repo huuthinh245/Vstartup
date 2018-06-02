@@ -20,14 +20,13 @@ import {
   responsiveWidth,
   responsiveHeight
 } from '../../../utils/constants';
-import { _alert } from '../../../utils/alert';
 import * as routes from '../../../routes/routes';
 import { _requestFB } from './facebook';
 import Overlay from '../../common/Overlay';
-import { _setupGoogleSignin, _signInGoogle, _signOutGoogle } from './google';
+import { _signInGoogle, _signOutGoogle } from './google';
 import Header from '../../../navigators/headers/CommonHeader';
 import headerStrings from '../../../localization/header';
-import { loginAction, socialAction, logoutAction } from '../../../redux/auth/actions';
+import { loginAction, socialAction } from '../../../redux/auth/actions';
 import emitter from '../../../emitter';
 
 import { authApi } from '../../../utils/api';
@@ -46,10 +45,6 @@ class Login extends Component {
       password: '123',
       googleUser: null
     };
-  }
-
-  componentDidMount() {
-    _setupGoogleSignin(user => this.setState({ googleUser: user }));
   }
 
   _signIn = async () => {
@@ -296,6 +291,7 @@ export const styles = StyleSheet.create({
   },
   hoishiInput: {
     flex: 1,
+    paddingVertical: 10,
     paddingLeft: _dims.defaultPadding
   }
 });

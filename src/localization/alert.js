@@ -7,6 +7,8 @@ const strings = new LocalizedStrings({
     success: 'Success',
     warning: 'Warning',
     restart: 'Try restart application',
+    rs: 'Restart',
+    requireRestart: 'Restart application to change settings',
 
     deleteSuccess: 'Delete successfully.',
     delete: 'Confirm delete',
@@ -33,6 +35,8 @@ const strings = new LocalizedStrings({
     success: 'Thành công',
     warning: 'Cảnh báo',
     restart: 'Thử khởi động lại ứng dụng',
+    rs: 'Khởi động lại',
+    requireRestart: 'Khởi động lại ứng dụng để áp dụng cài đặt',
 
     deleteSuccess: 'Xoá thành công.',
     delete: 'Xác nhận xoá',

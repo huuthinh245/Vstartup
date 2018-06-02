@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import FlipView from 'react-native-flip-view-next';
-import RNGooglePlacePicker from 'react-native-google-place-picker';
 
 import { _colors } from '../utils/constants';
 import Header from '../navigators/headers/SearchTab';

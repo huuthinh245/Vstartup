@@ -166,6 +166,7 @@ class ProjectDetail extends Component {
           <Accordion
             sections={SECTIONS}
             renderSectionTitle={this._renderSectionTitle}
+            touchableComponent={TouchableOpacity}
             renderHeader={this._renderHeader}
             renderContent={this._renderContent}
             initiallyActiveSection={0}

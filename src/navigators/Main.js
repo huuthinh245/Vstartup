@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text } from 'react-native';
-
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import { transitionConfig } from './configs';
 import * as routes from '../routes/routes';
 import SearchTab from '../routes/SearchTab';
 import HistoryTab from '../routes/HistoryTab';
@@ -28,6 +28,7 @@ import Register from '../components/authorization/register';
 import Forgot from '../components/authorization/Forgot';
 import Login from '../components/authorization/login';
 import CreateRealty from '../routes/CreateRealty';
+import Feedback from '../routes/Feedback';
 
 import strings from '../localization/header';
 import { _dims, responsiveFontSize } from '../utils/constants';
@@ -42,9 +43,6 @@ const tabsConfig = {
 
 const tabsOptions = {
   navigationOptions: ({ navigation }) => ({
-    tabBarOnPress: (a, b) => {
-      console.log(a, b);
-    },
     tabBarIcon: ({ focused, tintColor }) => {
       const { routeName } = navigation.state;
       let iconName;
@@ -119,7 +117,8 @@ const stackConfig = {
 
 const navConfig = {
   navigationOptions: { header: null },
-  initialRouteName: routes.Tabs
+  initialRouteName: routes.Tabs,
+  transitionConfig
 };
 
 const Main = createStackNavigator(stackConfig, navConfig);
@@ -130,7 +129,8 @@ export const MainWithModal = createStackNavigator(
     [routes.login]: { screen: Login },
     [routes.register]: { screen: Register },
     [routes.forgot]: { screen: Forgot },
-    [routes.createRealty]: { screen: CreateRealty }
+    [routes.createRealty]: { screen: CreateRealty },
+    [routes.feedBack]: { screen: Feedback }
   },
   {
     mode: 'modal',
