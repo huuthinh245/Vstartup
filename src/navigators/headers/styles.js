@@ -41,8 +41,7 @@ export const styles = StyleSheet.create({
   },
   suggestInput: {
     margin: 0,
-    padding: 0,
-    backgroundColor: 'red'
+    padding: 0
   },
   searchBarInputClear: {
     paddingHorizontal: 5,

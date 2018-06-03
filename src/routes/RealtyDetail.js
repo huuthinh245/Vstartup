@@ -145,7 +145,7 @@ class RealtyDetail extends Component {
             <Ionicons
               name={`ios-heart${realty.is_favorite ? '-outline' : ''}`}
               style={styles.socialButton}
-              color="red"
+              color="tomato"
               onPress={() => this._likeRealty(realty)}
             />
             <FeatherIcons
@@ -188,6 +188,7 @@ class RealtyDetail extends Component {
           <Accordion
             sections={SECTIONS}
             renderSectionTitle={this._renderSectionTitle}
+            touchableComponent={TouchableOpacity}
             renderHeader={this._renderHeader}
             renderContent={this._renderContent}
             initiallyActiveSection={0}

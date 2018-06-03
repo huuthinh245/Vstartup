@@ -21,7 +21,7 @@ const getListRealtyEpic = actions$ =>
       return { type: GET_LIST_REALTY_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
-      return { type: GET_LIST_REALTY_FAILURE };
+      return { type: GET_LIST_REALTY_FAILURE, payload: error };
     }
   });
 
@@ -31,8 +31,8 @@ const loadMoreListRealtyEpic = actions$ =>
       const resp = await realtyApi.listRealty(action.payload);
       return { type: LOAD_MORE_LIST_REALTY_SUCCESS, payload: resp.body };
     } catch (error) {
-      handleError(error, true);
-      return { type: LOAD_MORE_LIST_REALTY_FAILURE };
+      handleError(error);
+      return { type: LOAD_MORE_LIST_REALTY_FAILURE, payload: error };
     }
   });
 
@@ -43,7 +43,7 @@ const refreshListRealtyEpic = actions$ =>
       return { type: REFRESH_LIST_REALTY_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
-      return { type: REFRESH_LIST_REALTY_FAILURE };
+      return { type: REFRESH_LIST_REALTY_FAILURE, payload: error };
     }
   });
 

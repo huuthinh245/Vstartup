@@ -13,6 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import RNPopover from 'react-native-popover-menu';
+import ActionSheet from 'react-native-actionsheet';
 
 import Overlay from '../components/common/Overlay';
 import Header from '../navigators/headers/CommonHeader';
@@ -28,13 +29,21 @@ import {
   _dims,
   _colors,
   LIMIT_SERVICES,
-  responsiveWidth
+  responsiveWidth,
+  _ios
 } from '../utils/constants';
 import { getMyRealtyAction, loadMoreMyRealtyAction } from '../redux/myRealty/actions';
-import { imagePicker } from '../utils/imagePicker';
+import { imagePicker, cameraPicker } from '../utils/imagePicker';
 import { userApi } from '../utils/api';
 import { logoutAction } from '../redux/auth/actions';
 import { _alert } from '../utils/alert';
+
+const camera = <Icon family="FontAwesome" name="camera" color="#000000" size={30} />;
+const images = <Icon family="FontAwesome" name="image" color="#000000" size={30} />;
+
+const size = _ios
+  ? responsiveFontSize(_dims.defaultFontTitle + 2)
+  : responsiveFontSize(_dims.defaultFontTitle + 18);
 
 class AuthDetail extends React.Component {
   constructor(props) {
@@ -48,15 +57,9 @@ class AuthDetail extends React.Component {
   }
 
   _showHeaderPopup = ref => {
-    const edit = (
-      <Icon name="edit" style={{ width: 40 }} size={24} color="#fff" family="FontAwesome" />
-    );
-    const changePassword = (
-      <Icon name="lock" style={{ width: 40 }} size={24} color="#fff" family="FontAwesome" />
-    );
-    const logOut = (
-      <Icon name="sign-out" style={{ width: 40 }} size={24} color="#fff" family="FontAwesome" />
-    );
+    const edit = <Icon name="edit" size={size} color="#ffffff" family="FontAwesome" />;
+    const changePassword = <Icon name="lock" size={size} color="#ffffff" family="FontAwesome" />;
+    const logOut = <Icon name="sign-out" size={size} color="#ffffff" family="FontAwesome" />;
 
     const menus = [
       {
@@ -68,37 +71,45 @@ class AuthDetail extends React.Component {
       }
     ];
 
+    handleOnDone = index => {
+      if (index === 0) {
+        this.props.navigation.navigate(routes.additionalInformation, {
+          user: this.props.auth.user
+        });
+      } else if (index === 1) {
+        this.props.navigation.navigate(routes.changePassword);
+      } else if (index === 2) {
+        _alert(strings.logOut, strings.areYouSure, [
+          {
+            text: alertStrings.ok,
+            onPress: () => logoutAction()
+          },
+          {
+            text: alertStrings.cancel
+          }
+        ]);
+      }
+    };
+
     RNPopover.Show(ref, {
       menus,
-      onDone: index => {
-        if (index === 0) {
-          this.props.navigation.navigate(routes.additionalInformation, {
-            user: this.props.auth.user
-          });
-        } else if (index === 1) {
-          this.props.navigation.navigate(routes.changePassword);
+      onDone: (status, index) => {
+        if (_ios) {
+          handleOnDone(status);
         } else {
-          _alert(strings.logOut, strings.areYouSure, [
-            {
-              text: alertStrings.ok,
-              onPress: () => logoutAction()
-            },
-            {
-              text: alertStrings.cancel
-            }
-          ]);
+          handleOnDone(index);
         }
       },
+      tintColor: _colors.popup,
       theme: 'dark',
-      tintColor: 'rgb(0,0,0)',
       rowHeight: 50,
       perferedWidth: responsiveWidth(70)
     });
   };
 
   _showItemPopup = ref => {
-    const hide = <Icon name="eye-slash" size={24} color="#fff" family="FontAwesome" />;
-    const edit = <Icon name="edit" size={24} color="#fff" family="FontAwesome" />;
+    const hide = <Icon name="eye-slash" size={size} color="#ffffff" family="FontAwesome" />;
+    const edit = <Icon name="edit" size={size} color="#ffffff" family="FontAwesome" />;
 
     const menus = [
       {
@@ -109,14 +120,24 @@ class AuthDetail extends React.Component {
       }
     ];
 
+    handleOnDone = index => {
+      if (index === 0) {
+        // hide realty
+      } else if (index === 1) {
+        // edit realty
+      }
+    };
+
     RNPopover.Show(ref, {
       menus,
-      onDone: index => {
-        if (index === 0) {
-        } else if (index === 1) {
+      onDone: (status, index) => {
+        if (_ios) {
+          handleOnDone(status);
+        } else {
+          handleOnDone(index);
         }
       },
-      tintColor: 'haha',
+      tintColor: _colors.popup,
       theme: 'dark',
       rowHeight: 50,
       perferedWidth: responsiveWidth(70)
@@ -153,36 +174,30 @@ class AuthDetail extends React.Component {
   _renderItem = ({ item }) => {
     return (
       <TouchableOpacity
-        onPress={() => {
-          this.props.navigation.navigate(routes.realtyDetail, { data: item });
-        }}
         ref={ref => {
           this[`realty(${item.id})`] = ref;
         }}
-        onLongPress={() => this._dropdown.show()}
+        onPress={() => {
+          this.props.navigation.navigate(routes.realtyDetail, { data: item });
+        }}
+        onLongPress={() => this._showItemPopup(this[`realty(${item.id})`])}
+        // onLongPress={this._showSheet}
         style={styles.item}
       >
-        <FastImage
-          style={styles.itemImage}
-          source={{
-            uri: item.thumb,
-            priority: FastImage.priority.high
-          }}
-          resizeMode={FastImage.resizeMode.cover}
-        />
+        <View style={styles.itemImage}>
+          <FastImage
+            source={{
+              uri: item.thumb,
+              priority: FastImage.priority.high
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
+        </View>
 
         <View style={styles.itemInfo}>
-          <View style={styles.titleItem}>
-            <Text numberOfLines={2} style={styles.itemName}>
-              {item.title}
-            </Text>
-            <Ionicons
-              name="md-more"
-              style={styles.itemIcon}
-              onPress={() => this._showItemPopup(this[`realty(${item.id})`])}
-            />
-          </View>
-
+          <Text numberOfLines={2} style={styles.itemName}>
+            {item.title}
+          </Text>
           <Text numberOfLines={1} style={styles.itemPrice}>
             {item.price} {item.price_unit}
           </Text>
@@ -208,17 +223,9 @@ class AuthDetail extends React.Component {
             resizeMode={FastImage.resizeMode.cover}
           />
           <TouchableOpacity
+            delayLongPress={2000}
             style={styles.cameraWrapper}
-            onPress={() =>
-              imagePicker('photo', false, image => {
-                userApi
-                  .uploadAvatar({ avatar: { uri: image.sourceURL } })
-                  .then(value => console.log(value))
-                  .catch(error => {
-                    console.log(error);
-                  });
-              })
-            }
+            onPress={() => this.actionSheetAuth.show()}
           >
             <Ionicons name="ios-camera" style={styles.camera} />
           </TouchableOpacity>
@@ -280,7 +287,10 @@ class AuthDetail extends React.Component {
       <View style={styles.wrapper}>
         <Overlay visible={this.props.auth.fetching} />
         {this._renderHeader()}
-        <TouchableOpacity style={styles.fab} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.fab}
+          onPress={() => this.props.navigation.navigate(routes.createRealty)}
+        >
           <Ionicons
             name="ios-add-circle"
             color="#65b6fb"
@@ -302,6 +312,32 @@ class AuthDetail extends React.Component {
             this.onEndReachedCalledDuringMomentum = false;
           }}
         />
+        <ActionSheet
+          ref={o => {
+            this.actionSheetAuth = o;
+          }}
+          options={[strings.actionCamera, strings.actionPhoto, strings.cancel]}
+          cancelButtonIndex={2}
+          onPress={index => {
+            if (index === 1) {
+              imagePicker({
+                multiple: false,
+                callback: image => {
+                  userApi
+                    .uploadAvatar({ avatar: { uri: image.sourceURL } })
+                    .then(value => console.log(value))
+                    .catch(error => {
+                      console.log(error);
+                    });
+                }
+              });
+            } else if (index === 0) {
+              cameraPicker({
+                callback: image => console.log(image)
+              });
+            }
+          }}
+        />
       </View>
     );
   }
@@ -309,7 +345,7 @@ class AuthDetail extends React.Component {
 
 export default connect(state => ({ auth: state.auth, myRealty: state.myRealty }))(AuthDetail);
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: '#fbfbfb'
@@ -356,8 +392,8 @@ const styles = StyleSheet.create({
   image: {
     alignSelf: 'center',
     width: _dims.screenWidth / 2,
-    height: _dims.screenWidth / 2,
-    borderRadius: _dims.screenWidth / 4,
+    height: _dims.screenWidth / 2 * 1.25,
+    borderRadius: 20,
     marginVertical: _dims.defaultPadding
   },
   line: {
@@ -371,7 +407,6 @@ const styles = StyleSheet.create({
   lineIcon: {
     fontSize: responsiveFontSize(_dims.defaultFontSubTitle + 4),
     color: _colors.mainColor,
-    marginLeft: -_dims.defaultPadding / 2,
     marginRight: _dims.defaultPadding * 2
   },
   lineText: {
@@ -395,7 +430,9 @@ const styles = StyleSheet.create({
   itemImage: {
     width: (_dims.screenWidth - _dims.defaultPadding * 2) / 4,
     height: (_dims.screenWidth - _dims.defaultPadding * 2) / 4,
-    borderRadius: 20
+    borderRadius: 20,
+    borderWidth: 1 / PixelRatio.get(),
+    borderColor: 'silver'
   },
   itemInfo: {
     flex: 1,
@@ -423,8 +460,8 @@ const styles = StyleSheet.create({
   separator: {
     height: 0.5,
     backgroundColor: '#44cee2',
-    marginVertical: 5,
-    marginHorizontal: _dims.defaultPadding
+    marginVertical: 10,
+    marginLeft: _dims.screenWidth / 4 + _dims.defaultPadding / 2,
   },
   indicator: {
     alignSelf: 'center',

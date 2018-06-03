@@ -154,6 +154,7 @@ const updateInfoEpic = actions$ =>
   actions$.ofType(UPDATE_INFO).switchMap(async action => {
     try {
       const resp = await userApi.updateUser(action.payload);
+      action.payload.callback();
       return { type: UPDATE_INFO_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);

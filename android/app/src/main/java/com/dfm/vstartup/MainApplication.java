@@ -3,6 +3,7 @@ package com.dfm.vstartup;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNRate.RNRatePackage;
 import ui.popovermenu.RNPopoverMenuPackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
@@ -10,19 +11,13 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.dfm.vstartup.BuildConfig;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
-
-
-import com.facebook.react.ReactNativeHost;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.facebook.react.ReactPackage;
 import com.facebook.CallbackManager;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
-import com.facebook.appevents.AppEventsLogger;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
 import com.airbnb.android.react.maps.MapsPackage;
-import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.opensettings.OpenSettingsPakage;
 import java.util.List;
@@ -49,8 +44,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNPopoverMenuPackage(),
-            new ReactNativeYouTube(),
+          new RNRatePackage(),
+          new RNPopoverMenuPackage(),
+          new ReactNativeYouTube(),
           new VectorIconsPackage(),
           new ReactNativeRestartPackage(),
           new FBSDKPackage(mCallbackManager),
@@ -59,7 +55,8 @@ public class MainApplication extends Application implements ReactApplication {
           new OpenSettingsPakage(),
           new RNGoogleSigninPackage(),
           new RNSpinkitPackage(),
-          new FastImageViewPackage()
+          new FastImageViewPackage(),
+          new PickerPackage()
       );
     }
 

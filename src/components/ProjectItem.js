@@ -1,38 +1,15 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import PropsTypes from 'prop-types';
+
 import FastImage from 'react-native-fast-image';
 
 import { _colors, _dims, responsiveFontSize, responsiveHeight } from '../utils/constants';
 
 export default class ProjectItem extends React.Component {
-  static propsType = {
-    selected: PropsTypes.bool,
-    showPin: PropsTypes.object
-  };
-
-  static defaultProps = {
-    showPin: {
-      color: 'red'
-    },
-    selected: false
-  };
-
   render() {
     const { data } = this.props;
     return (
-      <TouchableOpacity
-        style={styles.wrapper}
-        onLongPress={this.props.onLongPress}
-        activeOpacity={0.8}
-      >
-        {this.props.selected && (
-          <View style={styles.checkedOverlay}>
-            <Ionicons name="md-checkmark-circle" style={styles.checked} />
-          </View>
-        )}
-
+      <TouchableOpacity style={styles.wrapper} onPress={this.props.onPress} activeOpacity={0.8}>
         <FastImage
           style={styles.image}
           source={{
@@ -41,18 +18,8 @@ export default class ProjectItem extends React.Component {
           }}
           resizeMode={FastImage.resizeMode.cover}
         />
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>1/8</Text>
-          <Ionicons
-            style={styles.favoriteButton}
-            name={`md-heart${data.is_favorite === 1 ? '' : '-outline'}`}
-          />
-        </View>
         <View style={styles.infoWrapper}>
           <View style={{ flexDirection: 'row' }}>
-            {this.props.showPin && (
-              <Ionicons style={[styles.pin, { color: this.props.showPin.color }]} name="md-pin" />
-            )}
             <Text numberOfLines={1} style={[styles.text, styles.title]}>
               {data.title}
             </Text>
@@ -73,7 +40,10 @@ const borderRadius = 10;
 
 export const styles = StyleSheet.create({
   wrapper: {
-    borderRadius
+    borderRadius,
+    backgroundColor: '#fff',
+    width: _dims.screenWidth - 2 * _dims.defaultPadding,
+    height: (_dims.screenWidth - 2 * _dims.defaultPadding) * 0.5
   },
   placeHolder: {
     borderRadius,
@@ -100,16 +70,18 @@ export const styles = StyleSheet.create({
     top: _dims.defaultPadding,
     right: _dims.defaultPadding,
     fontSize: 24,
-    color: 'red'
+    color: 'tomato'
   },
   touch: {
     height: responsiveHeight(10)
   },
   infoWrapper: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
     backgroundColor: _colors.overlay,
     width: '100%',
     padding: 10,
-    marginTop: responsiveHeight(10),
     borderBottomLeftRadius: borderRadius,
     borderBottomRightRadius: borderRadius
   },

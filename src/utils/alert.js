@@ -9,5 +9,9 @@ export const _alert = (title = '', message = '', buttons = [], cancelable = fals
     return { text, onPress };
   });
 
+  if (actions.length === 0) {
+    actions.push({ text: 'Ok' });
+  }
+
   Alert.alert(title, message, actions, { cancelable });
 };

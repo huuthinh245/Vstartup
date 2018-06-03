@@ -17,7 +17,7 @@ import {
   LOAD_MORE_LIST_REALTY_SUCCESS,
   LOAD_MORE_LIST_REALTY_FAILURE
 } from './actions';
-import { handleLikeOrUnlikeRealty } from '../../utils/api';
+import { handleLikeOrUnlikeRealty, handleLikeOrUnlikeRealtyFailure } from '../../utils/api';
 
 const initial = {
   fetching: false,
@@ -66,9 +66,9 @@ export const listRealtyReducer = handleActions(
       return Object.assign({}, state, { refreshing: false, error: payload });
     },
     [LIKE_REALTY]: (state, { payload }) => handleLikeOrUnlikeRealty(state, payload),
-    [LIKE_REALTY_FAILURE]: (state, { payload }) => handleLikeOrUnlikeRealty(state, payload),
+    [LIKE_REALTY_FAILURE]: (state, { payload }) => handleLikeOrUnlikeRealtyFailure(state, payload),
     [UNLIKE_REALTY]: (state, { payload }) => handleLikeOrUnlikeRealty(state, payload),
-    [UNLIKE_REALTY_FAILURE]: (state, { payload }) => handleLikeOrUnlikeRealty(state, payload)
+    [UNLIKE_REALTY_FAILURE]: (state, { payload }) => handleLikeOrUnlikeRealtyFailure(state, payload)
   },
   initial
 );

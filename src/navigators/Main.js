@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text } from 'react-native';
-
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import { transitionConfig } from './configs';
 import * as routes from '../routes/routes';
 import SearchTab from '../routes/SearchTab';
 import HistoryTab from '../routes/HistoryTab';
@@ -27,6 +27,8 @@ import ChangePassword from '../routes/ChangePassword';
 import Register from '../components/authorization/register';
 import Forgot from '../components/authorization/Forgot';
 import Login from '../components/authorization/login';
+import CreateRealty from '../routes/CreateRealty';
+import Feedback from '../routes/Feedback';
 
 import strings from '../localization/header';
 import { _dims, responsiveFontSize } from '../utils/constants';
@@ -89,7 +91,10 @@ const tabsOptions = {
     activeTintColor: 'tomato',
     inactiveTintColor: 'gray'
   },
-  initialRouteName: 'FavoriteTab'
+  initialRouteName: 'FavoriteTab',
+  lazy: false,
+  animationEnabled: true,
+  swipeEnabled: true
 };
 
 export const Tabs = createBottomTabNavigator(tabsConfig, tabsOptions);
@@ -112,7 +117,8 @@ const stackConfig = {
 
 const navConfig = {
   navigationOptions: { header: null },
-  initialRouteName: routes.Tabs
+  initialRouteName: routes.Tabs,
+  transitionConfig
 };
 
 const Main = createStackNavigator(stackConfig, navConfig);
@@ -122,7 +128,9 @@ export const MainWithModal = createStackNavigator(
     [routes.main]: { screen: Main },
     [routes.login]: { screen: Login },
     [routes.register]: { screen: Register },
-    [routes.forgot]: { screen: Forgot }
+    [routes.forgot]: { screen: Forgot },
+    [routes.createRealty]: { screen: CreateRealty },
+    [routes.feedBack]: { screen: Feedback }
   },
   {
     mode: 'modal',

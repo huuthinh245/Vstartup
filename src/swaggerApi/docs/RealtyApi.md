@@ -1,20 +1,21 @@
 # RemsApi.RealtyApi
 
-All URIs are relative to _http://rems.dfm-engineering.com/api/v1_
+All URIs are relative to *http://rems.dfm-engineering.com/api/v1*
 
-| Method                                            | HTTP request                            | Description |
-| ------------------------------------------------- | --------------------------------------- | ----------- |
-| [**deleteFavorite**](RealtyApi.md#deleteFavorite) | **DELETE** /realty/favorite/{realty_id} |
-| [**deleteKeyword**](RealtyApi.md#deleteKeyword)   | **DELETE** /realty/keyword              |
-| [**listFavorite**](RealtyApi.md#listFavorite)     | **GET** /realty/favorite                |
-| [**listKeyword**](RealtyApi.md#listKeyword)       | **GET** /realty/keyword                 |
-| [**listRealty**](RealtyApi.md#listRealty)         | **GET** /realty                         |
-| [**mapRealty**](RealtyApi.md#mapRealty)           | **GET** /realty/map                     |
-| [**postFavorite**](RealtyApi.md#postFavorite)     | **POST** /realty/favorite               |
-| [**postRealty**](RealtyApi.md#postRealty)         | **POST** /realty                        |
-| [**saveKeyword**](RealtyApi.md#saveKeyword)       | **POST** /realty/keyword                |
-| [**viewRealty**](RealtyApi.md#viewRealty)         | **GET** /realty/mapView                 |
-| [**viewRealty_0**](RealtyApi.md#viewRealty_0)     | **GET** /realty/{id}                    |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**deleteFavorite**](RealtyApi.md#deleteFavorite) | **DELETE** /realty/favorite/{realty_id} | 
+[**deleteKeyword**](RealtyApi.md#deleteKeyword) | **DELETE** /realty/keyword | 
+[**listFavorite**](RealtyApi.md#listFavorite) | **GET** /realty/favorite | 
+[**listKeyword**](RealtyApi.md#listKeyword) | **GET** /realty/keyword | 
+[**listRealty**](RealtyApi.md#listRealty) | **GET** /realty | 
+[**mapRealty**](RealtyApi.md#mapRealty) | **GET** /realty/map | 
+[**postFavorite**](RealtyApi.md#postFavorite) | **POST** /realty/favorite | 
+[**postRealty**](RealtyApi.md#postRealty) | **POST** /realty | 
+[**saveKeyword**](RealtyApi.md#saveKeyword) | **POST** /realty/keyword | 
+[**viewMapRealty**](RealtyApi.md#viewMapRealty) | **GET** /realty/mapView | 
+[**viewRealty**](RealtyApi.md#viewRealty) | **GET** /realty/{id} | 
+
 
 <a name="deleteFavorite"></a>
 
@@ -491,7 +492,9 @@ apiInstance.saveKeyword(address, lat, lng, callback);
 * **Content-Type**: application/x-www-form-urlencoded
 * **Accept**: application/json
 
-<a name="viewRealty"></a>
+<a name="viewMapRealty"></a>
+# **viewMapRealty**
+> [RealtyMap] viewMapRealty(ids)
 
 # **viewRealty**
 
@@ -513,7 +516,7 @@ var callback = function(error, data, response) {
     console.log("API called successfully. Returned data: " + data);
   }
 };
-apiInstance.viewRealty(ids, callback);
+apiInstance.viewMapRealty(ids, callback);
 ```
 
 ### Parameters
@@ -535,7 +538,9 @@ No authorization required
 * **Content-Type**: application/json
 * **Accept**: application/json
 
-<a name="viewRealty_0"></a>
+<a name="viewRealty"></a>
+# **viewRealty**
+> Realty viewRealty(id)
 
 # **viewRealty_0**
 
@@ -557,7 +562,7 @@ var callback = function(error, data, response) {
     console.log("API called successfully. Returned data: " + data);
   }
 };
-apiInstance.viewRealty_0(id, callback);
+apiInstance.viewRealty(id, callback);
 ```
 
 ### Parameters

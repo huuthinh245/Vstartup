@@ -16,7 +16,7 @@ export default class ProjectItem extends React.Component {
 
   static defaultProps = {
     showPin: {
-      color: 'red'
+      color: 'tomato'
     },
     selected: false
   };

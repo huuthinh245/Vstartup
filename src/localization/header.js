@@ -27,7 +27,12 @@ const strings = new LocalizedStrings({
     changePassword: 'Change password',
     loginScreen: 'Login',
     registerScreen: 'Register',
-    forgotScreen: 'Forgot'
+    forgotScreen: 'Forgot',
+    listProject: 'List Project',
+    listAgency: 'List Agency',
+    agencyDetail: 'Agency detail',
+    settings: 'Settings',
+    feedback: 'Feedback'
   },
   vni: {
     close: 'Huỷ',
@@ -37,9 +42,13 @@ const strings = new LocalizedStrings({
     delete: 'Xoá',
     searchLabel: 'Tìm kiếm',
     historyLabel: 'Đã tìm',
+    historyTitle: 'BĐS đã tìm',
     favoriteLabel: 'Yêu thích',
+    favoriteTitle: 'BĐS yêu thích',
     profileLabel: 'Tài khoản',
+    profileTitle: 'Tài khoản',
     menuLabel: 'Menu',
+    menuTitle: 'Menu',
     filter: 'Lọc',
     searchCityPlaceholder: 'Tìm kiếm theo địa chỉ',
     customer: 'Khách hàng',
@@ -50,7 +59,12 @@ const strings = new LocalizedStrings({
     changePassword: 'Thay đổi mật khẩu',
     loginScreen: 'Đăng nhập',
     registerScreen: 'Đăng ký',
-    forgotScreen: 'Quên mật khẩu'
+    forgotScreen: 'Quên mật khẩu',
+    listProject: 'Danh sách dự án',
+    listAgency: 'Danh sách nhà môi giới',
+    agencyDetail: 'Chi tiết nhà môi giới',
+    settings: 'Cài đặt',
+    feedback: 'Phản hồi'
   }
 });
 

@@ -11,6 +11,7 @@ import { addListener, middleware } from './utils/navigationRedux';
 import { reducers } from './redux/reducer';
 import emitter from './emitter';
 import { _ios, _colors } from './utils/constants';
+import { _setupGoogleSignin } from './components/authorization/login/google';
 
 class App extends React.Component {
   render() {
@@ -41,6 +42,7 @@ export const store = createStore(reducers, {}, composeEnhancers(...enhancers));
 
 class Root extends React.Component {
   componentDidMount() {
+    _setupGoogleSignin();
     this.event = emitter.addListener('alert', obj => {
       this.dropdown.alertWithType(obj.type, obj.title, obj.error);
     });
@@ -56,7 +58,6 @@ class Root extends React.Component {
           barStyle="dark-content"
           backgroundColor={_ios ? 'transparent' : _colors.header}
         />
-
         <DropdownAlert
           ref={ref => {
             this.dropdown = ref;

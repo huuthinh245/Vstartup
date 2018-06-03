@@ -117,7 +117,7 @@ PODS:
     - React/RCTBlob
   - ReactNativePermissions (1.1.1):
     - React
-  - RNImageCropPicker (0.20.1):
+  - RNImageCropPicker (0.20.3):
     - QBImagePickerController
     - React/Core
     - RSKImageCropper
@@ -196,11 +196,11 @@ SPEC CHECKSUMS:
   react-native-fetch-blob: 2bef9be702de8726f4d7bf58d2345579aaaee60d
   react-native-google-maps: 68a831730110823d3dadfea0e133f0f4426cd213
   react-native-maps: fb06a43ce6884256097eec1dd69d23957b71df88
-  ReactNativePermissions: b64e084dff6a5cad51587d38c306f09246246384
-  RNImageCropPicker: 9a57db293fc3588e30d72027969388c07779785d
+  ReactNativePermissions: 2e324bb3baf12702e3ec27f76c8ae1158fa69fc6
+  RNImageCropPicker: 043273b7368fdfb61cc458f359242f0fb75139be
   RSKImageCropper: d9a1acbc0600bf8decc8f0d21895872c99a9e4cf
   yoga: 4cf45c8bdb4d7e1a1f285e273009756314e6df53
 
-PODFILE CHECKSUM: d0eb3842adfc90e7fc83b9b43843a9536d0f9713
+PODFILE CHECKSUM: 2b02fd42fb75f9ab93736bec1109a0959dd2650c
 
 COCOAPODS: 1.3.1

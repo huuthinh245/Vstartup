@@ -14,7 +14,11 @@ const strings = new LocalizedStrings({
     logOut: 'Logout',
     areYouSure: 'Are you sure to logout ?',
     hideRealty: 'Hide this realty',
-    editRealty: 'Edit this realty'
+    editRealty: 'Edit this realty',
+    actionTitle: 'Upload avatar',
+    actionCamera: 'Take a photo',
+    actionPhoto: 'Select from library',
+    cancel: 'Cancel'
   },
   vni: {
     name: 'họ và tên',

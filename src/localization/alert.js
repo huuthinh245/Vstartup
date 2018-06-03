@@ -7,7 +7,12 @@ const strings = new LocalizedStrings({
     success: 'Success',
     warning: 'Warning',
     restart: 'Try restart application',
+    rs: 'Restart',
+    requireRestart: 'Restart application to change settings',
 
+    deleteSuccess: 'Delete successfully.',
+    delete: 'Confirm delete',
+    confirmDelete: 'Are you sure to delete ?',
     ok: 'OK',
     cancel: 'Cancel',
 
@@ -22,6 +27,7 @@ const strings = new LocalizedStrings({
     deviceOffline: 'No network connection.',
     phoneInvalid: 'Incorrect phone number',
 
+    updateInfoSuccess: 'Update information successfully !',
     registerSuccess: 'Register account successfully !'
   },
   vni: {
@@ -29,7 +35,12 @@ const strings = new LocalizedStrings({
     success: 'Thành công',
     warning: 'Cảnh báo',
     restart: 'Thử khởi động lại ứng dụng',
+    rs: 'Khởi động lại',
+    requireRestart: 'Khởi động lại ứng dụng để áp dụng cài đặt',
 
+    deleteSuccess: 'Xoá thành công.',
+    delete: 'Xác nhận xoá',
+    confirmDelete: 'Bạn chắc chắn muốn xoá ?',
     ok: 'OK',
     cancel: 'Huỷ',
 
@@ -44,6 +55,7 @@ const strings = new LocalizedStrings({
     deviceOffline: 'Không có kết nối internet.',
     phoneInvalid: 'Số điện thoại không đúng định dạng',
 
+    updateInfoSuccess: 'Cập nhật tài khoản thành công !',
     registerSuccess: 'Đăng ký tài khoản thành công !'
   }
 });

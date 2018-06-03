@@ -27,16 +27,7 @@ export const listHistoryReducer = handleActions(
       return Object.assign({}, state, { fetching: true });
     },
     [GET_LIST_HISTORY_SUCCESS]: (state, { payload }) => {
-      const arr = state.data;
-      payload.forEach(item => {
-        const index = arr.findIndex(i => i.id === item.id);
-        if (index === -1) {
-          arr.splice(0, 0, item);
-        } else {
-          Object.assign(arr[index], item);
-        }
-      });
-      return Object.assign({}, state, { data: arr, fetching: false, error: null });
+      return Object.assign({}, state, { data: payload, fetching: false, error: null });
     },
     [GET_LIST_HISTORY_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { fetching: false, error: payload });
@@ -51,7 +42,7 @@ export const listHistoryReducer = handleActions(
       return Object.assign({}, state, { refreshing: false, error: payload });
     },
     [DELETE_HISTORY]: state => {
-      return Object.assign({}, state, { deleting: false });
+      return Object.assign({}, state, { deleting: true });
     },
     [DELETE_HISTORY_SUCCESS]: (state, { payload }) => {
       let arr = state.data;

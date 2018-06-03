@@ -32,7 +32,7 @@ const likeRealty = actions$ =>
       return { type: LIKE_REALTY_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
-      return { type: LIKE_REALTY_FAILURE };
+      return { type: LIKE_REALTY_FAILURE, payload: { realty: action.payload, error } };
     }
   });
 
@@ -43,7 +43,7 @@ const unlikeRealty = actions$ =>
       return { type: UNLIKE_REALTY_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
-      return { type: UNLIKE_REALTY_FAILURE };
+      return { type: UNLIKE_REALTY_FAILURE, payload: { realty: action.payload, error } };
     }
   });
 
