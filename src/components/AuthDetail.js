@@ -33,7 +33,7 @@ import {
   _ios
 } from '../utils/constants';
 import { getMyRealtyAction, loadMoreMyRealtyAction } from '../redux/myRealty/actions';
-import { imagePicker } from '../utils/imagePicker';
+import { imagePicker, cameraPicker } from '../utils/imagePicker';
 import { userApi } from '../utils/api';
 import { logoutAction } from '../redux/auth/actions';
 import { _alert } from '../utils/alert';
@@ -223,6 +223,7 @@ class AuthDetail extends React.Component {
             resizeMode={FastImage.resizeMode.cover}
           />
           <TouchableOpacity
+            delayLongPress={2000}
             style={styles.cameraWrapper}
             onPress={() => this.actionSheetAuth.show()}
           >
@@ -318,17 +319,22 @@ class AuthDetail extends React.Component {
           options={[strings.actionCamera, strings.actionPhoto, strings.cancel]}
           cancelButtonIndex={2}
           onPress={index => {
-            if(index === 0) {
-              imagePicker('photo', false, image => {
-                userApi
-                  .uploadAvatar({ avatar: { uri: image.sourceURL } })
-                  .then(value => console.log(value))
-                  .catch(error => {
-                    console.log(error);
-                  });
+            if (index === 1) {
+              imagePicker({
+                multiple: false,
+                callback: image => {
+                  userApi
+                    .uploadAvatar({ avatar: { uri: image.sourceURL } })
+                    .then(value => console.log(value))
+                    .catch(error => {
+                      console.log(error);
+                    });
+                }
               });
-            } else if(index === 1) {
-              
+            } else if (index === 0) {
+              cameraPicker({
+                callback: image => console.log(image)
+              });
             }
           }}
         />
@@ -454,8 +460,8 @@ export const styles = StyleSheet.create({
   separator: {
     height: 0.5,
     backgroundColor: '#44cee2',
-    marginVertical: 5,
-    marginHorizontal: _dims.defaultPadding
+    marginVertical: 10,
+    marginLeft: _dims.screenWidth / 4 + _dims.defaultPadding / 2,
   },
   indicator: {
     alignSelf: 'center',
