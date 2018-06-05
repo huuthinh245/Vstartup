@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { transitionConfig } from './configs';
+// import { transitionConfig } from './configs';
 import * as routes from '../routes/routes';
 import SearchTab from '../routes/SearchTab';
 import HistoryTab from '../routes/HistoryTab';
@@ -23,6 +23,8 @@ import ListProject from '../routes/ListProject';
 import ListInvestor from '../routes/ListInvestor';
 import Settings from '../routes/Settings';
 import ChangePassword from '../routes/ChangePassword';
+import Contacts from '../routes/Contacts';
+import AgencyProject from '../routes/AgencyProject';
 
 import Register from '../components/authorization/register';
 import Forgot from '../components/authorization/Forgot';
@@ -112,13 +114,15 @@ const stackConfig = {
   [routes.listInvestor]: { screen: ListInvestor },
   [routes.listProject]: { screen: ListProject },
   [routes.settings]: { screen: Settings },
-  [routes.changePassword]: { screen: ChangePassword }
+  [routes.changePassword]: { screen: ChangePassword },
+  [routes.contacts]: { screen: Contacts },
+  [routes.agencyProject]: { screen: AgencyProject }
 };
 
 const navConfig = {
   navigationOptions: { header: null },
-  initialRouteName: routes.Tabs,
-  transitionConfig
+  initialRouteName: routes.Tabs
+  // transitionConfig
 };
 
 const Main = createStackNavigator(stackConfig, navConfig);

@@ -20,7 +20,7 @@ import {
   DELETE_CONTACT_FAILURE
 } from './actions';
 
-const sendContact = actions$ =>
+const postContact = actions$ =>
   actions$.ofType(SEND_CONTACT).switchMap(async action => {
     try {
       const resp = await contactApi.postContact(action.payload);
@@ -65,7 +65,7 @@ const refreshListContact = actions$ =>
   });
 
 const loadMoreListContact = actions$ =>
-  actions$.ofType(LOAD_MORE_LIST_CONTACT).listContact(async action => {
+  actions$.ofType(LOAD_MORE_LIST_CONTACT).switchMap(async action => {
     try {
       const resp = await contactApi.postContact(action.payload);
       return { type: LOAD_MORE_LIST_CONTACT_SUCCESS, payload: resp.body };
@@ -75,8 +75,8 @@ const loadMoreListContact = actions$ =>
     }
   });
 
-export const sendContactEpic = combineEpics(
-  sendContact,
+export const contactEpic = combineEpics(
+  postContact,
   getListContact,
   refreshListContact,
   loadMoreListContact,

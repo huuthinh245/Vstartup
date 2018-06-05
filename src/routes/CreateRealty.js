@@ -1,33 +1,47 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback
+} from 'react-native';
 import { connect } from 'react-redux';
 
-import { responsiveFontSize, _dims, responsiveHeight, _colors } from '../utils/constants';
+import { _dims, _colors, responsiveFontSize } from '../utils/constants';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
+import strings from '../localization/feedback';
 import alertStrings from '../localization/alert';
-import strings from '../localization/authorization';
 import emitter from '../emitter';
-import { PHONE_REGEX } from '../utils/validation';
-import { updateInfoAction } from '../redux/auth/actions';
+import { EMAIL_REGEX, PHONE_REGEX } from '../utils/validation';
 
 class CreateRealty extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       name: this.props.auth.user.name,
+      email: this.props.auth.user.email,
       phone: this.props.auth.user.phone,
-      address: this.props.auth.user.address
+      reason: ''
     };
   }
 
   _validate = () => {
-    if (!this.state.name) {
+    if (!this.state.email) {
       emitter.emit('alert', {
         type: 'warn',
         title: alertStrings.invalidField,
-        error: alertStrings.emailInvalid
+        error: alertStrings.emailIsRequire
+      });
+      this.email.focus();
+    } else if (!EMAIL_REGEX.test(this.state.email)) {
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.emptyField
       });
       this.email.focus();
     } else if (!PHONE_REGEX.test(this.state.phone)) {
@@ -36,71 +50,90 @@ class CreateRealty extends React.Component {
         title: alertStrings.invalidField,
         error: alertStrings.phoneInvalid
       });
-    } else if (!this.state.address) {
-      emitter.emit('alert', {
-        type: 'warn',
-        title: alertStrings.invalidField,
-        error: alertStrings.addressEmpty
-      });
+      this.phone.focus();
     } else {
-      updateInfoAction(this.state);
     }
   };
 
   render() {
     return (
-      <View style={styles.wrapper}>
-        <Header
-          onLeftPress={() => this.props.navigation.goBack()}
-          title={headerStrings.additionalInformation}
-          right={
-            <TouchableOpacity>
-              <Text style={{ color: _colors.mainColor }}>{headerStrings.save}</Text>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={{ flex: 1 }}>
+          <Header
+            onLeftPress={() => this.props.navigation.goBack()}
+            title={headerStrings.createRealty}
+          />
+          <View style={styles.wrapper}>
+            <View style={styles.innerWrapper}>
+              <Text style={styles.title}>{strings.nameLabel}</Text>
+              <TextInput
+                style={styles.input}
+                value={this.state.name}
+                onChangeText={name => this.setState({ name })}
+                placeholder={strings.namePlaceholder}
+                returnKeyType="next"
+                autoCapitalize="none"
+                autoCorrect={false}
+                clearButtonMode="always"
+                ref={ref => {
+                  this.name = ref;
+                }}
+              />
+              <Text style={styles.title}>{strings.emailLabel}</Text>
+              <TextInput
+                value={this.state.email}
+                onChangeText={email => this.setState({ email })}
+                placeholder={strings.emailPlaceholder}
+                returnKeyType="next"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                clearButtonMode="always"
+                ref={ref => {
+                  this.email = ref;
+                }}
+                style={styles.input}
+              />
+              <Text style={styles.title}>{strings.phoneLabel}</Text>
+              <TextInput
+                value={this.state.phone}
+                onChangeText={phone => this.setState({ phone })}
+                placeholder={strings.phonePlaceholder}
+                returnKeyType="next"
+                keyboardType="phone-pad"
+                autoCapitalize="none"
+                autoCorrect={false}
+                clearButtonMode="always"
+                ref={ref => {
+                  this.phone = ref;
+                }}
+                style={styles.input}
+              />
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => this.area.focus()}
+                style={styles.textArea}
+              >
+                <TextInput
+                  multiline
+                  value={this.state.reason}
+                  onChangeText={reason => this.setState({ reason })}
+                  placeholder={strings.thinking}
+                  returnKeyType="go"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  ref={ref => {
+                    this.area = ref;
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity style={styles.submit}>
+              <Text style={styles.submitText}>{strings.submit}</Text>
             </TouchableOpacity>
-          }
-          onRightPress={() => alert(1)}
-        />
-        <View style={styles.innerWrapper}>
-          <Text style={styles.title}>{strings.inputInfo}</Text>
-          <View style={styles.hoishiWrapper}>
-            <Ionicons style={styles.hoishiIcon} name="ios-contact" />
-            <TextInput
-              ref={ref => {
-                this.name = ref;
-              }}
-              style={styles.hoishiInput}
-              placeholder={strings.name}
-              onChangeText={name => this.setState({ name })}
-              returnKeyType="next"
-              autoCapitalize="none"
-              autoCorrect={false}
-              clearButtonMode="always"
-            />
-          </View>
-          <View style={styles.hoishiWrapper}>
-            <Ionicons style={styles.hoishiIcon} name="ios-call" />
-            <TextInput
-              ref={ref => {
-                this.phone = ref;
-              }}
-              style={styles.hoishiInput}
-              placeholder={strings.phone}
-              onChangeText={phone => this.setState({ phone })}
-              returnKeyType="next"
-              keyboardType="phone-pad"
-              autoCapitalize="none"
-              autoCorrect={false}
-              clearButtonMode="always"
-            />
-          </View>
-          <View style={styles.hoishiWrapper}>
-            <Ionicons style={styles.hoishiIcon} name="md-pin" />
-            <Text style={[styles.hoishiInput, this.state.address ? {} : { color: 'silver' }]}>
-              {this.state.address || strings.address}
-            </Text>
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -110,32 +143,40 @@ export default connect(state => ({ auth: state.auth }))(CreateRealty);
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#fff'
-  },
-  title: {
-    marginVertical: _dims.defaultPadding * 2,
-    marginLeft: _dims.defaultPadding,
-    color: '#555'
+    backgroundColor: '#f4f4f4'
   },
   innerWrapper: {
-    padding: _dims.defaultPadding
-  },
-  hoishiWrapper: {
-    borderBottomWidth: 1,
-    borderColor: _colors.mainColor,
-    padding: 5,
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    marginBottom: responsiveHeight(3)
-  },
-  hoishiIcon: {
-    color: _colors.mainColor,
-    fontSize: responsiveFontSize(_dims.defaultFontSize + 7),
-    alignSelf: 'center'
-  },
-  hoishiInput: {
     flex: 1,
-    paddingVertical: 10,
-    paddingLeft: _dims.defaultPadding
+    paddingTop: _dims.defaultPadding,
+    paddingHorizontal: _dims.defaultPadding
+  },
+  input: {
+    marginBottom: _dims.defaultPadding
+  },
+  title: {
+    marginLeft: _dims.defaultPadding,
+    padding: 3,
+    color: '#555'
+  },
+  textArea: {
+    marginBottom: _dims.defaultPadding * 2,
+    marginTop: _dims.defaultPadding,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: 'silver',
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingVertical: 10
+  },
+  submit: {
+    backgroundColor: _colors.mainColor,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  submitText: {
+    fontSize: responsiveFontSize(_dims.defaultFontSubTitle + 2),
+    fontWeight: 'bold',
+    color: '#fff'
   }
 });

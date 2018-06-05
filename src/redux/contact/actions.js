@@ -20,7 +20,7 @@ export const DELETE_CONTACT = 'DELETE_CONTACT';
 export const DELETE_CONTACT_SUCCESS = 'DELETE_CONTACT_SUCCESS';
 export const DELETE_CONTACT_FAILURE = 'DELETE_CONTACT_FAILURE';
 
-export const sendContactAction = payload =>
+export const postContactAction = payload =>
   store.dispatch({
     type: SEND_CONTACT,
     payload

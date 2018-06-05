@@ -1,18 +1,18 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, PixelRatio } from 'react-native';
 import { _colors, _dims, _ios, responsiveFontSize } from '../../utils/constants';
 
 export const styles = StyleSheet.create({
   wrapper: {
     height: _dims.navBarHeight,
     paddingTop: _ios ? 20 : 0,
-    backgroundColor: _colors.header,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     alignContent: 'center',
-    borderBottomWidth: 0.5,
-    borderColor: 'silver',
     zIndex: Number.MAX_SAFE_INTEGER,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    borderColor: 'silver',
+    borderBottomWidth: 1
   },
   suggestHeader: {
     height: _dims.navBarHeight,
@@ -23,7 +23,6 @@ export const styles = StyleSheet.create({
   searchBarInputContainer: {
     backgroundColor: '#fff',
     height: 28,
-    borderRadius: 5,
     paddingTop: 4.5,
     paddingBottom: 4.5,
     paddingLeft: 10,
@@ -32,7 +31,10 @@ export const styles = StyleSheet.create({
     marginRight: 8,
     flex: 1,
     flexDirection: 'row',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    borderColor: _colors.mainColor,
+    borderWidth: 1 / PixelRatio.get(),
+    borderRadius: 5
   },
   searchBarInput: {
     backgroundColor: '#FFFFFF',

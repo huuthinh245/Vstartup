@@ -12,6 +12,8 @@ import { agencyDetailEpic } from './agencyDetail/epics';
 import { listProjectEpic } from './listProject/epics';
 import { projectDetailEpic } from './projectDetail/epics';
 import { agencyRealtyEpic } from './agencyRealty/epics';
+import { agencyProjectEpic } from './agencyProject/epics';
+import { contactEpic } from './contact/epics';
 
 export default (epics = combineEpics(
   listEpic,
@@ -25,5 +27,7 @@ export default (epics = combineEpics(
   agencyDetailEpic,
   listProjectEpic,
   projectDetailEpic,
-  agencyRealtyEpic
+  agencyRealtyEpic,
+  agencyProjectEpic,
+  contactEpic
 ));

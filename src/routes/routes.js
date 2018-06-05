@@ -19,3 +19,5 @@ export const listInvestor = 'SC_LIST_INVESTOR';
 export const settings = 'SC_SETTINGS';
 export const createRealty = 'SC_CREATE_REALTY';
 export const feedBack = 'SC_FEEDBACK';
+export const contacts = 'SC_CONTACTS';
+export const agencyProject = 'SC_AGENCY_PROJECT';

@@ -10,7 +10,9 @@ const strings = new LocalizedStrings({
     utils: 'Utilities',
     projectType: 'Type of project',
     show: 'Show results',
-    default: 'Default'
+    default: 'Default',
+    billion: 'billion',
+    square: 'm²'
   },
   vni: {
     price: 'Giá',
@@ -20,7 +22,9 @@ const strings = new LocalizedStrings({
     utils: 'Tiện ích',
     projectType: 'Loại dự án',
     show: 'Xem kết quả',
-    default: 'Mặc định'
+    default: 'Mặc định',
+    billion: 'tỷ',
+    square: 'm²'
   }
 });
 

@@ -38,9 +38,6 @@ import { userApi } from '../utils/api';
 import { logoutAction } from '../redux/auth/actions';
 import { _alert } from '../utils/alert';
 
-const camera = <Icon family="FontAwesome" name="camera" color="#000000" size={30} />;
-const images = <Icon family="FontAwesome" name="image" color="#000000" size={30} />;
-
 const size = _ios
   ? responsiveFontSize(_dims.defaultFontTitle + 2)
   : responsiveFontSize(_dims.defaultFontTitle + 18);
@@ -60,25 +57,53 @@ class AuthDetail extends React.Component {
     const edit = <Icon name="edit" size={size} color="#ffffff" family="FontAwesome" />;
     const changePassword = <Icon name="lock" size={size} color="#ffffff" family="FontAwesome" />;
     const logOut = <Icon name="sign-out" size={size} color="#ffffff" family="FontAwesome" />;
+    const manage = <Icon name="envelope" size={size} color="#ffffff" family="FontAwesome" />;
+    const project = <Icon name="tasks" size={size} color="#ffffff" family="FontAwesome" />;
 
-    const menus = [
-      {
-        menus: [
-          { label: strings.editAccount, icon: edit },
-          { label: strings.changePassword, icon: changePassword },
-          { label: strings.logOut, icon: logOut }
-        ]
-      }
-    ];
+    let menus;
+
+    if(this.props.auth.user.role_id !== 3) {
+      menus = [
+        {
+          menus: [
+            { label: strings.editAccount, icon: edit },
+            { label: strings.changePassword, icon: changePassword },
+            { label: strings.logOut, icon: logOut }
+          ]
+        }
+      ];
+    } else {
+      menus = [
+        {
+          menus: [
+            { label: strings.manageContact, icon: manage },
+            { label: strings.manageProject, icon: project },
+            { label: strings.editAccount, icon: edit },
+            { label: strings.changePassword, icon: changePassword },
+            { label: strings.logOut, icon: logOut }
+          ]
+        }
+      ];
+    }
 
     handleOnDone = index => {
-      if (index === 0) {
+      const _index = this.props.auth.user.role_id !== 3 ? index : index - 2;
+      if (_index === -2) {
+        this.props.navigation.navigate(routes.contacts, {
+          user: this.props.auth.user
+        });
+      } else if (_index === -1) {
+        this.props.navigation.navigate(routes.agencyProject, {
+          user: this.props.auth.user
+        });
+      }
+      if (_index === 0) {
         this.props.navigation.navigate(routes.additionalInformation, {
           user: this.props.auth.user
         });
-      } else if (index === 1) {
+      } else if (_index === 1) {
         this.props.navigation.navigate(routes.changePassword);
-      } else if (index === 2) {
+      } else if (_index === 2) {
         _alert(strings.logOut, strings.areYouSure, [
           {
             text: alertStrings.ok,
@@ -297,6 +322,7 @@ class AuthDetail extends React.Component {
             size={responsiveFontSize(_dims.defaultFontSize * 4)}
           />
         </TouchableOpacity>
+        
         <FlatList
           style={{ marginHorizontal: _dims.defaultPadding, paddingBottom: 100 }}
           data={this.props.myRealty.data}
@@ -458,10 +484,10 @@ export const styles = StyleSheet.create({
     fontSize: responsiveFontSize(_dims.defaultFontTitle + 8)
   },
   separator: {
-    height: 0.5,
+    height: 1 / PixelRatio.get(),
     backgroundColor: '#44cee2',
-    marginVertical: 10,
-    marginLeft: _dims.screenWidth / 4 + _dims.defaultPadding / 2,
+    marginVertical: _dims.defaultPadding,
+    marginLeft: _dims.screenWidth / 4 + _dims.defaultPadding / 2
   },
   indicator: {
     alignSelf: 'center',

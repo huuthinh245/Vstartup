@@ -28,7 +28,7 @@ const initial = {
   error: null
 };
 
-export const agencyDetailReducer = handleActions(
+export const contactsReducer = handleActions(
   {
     [SEND_CONTACT]: state => {
       return Object.assign({}, state, { sending: true });
@@ -71,7 +71,7 @@ export const agencyDetailReducer = handleActions(
     [REFRESH_LIST_CONTACT_SUCCESS]: (state, { payload }) => {
       return Object.assign({}, state, { refreshing: false, data: payload, error: null });
     },
-    [LOAD_MORE_LIST_CONTACT]: (state, { payload }) => {
+    [LOAD_MORE_LIST_CONTACT_SUCCESS]: (state, { payload }) => {
       payload.forEach(item => {
         const index = state.data.findIndex(i => i.id === item.id);
         if (index === -1) {

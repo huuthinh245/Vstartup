@@ -8,7 +8,6 @@ import {
   FlatList,
   PixelRatio
 } from 'react-native';
-import Accordion from 'react-native-collapsible/Accordion';
 import RNRestart from 'react-native-restart';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -37,53 +36,30 @@ export default class Settings extends React.Component {
     }
   }
 
-  _renderHeader = (section, index, isActive) => {
-    const plus = isActive ? 6 : 2;
-    const size = responsiveFontSize(_dims.defaultFontSize + plus);
-    return (
-      <View style={styles.header}>
-        <Text style={[styles.headerText, isActive && { fontWeight: 'bold' }]}>{section.title}</Text>
-        <Ionicons
-          style={[
-            styles.headerIcon,
-            isActive && {
-              transform: [{ rotate: '90deg' }]
-            }
-          ]}
-          name="ios-arrow-forward"
-          size={size}
-        />
-      </View>
-    );
-  };
-
-  _renderContent = (section, i, isActive, sections) => {
+  _renderListLanguage = () => {
     const _index = this.state.selectedLanguage;
-    if (i === 0) {
-      return (
-        <FlatList
-          data={languages}
-          extraData={this.state}
-          keyExtractor={item => item}
-          renderItem={({ item, index }) => {
-            return (
-              <TouchableOpacity
-                style={styles.item}
-                onPress={() =>
-                  this.setState({ selectedLanguage: index }, () => console.log(this.state))
-                }
-              >
-                <Text style={styles.itemText}>{item}</Text>
-                <View style={styles.itemIconWrapper}>
-                  {index === _index && <Ionicons style={styles.itemIcon} name="ios-checkmark" />}
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
-      );
-    }
-    return null;
+    return (
+      <FlatList
+        data={languages}
+        extraData={this.state}
+        keyExtractor={item => item}
+        renderItem={({ item, index }) => {
+          return (
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() =>
+                this.setState({ selectedLanguage: index }, () => console.log(this.state))
+              }
+            >
+              <Text style={styles.itemText}>{item}</Text>
+              <View style={styles.itemIconWrapper}>
+                {index === _index && <Ionicons style={styles.itemIcon} name="ios-checkmark" />}
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+      />
+    );
   };
 
   _onSave = () => {
@@ -111,12 +87,6 @@ export default class Settings extends React.Component {
   };
 
   render() {
-    const SECTIONS = [
-      {
-        title: strings.language,
-        content: languages
-      }
-    ];
     return (
       <View style={{ flex: 1 }}>
         <Header
@@ -141,13 +111,10 @@ export default class Settings extends React.Component {
           title={headerStrings.settings}
         />
         <View style={styles.wrapper}>
-          <Accordion
-            touchableComponent={TouchableOpacity}
-            sections={SECTIONS}
-            renderHeader={this._renderHeader}
-            renderContent={this._renderContent}
-            initiallyActiveSection={2}
-          />
+          <TouchableOpacity style={styles.header}>
+            <Text style={styles.headerText}>{strings.language}</Text>
+          </TouchableOpacity>
+          {this._renderListLanguage()}
         </View>
       </View>
     );

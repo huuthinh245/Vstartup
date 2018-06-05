@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import ModalDropdown from 'react-native-modal-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
+import RNPopover from 'react-native-popover-menu';
 
-import { _dims, _colors, responsiveFontSize, responsiveWidth } from '../utils/constants';
+import { _dims, _colors, responsiveFontSize, responsiveWidth, _ios } from '../utils/constants';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import strings from '../localization/filter';
@@ -27,13 +27,41 @@ class Filter extends React.Component {
     this.state = {
       scrollEnabled: true,
       utils: [],
-      priceRange: [2, 8],
-      areaRange: [2, 8],
+      priceRange: [0, 20],
+      areaRange: [0, 1000],
       beds: 1,
       baths: 1,
       projType: _.values(this.props.options.data.realtyTypes)[0]
     };
   }
+
+  _showPopOver = (ref, _menus, callback) => {
+    const menusValues = [];
+    _menus.forEach(item => {
+      menusValues.push({ label: item });
+    });
+
+    const menus = [
+      {
+        menus: menusValues
+      }
+    ];
+
+    RNPopover.Show(ref, {
+      menus,
+      onDone: (status, index) => {
+        if (_ios) {
+          callback(status);
+        } else {
+          callback(index);
+        }
+      },
+      tintColor: _colors.popup,
+      theme: 'dark',
+      rowHeight: 50,
+      perferedWidth: responsiveWidth(70)
+    });
+  };
 
   _renderDropdownRow = option => {
     return (
@@ -43,37 +71,6 @@ class Filter extends React.Component {
         </Text>
       </View>
     );
-  };
-
-  _drpFrameBed = style => {
-    style.bottom -= 20;
-    style.left = _dims.defaultPadding + 10;
-    return style;
-  };
-
-  _drpFrameBath = style => {
-    style.bottom -= 20;
-    style.right = _dims.defaultPadding + 10;
-    return style;
-  };
-
-  _drpFrameProj = style => {
-    style.bottom -= 20;
-    style.right = _dims.defaultPadding + 10;
-    styles.height = 400;
-    return style;
-  };
-
-  _onDropdownBedSelect = (index, value) => {
-    this.setState({ beds: value });
-  };
-
-  _onDropdownBathSelect = (index, value) => {
-    this.setState({ baths: value });
-  };
-
-  _onDropdownProjSelect = (index, value) => {
-    this.setState({ projType: { id: index, name: value } });
   };
 
   _renderItem = ({ item }) => {
@@ -136,27 +133,22 @@ class Filter extends React.Component {
                 containerStyle={styles.sliderContainerStyle}
                 trackStyle={styles.trackStyle}
                 markerStyle={styles.markerStyle}
-                min={0}
-                max={10}
+                min={this.state.priceRange[0]}
+                max={this.state.priceRange[1]}
                 allowOverlap
                 snapped
               />
               <View style={styles.sliderValueWrapper}>
-                <Text style={styles.sliderValue}>{this.state.priceRange[0]}</Text>
+                <Text style={styles.sliderValue}>
+                  {`${this.state.priceRange[0]} ${strings.billion}`}
+                </Text>
                 <Text style={[styles.sliderValue, styles.alignEnd]}>
-                  {this.state.priceRange[1]}
+                  {`${this.state.priceRange[1]} ${strings.billion}`}
                 </Text>
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row' }}>
-              <MaterialIcons
-                name="check-box"
-              />
-              <Text style={styles.title}>{strings.area}</Text>
-              
-            </View>
-            <View style={styles.sliderWrapper}>
+            <View style={[styles.sliderWrapper, { marginTop: _dims.defaultPadding }]}>
               <MultiSlider
                 sliderLength={_dims.screenWidth - _dims.defaultPadding * 2}
                 onValuesChangeStart={this._disableScroll}
@@ -168,14 +160,19 @@ class Filter extends React.Component {
                 containerStyle={styles.sliderContainerStyle}
                 trackStyle={styles.trackStyle}
                 markerStyle={styles.markerStyle}
-                min={0}
-                max={10}
+                min={this.state.areaRange[0]}
+                max={this.state.areaRange[1]}
+                step={50}
                 allowOverlap
                 snapped
               />
               <View style={styles.sliderValueWrapper}>
-                <Text style={styles.sliderValue}>{this.state.areaRange[0]}</Text>
-                <Text style={[styles.sliderValue, styles.alignEnd]}>{this.state.areaRange[1]}</Text>
+                <Text style={styles.sliderValue}>
+                  {`${this.state.areaRange[0]} ${strings.square}`}
+                </Text>
+                <Text style={[styles.sliderValue, styles.alignEnd]}>
+                  {`${this.state.areaRange[1]} ${strings.square}`}
+                </Text>
               </View>
             </View>
 
@@ -186,28 +183,24 @@ class Filter extends React.Component {
                 </Text>
 
                 <TouchableOpacity
-                  onPress={() => this._dropdownBed.show()}
+                  ref={ref => {
+                    this.bedContext = ref;
+                  }}
+                  onPress={() =>
+                    this._showPopOver(
+                      this.bedContext,
+                      this.props.options.data.realtyTypes.map(item => item.name),
+                      projType => this.setState({ projType })
+                    )
+                  }
                   style={styles.selectWrapper}
                 >
                   <Text style={styles.selectText}>{this.state.beds}</Text>
-                  <ModalDropdown
-                    ref={el => {
-                      this._dropdownBed = el;
-                    }}
-                    options={['1', '2', '3', '>= 4']}
-                    dropdownStyle={[styles.dropdown, styles.dropdownBed]}
-                    renderRow={this._renderDropdownRow}
-                    renderSeparator={() => null}
-                    onSelect={this._onDropdownBedSelect}
-                    dropdownTextHighlightStyle={styles.highlight}
-                    adjustFrame={style => this._drpFrameBed(style)}
-                  >
-                    <Ionicons
-                      name="ios-arrow-down"
-                      size={responsiveFontSize(_dims.defaultFontTitle + 2)}
-                      color={_colors.mainColor}
-                    />
-                  </ModalDropdown>
+                  <Ionicons
+                    name="ios-arrow-down"
+                    size={responsiveFontSize(_dims.defaultFontTitle + 2)}
+                    color={_colors.mainColor}
+                  />
                 </TouchableOpacity>
               </View>
 
@@ -221,24 +214,12 @@ class Filter extends React.Component {
                   style={styles.selectWrapper}
                 >
                   <Text style={styles.selectText}>{this.state.baths}</Text>
-                  <ModalDropdown
-                    ref={el => {
-                      this._dropdownBath = el;
-                    }}
-                    options={['1', '2', ' >= 3']}
-                    dropdownStyle={[styles.dropdown, styles.dropdownBath]}
-                    renderRow={this._renderDropdownRow}
-                    renderSeparator={() => null}
-                    onSelect={this._onDropdownBathSelect}
-                    dropdownTextHighlightStyle={styles.highlight}
-                    adjustFrame={style => this._drpFrameBath(style)}
-                  >
-                    <Ionicons
-                      name="ios-arrow-down"
-                      size={responsiveFontSize(_dims.defaultFontTitle + 2)}
-                      color={_colors.mainColor}
-                    />
-                  </ModalDropdown>
+
+                  <Ionicons
+                    name="ios-arrow-down"
+                    size={responsiveFontSize(_dims.defaultFontTitle + 2)}
+                    color={_colors.mainColor}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
@@ -265,28 +246,24 @@ class Filter extends React.Component {
               <Text style={styles.title}>{strings.projectType}</Text>
 
               <TouchableOpacity
-                onPress={() => this._dropdownProj.show()}
+                ref={ref => {
+                  this.projTypeContext = ref;
+                }}
+                onPress={() =>
+                  this._showPopOver(
+                    this.projTypeContext,
+                    this.props.options.data.realtyTypes.map(item => item.name),
+                    projType => this.setState({ projType })
+                  )
+                }
                 style={styles.selectWrapper}
               >
                 <Text style={styles.selectText}>{this.state.projType.name}</Text>
-                <ModalDropdown
-                  ref={el => {
-                    this._dropdownProj = el;
-                  }}
-                  options={_.values(this.props.options.data.realtyTypes.map(item => item.name))}
-                  dropdownStyle={styles.dropdown}
-                  renderRow={this._renderDropdownRow}
-                  renderSeparator={() => null}
-                  onSelect={this._onDropdownProjSelect}
-                  dropdownTextHighlightStyle={styles.highlight}
-                  adjustFrame={style => this._drpFrameProj(style)}
-                >
-                  <Ionicons
-                    name="ios-arrow-down"
-                    size={responsiveFontSize(_dims.defaultFontTitle + 2)}
-                    color={_colors.mainColor}
-                  />
-                </ModalDropdown>
+                <Ionicons
+                  name="ios-arrow-down"
+                  size={responsiveFontSize(_dims.defaultFontTitle + 2)}
+                  color={_colors.mainColor}
+                />
               </TouchableOpacity>
             </View>
           </View>

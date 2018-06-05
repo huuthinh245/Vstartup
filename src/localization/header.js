@@ -32,7 +32,10 @@ const strings = new LocalizedStrings({
     listAgency: 'List Agency',
     agencyDetail: 'Agency detail',
     settings: 'Settings',
-    feedback: 'Feedback'
+    feedback: 'Feedback',
+    createRealty: 'Create realty',
+    listContact: 'List contact',
+    agencyProject: 'All projects'
   },
   vni: {
     close: 'Huỷ',
@@ -64,7 +67,10 @@ const strings = new LocalizedStrings({
     listAgency: 'Danh sách nhà môi giới',
     agencyDetail: 'Chi tiết nhà môi giới',
     settings: 'Cài đặt',
-    feedback: 'Phản hồi'
+    feedback: 'Phản hồi',
+    createRealty: 'Đăng tin BĐS',
+    listContact: 'Danh sách liên hệ',
+    agencyProject: 'Tất cả dự án'
   }
 });
 

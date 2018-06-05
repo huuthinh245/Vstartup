@@ -139,7 +139,7 @@ class RealtyDetail extends Component {
         />
         <View style={{ paddingHorizontal: _dims.defaultPadding }}>
           <View style={styles.titleWrapper}>
-            <Text style={styles.title} numberOfLines={1}>
+            <Text style={styles.title} numberOfLines={3}>
               {realty.title}
             </Text>
             <Ionicons

@@ -14,6 +14,8 @@ import { agencyDetailReducer } from './agencyDetail/reducer';
 import { listProjectReducer } from './listProject/reducer';
 import { projectDetailReducer } from './projectDetail/reducer';
 import { agencyRealtyReducer } from './agencyRealty/reducer';
+import { agencyProjectReducer } from './agencyProject/reducer';
+import { contactsReducer } from './contact/reducer';
 
 const navReducer = createNavigationReducer(AppNavigator);
 
@@ -31,5 +33,7 @@ export const reducers = combineReducers({
   agencyDetail: agencyDetailReducer,
   listProject: listProjectReducer,
   projectDetail: projectDetailReducer,
-  agencyRealty: agencyRealtyReducer
+  agencyRealty: agencyRealtyReducer,
+  agencyProject: agencyProjectReducer,
+  listContact: contactsReducer
 });

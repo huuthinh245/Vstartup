@@ -15,15 +15,15 @@ import { PlaceHolder } from '../components/RealtyItem';
 import * as routes from '../routes/routes';
 import HistoryItem from '../components/HistoryItem';
 import {
-  getListHistoryAction,
-  refreshListHistoryAction,
-  deleteHistoryAction
-} from '../redux/listHistory/actions';
+  getListContactAction,
+  refreshListContactAction,
+  deleteContactAction
+} from '../redux/contact/actions';
 import { _alert } from '../utils/alert';
 
 const textStyle = color => ({ color: color || _colors.mainColor });
 
-class ListHistory extends React.Component {
+class ListContact extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,12 +32,12 @@ class ListHistory extends React.Component {
     };
   }
   componentDidMount() {
-    getListHistoryAction();
+    getListContactAction();
   }
 
   _onRefresh = () => {
-    if (this.props.listHistory.refreshing) return;
-    refreshListHistoryAction();
+    if (this.props.listContact.refreshing) return;
+    refreshListContactAction();
   };
 
   _renderItem = ({ item }) => {
@@ -87,7 +87,7 @@ class ListHistory extends React.Component {
                         error: alertStrings.deleteSuccess
                       });
                     };
-                    deleteHistoryAction({ ids, callback });
+                    deleteContactAction({ ids, callback });
                   }
                 },
                 {
@@ -103,17 +103,20 @@ class ListHistory extends React.Component {
         }
       />
     ) : (
-      <Header title={headerStrings.historyTitle} outer />
+      <Header
+        title={headerStrings.listContact}
+        onLeftPress={() => this.props.navigation.goBack()}
+      />
     );
   };
 
   render = () => {
-    const { listHistory } = this.props;
+    const { listContact } = this.props;
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        <Overlay visible={this.props.listHistory.deleting} />
+        <Overlay visible={this.props.listContact.deleting} />
         {this._renderHeader()}
-        {listHistory.fetching ? (
+        {listContact.fetching ? (
           <View>
             <PlaceHolder />
             <Separator height={_dims.defaultPadding} />
@@ -127,16 +130,17 @@ class ListHistory extends React.Component {
           </View>
         ) : (
           <FlatList
-            data={listHistory.data}
+            style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
+            data={listContact.data}
             renderItem={this._renderItem}
             keyExtractor={item => `${item.id}`}
-            ListEmptyComponent={() => <Empty title={errorStrings.emptyListHistory} />}
             ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
             ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
+            ListEmptyComponent={() => <Empty title={errorStrings.emptyListContact} />}
             onMomentumScrollBegin={() => {
               this.onEndReachedCalledDuringMomentum = false;
             }}
-            refreshing={listHistory.refreshing}
+            refreshing={listContact.refreshing}
             onRefresh={this._onRefresh}
           />
         )}
@@ -146,5 +150,5 @@ class ListHistory extends React.Component {
 }
 
 export default connect(state => ({
-  listHistory: state.listHistory
-}))(ListHistory);
+  listContact: state.listContact
+}))(ListContact);

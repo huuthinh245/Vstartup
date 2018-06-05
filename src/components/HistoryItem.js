@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, PixelRatio } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FastImage from 'react-native-fast-image';
 import { responsiveFontSize, _dims, responsiveHeight, _colors } from '../utils/constants';
@@ -54,7 +54,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 10
+    borderRadius: 10,
+    shadowColor: '#777',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 2,
+    marginHorizontal: _dims.defaultPadding,
+    borderWidth: 1 / PixelRatio.get(),
+    borderColor: 'rgba(192,192,192,0.5)'
   },
   overlay: {
     position: 'absolute',

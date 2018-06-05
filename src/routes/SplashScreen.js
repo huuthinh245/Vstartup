@@ -37,7 +37,7 @@ class SplashScreen extends React.Component {
       ApiClient.instance.authentications.Bearer.type = 'apiKey';
       ApiClient.instance.authentications.Bearer.apiKeyPrefix = 'Bearer';
       ApiClient.instance.authentications.Bearer.apiKey = token;
-      loginAction({ email: 'admin@admin.com', password: '123', reset: true });
+      loginAction({ email: 'lequangha.pnv17@gmail.com', password: '123admin', reset: true });
       // getMeAction();
       // getListKeywordAction();
     } else {
@@ -59,7 +59,6 @@ class SplashScreen extends React.Component {
   }
 
   render() {
-    console.log(strings);
     return (
       <View style={{ flex: 1 }}>
         <StatusBar hidden />

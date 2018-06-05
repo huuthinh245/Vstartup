@@ -1,12 +1,12 @@
 import React from 'react';
-import { FlatList, ActivityIndicator, TouchableOpacity, View } from 'react-native';
+import { FlatList, ActivityIndicator, View, Text } from 'react-native';
 import { connect } from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
-import Separator from '../components/flatlistHelpers/Separator';
-import { _dims, LIMIT_SERVICES, _colors } from '../utils/constants';
+import errorStrings from '../localization/error';
+import { Separator, Empty } from '../components/flatlistHelpers';
+import { _dims, LIMIT_SERVICES } from '../utils/constants';
 import FavoriteItem, { PlaceHolder } from '../components/RealtyItem';
 import { likeRealtyAction, unlikeRealtyAction } from '../redux/realtyDetail/actions';
 import {
@@ -82,7 +82,7 @@ class ListFavorite extends React.Component {
   render = () => {
     const { listFavorite } = this.props;
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header title={headerStrings.favoriteTitle} outer />
         {listFavorite.fetching ? (
           <View>
@@ -98,13 +98,13 @@ class ListFavorite extends React.Component {
           </View>
         ) : (
           <FlatList
-            style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
             data={this.props.listFavorite.data}
             renderItem={this._renderItem}
             keyExtractor={item => `${item.id}`}
             ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
             ListFooterComponent={this._renderFooter}
             ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
+            ListEmptyComponent={<Empty title={errorStrings.emptyListFavorite} />}
             onMomentumScrollBegin={() => {
               this.onEndReachedCalledDuringMomentum = false;
             }}

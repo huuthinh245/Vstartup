@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, PixelRatio } from 'react-native';
 
 import FastImage from 'react-native-fast-image';
 
@@ -41,17 +41,20 @@ const borderRadius = 10;
 export const styles = StyleSheet.create({
   wrapper: {
     borderRadius,
+    borderWidth: 1 / PixelRatio.get(),
+    borderColor: 'rgba(192,192,192,0.5)',
     backgroundColor: '#fff',
-    width: _dims.screenWidth - 2 * _dims.defaultPadding,
-    height: (_dims.screenWidth - 2 * _dims.defaultPadding) * 0.5
+    marginHorizontal: _dims.defaultPadding,
+    height: (_dims.screenHeight - 128 - 3 * _dims.defaultPadding) / 2.5,
+    shadowColor: '#333',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 2
   },
   placeHolder: {
     borderRadius,
-    height:
-      responsiveHeight(10) +
-      38 +
-      responsiveFontSize(_dims.defaultFontTitle) +
-      responsiveFontSize(_dims.defaultFontSize),
+    height: (_dims.screenHeight - 128 - 3 * _dims.defaultPadding) / 2.5,
     backgroundColor: '#fff',
     padding: _dims.defaultPadding
   },
@@ -64,8 +67,6 @@ export const styles = StyleSheet.create({
     left: 0
   },
   favoriteButton: {
-    width: 30,
-    alignSelf: 'center',
     position: 'absolute',
     top: _dims.defaultPadding,
     right: _dims.defaultPadding,
@@ -76,14 +77,14 @@ export const styles = StyleSheet.create({
     height: responsiveHeight(10)
   },
   infoWrapper: {
+    backgroundColor: _colors.overlay,
+    borderBottomLeftRadius: borderRadius,
+    borderBottomRightRadius: borderRadius,
     position: 'absolute',
     bottom: 0,
+    right: 0,
     left: 0,
-    backgroundColor: _colors.overlay,
-    width: '100%',
-    padding: 10,
-    borderBottomLeftRadius: borderRadius,
-    borderBottomRightRadius: borderRadius
+    padding: 10
   },
   infoWrapperPlaceHolder: {
     backgroundColor: 'rgba(0,0,0,0.2)',
@@ -99,7 +100,8 @@ export const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginVertical: 2
   },
   titleWrapper: {
     flexDirection: 'row'

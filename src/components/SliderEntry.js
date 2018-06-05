@@ -16,8 +16,6 @@ export default class SliderEntry extends Component {
   get image() {
     const { data, parallax, parallaxProps, even } = this.props;
 
-    console.log(this.props);
-
     return parallax ? (
       <ParallaxImage
         source={{ uri: data }}
@@ -73,7 +71,12 @@ const styles = StyleSheet.create({
     width: itemWidth,
     height: slideHeight,
     paddingHorizontal: itemHorizontalMargin,
-    paddingBottom: 18 // needed for shadow
+    paddingBottom: 18, // needed for shadow,
+    shadowColor: '#888',
+    shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+    elevation: 2
   },
   shadow: {
     position: 'absolute',
@@ -93,7 +96,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: entryBorderRadius,
     borderWidth: 1 / PixelRatio.get(),
-    borderColor: 'silver'
+    borderColor: 'silver',
+    resizeMode: 'center'
   },
   image: {
     ...StyleSheet.absoluteFillObject,

@@ -26,10 +26,10 @@ export const _dims = {
   screenHeight: height,
   navBarHeight: _ios ? 64 : 44,
   defaultPadding: responsiveWidth(3),
-  defaultFontSize: 16,
-  defaultFontInput: 18,
-  defaultFontTitle: 20,
-  defaultFontSubTitle: 14,
+  defaultFontSize: 14,
+  defaultFontInput: 15,
+  defaultFontTitle: 16,
+  defaultFontSubTitle: 13,
   indicator: responsiveFontSize(22)
 };
 
