@@ -5,12 +5,16 @@ import {
   GET_AGENCY_REALTY_FAILURE,
   LOAD_MORE_AGENCY_REALTY,
   LOAD_MORE_AGENCY_REALTY_SUCCESS,
-  LOAD_MORE_AGENCY_REALTY_FAILURE
+  LOAD_MORE_AGENCY_REALTY_FAILURE,
+  REFRESH_AGENCY_REALTY,
+  REFRESH_AGENCY_REALTY_SUCCESS,
+  REFRESH_AGENCY_REALTY_FAILURE
 } from './actions';
 
 const initial = {
   fetching: false,
   loadMore: false,
+  refreshing: false,
   data: {},
   error: null
 };
@@ -26,6 +30,16 @@ export const agencyRealtyReducer = handleActions(
     },
     [GET_AGENCY_REALTY_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { fetching: false, error: payload });
+    },
+    [REFRESH_AGENCY_REALTY]: state => {
+      return Object.assign({}, state, { refreshing: true });
+    },
+    [REFRESH_AGENCY_REALTY_SUCCESS]: (state, { payload }) => {
+      state.data[payload.author] = payload.data;
+      return Object.assign({}, state, { refreshing: false, error: null });
+    },
+    [REFRESH_AGENCY_REALTY_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, { refreshing: false, error: payload });
     },
     [LOAD_MORE_AGENCY_REALTY]: state => {
       return Object.assign({}, state, { loadMore: true });

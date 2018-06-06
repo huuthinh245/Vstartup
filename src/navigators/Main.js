@@ -29,7 +29,7 @@ import AgencyProject from '../routes/AgencyProject';
 import Register from '../components/authorization/register';
 import Forgot from '../components/authorization/Forgot';
 import Login from '../components/authorization/login';
-import CreateRealty from '../routes/CreateRealty';
+import PostRealty from '../routes/PostRealty';
 import Feedback from '../routes/Feedback';
 
 import strings from '../localization/header';
@@ -116,7 +116,8 @@ const stackConfig = {
   [routes.settings]: { screen: Settings },
   [routes.changePassword]: { screen: ChangePassword },
   [routes.contacts]: { screen: Contacts },
-  [routes.agencyProject]: { screen: AgencyProject }
+  [routes.agencyProject]: { screen: AgencyProject },
+  [routes.createRealty]: { screen: PostRealty },
 };
 
 const navConfig = {
@@ -133,7 +134,6 @@ export const MainWithModal = createStackNavigator(
     [routes.login]: { screen: Login },
     [routes.register]: { screen: Register },
     [routes.forgot]: { screen: Forgot },
-    [routes.createRealty]: { screen: CreateRealty },
     [routes.feedBack]: { screen: Feedback }
   },
   {

@@ -7,7 +7,10 @@ import {
   GET_MY_REALTY_FAILURE,
   LOAD_MORE_MY_REALTY,
   LOAD_MORE_MY_REALTY_SUCCESS,
-  LOAD_MORE_MY_REALTY_FAILURE
+  LOAD_MORE_MY_REALTY_FAILURE,
+  REFRESH_MY_REALTY,
+  REFRESH_MY_REALTY_SUCCESS,
+  REFRESH_MY_REALTY_FAILURE
 } from './actions';
 import { realtyApi, handleError } from '../../utils/api';
 
@@ -22,6 +25,17 @@ const getMyRealtyEpic = actions$ =>
     }
   });
 
+const refreshMyRealtyEpic = actions$ =>
+  actions$.ofType(REFRESH_MY_REALTY).switchMap(async action => {
+    try {
+      const resp = await realtyApi.listRealty(action.payload);
+      return { type: REFRESH_MY_REALTY_SUCCESS, payload: resp.body };
+    } catch (error) {
+      handleError(error, true);
+      return { type: REFRESH_MY_REALTY_FAILURE, payload: error };
+    }
+  });
+
 const loadMoreMyRealtyEpic = actions$ =>
   actions$.ofType(LOAD_MORE_MY_REALTY).switchMap(async action => {
     try {
@@ -33,4 +47,8 @@ const loadMoreMyRealtyEpic = actions$ =>
     }
   });
 
-export const myRealtyEpic = combineEpics(getMyRealtyEpic, loadMoreMyRealtyEpic);
+export const myRealtyEpic = combineEpics(
+  getMyRealtyEpic,
+  loadMoreMyRealtyEpic,
+  refreshMyRealtyEpic
+);

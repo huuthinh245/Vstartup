@@ -12,7 +12,8 @@ import * as routes from '../routes/routes';
 import { _dims, LIMIT_SERVICES } from '../utils/constants';
 import {
   getAgencyProjectAction,
-  loadMoreAgencyProjectAction
+  loadMoreAgencyProjectAction,
+  refreshAgencyProjectAction
 } from '../redux/agencyProject/actions';
 import { styles } from '../components/AuthDetail';
 
@@ -33,6 +34,12 @@ class AgencyProject extends React.Component {
     const len = this.props.agencyProject.data.length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
     loadMoreAgencyProjectAction({ author_id: user.id, page });
+  };
+
+  _onRefresh = () => {
+    if (this.props.agencyProject.fetching || this.props.agencyProject.refreshing) return;
+    const { user } = this.props.navigation.state.params;
+    refreshAgencyProjectAction({ author_id: user.id });
   };
 
   _renderItem = ({ item }) => {
@@ -76,7 +83,10 @@ class AgencyProject extends React.Component {
   render() {
     return (
       <View style={styles.wrapper}>
-        <Header title={headerStrings.agencyProject} />
+        <Header
+          title={headerStrings.agencyProject}
+          onLeftPress={() => this.props.navigation.goBack()}
+        />
         {this.props.agencyProject.fetching ? (
           <ActivityIndicator animating style={styles.indicator} />
         ) : (
@@ -94,6 +104,8 @@ class AgencyProject extends React.Component {
             onMomentumScrollBegin={() => {
               this.onEndReachedCalledDuringMomentum = false;
             }}
+            refreshing={this.props.agencyProject.refreshing}
+            onRefresh={this._onRefresh}
           />
         )}
       </View>

@@ -54,9 +54,11 @@ export const styles = StyleSheet.create({
   },
   placeHolder: {
     borderRadius,
-    height: (_dims.screenHeight - 128 - 3 * _dims.defaultPadding) / 2.5,
+    borderWidth: 1 / PixelRatio.get(),
+    borderColor: 'rgba(192,192,192,0.5)',
     backgroundColor: '#fff',
-    padding: _dims.defaultPadding
+    marginHorizontal: _dims.defaultPadding,
+    height: (_dims.screenHeight - 128 - 3 * _dims.defaultPadding) / 2.5
   },
   image: {
     width: '100%',

@@ -6,11 +6,16 @@ import { connect } from 'react-redux';
 
 import { PlaceHolder } from '../components/RealtyItem';
 import * as routes from '../routes/routes';
+import errorStrings from '../localization/error';
 import strings from '../localization/profile';
 import AirbnbRating from '../components/rating';
-import Separator from '../components/flatlistHelpers/Separator';
+import { Empty, Separator } from '../components/flatlistHelpers';
 import { responsiveFontSize, _dims, LIMIT_SERVICES } from '../utils/constants';
-import { getAgencyRealtyAction, loadMoreAgencyRealtyAction } from '../redux/agencyRealty/actions';
+import {
+  getAgencyRealtyAction,
+  loadMoreAgencyRealtyAction,
+  refreshAgencyRealtyAction
+} from '../redux/agencyRealty/actions';
 import { styles } from './AuthDetail';
 
 class AgencyDetail extends React.Component {
@@ -32,6 +37,12 @@ class AgencyDetail extends React.Component {
     loadMoreAgencyRealtyAction({ author_id: user.id, page });
   };
 
+  _onRefresh = () => {
+    if (this.props.agencyRealty.refreshing || this.props.agencyRealty.fetching) return;
+    const { user } = this.props;
+    refreshAgencyRealtyAction({ author_id: user.id });
+  };
+
   _renderItem = ({ item }) => {
     return (
       <TouchableOpacity
@@ -51,7 +62,7 @@ class AgencyDetail extends React.Component {
         </View>
 
         <View style={styles.itemInfo}>
-          <Text numberOfLines={2} style={styles.itemName}>
+          <Text numberOfLines={1} style={styles.itemName}>
             {item.title}
           </Text>
           <Text numberOfLines={1} style={styles.itemPrice}>
@@ -134,7 +145,7 @@ class AgencyDetail extends React.Component {
     ) {
       return null;
     }
-    return <Text>Empty</Text>;
+    return <Empty title={errorStrings.emptyListAgencyRealty} />;
   };
 
   render() {
@@ -151,6 +162,8 @@ class AgencyDetail extends React.Component {
           ListHeaderComponent={this._renderProfile}
           ListFooterComponent={this._renderFooter}
           onEndReached={this._onLoadMore}
+          refreshing={this.props.agencyRealty.refreshing}
+          onRefresh={this._onRefresh}
           onEndReachedThreshold={0}
           onMomentumScrollBegin={() => {
             this.onEndReachedCalledDuringMomentum = false;

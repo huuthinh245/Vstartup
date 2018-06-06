@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Easing } from 'react-native';
 import { connect } from 'react-redux';
-// import FlipView from 'react-native-flip-view-next';
+import FlipView from 'react-native-flip-view-next';
 
 import { _colors } from '../utils/constants';
 import Header from '../navigators/headers/SearchTab';
-// import SearchFront from '../components/tabs/SearchFront';
-// import SearchBack from '../components/tabs/SearchBack';
+import SearchFront from '../components/tabs/SearchFront';
+import SearchBack from '../components/tabs/SearchBack';
 import { getListRealtyAction } from '../redux/listRealty/actions';
 import * as routes from './routes';
 import Map from '../components/map';
@@ -51,8 +51,8 @@ class SearchTab extends React.Component {
           }
           editText={!this.state.editing ? 'Edit' : 'Done'}
         />
-        <Map />
-        {/* <FlipView
+        {/* <Map /> */}
+        <FlipView
           style={{ flex: 1 }}
           front={<SearchFront {...this.props} />}
           back={<SearchBack {...this.props} />}
@@ -61,7 +61,7 @@ class SearchTab extends React.Component {
           flipEasing={Easing.out(Easing.ease)}
           flipDuration={500}
           perspective={1000}
-        /> */}
+        />
       </View>
     );
   }

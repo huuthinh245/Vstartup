@@ -23,7 +23,7 @@ import { PlaceHolder } from '../components/RealtyItem';
 import * as routes from '../routes/routes';
 import strings from '../localization/profile';
 import AirbnbRating from '../components/rating';
-import Separator from '../components/flatlistHelpers/Separator';
+import { Separator, Empty } from '../components/flatlistHelpers';
 import {
   responsiveFontSize,
   _dims,
@@ -32,7 +32,11 @@ import {
   responsiveWidth,
   _ios
 } from '../utils/constants';
-import { getMyRealtyAction, loadMoreMyRealtyAction } from '../redux/myRealty/actions';
+import {
+  getMyRealtyAction,
+  loadMoreMyRealtyAction,
+  refreshMyRealtyAction
+} from '../redux/myRealty/actions';
 import { imagePicker, cameraPicker } from '../utils/imagePicker';
 import { userApi } from '../utils/api';
 import { logoutAction } from '../redux/auth/actions';
@@ -62,7 +66,7 @@ class AuthDetail extends React.Component {
 
     let menus;
 
-    if(this.props.auth.user.role_id !== 3) {
+    if (this.props.auth.user.role_id !== 3) {
       menus = [
         {
           menus: [
@@ -196,6 +200,12 @@ class AuthDetail extends React.Component {
     loadMoreMyRealtyAction({ author_id: user.id, page });
   };
 
+  _onRefresh = () => {
+    if (this.props.myRealty.fetching || this.props.myRealty.refreshing) return;
+    const { user } = this.props.auth;
+    refreshMyRealtyAction({ author_id: user.id });
+  };
+
   _renderItem = ({ item }) => {
     return (
       <TouchableOpacity
@@ -206,7 +216,6 @@ class AuthDetail extends React.Component {
           this.props.navigation.navigate(routes.realtyDetail, { data: item });
         }}
         onLongPress={() => this._showItemPopup(this[`realty(${item.id})`])}
-        // onLongPress={this._showSheet}
         style={styles.item}
       >
         <View style={styles.itemImage}>
@@ -304,7 +313,7 @@ class AuthDetail extends React.Component {
 
   _renderEmpty = () => {
     if (this.props.myRealty.fetching || this.props.myRealty.data.length === 0) return null;
-    return <Text>Empty</Text>;
+    return <Empty title={errorStrings.emptyListAgencyRealty} />;
   };
 
   render() {
@@ -322,7 +331,7 @@ class AuthDetail extends React.Component {
             size={responsiveFontSize(_dims.defaultFontSize * 4)}
           />
         </TouchableOpacity>
-        
+
         <FlatList
           style={{ marginHorizontal: _dims.defaultPadding, paddingBottom: 100 }}
           data={this.props.myRealty.data}
@@ -337,6 +346,8 @@ class AuthDetail extends React.Component {
           onMomentumScrollBegin={() => {
             this.onEndReachedCalledDuringMomentum = false;
           }}
+          refreshing={this.props.myRealty.refreshing}
+          onRefresh={this._onRefresh}
         />
         <ActionSheet
           ref={o => {
@@ -418,7 +429,7 @@ export const styles = StyleSheet.create({
   image: {
     alignSelf: 'center',
     width: _dims.screenWidth / 2,
-    height: _dims.screenWidth / 2 * 1.25,
+    height: (_dims.screenWidth / 2) * 1.25,
     borderRadius: 20,
     marginVertical: _dims.defaultPadding
   },
@@ -450,7 +461,6 @@ export const styles = StyleSheet.create({
   },
   item: {
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center'
   },
   itemImage: {
@@ -462,18 +472,19 @@ export const styles = StyleSheet.create({
   },
   itemInfo: {
     flex: 1,
-    marginLeft: _dims.defaultPadding
+    marginLeft: _dims.defaultPadding,
+    justifyContent: 'space-between'
   },
   titleItem: {
     flexDirection: 'row'
   },
   itemName: {
-    color: '#333',
-    flex: 1
+    color: '#333'
   },
   itemPrice: {
     color: '#44cee2',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginVertical: 3
   },
   itemAddress: {
     color: '#777'

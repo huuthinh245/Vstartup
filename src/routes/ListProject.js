@@ -49,7 +49,14 @@ class ListProject extends React.Component {
     return (
       <ProjectItem
         data={item}
-        onPress={() => this.props.navigation.navigate(routes.projectDetail, { data: item })}
+        onPress={() => {
+          if (this.props.navigation.state.params && this.props.navigation.state.params.callback) {
+            this.props.navigation.state.params.callback(item);
+            this.props.navigation.goBack();
+          } else {
+            this.props.navigation.navigate(routes.projectDetail, { data: item });
+          }
+        }}
       />
     );
   };

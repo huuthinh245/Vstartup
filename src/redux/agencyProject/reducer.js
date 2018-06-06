@@ -5,12 +5,16 @@ import {
   GET_AGENCY_PROJECT_FAILURE,
   LOAD_MORE_AGENCY_PROJECT,
   LOAD_MORE_AGENCY_PROJECT_SUCCESS,
-  LOAD_MORE_AGENCY_PROJECT_FAILURE
+  LOAD_MORE_AGENCY_PROJECT_FAILURE,
+  REFRESH_AGENCY_PROJECT,
+  REFRESH_AGENCY_PROJECT_SUCCESS,
+  REFRESH_AGENCY_PROJECT_FAILURE
 } from './actions';
 
 const initial = {
   fetching: false,
   loadMore: false,
+  refreshing: false,
   data: {},
   error: null
 };
@@ -26,6 +30,16 @@ export const agencyProjectReducer = handleActions(
     },
     [GET_AGENCY_PROJECT_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { fetching: false, error: payload });
+    },
+    [REFRESH_AGENCY_PROJECT]: state => {
+      return Object.assign({}, state, { refreshing: true });
+    },
+    [REFRESH_AGENCY_PROJECT_SUCCESS]: (state, { payload }) => {
+      state.data[payload.author] = payload.data;
+      return Object.assign({}, state, { refreshing: false, error: null });
+    },
+    [REFRESH_AGENCY_PROJECT_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, { refreshing: false, error: payload });
     },
     [LOAD_MORE_AGENCY_PROJECT]: state => {
       return Object.assign({}, state, { loadMore: true });

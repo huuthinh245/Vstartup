@@ -35,6 +35,9 @@ const strings = new LocalizedStrings({
     areYouSure: 'Bạn chắc chắn muốn đăng xuất ?',
     hideRealty: 'Ẩn tin bất động sản',
     editRealty: 'Chỉnh sửa tin bất động sản',
+    actionTitle: 'Tải ảnh lên',
+    actionCamera: 'Chụp ảnh',
+    actionPhoto: 'Thư viện ảnh',
     manageContact: 'Quản lý liên hệ',
     manageProject: 'Tất cả dự án'
   }
