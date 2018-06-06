@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import RNPopover from 'react-native-popover-menu';
 import ActionSheet from 'react-native-actionsheet';
+import RNGooglePlaces from 'react-native-google-places';
 
 import Overlay from '../components/common/Overlay';
 import Header from '../navigators/headers/CommonHeader';

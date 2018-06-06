@@ -15,6 +15,7 @@
 #import <RNGoogleSignin/RNGoogleSignin.h>
 #import <AVFoundation/AVFoundation.h>
 @import GoogleMaps;
+@import GooglePlaces;
 
 @implementation AppDelegate
 
@@ -24,8 +25,11 @@
   
   // enable sound of react-native-youtube on vibrate mode
   [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error: nil];
+  
   // change customer's key for goog-maps here before release
-  [GMSServices provideAPIKey:@"AIzaSyBkzL1WzN-G5SL0ZrgoRRAeCe3M7rniPEg"];
+  [GMSPlacesClient provideAPIKey:@"AIzaSyC91wuedAepcP_LjIHxwhlqGOFmtxDqBME"];
+  [GMSServices provideAPIKey:@"AIzaSyC91wuedAepcP_LjIHxwhlqGOFmtxDqBME"];
+  
 
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 

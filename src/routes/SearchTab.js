@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import FlipView from 'react-native-flip-view-next';
+import RNGooglePlaces from 'react-native-google-places';
 
 import { _colors } from '../utils/constants';
 import Header from '../navigators/headers/SearchTab';
@@ -33,16 +34,9 @@ class SearchTab extends React.Component {
         <Header
           flipIcon={!this.state.isFlipped ? 'md-list' : 'md-pin'}
           onFlipPress={this._flip}
-          onTitlePress={() => {
-            RNGooglePlacePicker.show(response => {
-              if (response.didCancel) {
-                console.log('User cancelled GooglePlacePicker');
-              } else if (response.error) {
-                console.log('GooglePlacePicker Error: ', response.error);
-              } else {
-                console.log(response);
-              }
-            });
+          onTitlePress={async () => {
+            const val = await RNGooglePlaces.openPlacePickerModal();
+            console.log(val);
           }}
           onFilterPress={() =>
             this.props.navigation.navigate(routes.filterScreen, {

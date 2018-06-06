@@ -3,6 +3,7 @@ package com.dfm.vstartup;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.arttitude360.reactnative.rngoogleplaces.RNGooglePlacesPackage;
 import com.RNRate.RNRatePackage;
 import ui.popovermenu.RNPopoverMenuPackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
@@ -44,6 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new RNGooglePlacesPackage(),
           new RNRatePackage(),
           new RNPopoverMenuPackage(),
           new ReactNativeYouTube(),
