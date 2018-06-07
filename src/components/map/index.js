@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
     marginBottom: -4,
-    opacity: 0.6
+    opacity: 0.8
   },
   bubbleHighlight: {
     flex: 0,
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   price: {
     color: '#000000',
     fontSize: 12,
-    opacity: 0.6
+    opacity: 0.8
   },
   priceHighlight: {
     color: '#000000',
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 24,
     alignSelf: 'center',
-    opacity: 0.6
+    opacity: 0.8
   },
   iconHighlight: {
     fontSize: 32,
