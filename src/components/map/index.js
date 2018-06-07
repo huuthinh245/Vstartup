@@ -172,22 +172,7 @@ export default class Map extends React.Component {
   }
 
   render() {
-    const { animation } = this.state;
-    const interpolations = fakeDate.map((marker, index) => {
-      const inputRange = [(index - 1) * CARD_WIDTH, index * CARD_WIDTH, (index + 1) * CARD_WIDTH];
-      const scale = animation.interpolate({
-        inputRange,
-        outputRange: [1, 2.5, 1],
-        extrapolate: 'clamp'
-      });
-      const opacity = animation.interpolate({
-        inputRange,
-        outputRange: [0.35, 1, 0.35],
-        extrapolate: 'clamp'
-      });
-      return { scale, opacity };
-    });
-
+    const { animation, currentMarkerIndex } = this.state;
     return (
       <View style={styles.main}>
         <MapView
@@ -203,24 +188,16 @@ export default class Map extends React.Component {
           }}
         >
           {fakeDate.map((marker, index) => {
-            const scaleStyle = {
-              transform: [
-                {
-                  scale: interpolations[index].scale
-                }
-              ]
-            };
             const opacityStyle = {
-              opacity: interpolations[index].opacity
+              opacity: currentMarkerIndex === index ? 1 : 0.5
             };
 
             return (
-              <Marker key={marker.title} coordinate={marker.coordinate}>
-                <Animated.View style={[styles.markerWrap, opacityStyle]}>
-                  <Animated.View style={[styles.ring, scaleStyle]} />
-                  <View style={styles.marker} />
-                </Animated.View>
-              </Marker>
+              <Marker.Animated
+                key={marker.title}
+                coordinate={marker.coordinate}
+                style={[styles.marker, opacityStyle]}
+              />
             );
           })}
         </MapView>
