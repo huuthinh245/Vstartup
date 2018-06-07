@@ -13,7 +13,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = width - 20;
-const FAKE_DATA_LENGTH = fakeDate.lengthr;
+// const FAKE_DATA_LENGTH = fakeDate.length;
 
 const styles = StyleSheet.create({
   main: {
@@ -127,25 +127,16 @@ export default class Map extends React.Component {
     super(props);
     this.state = {
       currentMarkerIndex: 0,
-      animation: new Animated.Value(0),
-      regionTimeout: 10
+      animation: new Animated.Value(0)
     };
   }
 
   componentDidMount() {
-    const { animation, regionTimeout, currentMarkerIndex } = this.state;
+    const { animation, currentMarkerIndex } = this.state;
     animation.addListener(({ value }) => {
-      let index = Math.floor(value / CARD_WIDTH);
-      if (index <= 0) {
-        index = 0;
-      }
-      if (index >= FAKE_DATA_LENGTH) {
-        index = FAKE_DATA_LENGTH - 1;
-      }
-
+      const index = Math.floor(value / CARD_WIDTH + 0.3);
       this.setState({ currentMarkerIndex: index });
 
-      clearTimeout(regionTimeout);
       setTimeout(() => {
         if (currentMarkerIndex !== index) {
           const { coordinate } = fakeDate[index];
@@ -206,6 +197,9 @@ export default class Map extends React.Component {
           })}
         </MapView>
         <Animated.ScrollView
+          ref={ref => {
+            this.scrollView = ref;
+          }}
           horizontal
           scrollEventThrottle={1}
           showsHorizontalScrollIndicator={false}
