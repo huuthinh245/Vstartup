@@ -135,7 +135,7 @@ export default class Map extends React.Component {
   componentDidMount() {
     const { animation, regionTimeout, currentMarkerIndex } = this.state;
     animation.addListener(({ value }) => {
-      let index = Math.floor(value / CARD_WIDTH + 0.3);
+      let index = Math.floor(value / CARD_WIDTH);
       if (index <= 0) {
         index = 0;
       }
@@ -143,11 +143,11 @@ export default class Map extends React.Component {
         index = FAKE_DATA_LENGTH - 1;
       }
 
+      this.setState({ currentMarkerIndex: index });
+
       clearTimeout(regionTimeout);
       setTimeout(() => {
         if (currentMarkerIndex !== index) {
-          this.setState({ currentMarkerIndex: index });
-
           const { coordinate } = fakeDate[index];
           this.map.animateToRegion(
             {
