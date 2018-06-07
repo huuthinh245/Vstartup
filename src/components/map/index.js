@@ -190,14 +190,18 @@ export default class Map extends React.Component {
             ];
 
             return (
-              <Marker.Animated coordinate={marker.coordinate}>
+              <Marker
+                key={marker.title}
+                coordinate={marker.coordinate}
+                onPress={() => console.log('index', index)}
+              >
                 <View style={styles.tooltip}>
                   <View style={bubbleStyle}>
                     <Text style={priceStyle}>{marker.price}</Text>
                   </View>
                   <Icon name="md-pin" style={iconStyle} />
                 </View>
-              </Marker.Animated>
+              </Marker>
             );
           })}
         </MapView>
