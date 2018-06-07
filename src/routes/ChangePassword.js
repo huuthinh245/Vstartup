@@ -9,7 +9,7 @@ import headerStrings from '../localization/header';
 import alertStrings from '../localization/alert';
 import strings from '../localization/authorization';
 import emitter from '../emitter';
-import { updateInfoAction } from '../redux/auth/actions';
+import { updatePasswordAction } from '../redux/auth/actions';
 import { _alert } from '../utils/alert';
 
 class ChangePassword extends React.Component {
@@ -52,9 +52,9 @@ class ChangePassword extends React.Component {
             onPress: () => this.props.navigation.goBack()
           }
         ]);
-      updateInfoAction({
-        password: this.state.password,
-        current_password: this.state.currentPassword,
+      updatePasswordAction({
+        newPassword: this.state.password,
+        currentPassword: this.state.currentPassword,
         callback
       });
     }

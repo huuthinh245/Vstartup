@@ -29,9 +29,9 @@ class AgencyProject extends React.Component {
   }
 
   _onLoadMore = () => {
-    if (this.props.agencyProject.fetching || this.onEndReachedCalledDuringMomentum) return;
+    if (this.props.agencyProject.loadMore || this.onEndReachedCalledDuringMomentum) return;
     const { user } = this.props.navigation.state.params;
-    const len = this.props.agencyProject.data.length;
+    const len = this.props.agencyProject.data[user.id].length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
     loadMoreAgencyProjectAction({ author_id: user.id, page });
   };
@@ -76,8 +76,17 @@ class AgencyProject extends React.Component {
   };
 
   _renderFooter = () => {
-    if (this.props.agencyProject.fetching || !this.props.agencyProject.loadMore) return null;
+    if (this.props.agencyProject.fetching || !this.props.agencyProject.loadMore) {
+      return <View style={{ height: _dims.defaultPadding }} />;
+    }
     return <ActivityIndicator animating style={styles.indicator} />;
+  };
+
+  _renderEmpty = () => {
+    if (this.props.agencyProject.fetching) {
+      return null;
+    }
+    return <Empty title={errorStrings.emptyListAgencyRealty} />;
   };
 
   render() {
@@ -91,12 +100,12 @@ class AgencyProject extends React.Component {
           <ActivityIndicator animating style={styles.indicator} />
         ) : (
           <FlatList
-            style={{ marginHorizontal: _dims.defaultPadding, paddingBottom: 100 }}
+            style={{ paddingHorizontal: _dims.defaultPadding, backgroundColor: '#fff' }}
             data={this.props.agencyProject.data[this.props.navigation.state.params.user.id]}
             renderItem={this._renderItem}
             keyExtractor={item => `${item.id}`}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
-            ListEmptyComponent={() => <Empty title={errorStrings.emptyListContact} />}
+            ListEmptyComponent={this._renderEmpty}
             ListHeaderComponent={() => <View style={{ height: _dims.defaultPadding }} />}
             ListFooterComponent={this._renderFooter}
             onEndReached={this._onLoadMore}

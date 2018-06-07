@@ -127,6 +127,7 @@ Class | Method | HTTP request | Description
 *RemsApi.AuthApi* | [**registerSocial**](docs/AuthApi.md#registerSocial) | **POST** /auth/register-social | 
 *RemsApi.ContactApi* | [**listContact**](docs/ContactApi.md#listContact) | **GET** /contact | 
 *RemsApi.ContactApi* | [**postContact**](docs/ContactApi.md#postContact) | **POST** /contact | 
+*RemsApi.FeedbackApi* | [**postFeedback**](docs/FeedbackApi.md#postFeedback) | **POST** /feedback | 
 *RemsApi.ListApi* | [**city**](docs/ListApi.md#city) | **GET** /list/city | 
 *RemsApi.ListApi* | [**option**](docs/ListApi.md#option) | **GET** /list/option | 
 *RemsApi.ProjectApi* | [**listProject**](docs/ProjectApi.md#listProject) | **GET** /project | 
@@ -146,6 +147,7 @@ Class | Method | HTTP request | Description
 *RemsApi.UserApi* | [**forgot**](docs/UserApi.md#forgot) | **POST** /user/forgot | 
 *RemsApi.UserApi* | [**getUser**](docs/UserApi.md#getUser) | **GET** /user/{id} | 
 *RemsApi.UserApi* | [**me**](docs/UserApi.md#me) | **GET** /user/me | 
+*RemsApi.UserApi* | [**updatePassword**](docs/UserApi.md#updatePassword) | **POST** /user/update-password | 
 *RemsApi.UserApi* | [**updateUser**](docs/UserApi.md#updateUser) | **POST** /user/me | 
 *RemsApi.UserApi* | [**uploadAvatar**](docs/UserApi.md#uploadAvatar) | **POST** /user/avatar | 
 
@@ -158,6 +160,7 @@ Class | Method | HTTP request | Description
  - [RemsApi.Coordinate](docs/Coordinate.md)
  - [RemsApi.Direction](docs/Direction.md)
  - [RemsApi.District](docs/District.md)
+ - [RemsApi.Feedback](docs/Feedback.md)
  - [RemsApi.GenericError](docs/GenericError.md)
  - [RemsApi.GenericSuscess](docs/GenericSuscess.md)
  - [RemsApi.ListCity](docs/ListCity.md)

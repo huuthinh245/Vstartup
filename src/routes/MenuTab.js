@@ -17,7 +17,7 @@ export default class MenuTab extends React.Component {
         <View style={styles.wrapper}>
           <TouchableOpacity
             style={styles.line}
-            onPress={() => this.props.navigation.navigate(routes.listProject)}
+            onPress={() => this.props.navigation.navigate(routes.allProject)}
           >
             <MaterialIcons style={styles.icon} name="store-mall-directory" />
             <Text style={styles.text}>{strings.project}</Text>

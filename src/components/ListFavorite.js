@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import errorStrings from '../localization/error';
-import { Separator, Empty } from '../components/flatlistHelpers';
+import { Separator, Empty, PlaceHolder } from '../components/flatlistHelpers';
 import { _dims, LIMIT_SERVICES } from '../utils/constants';
-import FavoriteItem, { PlaceHolder } from '../components/RealtyItem';
+import FavoriteItem from '../components/RealtyItem';
 import { likeRealtyAction, unlikeRealtyAction } from '../redux/realtyDetail/actions';
 import {
   getListFavoriteAction,
@@ -85,17 +85,7 @@ class ListFavorite extends React.Component {
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header title={headerStrings.favoriteTitle} outer />
         {listFavorite.fetching ? (
-          <View>
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-          </View>
+          <PlaceHolder />
         ) : (
           <FlatList
             data={this.props.listFavorite.data}

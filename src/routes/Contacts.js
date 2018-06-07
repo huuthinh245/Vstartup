@@ -4,14 +4,13 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import Overlay from '../components/common/Overlay';
-import { Separator, Empty } from '../components/flatlistHelpers';
+import { Separator, Empty, PlaceHolder } from '../components/flatlistHelpers';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import errorStrings from '../localization/error';
 import alertStrings from '../localization/alert';
 import { _dims, _colors } from '../utils/constants';
 import emitter from '../emitter';
-import { PlaceHolder } from '../components/RealtyItem';
 import * as routes from '../routes/routes';
 import HistoryItem from '../components/HistoryItem';
 import {
@@ -117,17 +116,7 @@ class ListContact extends React.Component {
         <Overlay visible={this.props.listContact.deleting} />
         {this._renderHeader()}
         {listContact.fetching ? (
-          <View>
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-          </View>
+          <PlaceHolder />
         ) : (
           <FlatList
             style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}

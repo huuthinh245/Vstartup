@@ -75,7 +75,7 @@ export const listFavoriteReducer = handleActions(
     [LIKE_REALTY_SUCCESS]: (state, { payload }) => {
       const index = state.data.findIndex(item => item.id === payload.id);
       if (index === -1) {
-        state.data.splice(0, 0, payload);
+        state.data.push(payload);
       }
       return Object.assign({}, state);
     }

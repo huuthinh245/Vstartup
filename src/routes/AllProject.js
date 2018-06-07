@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
-import Separator from '../components/flatlistHelpers/Separator';
+import errorStrings from '../localization/error';
+import { Separator, Empty, PlaceHolder } from '../components/flatlistHelpers';
 import { _dims, LIMIT_SERVICES } from '../utils/constants';
-import { PlaceHolder } from '../components/RealtyItem';
 import ProjectItem from '../components/ProjectItem';
 import {
-  getListProjectAction,
-  loadMoreListProjectAction,
-  refreshListProjectAction
-} from '../redux/listProject/actions';
+  getAgencyProjectAction,
+  loadMoreAgencyProjectAction,
+  refreshAgencyProjectAction
+} from '../redux/agencyProject/actions';
 import * as routes from '../routes/routes';
 
 class ListProject extends React.Component {
@@ -21,28 +21,24 @@ class ListProject extends React.Component {
     this.onEndReachedCalledDuringMomentum = true;
   }
   componentDidMount() {
-    getListProjectAction();
+    getAgencyProjectAction({ author_id: 0 });
   }
 
   _onLoadMore = () => {
-    if (
-      this.props.listProject.loadMore ||
-      this.props.listProject.fetching ||
-      this.props.listProject.refreshing ||
-      this.onEndReachedCalledDuringMomentum
-    ) {
+    const { agencyProject } = this.props;
+    if (agencyProject.loadMore || this.onEndReachedCalledDuringMomentum) {
       return;
     }
 
-    const len = this.props.listProject.data.length;
+    const len = agencyProject.data[0].length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
-    loadMoreListProjectAction({ page });
+    loadMoreAgencyProjectAction({ author_id: 0, page });
     this.onEndReachedCalledDuringMomentum = true;
   };
 
   _onRefresh = () => {
-    if (this.props.listProject.refreshing) return;
-    refreshListProjectAction();
+    if (this.props.agencyProject.refreshing) return;
+    refreshAgencyProjectAction({ author_id: 0 });
   };
 
   _renderItem = ({ item }) => {
@@ -50,6 +46,7 @@ class ListProject extends React.Component {
       <ProjectItem
         data={item}
         onPress={() => {
+          // callback if there is a component invoke this component to get projectId
           if (this.props.navigation.state.params && this.props.navigation.state.params.callback) {
             this.props.navigation.state.params.callback(item);
             this.props.navigation.goBack();
@@ -62,43 +59,32 @@ class ListProject extends React.Component {
   };
 
   _renderFooter = () => {
-    if (this.props.listProject.loadMore) {
-      return (
-        <ActivityIndicator
-          style={{
-            alignSelf: 'center',
-            marginVertical: 10
-          }}
-        />
-      );
+    if (this.props.agencyProject.loadMore) {
+      return <ActivityIndicator style={{ alignSelf: 'center', marginVertical: 10 }} />;
     }
-    return null;
+    return <View style={{ height: _dims.defaultPadding }} />;
+  };
+
+  _renderEmpty = () => {
+    if (this.props.agencyProject.fetching) {
+      return null;
+    }
+    return <Empty title={errorStrings.emptyListAgencyRealty} />;
   };
 
   render = () => {
-    const { listProject } = this.props;
+    const { agencyProject } = this.props;
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header
-          title={headerStrings.listProject}
+          title={headerStrings.agencyProject}
           onLeftPress={() => this.props.navigation.goBack()}
         />
-        {listProject.fetching ? (
-          <View>
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-          </View>
+        {agencyProject.fetching ? (
+          <PlaceHolder />
         ) : (
           <FlatList
-            style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
-            data={this.props.listProject.data}
+            data={this.props.agencyProject.data[0]}
             renderItem={this._renderItem}
             keyExtractor={item => `${item.id}`}
             ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
@@ -107,7 +93,7 @@ class ListProject extends React.Component {
             onMomentumScrollBegin={() => {
               this.onEndReachedCalledDuringMomentum = false;
             }}
-            refreshing={this.props.listProject.refreshing}
+            refreshing={this.props.agencyProject.refreshing}
             onEndReachedThreshold={0}
             onRefresh={this._onRefresh}
             onEndReached={this._onLoadMore}
@@ -119,5 +105,5 @@ class ListProject extends React.Component {
 }
 
 export default connect(state => ({
-  listProject: state.listProject
+  agencyProject: state.agencyProject
 }))(ListProject);

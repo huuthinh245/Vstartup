@@ -11,8 +11,8 @@ import {
 } from '../utils/constants';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
-import AgencyItem, { PlaceHolder } from '../components/AgencyItem';
-import Separator from '../components/flatlistHelpers/Separator';
+import AgencyItem from '../components/AgencyItem';
+import { Separator, PlaceHolder } from '../components/flatlistHelpers';
 import * as routes from './routes';
 import {
   getListAgencyAction,
@@ -27,8 +27,9 @@ class ListAgency extends React.Component {
   }
 
   componentDidMount() {
-    getListAgencyAction({ page: 1 });
+    getListAgencyAction();
   }
+
   _renderItem = ({ item, index }) => {
     const style =
       index % 2 === 0
@@ -66,33 +67,7 @@ class ListAgency extends React.Component {
           title={headerStrings.listAgency}
         />
         {listAgency.fetching ? (
-          <View style={{ padding: _dims.defaultPadding }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <PlaceHolder />
-              <PlaceHolder />
-            </View>
-            <Separator height={_dims.defaultPadding} />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <PlaceHolder />
-              <PlaceHolder />
-            </View>
-            <Separator height={_dims.defaultPadding} />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <PlaceHolder />
-              <PlaceHolder />
-            </View>
-            <Separator height={_dims.defaultPadding} />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <PlaceHolder />
-              <PlaceHolder />
-            </View>
-            <Separator height={_dims.defaultPadding} />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <PlaceHolder />
-              <PlaceHolder />
-            </View>
-            <Separator height={_dims.defaultPadding} />
-          </View>
+          <PlaceHolder />
         ) : (
           <FlatList
             style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}

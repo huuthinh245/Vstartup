@@ -19,6 +19,10 @@ export const UPDATE_INFO = 'UPDATE_INFO';
 export const UPDATE_INFO_SUCCESS = 'UPDATE_INFO_SUCCESS';
 export const UPDATE_INFO_FAILURE = 'UPDATE_INFO_FAILURE';
 
+export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
+export const UPDATE_PASSWORD_SUCCESS = 'UPDATE_PASSWORD_SUCCESS';
+export const UPDATE_PASSWORD_FAILURE = 'UPDATE_PASSWORD_FAILURE';
+
 export const AUTH_FAILURE = 'AUTH_FAILURE';
 
 export const loginAction = payload =>
@@ -60,5 +64,11 @@ export const getMeAction = payload =>
 export const updateInfoAction = payload =>
   store.dispatch({
     type: UPDATE_INFO,
+    payload
+  });
+
+export const updatePasswordAction = payload =>
+  store.dispatch({
+    type: UPDATE_PASSWORD,
     payload
   });

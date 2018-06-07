@@ -7,7 +7,7 @@ import AuthDetail from '../components/AuthDetail';
 class ProfileTab extends React.Component {
   render() {
     return this.props.auth.token ? (
-      <AuthDetail navigation={this.props.navigation} />
+      <AuthDetail data={this.props.auth.user} navigation={this.props.navigation} />
     ) : (
       <Login navigation={this.props.navigation} />
     );

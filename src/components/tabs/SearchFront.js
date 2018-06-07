@@ -1,11 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 import MapView from 'react-native-maps';
-import { connect } from 'react-redux';
 
 import Carousel from '../Carousel';
 
-class SearchFront extends React.Component {
+export default class SearchFront extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -18,10 +17,8 @@ class SearchFront extends React.Component {
             longitudeDelta: 0.0421
           }}
         />
-        <Carousel isRealty {...this.props} data={this.props.listRealty.data} />
+        <Carousel isRealty {...this.props} data={this.props.mapRealty.data} />
       </View>
     );
   }
 }
-
-export default connect(state => ({ listRealty: state.listRealty }))(SearchFront);

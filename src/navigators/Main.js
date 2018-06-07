@@ -19,7 +19,7 @@ import AdditionalInformation from '../routes/AdditionalInformation';
 import Sort from '../routes/Sort';
 import Filter from '../routes/Filter';
 import ListAgency from '../routes/ListAgency';
-import ListProject from '../routes/ListProject';
+import AllProject from '../routes/AllProject';
 import ListInvestor from '../routes/ListInvestor';
 import Settings from '../routes/Settings';
 import ChangePassword from '../routes/ChangePassword';
@@ -112,12 +112,12 @@ const stackConfig = {
   [routes.filterScreen]: { screen: Filter },
   [routes.listAgency]: { screen: ListAgency },
   [routes.listInvestor]: { screen: ListInvestor },
-  [routes.listProject]: { screen: ListProject },
+  [routes.allProject]: { screen: AllProject },
   [routes.settings]: { screen: Settings },
   [routes.changePassword]: { screen: ChangePassword },
   [routes.contacts]: { screen: Contacts },
   [routes.agencyProject]: { screen: AgencyProject },
-  [routes.createRealty]: { screen: PostRealty },
+  [routes.createRealty]: { screen: PostRealty }
 };
 
 const navConfig = {

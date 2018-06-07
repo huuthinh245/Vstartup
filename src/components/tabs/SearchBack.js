@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 
 import errorStrings from '../../localization/error';
 import { Separator, Empty } from '../flatlistHelpers';
-import RealtyItem, { PlaceHolder } from '../RealtyItem';
+import RealtyItem from '../RealtyItem';
 import { _dims, LIMIT_SERVICES } from '../../utils/constants';
 import * as routes from '../../routes/routes';
 import { likeRealtyAction, unlikeRealtyAction } from '../../redux/realtyDetail/actions';
-import { loadMoreListRealtyAction, refreshListRealtyAction } from '../../redux/listRealty/actions';
+import { loadMoreMapRealtyAction, refreshMapRealtyAction } from '../../redux/mapRealty/actions';
 
 class SearchBack extends React.Component {
   constructor(props) {
@@ -18,12 +18,13 @@ class SearchBack extends React.Component {
     };
     this.onEndReachedCalledDuringMomentum = true;
   }
+
   _likeRealty = async realty => {
     if (!this.props.auth.user.id) {
       this.props.navigation.navigate(routes.login, { modal: true });
       return;
     }
-    if (!this.props.listRealty.postingFavorite) {
+    if (!this.props.agencyDetail.postingFavorite) {
       if (realty.is_favorite) {
         unlikeRealtyAction(realty);
       } else {
@@ -33,19 +34,20 @@ class SearchBack extends React.Component {
   };
 
   _onLoadMore = () => {
-    if (this.props.listRealty.loadMore || this.onEndReachedCalledDuringMomentum) return;
-    const len = this.props.listRealty.data.length;
+    const { mapRealty } = this.props;
+    if (mapRealty.loadMore || this.onEndReachedCalledDuringMomentum) return;
+    const len = mapRealty.data.length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
     this.setState({ options: Object.assign(this.state.options, { page }) }, () =>
-      loadMoreListRealtyAction(this.state.options)
+      loadMoreMapRealtyAction(this.state.options)
     );
 
     this.onEndReachedCalledDuringMomentum = true;
   };
 
   _onRefresh = () => {
-    if (this.props.listRealty.refreshing) return;
-    refreshListRealtyAction(this.state.options);
+    if (this.props.mapRealty.refreshing) return;
+    refreshMapRealtyAction(this.state.options);
   };
 
   _renderItem = ({ item }) => {
@@ -60,7 +62,7 @@ class SearchBack extends React.Component {
   };
 
   _renderFooter = () => {
-    if (this.props.listRealty.loadMore) {
+    if (this.props.mapRealty.loadMore) {
       return (
         <ActivityIndicator
           style={{
@@ -70,45 +72,33 @@ class SearchBack extends React.Component {
         />
       );
     }
-    return null;
+    return <View style={{ height: _dims.defaultPadding }} />;
   };
 
   render() {
-    const { listRealty } = this.props;
+    const { mapRealty } = this.props;
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        {listRealty.fetching ? (
-          <View>
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-            <Separator height={_dims.defaultPadding} />
-            <PlaceHolder />
-          </View>
-        ) : (
-          <FlatList
-            data={listRealty.data}
-            renderItem={this._renderItem}
-            keyExtractor={item => `${item.id}`}
-            ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
-            ListFooterComponent={this._renderFooter}
-            ListEmptyComponent={<Empty title={errorStrings.emptyListHistory} />}
-            ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
-            onMomentumScrollBegin={() => {
-              this.onEndReachedCalledDuringMomentum = false;
-            }}
-            refreshing={listRealty.refreshing}
-            onEndReachedThreshold={0}
-            onRefresh={this._onRefresh}
-            onEndReached={this._onLoadMore}
-          />
-        )}
-      </View>
+      <FlatList
+        data={mapRealty.data}
+        renderItem={this._renderItem}
+        keyExtractor={item => `${item.id}`}
+        ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
+        ListFooterComponent={this._renderFooter}
+        ListEmptyComponent={<Empty title={errorStrings.emptyListHistory} />}
+        ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
+        onMomentumScrollBegin={() => {
+          this.onEndReachedCalledDuringMomentum = false;
+        }}
+        refreshing={mapRealty.refreshing}
+        onEndReachedThreshold={0}
+        onRefresh={this._onRefresh}
+        onEndReached={this._onLoadMore}
+      />
     );
   }
 }
-export default connect(state => ({ listRealty: state.listRealty, auth: state.auth }))(SearchBack);
+export default connect(state => ({
+  mapRealty: state.mapRealty,
+  auth: state.auth,
+  agencyDetail: state.agencyDetail
+}))(SearchBack);

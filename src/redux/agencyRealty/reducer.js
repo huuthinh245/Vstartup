@@ -51,7 +51,7 @@ export const agencyRealtyReducer = handleActions(
         payload.data.forEach(item => {
           const index = state.data[payload.author].findIndex(i => i.id === item.id);
           if (index === -1) {
-            state.data[payload.author].splice(0, 0, item);
+            state.data[payload.author].push(item);
           } else {
             Object.assign(state.data[payload.author][index], item);
           }

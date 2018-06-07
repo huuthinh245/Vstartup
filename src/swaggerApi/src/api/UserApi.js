@@ -16,18 +16,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/GenericError', 'model/LoginView', 'model/User', 'model/UserRegister'], factory);
+    define(['ApiClient', 'model/GenericError', 'model/GenericSuscess', 'model/LoginView', 'model/User', 'model/UserRegister'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('../model/GenericError'), require('../model/LoginView'), require('../model/User'), require('../model/UserRegister'));
+    module.exports = factory(require('../ApiClient'), require('../model/GenericError'), require('../model/GenericSuscess'), require('../model/LoginView'), require('../model/User'), require('../model/UserRegister'));
   } else {
     // Browser globals (root is window)
     if (!root.RemsApi) {
       root.RemsApi = {};
     }
-    root.RemsApi.UserApi = factory(root.RemsApi.ApiClient, root.RemsApi.GenericError, root.RemsApi.LoginView, root.RemsApi.User, root.RemsApi.UserRegister);
+    root.RemsApi.UserApi = factory(root.RemsApi.ApiClient, root.RemsApi.GenericError, root.RemsApi.GenericSuscess, root.RemsApi.LoginView, root.RemsApi.User, root.RemsApi.UserRegister);
   }
-}(this, function(ApiClient, GenericError, LoginView, User, UserRegister) {
+}(this, function(ApiClient, GenericError, GenericSuscess, LoginView, User, UserRegister) {
   'use strict';
 
   /**
@@ -51,13 +51,14 @@
      * Callback function to receive the result of the forgot operation.
      * @callback module:api/UserApi~forgotCallback
      * @param {String} error Error message, if any.
-     * @param data This operation does not return a value.
+     * @param {module:model/GenericSuscess} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {String} email 
      * @param {module:api/UserApi~forgotCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/GenericSuscess}
      */
     this.forgot = function(email, callback) {
       var postBody = null;
@@ -83,7 +84,7 @@
       var authNames = [];
       var contentTypes = ['application/x-www-form-urlencoded'];
       var accepts = ['application/json'];
-      var returnType = null;
+      var returnType = GenericSuscess;
 
       return this.apiClient.callApi(
         '/user/forgot', 'POST',
@@ -178,6 +179,59 @@
     }
 
     /**
+     * Callback function to receive the result of the updatePassword operation.
+     * @callback module:api/UserApi~updatePasswordCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/GenericSuscess} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {String} currentPassword 
+     * @param {String} newPassword 
+     * @param {module:api/UserApi~updatePasswordCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/GenericSuscess}
+     */
+    this.updatePassword = function(currentPassword, newPassword, callback) {
+      var postBody = null;
+
+      // verify the required parameter 'currentPassword' is set
+      if (currentPassword === undefined || currentPassword === null) {
+        throw new Error("Missing the required parameter 'currentPassword' when calling updatePassword");
+      }
+
+      // verify the required parameter 'newPassword' is set
+      if (newPassword === undefined || newPassword === null) {
+        throw new Error("Missing the required parameter 'newPassword' when calling updatePassword");
+      }
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+        'current_password': currentPassword,
+        'new_password': newPassword
+      };
+
+      var authNames = ['Bearer'];
+      var contentTypes = ['application/x-www-form-urlencoded'];
+      var accepts = ['application/json'];
+      var returnType = GenericSuscess;
+
+      return this.apiClient.callApi(
+        '/user/update-password', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the updateUser operation.
      * @callback module:api/UserApi~updateUserCallback
      * @param {String} error Error message, if any.
@@ -223,7 +277,7 @@
      * Callback function to receive the result of the uploadAvatar operation.
      * @callback module:api/UserApi~uploadAvatarCallback
      * @param {String} error Error message, if any.
-     * @param data This operation does not return a value.
+     * @param {module:model/GenericSuscess} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
@@ -231,6 +285,7 @@
      * @param {Object} opts Optional parameters
      * @param {File} opts.avatar upload file avatar
      * @param {module:api/UserApi~uploadAvatarCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/GenericSuscess}
      */
     this.uploadAvatar = function(opts, callback) {
       opts = opts || {};
@@ -252,7 +307,7 @@
       var authNames = ['Bearer'];
       var contentTypes = ['multipart/form-data'];
       var accepts = ['application/json'];
-      var returnType = null;
+      var returnType = GenericSuscess;
 
       return this.apiClient.callApi(
         '/user/avatar', 'POST',

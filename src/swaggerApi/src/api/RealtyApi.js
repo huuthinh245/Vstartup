@@ -128,7 +128,7 @@
       };
 
       var authNames = ['Bearer'];
-      var contentTypes = ['application/json'];
+      var contentTypes = ['application/x-www-form-urlencoded'];
       var accepts = ['application/json'];
       var returnType = GenericSuscess;
 
@@ -362,7 +362,7 @@
       };
 
       var authNames = ['Bearer'];
-      var contentTypes = ['application/json'];
+      var contentTypes = ['application/x-www-form-urlencoded'];
       var accepts = ['application/json'];
       var returnType = RealtyList;
 

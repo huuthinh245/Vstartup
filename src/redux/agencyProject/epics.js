@@ -17,7 +17,9 @@ import { projectApi, handleError } from '../../utils/api';
 const getAgencyProjectEpic = actions$ =>
   actions$.ofType(GET_AGENCY_PROJECT).switchMap(async action => {
     try {
-      const resp = await projectApi.listProject(action.payload);
+      const opts = Object.assign({}, action.payload);
+      if (action.payload.author_id === 0) delete opts.author_id;
+      const resp = await projectApi.listProject(opts);
       return {
         type: GET_AGENCY_PROJECT_SUCCESS,
         payload: { author: action.payload.author_id, data: resp.body }
@@ -31,7 +33,9 @@ const getAgencyProjectEpic = actions$ =>
 const refreshAgencyProjectEpic = actions$ =>
   actions$.ofType(REFRESH_AGENCY_PROJECT).switchMap(async action => {
     try {
-      const resp = await projectApi.listProject(action.payload);
+      const opts = Object.assign({}, action.payload);
+      if (action.payload.author_id === 0) delete opts.author_id;
+      const resp = await projectApi.listProject(opts);
       return {
         type: REFRESH_AGENCY_PROJECT_SUCCESS,
         payload: { author: action.payload.author_id, data: resp.body }
@@ -45,7 +49,9 @@ const refreshAgencyProjectEpic = actions$ =>
 const loadMoreAgencyProjectEpic = actions$ =>
   actions$.ofType(LOAD_MORE_AGENCY_PROJECT).switchMap(async action => {
     try {
-      const resp = await projectApi.listProject(action.payload);
+      const opts = Object.assign({}, action.payload);
+      if (action.payload.author_id === 0) delete opts.author_id;
+      const resp = await projectApi.listProject(opts);
       return {
         type: LOAD_MORE_AGENCY_PROJECT_SUCCESS,
         payload: { author: action.payload.author_id, data: resp.body }

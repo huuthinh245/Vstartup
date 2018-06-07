@@ -17,7 +17,9 @@ import { realtyApi, handleError } from '../../utils/api';
 const getAgencyRealtyEpic = actions$ =>
   actions$.ofType(GET_AGENCY_REALTY).switchMap(async action => {
     try {
-      const resp = await realtyApi.listRealty(action.payload);
+      const opts = Object.assign({}, action.payload);
+      if (action.payload.author_id === 0) delete opts.author_id;
+      const resp = await realtyApi.listRealty(opts);
       return {
         type: GET_AGENCY_REALTY_SUCCESS,
         payload: { author: action.payload.author_id, data: resp.body }
@@ -31,7 +33,9 @@ const getAgencyRealtyEpic = actions$ =>
 const refreshAgencyRealtyEpic = actions$ =>
   actions$.ofType(REFRESH_AGENCY_REALTY).switchMap(async action => {
     try {
-      const resp = await realtyApi.listRealty(action.payload);
+      const opts = Object.assign({}, action.payload);
+      if (action.payload.author_id === 0) delete opts.author_id;
+      const resp = await realtyApi.listRealty(opts);
       return {
         type: REFRESH_AGENCY_REALTY_SUCCESS,
         payload: { author: action.payload.author_id, data: resp.body }
@@ -45,7 +49,9 @@ const refreshAgencyRealtyEpic = actions$ =>
 const loadMoreAgencyRealtyEpic = actions$ =>
   actions$.ofType(LOAD_MORE_AGENCY_REALTY).switchMap(async action => {
     try {
-      const resp = await realtyApi.listRealty(action.payload);
+      const opts = Object.assign({}, action.payload);
+      if (action.payload.author_id === 0) delete opts.author_id;
+      const resp = await realtyApi.listRealty(opts);
       return {
         type: LOAD_MORE_AGENCY_REALTY_SUCCESS,
         payload: { author: action.payload.author_id, data: resp.body }

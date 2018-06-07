@@ -20,7 +20,10 @@ import {
   AUTH_FAILURE,
   UPDATE_INFO,
   UPDATE_INFO_SUCCESS,
-  UPDATE_INFO_FAILURE
+  UPDATE_INFO_FAILURE,
+  UPDATE_PASSWORD,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PASSWORD_FAILURE
 } from './actions';
 import { authApi, userApi, handleError } from '../../utils/api';
 import { ApiClient } from '../../swaggerApi/src';
@@ -162,6 +165,18 @@ const updateInfoEpic = actions$ =>
     }
   });
 
+const updatePasswordEpic = actions$ =>
+  actions$.ofType(UPDATE_PASSWORD).switchMap(async action => {
+    try {
+      const resp = await userApi.updatePassword(action.payload);
+      action.payload.callback();
+      return { type: UPDATE_PASSWORD_SUCCESS, payload: resp.body };
+    } catch (error) {
+      handleError(error, true);
+      return { type: UPDATE_PASSWORD_FAILURE, payload: error };
+    }
+  });
+
 export const authEpic = combineEpics(
   loginEpic,
   forgotEpic,
@@ -169,5 +184,6 @@ export const authEpic = combineEpics(
   socialEpic,
   getMeEpic,
   logoutEpic,
-  updateInfoEpic
+  updateInfoEpic,
+  updatePasswordEpic
 );

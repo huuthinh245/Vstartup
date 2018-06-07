@@ -3,10 +3,8 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import PropsTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
-import Placeholder from 'rn-placeholder';
 
 import { styles } from './ProjectItem';
-import { _dims, responsiveHeight } from '../utils/constants';
 
 export default class RealtyItem extends React.Component {
   static propsType = {
@@ -59,18 +57,3 @@ export default class RealtyItem extends React.Component {
     );
   }
 }
-
-export const PlaceHolder = () => {
-  return (
-    <View style={styles.placeHolder}>
-      <Placeholder.ImageContent
-        size={responsiveHeight(15)}
-        hasRadius
-        animate="fade"
-        lineNumber={5}
-        lineSpacing={5}
-        lastLineWidth="30%"
-      />
-    </View>
-  );
-};

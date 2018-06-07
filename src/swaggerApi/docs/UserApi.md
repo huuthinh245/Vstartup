@@ -7,13 +7,14 @@ Method | HTTP request | Description
 [**forgot**](UserApi.md#forgot) | **POST** /user/forgot | 
 [**getUser**](UserApi.md#getUser) | **GET** /user/{id} | 
 [**me**](UserApi.md#me) | **GET** /user/me | 
+[**updatePassword**](UserApi.md#updatePassword) | **POST** /user/update-password | 
 [**updateUser**](UserApi.md#updateUser) | **POST** /user/me | 
 [**uploadAvatar**](UserApi.md#uploadAvatar) | **POST** /user/avatar | 
 
 
 <a name="forgot"></a>
 # **forgot**
-> forgot(email)
+> GenericSuscess forgot(email)
 
 
 
@@ -30,7 +31,7 @@ var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully.');
+    console.log('API called successfully. Returned data: ' + data);
   }
 };
 apiInstance.forgot(email, callback);
@@ -44,7 +45,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-null (empty response body)
+[**GenericSuscess**](GenericSuscess.md)
 
 ### Authorization
 
@@ -144,6 +145,60 @@ This endpoint does not need any parameter.
  - **Content-Type**: application/json
  - **Accept**: application/json
 
+<a name="updatePassword"></a>
+# **updatePassword**
+> GenericSuscess updatePassword(currentPassword, newPassword)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+var defaultClient = RemsApi.ApiClient.instance;
+
+// Configure API key authorization: Bearer
+var Bearer = defaultClient.authentications['Bearer'];
+Bearer.apiKey = 'YOUR API KEY';
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.apiKeyPrefix = 'Token';
+
+var apiInstance = new RemsApi.UserApi();
+
+var currentPassword = "currentPassword_example"; // String | 
+
+var newPassword = "newPassword_example"; // String | 
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.updatePassword(currentPassword, newPassword, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **currentPassword** | **String**|  | 
+ **newPassword** | **String**|  | 
+
+### Return type
+
+[**GenericSuscess**](GenericSuscess.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
 <a name="updateUser"></a>
 # **updateUser**
 > LoginView updateUser(opts)
@@ -198,7 +253,7 @@ Name | Type | Description  | Notes
 
 <a name="uploadAvatar"></a>
 # **uploadAvatar**
-> uploadAvatar(opts)
+> GenericSuscess uploadAvatar(opts)
 
 
 
@@ -223,7 +278,7 @@ var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully.');
+    console.log('API called successfully. Returned data: ' + data);
   }
 };
 apiInstance.uploadAvatar(opts, callback);
@@ -237,7 +292,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-null (empty response body)
+[**GenericSuscess**](GenericSuscess.md)
 
 ### Authorization
 

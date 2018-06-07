@@ -75,7 +75,7 @@ export const contactsReducer = handleActions(
       payload.forEach(item => {
         const index = state.data.findIndex(i => i.id === item.id);
         if (index === -1) {
-          state.data.splice(0, 0, item);
+          state.data.push(item);
         } else {
           Object.assign(state.data[index], item);
         }

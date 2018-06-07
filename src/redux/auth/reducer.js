@@ -16,7 +16,10 @@ import {
   AUTH_FAILURE,
   UPDATE_INFO,
   UPDATE_INFO_SUCCESS,
-  UPDATE_INFO_FAILURE
+  UPDATE_INFO_FAILURE,
+  UPDATE_PASSWORD,
+  UPDATE_PASSWORD_SUCCESS,
+  UPDATE_PASSWORD_FAILURE
 } from './actions';
 
 const initial = {
@@ -75,6 +78,15 @@ export const authReducer = handleActions(
       return Object.assign({}, state, { updating: false, user: payload, error: null });
     },
     [UPDATE_INFO_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, payload, { updating: false, error: payload });
+    },
+    [UPDATE_PASSWORD]: state => {
+      return Object.assign({}, state, { updating: true });
+    },
+    [UPDATE_PASSWORD_SUCCESS]: state => {
+      return Object.assign({}, state, { updating: false, error: null });
+    },
+    [UPDATE_PASSWORD_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, payload, { updating: false, error: payload });
     }
   },

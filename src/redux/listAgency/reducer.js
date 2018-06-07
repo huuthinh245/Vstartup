@@ -39,7 +39,7 @@ export const listAgencyReducer = handleActions(
       payload.forEach(item => {
         const index = arr.findIndex(i => i.id === item.id);
         if (index === -1) {
-          arr.splice(0, 0, item);
+          arr.push(item);
         } else {
           Object.assign(arr[index], item);
         }

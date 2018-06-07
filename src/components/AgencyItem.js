@@ -5,7 +5,7 @@ import Placeholder from 'rn-placeholder';
 
 import AirbnbRating from '../components/rating';
 
-import { responsiveFontSize, _dims } from '../utils/constants';
+import { responsiveFontSize, _dims, responsiveHeight } from '../utils/constants';
 
 export default class AgencyItem extends React.Component {
   render() {
@@ -40,12 +40,14 @@ export default class AgencyItem extends React.Component {
 
 export const PlaceHolder = props => {
   return (
-    <View style={styles.placeHolder}>
+    <View style={[styles.placeHolder, props.style]}>
       <Placeholder.ImageContent
-        size={_dims.screenWidth / 2 - _dims.defaultPadding * 1.5}
-        animate="fade"
-        lineNumber={4}
+        size={responsiveHeight(20)}
+        lineNumber={5}
+        textSize={14}
         lineSpacing={5}
+        width="90%"
+        firstLineWidth="90%"
         lastLineWidth="30%"
       />
     </View>
@@ -58,6 +60,12 @@ const styles = StyleSheet.create({
     height: (_dims.screenWidth / 2 - _dims.defaultPadding * 1.5) * 1.25,
     borderRadius: 20,
     backgroundColor: '#ddd'
+  },
+  placeHolder: {
+    width: '100%',
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   image: {
     height: '100%',
