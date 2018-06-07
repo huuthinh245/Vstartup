@@ -15,38 +15,6 @@ const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = width - 20;
 const FAKE_DATA_LENGTH = fakeDate.lengthr;
 
-// const styles = StyleSheet.create({
-//   main: {
-//     flex: 1
-//   },
-//   map: {
-//     flex: 1
-//   },
-//   tooltip: {
-//     flexDirection: 'column',
-//     alignSelf: 'flex-start'
-//   },
-//   bubble: {
-//     flex: 0,
-//     flexDirection: 'row',
-//     alignSelf: 'flex-start',
-//     backgroundColor: '#FFFFFF',
-//     paddingHorizontal: 4,
-//     paddingVertical: 2,
-//     borderRadius: 3,
-//     borderWidth: 1,
-//     marginBottom: -4
-//   },
-//   price: {
-//     color: '#000000',
-//     fontSize: 13
-//   },
-//   icon: {
-//     fontSize: 24,
-//     alignSelf: 'center'
-//   }
-// });
-
 const styles = StyleSheet.create({
   main: {
     flex: 1
@@ -95,41 +63,64 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#444'
   },
-  markerWrap: {
-    alignItems: 'center',
-    justifyContent: 'center'
+  tooltip: {
+    flexDirection: 'column',
+    alignSelf: 'flex-start'
   },
-  marker: {
-    width: 8,
-    height: 8,
+  bubble: {
+    flex: 0,
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 4,
+    paddingVertical: 2,
     borderRadius: 4,
-    backgroundColor: 'rgba(130,4,150, 0.9)'
-  },
-  markerSelected: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#FF9800'
-  },
-  ring: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: 'rgba(130,4,150, 0.3)',
-    position: 'absolute',
     borderWidth: 1,
-    borderColor: 'rgba(130,4,150, 0.5)'
+    marginBottom: -4,
+    opacity: 0.6
+  },
+  bubbleHighlight: {
+    flex: 0,
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    borderRadius: 4,
+    borderWidth: 2,
+    marginBottom: -6,
+    opacity: 1
+  },
+  price: {
+    color: '#000000',
+    fontSize: 12,
+    opacity: 0.6
+  },
+  priceHighlight: {
+    color: '#000000',
+    fontSize: 14,
+    opacity: 1
+  },
+  icon: {
+    fontSize: 24,
+    alignSelf: 'center',
+    opacity: 0.6
+  },
+  iconHighlight: {
+    fontSize: 32,
+    alignSelf: 'center',
+    opacity: 1
   }
 });
 
-// const renderColor = type => {
-//   if (type === 'blue') {
-//     return '#2196F3';
-//   } else if (type === 'orange') {
-//     return '#FF9800';
-//   }
-//   return '#E91E63';
-// };
+const renderColor = type => {
+  if (type === 'blue') {
+    return '#2196F3';
+  } else if (type === 'orange') {
+    return '#FF9800';
+  }
+  return '#E91E63';
+};
 
 export default class Map extends React.Component {
   constructor(props) {
@@ -188,16 +179,25 @@ export default class Map extends React.Component {
           }}
         >
           {fakeDate.map((marker, index) => {
-            const opacityStyle = {
-              opacity: currentMarkerIndex === index ? 1 : 0.5
-            };
+            const bubbleStyle = [
+              currentMarkerIndex === index ? styles.bubbleHighlight : styles.bubble,
+              { borderColor: renderColor(marker.type) }
+            ];
+            const priceStyle = currentMarkerIndex === index ? styles.priceHighlight : styles.price;
+            const iconStyle = [
+              currentMarkerIndex === index ? styles.iconHighlight : styles.icon,
+              { color: renderColor(marker.type) }
+            ];
 
             return (
-              <Marker.Animated
-                key={marker.title}
-                coordinate={marker.coordinate}
-                style={[styles.marker, opacityStyle]}
-              />
+              <Marker.Animated coordinate={marker.coordinate}>
+                <View style={styles.tooltip}>
+                  <View style={bubbleStyle}>
+                    <Text style={priceStyle}>{marker.price}</Text>
+                  </View>
+                  <Icon name="md-pin" style={iconStyle} />
+                </View>
+              </Marker.Animated>
             );
           })}
         </MapView>
