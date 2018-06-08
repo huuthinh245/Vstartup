@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions, Animated, Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/Ionicons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 import fakeDate from './fakeData';
 
@@ -11,8 +12,9 @@ const LATITUDE = 10.8941563;
 const LONGITUDE = 106.7690843;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const CARD_HEIGHT = height / 4;
+const CARD_HEIGHT = height / 3.5;
 const CARD_WIDTH = width - 20;
+const FAKE_DATA_LENGTH = fakeDate.length;
 
 const styles = StyleSheet.create({
   main: {
@@ -23,47 +25,77 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     position: 'absolute',
-    bottom: 30,
+    bottom: 10,
     left: 0,
-    right: 0,
-    paddingVertical: 10
+    right: 0
   },
   endPadding: {
     paddingRight: width - CARD_WIDTH
   },
   card: {
-    padding: 10,
-    elevation: 2,
     backgroundColor: '#FFF',
     marginHorizontal: 10,
-    shadowColor: '#000',
-    shadowRadius: 5,
-    shadowOpacity: 0.3,
-    shadowOffset: { x: 2, y: -2 },
     height: CARD_HEIGHT,
-    width: CARD_WIDTH,
-    overflow: 'hidden'
+    width: CARD_WIDTH
   },
   cardImage: {
-    flex: 3,
     width: '100%',
     height: '100%',
     alignSelf: 'center'
   },
-  textContent: {
-    flex: 1
-  },
-  cardTitle: {
-    fontSize: 12,
-    marginTop: 5,
+  cardIndex: {
+    position: 'absolute',
+    top: 6,
+    left: 10,
+    fontSize: 14,
+    color: '#FFFFFF',
     fontWeight: 'bold'
   },
-  cardDescription: {
-    fontSize: 12,
-    color: '#444'
+  cardLikeIcon: {
+    position: 'absolute',
+    top: 6,
+    right: 40,
+    fontSize: 20,
+    color: '#FFFFFF'
+  },
+  cardSharingIcon: {
+    position: 'absolute',
+    top: 6,
+    right: 10,
+    fontSize: 20,
+    color: '#FFFFFF'
+  },
+  cardPlaceIcon: {
+    position: 'absolute',
+    bottom: 50,
+    left: 10,
+    fontSize: 20
+  },
+  cardTitle: {
+    position: 'absolute',
+    bottom: 50,
+    left: 30,
+    fontSize: 14,
+    color: '#FFFFFF',
+    fontWeight: 'bold'
+  },
+  cardPrice: {
+    position: 'absolute',
+    bottom: 30,
+    left: 30,
+    fontSize: 14,
+    color: '#FFFFFF',
+    fontWeight: 'bold'
+  },
+  cardAddress: {
+    position: 'absolute',
+    bottom: 10,
+    left: 30,
+    fontSize: 14,
+    color: '#FFFFFF',
+    fontWeight: '400'
   },
   tooltip: {
-    flexDirection: 'column',
     alignSelf: 'flex-start'
   },
   bubble: {
@@ -218,17 +250,21 @@ export default class Map extends React.Component {
           style={styles.scrollView}
           contentContainerStyle={styles.endPadding}
         >
-          {fakeDate.map(marker => (
+          {fakeDate.map((marker, index) => (
             <View style={styles.card} key={marker.title}>
               <Image source={{ uri: marker.image }} style={styles.cardImage} resizeMode="cover" />
-              <View style={styles.textContent}>
-                <Text numberOfLines={1} style={styles.cardTitle}>
-                  {marker.title}
-                </Text>
-                <Text numberOfLines={1} style={styles.cardDescription}>
-                  {marker.description}
-                </Text>
-              </View>
+              <SimpleLineIcons name="heart" style={styles.cardLikeIcon} />
+              <SimpleLineIcons name="share" style={styles.cardSharingIcon} />
+              <Icon
+                name="md-pin"
+                style={[styles.cardPlaceIcon, { color: renderColor(marker.type) }]}
+              />
+              <Text style={styles.cardIndex}>
+                {`${index + 1}/${FAKE_DATA_LENGTH} - ${FAKE_DATA_LENGTH} hình`}
+              </Text>
+              <Text style={styles.cardTitle}>{marker.title}</Text>
+              <Text style={styles.cardPrice}>{marker.price}</Text>
+              <Text style={styles.cardAddress}>{marker.address}</Text>
             </View>
           ))}
         </Animated.ScrollView>
