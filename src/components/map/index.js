@@ -13,7 +13,6 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = width - 20;
-// const FAKE_DATA_LENGTH = fakeDate.length;
 
 const styles = StyleSheet.create({
   main: {
@@ -54,7 +53,7 @@ const styles = StyleSheet.create({
   textContent: {
     flex: 1
   },
-  cardtitle: {
+  cardTitle: {
     fontSize: 12,
     marginTop: 5,
     fontWeight: 'bold'
@@ -133,6 +132,7 @@ export default class Map extends React.Component {
 
   componentDidMount() {
     const { animation, currentMarkerIndex } = this.state;
+
     animation.addListener(({ value }) => {
       const index = Math.floor(value / CARD_WIDTH + 0.3);
       this.setState({ currentMarkerIndex: index });
@@ -140,6 +140,7 @@ export default class Map extends React.Component {
       setTimeout(() => {
         if (currentMarkerIndex !== index) {
           const { coordinate } = fakeDate[index];
+
           this.map.animateToRegion(
             {
               ...coordinate,
@@ -155,6 +156,7 @@ export default class Map extends React.Component {
 
   render() {
     const { animation, currentMarkerIndex } = this.state;
+
     return (
       <View style={styles.main}>
         <MapView
@@ -197,9 +199,6 @@ export default class Map extends React.Component {
           })}
         </MapView>
         <Animated.ScrollView
-          ref={ref => {
-            this.scrollView = ref;
-          }}
           horizontal
           scrollEventThrottle={1}
           showsHorizontalScrollIndicator={false}
@@ -223,7 +222,7 @@ export default class Map extends React.Component {
             <View style={styles.card} key={marker.title}>
               <Image source={{ uri: marker.image }} style={styles.cardImage} resizeMode="cover" />
               <View style={styles.textContent}>
-                <Text numberOfLines={1} style={styles.cardtitle}>
+                <Text numberOfLines={1} style={styles.cardTitle}>
                   {marker.title}
                 </Text>
                 <Text numberOfLines={1} style={styles.cardDescription}>
