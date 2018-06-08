@@ -11,6 +11,7 @@ import FavoriteTab from '../routes/FavoriteTab';
 import ProfileTab from '../routes/ProfileTab';
 import MenuTab from '../routes/MenuTab';
 
+import PickObjOnMap from '../routes/PickObjOnMap';
 import ProjectDetail from '../routes/ProjectDetail';
 import RealtyDetail from '../routes/RealtyDetail';
 import AgencyDetail from '../routes/AgencyDetail';
@@ -117,7 +118,8 @@ const stackConfig = {
   [routes.changePassword]: { screen: ChangePassword },
   [routes.contacts]: { screen: Contacts },
   [routes.agencyProject]: { screen: AgencyProject },
-  [routes.createRealty]: { screen: PostRealty }
+  [routes.createRealty]: { screen: PostRealty },
+  [routes.pickObjOnMap]: { screen: PickObjOnMap }
 };
 
 const navConfig = {

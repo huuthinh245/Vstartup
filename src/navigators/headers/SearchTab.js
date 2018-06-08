@@ -6,13 +6,6 @@ import { styles } from './styles';
 import headerStrings from '../../localization/header';
 
 export default class Header extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchText: ''
-    };
-  }
-
   _renderContent = () => {
     return (
       <View style={{ flexDirection: 'row' }}>
@@ -30,8 +23,8 @@ export default class Header extends React.Component {
             name="ios-search"
             style={{ alignSelf: 'center', marginRight: 5 }}
           />
-          <Text style={[styles.searchBarInput, !this.state.searchText && { color: 'silver' }]}>
-            {this.state.searchText || headerStrings.searchCityPlaceholder}
+          <Text style={styles.searchBarInput}>
+            {this.props.title || headerStrings.searchCityPlaceholder}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**postFavorite**](RealtyApi.md#postFavorite) | **POST** /realty/favorite | 
 [**postRealty**](RealtyApi.md#postRealty) | **POST** /realty | 
 [**saveKeyword**](RealtyApi.md#saveKeyword) | **POST** /realty/keyword | 
+[**uploadImages**](RealtyApi.md#uploadImages) | **POST** /realty/upload | 
 [**viewMapRealty**](RealtyApi.md#viewMapRealty) | **GET** /realty/mapView | 
 [**viewRealty**](RealtyApi.md#viewRealty) | **GET** /realty/{id} | 
 
@@ -484,6 +485,58 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+<a name="uploadImages"></a>
+# **uploadImages**
+> GenericSuscess uploadImages(opts)
+
+
+
+### Example
+```javascript
+var RemsApi = require('rems_api');
+var defaultClient = RemsApi.ApiClient.instance;
+
+// Configure API key authorization: Bearer
+var Bearer = defaultClient.authentications['Bearer'];
+Bearer.apiKey = 'YOUR API KEY';
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.apiKeyPrefix = 'Token';
+
+var apiInstance = new RemsApi.RealtyApi();
+
+var opts = { 
+  'images': "/path/to/file.txt" // File | 
+};
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.uploadImages(opts, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **images** | **File**|  | [optional] 
+
+### Return type
+
+[**GenericSuscess**](GenericSuscess.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
  - **Accept**: application/json
 
 <a name="viewMapRealty"></a>

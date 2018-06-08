@@ -23,6 +23,7 @@ import * as routes from './routes';
 import { _colors, _dims, responsiveFontSize, pluralNoun } from '../utils/constants';
 import SliderEntry from '../components/SliderEntry';
 import strings from '../localization/projectDetail';
+import alertStrings from '../localization/alert';
 import Header from '../navigators/headers/CommonHeader';
 import { _alert } from '../utils/alert';
 import { styles } from './ProjectDetail';
@@ -198,15 +199,11 @@ class RealtyDetail extends Component {
         <View style={styles.userContact}>
           <Text style={styles.userNameContact}>{realty.contact_name}</Text>
           <TouchableOpacity
-            onPress={async () => {
-              try {
-                await call({
-                  number: realty.contact_phone,
-                  prompt: true
-                });
-              } catch (e) {
-                _alert(e.message);
-              }
+            onPress={() => {
+              call({
+                number: realty.contact_phone,
+                prompt: true
+              }).catch(err => _alert(alertStrings.error, err.message));
             }}
             style={styles.callWrapper}
           >

@@ -253,7 +253,7 @@ Name | Type | Description  | Notes
 
 <a name="uploadAvatar"></a>
 # **uploadAvatar**
-> GenericSuscess uploadAvatar(opts)
+> User uploadAvatar(opts)
 
 
 
@@ -271,7 +271,7 @@ Bearer.apiKey = 'YOUR API KEY';
 var apiInstance = new RemsApi.UserApi();
 
 var opts = { 
-  'avatar': "/path/to/file.txt" // File | upload file avatar
+  'file': "/path/to/file.txt" // File | upload file avatar
 };
 
 var callback = function(error, data, response) {
@@ -288,11 +288,11 @@ apiInstance.uploadAvatar(opts, callback);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **avatar** | **File**| upload file avatar | [optional] 
+ **file** | **File**| upload file avatar | [optional] 
 
 ### Return type
 
-[**GenericSuscess**](GenericSuscess.md)
+[**User**](User.md)
 
 ### Authorization
 

@@ -141,6 +141,7 @@ Class | Method | HTTP request | Description
 *RemsApi.RealtyApi* | [**postFavorite**](docs/RealtyApi.md#postFavorite) | **POST** /realty/favorite | 
 *RemsApi.RealtyApi* | [**postRealty**](docs/RealtyApi.md#postRealty) | **POST** /realty | 
 *RemsApi.RealtyApi* | [**saveKeyword**](docs/RealtyApi.md#saveKeyword) | **POST** /realty/keyword | 
+*RemsApi.RealtyApi* | [**uploadImages**](docs/RealtyApi.md#uploadImages) | **POST** /realty/upload | 
 *RemsApi.RealtyApi* | [**viewMapRealty**](docs/RealtyApi.md#viewMapRealty) | **GET** /realty/mapView | 
 *RemsApi.RealtyApi* | [**viewRealty**](docs/RealtyApi.md#viewRealty) | **GET** /realty/{id} | 
 *RemsApi.SettingApi* | [**changeLanguage**](docs/SettingApi.md#changeLanguage) | **POST** /setting/language/{lang} | 

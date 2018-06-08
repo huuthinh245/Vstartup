@@ -21,3 +21,4 @@ export const createRealty = 'SC_CREATE_REALTY';
 export const feedBack = 'SC_FEEDBACK';
 export const contacts = 'SC_CONTACTS';
 export const agencyProject = 'SC_AGENCY_PROJECT';
+export const pickObjOnMap = 'SC_PICK_OBJ_ON_MAP';

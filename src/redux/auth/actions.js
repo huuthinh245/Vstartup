@@ -23,6 +23,10 @@ export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
 export const UPDATE_PASSWORD_SUCCESS = 'UPDATE_PASSWORD_SUCCESS';
 export const UPDATE_PASSWORD_FAILURE = 'UPDATE_PASSWORD_FAILURE';
 
+export const UPDATE_AVATAR = 'UPDATE_AVATAR';
+export const UPDATE_AVATAR_SUCCESS = 'UPDATE_AVATAR_SUCCESS';
+export const UPDATE_AVATAR_FAILURE = 'UPDATE_AVATAR_FAILURE';
+
 export const AUTH_FAILURE = 'AUTH_FAILURE';
 
 export const loginAction = payload =>
@@ -70,5 +74,11 @@ export const updateInfoAction = payload =>
 export const updatePasswordAction = payload =>
   store.dispatch({
     type: UPDATE_PASSWORD,
+    payload
+  });
+
+export const updateAvatarAction = payload =>
+  store.dispatch({
+    type: UPDATE_AVATAR,
     payload
   });

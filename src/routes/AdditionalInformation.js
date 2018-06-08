@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
+import RNGooglePlaces from 'react-native-google-places';
 
 import { responsiveFontSize, _dims, responsiveHeight, _colors } from '../utils/constants';
 import Header from '../navigators/headers/CommonHeader';
@@ -20,7 +21,7 @@ class AdditionalInformation extends React.Component {
     this.state = {
       name: this.props.auth.user.name,
       phone: this.props.auth.user.phone,
-      address: this.props.auth.user.address || 'Ho Chi Minh city'
+      address: { address: this.props.auth.user.address }
     };
   }
 
@@ -59,6 +60,7 @@ class AdditionalInformation extends React.Component {
   };
 
   render() {
+    const _address = this.state.address.address || this.state.address.name;
     return (
       <View style={styles.wrapper}>
         <Header
@@ -106,12 +108,18 @@ class AdditionalInformation extends React.Component {
               clearButtonMode="always"
             />
           </View>
-          <View style={styles.hoishiWrapper}>
+          <TouchableOpacity
+            onPress={async () => {
+              const val = await RNGooglePlaces.openPlacePickerModal();
+              this.setState({ address: val });
+            }}
+            style={styles.hoishiWrapper}
+          >
             <Ionicons style={styles.hoishiIcon} name="md-pin" />
-            <Text style={[styles.hoishiInput, this.state.address ? {} : { color: 'silver' }]}>
-              {this.state.address || strings.address}
+            <Text style={[styles.hoishiInput, _address ? {} : { color: 'silver' }]}>
+              {_address || strings.address}
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -149,6 +157,6 @@ const styles = StyleSheet.create({
   hoishiInput: {
     flex: 1,
     paddingVertical: 10,
-    paddingLeft: _dims.defaultPadding,
+    paddingLeft: _dims.defaultPadding
   }
 });

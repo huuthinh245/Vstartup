@@ -29,12 +29,6 @@ class SearchTab extends React.Component {
     getMapRealtyAction();
   }
 
-  componentWillReceiveProps(nextProps, nextState) {
-    if (json(nextState.options) !== json(this.state.options)) {
-      // getMapRealtyAction(this.state.options);
-    }
-  }
-
   _flip = () => {
     this.setState({ isFlipped: !this.state.isFlipped });
   };
@@ -48,12 +42,21 @@ class SearchTab extends React.Component {
           title={this.state.searchAddress}
           onTitlePress={async () => {
             const val = await RNGooglePlaces.openPlacePickerModal();
-            console.log(val);
-            const enhance = Object.assign(this.state.options, {
-              lat: val.latitude,
-              lng: val.longitude
-            });
-            this.setState({ options: enhance, searchAddress: val.address });
+            if (
+              val.latitude !== this.state.options.lat &&
+              val.longitude !== this.state.options.lng
+            ) {
+              this.setState({
+                lat: val.latitude,
+                lng: val.longitude,
+                searchAddress: val.address || val.name
+              });
+              const enhance = Object.assign(this.state.options, {
+                lat: val.latitude,
+                lng: val.longitude
+              });
+              getMapRealtyAction(enhance);
+            }
           }}
           onFilterPress={() =>
             this.props.navigation.navigate(routes.filterScreen, {

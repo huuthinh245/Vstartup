@@ -1,4 +1,4 @@
-import { StyleSheet, PixelRatio } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { _colors, _dims, _ios, responsiveFontSize } from '../../utils/constants';
 
 export const styles = StyleSheet.create({
@@ -22,24 +22,25 @@ export const styles = StyleSheet.create({
   },
   searchBarInputContainer: {
     backgroundColor: '#fff',
-    height: 28,
-    paddingTop: 4.5,
-    paddingBottom: 4.5,
+    height: 32,
     paddingLeft: 10,
     paddingRight: 10,
-    marginLeft: 8,
-    marginRight: 8,
+    marginLeft: 4,
+    marginRight: 4,
     flex: 1,
     flexDirection: 'row',
     alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderColor: _colors.mainColor,
-    borderWidth: 1 / PixelRatio.get(),
+    borderWidth: 1,
     borderRadius: 5
   },
   searchBarInput: {
     backgroundColor: '#FFFFFF',
     fontSize: 15,
-    flex: 1
+    flex: 1,
+    color: 'silver'
   },
   suggestInput: {
     margin: 0,

@@ -19,7 +19,10 @@ import {
   UPDATE_INFO_FAILURE,
   UPDATE_PASSWORD,
   UPDATE_PASSWORD_SUCCESS,
-  UPDATE_PASSWORD_FAILURE
+  UPDATE_PASSWORD_FAILURE,
+  UPDATE_AVATAR,
+  UPDATE_AVATAR_SUCCESS,
+  UPDATE_AVATAR_FAILURE
 } from './actions';
 
 const initial = {
@@ -87,6 +90,15 @@ export const authReducer = handleActions(
       return Object.assign({}, state, { updating: false, error: null });
     },
     [UPDATE_PASSWORD_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, payload, { updating: false, error: payload });
+    },
+    [UPDATE_AVATAR]: state => {
+      return Object.assign({}, state, { updating: true });
+    },
+    [UPDATE_AVATAR_SUCCESS]: (state, { payload }) => {
+      return Object.assign({}, state, { updating: false, user: payload, error: null });
+    },
+    [UPDATE_AVATAR_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, payload, { updating: false, error: payload });
     }
   },

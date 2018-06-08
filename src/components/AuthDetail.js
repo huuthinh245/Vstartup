@@ -6,7 +6,8 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
-  PixelRatio
+  PixelRatio,
+  Linking
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -14,6 +15,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import RNPopover from 'react-native-popover-menu';
 import ActionSheet from 'react-native-actionsheet';
+import RNFetchBlob from 'react-native-fetch-blob';
+import call from 'react-native-phone-call';
 
 import Overlay from '../components/common/Overlay';
 import Header from '../navigators/headers/CommonHeader';
@@ -39,7 +42,7 @@ import {
 } from '../redux/agencyRealty/actions';
 import { imagePicker, cameraPicker } from '../utils/imagePicker';
 import { userApi } from '../utils/api';
-import { logoutAction } from '../redux/auth/actions';
+import { logoutAction, updateAvatarAction } from '../redux/auth/actions';
 import { _alert } from '../utils/alert';
 
 const size = _ios
@@ -50,6 +53,9 @@ class AuthDetail extends React.Component {
   constructor(props) {
     super(props);
     this.onEndReachedCalledDuringMomentum = true;
+    this.state = {
+      uploading: false
+    };
   }
 
   componentDidMount() {
@@ -281,6 +287,114 @@ class AuthDetail extends React.Component {
     );
   };
 
+  _uploadAvatar = async image => {
+    // const { Blob } = RNFetchBlob.polyfill;
+    // const blob = await Blob.build(image.data, { type: 'image/png;base64' });
+
+    // const body = new FormData();
+    // body.append('file', blob);
+    // fetch('https://rems.dfm-engineering.com/api/v1/user/avatar', {
+    //   method: 'POST',
+    //   Authorization: `Bearer ${this.props.auth.token}`,
+    //   'Content-Type': 'multipart/form-data',
+    //   body
+    // }).then(value => {
+    //   console.log(value);
+    //   return value.json();
+    // })
+    //   .then(val => console.log(val))
+    //   .catch(error => console.log(error.code, error.message));
+
+    // return;
+
+    // RNFetchBlob.fetch(
+    //   'POST',
+    //   'https://rems.dfm-engineering.com/api/v1/user/avatar',
+    //   {
+    //     Authorization: `Bearer ${this.props.auth.token}`,
+    //     'Content-Type': 'multipart/form-data'
+    //   },
+    //   [
+    //     {
+    //       name: 'file',
+    //       filename: 'avatar-png.png',
+    //       type: 'image/png',
+    //       data: image.data
+    //     }
+    //   ]
+    // )
+    //   .then(resp => {
+    //     console.log(resp);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
+
+    // const body = new FormData();
+    // body.append('file', {
+    //   type: 'image/jpeg',
+    //   name: 'photo.jpg',
+    //   uri: image.path
+    // });
+    // this.setState({ uploading: true });
+    // try {
+    //   const val = await fetch('https://rems.dfm-engineering.com/api/v1/user/avatar', {
+    //     method: 'POST',
+    //     Authorization: `Bearer ${this.props.auth.token}`,
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'Content-Type': 'multipart/form-data'
+    //     },
+    //     body: JSON.stringify(body)
+    //   });
+    //   this.setState({ uploading: false });
+    //   console.log(val);
+    // } catch (error) {
+    //   this.setState({ uploading: false });
+    //   console.log(error.code, error.message);
+    // }
+
+    // console.log(image);
+
+    // const body = new FormData();
+    // body.append('file', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAc1gAAHNYBTCInoQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIHSURBVGiB7dbHahVRHIDxgaxUsCSW2I1uYskmij6DCK4FX0AsERsKbuyP4MPYxYUVa4xKbNGFZaFuFcnPRe6FazznOslMchyZbznl//++xWEmy2pqampqavKDfmxN7VEIbME3/MD21D6TApsbEU2+Y1tHarGJgL4syy5kWdbZcrkjy7J5aYwmATbhqz+5iBmp/XKBjZGIS1WK6MeXQMRlzEztlwv04XMg4kqVIjb8DxHr8SkQcbVKEesiEdcwK7VfLrAWHwMR16sU0YsPgYibmJ3aLxdYg/eBiFtVi3gXiZiT2i8XWB2JuF2liB6MBCLuFIrAYewo0bXdrsV4EYh4ggVFBh9vDBrFrhKdQ7tW4W0g4i7mFhl8bNzAKYvBUgwHIu4VimgMPx8Y/BM7S/Jv7lmIwcCuIXSXteRcYMEodpc0f4nwmXisyJmILDs7FTHGDvbzwOxiB/svS8+UGYPuNhELy/Yfv/x0JGbPBOd041lg1uCUR7RInIrE7M35/nw8Csx4Om0RLTInJxODLjyMRCyaLv/xUiciMfsiz3fhQeCdoWQRLXK5YtDZJqKc70RRcDQSM9C434n7gWeGsSy1/2+If2f240bg3gh6UnsHwZGAcIiXWJ7aty3Gfvfb8eqfj2iCQ5GI11iR2m9C4GDlI5rgQCPiDVam9ikEBtCb2qOmpqamWvwC3iRBKYTf2LIAAAAASUVORK5CYII=');
+    // const xhr = new XMLHttpRequest();
+    // xhr.open('POST', 'https://rems.dfm-engineering.com/api/v1/user/avatar', true);
+    // xhr.setRequestHeader('Content-type', 'multipart/form-data');
+    // xhr.setRequestHeader('Authorization', `Bearer ${this.this.props.auth.token}`);
+
+    // xhr.onreadystatechange = (result, error) => {
+    //   if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+    //     console.log(result, error, xhr);
+    //   }
+    // };
+    // xhr.send({ form: body });
+
+    // const body = new FormData();
+    // body.append('file', `data:image/png;base64,${image.data}`);
+    // const xhr = new XMLHttpRequest();
+    // xhr.open('POST', 'https://rems.dfm-engineering.com/api/v1/user/avatar', true);
+    // xhr.setRequestHeader('Content-type', 'multipart/form-data');
+    // xhr.setRequestHeader('Authorization', `Bearer ${this.props.auth.token}`);
+
+    // xhr.onreadystatechange = (error, result) => {
+    //   if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+    //     console.log(result);
+    //   }else {
+    //     console.log(error);
+    //   }
+    // };
+    // xhr.send({ form: body });
+
+    const body = new FormData();
+    body.append('file', {
+      type: 'image/jpeg',
+      name: 'photo.jpg',
+      uri: image.path
+    });
+    this.props.dispatch(updateAvatarAction(body, this.props.auth.token));
+  };
+
   _renderProfile = () => {
     const { user } = this.props.auth;
     const { data } = this.props;
@@ -316,22 +430,48 @@ class AuthDetail extends React.Component {
         )}
 
         <View style={styles.infoWrapper}>
-          <View style={styles.line}>
+          <TouchableOpacity
+            onPress={() => {
+              if (user.id !== data.id && data.phone) {
+                call({
+                  number: data.phone,
+                  prompt: true
+                }).catch(err => _alert(alertStrings.error, err.message));
+              }
+            }}
+            style={styles.line}
+          >
             <Ionicons name="ios-call" style={styles.lineIcon} />
             <Text style={[styles.lineText, !data.phone && { color: 'silver' }]}>
               {data.phone || strings.unset}
             </Text>
-          </View>
-          <View style={styles.line}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              if (user.id !== data.id && data.email) {
+                Linking.openURL(`mailto:${data.email}`).catch(err =>
+                  _alert(alertStrings.error, err.message)
+                );
+              }
+            }}
+            style={styles.line}
+          >
             <Ionicons name="ios-mail" style={styles.lineIcon} />
             <Text style={styles.lineText}>{data.email}</Text>
-          </View>
-          <View style={[styles.line, styles.noBorderBottom]}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate(routes.pickObjOnMap, {
+                coordinate: [data.lat, data.lng]
+              })
+            }
+            style={[styles.line, styles.noBorderBottom]}
+          >
             <Ionicons name="md-pin" style={styles.lineIcon} />
             <Text style={[styles.lineText, !data.address && { color: 'silver' }]}>
               {data.address || strings.unset}
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <Text style={styles.showProj}>{strings.showProj}</Text>
@@ -354,7 +494,8 @@ class AuthDetail extends React.Component {
     if (agencyRealty.fetching) {
       return null;
     }
-    const str = user.id === data.id ? errorStrings.emptyListMyRealty : errorStrings.emptyListAgencyRealty;
+    const str =
+      user.id === data.id ? errorStrings.emptyListMyRealty : errorStrings.emptyListAgencyRealty;
     return <Empty title={str} />;
   };
 
@@ -363,7 +504,7 @@ class AuthDetail extends React.Component {
     const { user } = this.props.auth;
     return (
       <View style={styles.wrapper}>
-        <Overlay visible={this.props.auth.fetching} />
+        <Overlay visible={this.state.uploading} />
         {this._renderHeader()}
         {data.id === user.id && (
           <TouchableOpacity
@@ -405,18 +546,11 @@ class AuthDetail extends React.Component {
             if (index === 1) {
               imagePicker({
                 multiple: false,
-                callback: image => {
-                  userApi
-                    .uploadAvatar({ avatar: { uri: image.sourceURL } })
-                    .then(value => console.log(value))
-                    .catch(error => {
-                      console.log(error);
-                    });
-                }
+                callback: this._uploadAvatar
               });
             } else if (index === 0) {
               cameraPicker({
-                callback: image => console.log(image)
+                callback: this._uploadAvatar
               });
             }
           }}

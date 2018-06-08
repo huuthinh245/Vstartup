@@ -476,6 +476,49 @@
     }
 
     /**
+     * Callback function to receive the result of the uploadImages operation.
+     * @callback module:api/RealtyApi~uploadImagesCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/GenericSuscess} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {Object} opts Optional parameters
+     * @param {File} opts.images 
+     * @param {module:api/RealtyApi~uploadImagesCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/GenericSuscess}
+     */
+    this.uploadImages = function(opts, callback) {
+      opts = opts || {};
+      var postBody = null;
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+        'images': opts['images']
+      };
+
+      var authNames = ['Bearer'];
+      var contentTypes = ['multipart/form-data'];
+      var accepts = ['application/json'];
+      var returnType = GenericSuscess;
+
+      return this.apiClient.callApi(
+        '/realty/upload', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the viewMapRealty operation.
      * @callback module:api/RealtyApi~viewMapRealtyCallback
      * @param {String} error Error message, if any.

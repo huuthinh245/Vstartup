@@ -23,7 +23,10 @@ import {
   UPDATE_INFO_FAILURE,
   UPDATE_PASSWORD,
   UPDATE_PASSWORD_SUCCESS,
-  UPDATE_PASSWORD_FAILURE
+  UPDATE_PASSWORD_FAILURE,
+  UPDATE_AVATAR,
+  UPDATE_AVATAR_SUCCESS,
+  UPDATE_AVATAR_FAILURE
 } from './actions';
 import { authApi, userApi, handleError } from '../../utils/api';
 import { ApiClient } from '../../swaggerApi/src';
@@ -177,6 +180,17 @@ const updatePasswordEpic = actions$ =>
     }
   });
 
+const updateAvatarEpic = actions$ =>
+  actions$.ofType(UPDATE_AVATAR).switchMap(async action => {
+    try {
+      const resp = await userApi.uploadAvatar(action.payload);
+      return { type: UPDATE_AVATAR_SUCCESS, payload: resp.body };
+    } catch (error) {
+      handleError(error, true);
+      return { type: UPDATE_AVATAR_FAILURE, payload: error };
+    }
+  });
+
 export const authEpic = combineEpics(
   loginEpic,
   forgotEpic,
@@ -185,5 +199,6 @@ export const authEpic = combineEpics(
   getMeEpic,
   logoutEpic,
   updateInfoEpic,
-  updatePasswordEpic
+  updatePasswordEpic,
+  updateAvatarEpic
 );

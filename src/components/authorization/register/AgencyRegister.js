@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, TextInput, Text, findNodeHandle } from 'react-native';
+import { View, TextInput, Text, findNodeHandle, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
+import RNGooglePlaces from 'react-native-google-places';
 
 import emitter from '../../../emitter';
 import strings from '../../../localization/authorization';
@@ -22,7 +23,7 @@ class AgencyRegister extends Component {
       password: '',
       rePassword: '',
       phone: '',
-      address: 'a'
+      address: {}
     };
   }
 
@@ -35,7 +36,8 @@ class AgencyRegister extends Component {
             email: this.state.email,
             password: this.state.password,
             phone: this.state.phone,
-            address: this.state.address
+            lat: this.state.address.latitude,
+            lng: this.state.address.longitude
           }
         };
         const callback = () => registerAction(opts);
@@ -84,19 +86,19 @@ class AgencyRegister extends Component {
         error: alertStrings.phoneEmpty
       });
       this.phone.focus();
-    } else if (!this.state.address) {
+    } else if (!this.state.address.lat) {
       emitter.emit('alert', {
         type: 'warn',
         title: alertStrings.invalidField,
         error: alertStrings.addressEmpty
       });
-      this.address.focus();
     } else {
       callback();
     }
   };
 
   render() {
+    const _address = this.state.address.address || this.state.address.name;
     return (
       <KeyboardAwareScrollView
         resetScrollToCoords={{ x: 0, y: 0 }}
@@ -203,14 +205,18 @@ class AgencyRegister extends Component {
           />
         </View>
 
-        <View style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}>
+        <TouchableOpacity
+          onPress={async () => {
+            const val = await RNGooglePlaces.openPlacePickerModal();
+            this.setState({ address: val });
+          }}
+          style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}
+        >
           <Ionicons name="md-pin" style={styles.hoishiIcon} />
-          <Text
-            style={[styles.hoishiInput, !this.state.address && { color: 'silver', padding: 10 }]}
-          >
-            {this.state.address || strings.address}
+          <Text style={[styles.hoishiInput, !_address && { color: 'silver', padding: 10 }]}>
+            {_address || strings.address}
           </Text>
-        </View>
+        </TouchableOpacity>
       </KeyboardAwareScrollView>
     );
   }
