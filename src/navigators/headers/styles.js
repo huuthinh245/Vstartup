@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     fontSize: 15,
     flex: 1,
-    color: 'silver'
+    color: 'gray'
   },
   suggestInput: {
     margin: 0,

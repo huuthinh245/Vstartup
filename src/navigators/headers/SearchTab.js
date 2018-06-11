@@ -19,7 +19,7 @@ export default class Header extends React.Component {
         >
           <Ionicons
             size={18}
-            color="silver"
+            color="gray"
             name="ios-search"
             style={{ alignSelf: 'center', marginRight: 5 }}
           />

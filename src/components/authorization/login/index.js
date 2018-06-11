@@ -41,8 +41,8 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'admin@admin.com',
-      password: '123',
+      email: 'mrdung.dev@gmail.com',
+      password: '123admin',
       googleUser: null
     };
   }
@@ -159,7 +159,7 @@ class Login extends Component {
 
           <TouchableOpacity onPress={this._signIn} style={styles.inputWrapper}>
             <Text style={[styles.input, styles.requestButtonText, { color: _colors.mainColor }]}>
-              {strings.sendRequest}
+              {strings.login}
             </Text>
           </TouchableOpacity>
 

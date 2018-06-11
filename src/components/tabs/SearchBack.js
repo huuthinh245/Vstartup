@@ -78,22 +78,24 @@ class SearchBack extends React.Component {
   render() {
     const { mapRealty } = this.props;
     return (
-      <FlatList
-        data={mapRealty.data}
-        renderItem={this._renderItem}
-        keyExtractor={item => `${item.id}`}
-        ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
-        ListFooterComponent={this._renderFooter}
-        ListEmptyComponent={<Empty title={errorStrings.emptyListHistory} />}
-        ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
-        onMomentumScrollBegin={() => {
-          this.onEndReachedCalledDuringMomentum = false;
-        }}
-        refreshing={mapRealty.refreshing}
-        onEndReachedThreshold={0}
-        onRefresh={this._onRefresh}
-        onEndReached={this._onLoadMore}
-      />
+      <View style={{ backgroundColor: '#fff', flex: 1 }}>
+        <FlatList
+          data={mapRealty.data}
+          renderItem={this._renderItem}
+          keyExtractor={item => `${item.id}`}
+          ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
+          ListFooterComponent={this._renderFooter}
+          ListEmptyComponent={<Empty title={errorStrings.emptyListSearch} />}
+          ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
+          onMomentumScrollBegin={() => {
+            this.onEndReachedCalledDuringMomentum = false;
+          }}
+          refreshing={mapRealty.refreshing}
+          onEndReachedThreshold={0}
+          onRefresh={this._onRefresh}
+          onEndReached={this._onLoadMore}
+        />
+      </View>
     );
   }
 }

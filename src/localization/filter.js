@@ -3,6 +3,7 @@ import setLanguage from './setLanguage';
 
 const strings = new LocalizedStrings({
   eng: {
+    filter: 'Filter',
     price: 'Price',
     area: 'Area',
     bedroom: 'Bedrooms',
@@ -12,9 +13,12 @@ const strings = new LocalizedStrings({
     show: 'Show results',
     default: 'Default',
     billion: 'billion',
-    square: 'm²'
+    square: 'm²',
+    moreThanFive: 'More than 5',
+    pleaseSelect: '--- Select ---'
   },
   vni: {
+    filter: 'Lọc',
     price: 'Giá',
     area: 'Diện tích',
     bedroom: 'Phòng ngủ',
@@ -24,7 +28,9 @@ const strings = new LocalizedStrings({
     show: 'Xem kết quả',
     default: 'Mặc định',
     billion: 'tỷ',
-    square: 'm²'
+    square: 'm²',
+    moreThanFive: 'Nhiều hơn 5',
+    pleaseSelect: '--- Lựa chọn ---'
   }
 });
 

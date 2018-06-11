@@ -127,10 +127,10 @@ class Feedback extends React.Component {
                   }}
                 />
               </TouchableOpacity>
+              <TouchableOpacity style={styles.submit}>
+                <Text style={styles.submitText}>{strings.submit}</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.submit}>
-              <Text style={styles.submitText}>{strings.submit}</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -169,10 +169,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   submit: {
-    backgroundColor: _colors.mainColor,
+    backgroundColor: '#3bcce1',
     padding: 20,
     alignItems: 'center',
-    justifyContent: 'center'
+    borderRadius: 8,
+    justifyContent: 'center',
+    marginBottom: _dims.defaultPadding
   },
   submitText: {
     fontSize: responsiveFontSize(_dims.defaultFontSubTitle + 2),

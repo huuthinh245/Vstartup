@@ -3,6 +3,7 @@ import setLanguage from './setLanguage';
 
 const strings = new LocalizedStrings({
   eng: {
+    login: 'Login',
     loadingData: 'Loading data, please wait ...',
     email: 'Email',
     currentPassword: 'Current password',
@@ -18,6 +19,7 @@ const strings = new LocalizedStrings({
     inputPassword: 'Enter your password'
   },
   vni: {
+    login: 'Đăng nhập',
     loadingData: 'Đang tải dữ liệu, vui lòng đợi ...',
     email: 'Email',
     currentPassword: 'Mật khẩu hiện tại',

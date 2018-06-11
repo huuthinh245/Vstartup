@@ -5,6 +5,7 @@ import { cityReducer, optionsReducer } from './preload/reducer';
 import { authReducer } from './auth/reducer';
 import { AppNavigator } from '../navigators/Root';
 import { mapRealtyReducer } from './mapRealty/reducer';
+import { searchRealtyReducer } from './searchRealty/reducer';
 import { realtyDetailReducer } from './realtyDetail/reducer';
 import { listHistoryReducer } from './listHistory/reducer';
 import { listFavoriteReducer } from './listFavorite/reducer';
@@ -23,6 +24,7 @@ export const reducers = combineReducers({
   options: optionsReducer,
   auth: authReducer,
   mapRealty: mapRealtyReducer,
+  searchRealty: searchRealtyReducer,
   realtyDetail: realtyDetailReducer,
   listHistory: listHistoryReducer,
   listFavorite: listFavoriteReducer,

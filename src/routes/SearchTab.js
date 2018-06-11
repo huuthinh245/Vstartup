@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import FlipView from 'react-native-flip-view-next';
 import RNGooglePlaces from 'react-native-google-places';
 
-import { _colors } from '../utils/constants';
+import Overlay from '../components/common/Overlay';
 import Header from '../navigators/headers/SearchTab';
 import SearchFront from '../components/tabs/SearchFront';
 import SearchBack from '../components/tabs/SearchBack';
 import { PlaceHolder } from '../components/flatlistHelpers';
 import { getMapRealtyAction } from '../redux/mapRealty/actions';
+import { getSearchRealtyAction } from '../redux/searchRealty/actions';
 import * as routes from './routes';
 import Map from '../components/map';
 
@@ -27,6 +28,7 @@ class SearchTab extends React.Component {
 
   componentDidMount() {
     getMapRealtyAction();
+    getSearchRealtyAction();
   }
 
   _flip = () => {
@@ -35,7 +37,7 @@ class SearchTab extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: _colors.viewBG }}>
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header
           flipIcon={!this.state.isFlipped ? 'md-list' : 'md-pin'}
           onFlipPress={this._flip}
@@ -55,12 +57,14 @@ class SearchTab extends React.Component {
                 lat: val.latitude,
                 lng: val.longitude
               });
+              getSearchRealtyAction(enhance);
               getMapRealtyAction(enhance);
             }
           }}
           onFilterPress={() =>
             this.props.navigation.navigate(routes.filterScreen, {
-              onDone: value => alert(value.toString())
+              onDone: value => this.setState({ options: value }),
+              options: this.state.options
             })
           }
           editText={!this.state.editing ? 'Edit' : 'Done'}
@@ -68,16 +72,19 @@ class SearchTab extends React.Component {
         {this.props.mapRealty.fetching ? (
           <PlaceHolder />
         ) : (
-          <FlipView
-            style={{ flex: 1 }}
-            front={<SearchFront {...this.props} />}
-            back={<SearchBack {...this.props} />}
-            isFlipped={this.state.isFlipped}
-            flipAxis="y"
-            flipEasing={Easing.out(Easing.ease)}
-            flipDuration={500}
-            perspective={1000}
-          />
+          <View style={{ flex: 1 }}>
+            <Overlay />
+            <FlipView
+              style={{ flex: 1 }}
+              front={<SearchFront {...this.props} />}
+              back={<SearchBack {...this.props} />}
+              isFlipped={this.state.isFlipped}
+              flipAxis="y"
+              flipEasing={Easing.out(Easing.ease)}
+              flipDuration={500}
+              perspective={1000}
+            />
+          </View>
         )}
       </View>
     );

@@ -42,7 +42,7 @@ import {
 } from '../redux/agencyRealty/actions';
 import { imagePicker, cameraPicker } from '../utils/imagePicker';
 import { userApi } from '../utils/api';
-import { logoutAction, updateAvatarAction } from '../redux/auth/actions';
+import { logoutAction, updateAvatarAction, UPDATE_AVATAR } from '../redux/auth/actions';
 import { _alert } from '../utils/alert';
 
 const size = _ios
@@ -105,35 +105,35 @@ class AuthDetail extends React.Component {
     }
 
     handleOnDone = index => {
-      let _index = index;
-      if (user.id === data.id) _index = index - 2;
-      else if (user.role_id === 3) _index = index - 1;
+      if (data.id === user.id) {
+        let _index = index;
+        if(data.role_id === 3) {
+          _index = index - 2;
+        }
 
-      if (_index === -2) {
-        this.props.navigation.navigate(routes.contacts, {
-          user: data
-        });
-      } else if (_index === -1) {
-        this.props.navigation.navigate(routes.agencyProject, {
-          user: data
-        });
-      }
-      if (_index === 0) {
-        this.props.navigation.navigate(routes.additionalInformation, {
-          user: data
-        });
-      } else if (_index === 1) {
-        this.props.navigation.navigate(routes.changePassword);
-      } else if (_index === 2) {
-        _alert(strings.logOut, strings.areYouSure, [
-          {
-            text: alertStrings.ok,
-            onPress: () => logoutAction()
-          },
-          {
-            text: alertStrings.cancel
-          }
-        ]);
+        console.log(_index);
+
+        if(_index === -2) {
+          this.props.navigation.navigate(routes.contacts);
+        } else if(_index === -1) {
+          this.props.navigation.navigate(routes.agencyProject, { user });
+        } else if (_index === 0) {
+          this.props.navigation.navigate(routes.additionalInformation);
+        } else if (_index === 1) {
+          this.props.navigation.navigate(routes.changePassword);
+        } else if (_index === 2) {
+          _alert(strings.logOut, strings.areYouSure, [
+            {
+              text: alertStrings.ok,
+              onPress: () => logoutAction()
+            },
+            {
+              text: alertStrings.cancel
+            }
+          ]);
+        }
+      }else {
+        this.props.navigation.navigate(routes.agencyProject, { user: data });
       }
     };
 
@@ -288,104 +288,6 @@ class AuthDetail extends React.Component {
   };
 
   _uploadAvatar = async image => {
-    // const { Blob } = RNFetchBlob.polyfill;
-    // const blob = await Blob.build(image.data, { type: 'image/png;base64' });
-
-    // const body = new FormData();
-    // body.append('file', blob);
-    // fetch('https://rems.dfm-engineering.com/api/v1/user/avatar', {
-    //   method: 'POST',
-    //   Authorization: `Bearer ${this.props.auth.token}`,
-    //   'Content-Type': 'multipart/form-data',
-    //   body
-    // }).then(value => {
-    //   console.log(value);
-    //   return value.json();
-    // })
-    //   .then(val => console.log(val))
-    //   .catch(error => console.log(error.code, error.message));
-
-    // return;
-
-    // RNFetchBlob.fetch(
-    //   'POST',
-    //   'https://rems.dfm-engineering.com/api/v1/user/avatar',
-    //   {
-    //     Authorization: `Bearer ${this.props.auth.token}`,
-    //     'Content-Type': 'multipart/form-data'
-    //   },
-    //   [
-    //     {
-    //       name: 'file',
-    //       filename: 'avatar-png.png',
-    //       type: 'image/png',
-    //       data: image.data
-    //     }
-    //   ]
-    // )
-    //   .then(resp => {
-    //     console.log(resp);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
-
-    // const body = new FormData();
-    // body.append('file', {
-    //   type: 'image/jpeg',
-    //   name: 'photo.jpg',
-    //   uri: image.path
-    // });
-    // this.setState({ uploading: true });
-    // try {
-    //   const val = await fetch('https://rems.dfm-engineering.com/api/v1/user/avatar', {
-    //     method: 'POST',
-    //     Authorization: `Bearer ${this.props.auth.token}`,
-    //     headers: {
-    //       Accept: 'application/json',
-    //       'Content-Type': 'multipart/form-data'
-    //     },
-    //     body: JSON.stringify(body)
-    //   });
-    //   this.setState({ uploading: false });
-    //   console.log(val);
-    // } catch (error) {
-    //   this.setState({ uploading: false });
-    //   console.log(error.code, error.message);
-    // }
-
-    // console.log(image);
-
-    // const body = new FormData();
-    // body.append('file', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAc1gAAHNYBTCInoQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIHSURBVGiB7dbHahVRHIDxgaxUsCSW2I1uYskmij6DCK4FX0AsERsKbuyP4MPYxYUVa4xKbNGFZaFuFcnPRe6FazznOslMchyZbznl//++xWEmy2pqampqavKDfmxN7VEIbME3/MD21D6TApsbEU2+Y1tHarGJgL4syy5kWdbZcrkjy7J5aYwmATbhqz+5iBmp/XKBjZGIS1WK6MeXQMRlzEztlwv04XMg4kqVIjb8DxHr8SkQcbVKEesiEdcwK7VfLrAWHwMR16sU0YsPgYibmJ3aLxdYg/eBiFtVi3gXiZiT2i8XWB2JuF2liB6MBCLuFIrAYewo0bXdrsV4EYh4ggVFBh9vDBrFrhKdQ7tW4W0g4i7mFhl8bNzAKYvBUgwHIu4VimgMPx8Y/BM7S/Jv7lmIwcCuIXSXteRcYMEodpc0f4nwmXisyJmILDs7FTHGDvbzwOxiB/svS8+UGYPuNhELy/Yfv/x0JGbPBOd041lg1uCUR7RInIrE7M35/nw8Csx4Om0RLTInJxODLjyMRCyaLv/xUiciMfsiz3fhQeCdoWQRLXK5YtDZJqKc70RRcDQSM9C434n7gWeGsSy1/2+If2f240bg3gh6UnsHwZGAcIiXWJ7aty3Gfvfb8eqfj2iCQ5GI11iR2m9C4GDlI5rgQCPiDVam9ikEBtCb2qOmpqamWvwC3iRBKYTf2LIAAAAASUVORK5CYII=');
-    // const xhr = new XMLHttpRequest();
-    // xhr.open('POST', 'https://rems.dfm-engineering.com/api/v1/user/avatar', true);
-    // xhr.setRequestHeader('Content-type', 'multipart/form-data');
-    // xhr.setRequestHeader('Authorization', `Bearer ${this.this.props.auth.token}`);
-
-    // xhr.onreadystatechange = (result, error) => {
-    //   if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-    //     console.log(result, error, xhr);
-    //   }
-    // };
-    // xhr.send({ form: body });
-
-    // const body = new FormData();
-    // body.append('file', `data:image/png;base64,${image.data}`);
-    // const xhr = new XMLHttpRequest();
-    // xhr.open('POST', 'https://rems.dfm-engineering.com/api/v1/user/avatar', true);
-    // xhr.setRequestHeader('Content-type', 'multipart/form-data');
-    // xhr.setRequestHeader('Authorization', `Bearer ${this.props.auth.token}`);
-
-    // xhr.onreadystatechange = (error, result) => {
-    //   if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-    //     console.log(result);
-    //   }else {
-    //     console.log(error);
-    //   }
-    // };
-    // xhr.send({ form: body });
-
     const body = new FormData();
     body.append('file', {
       type: 'image/jpeg',
@@ -460,11 +362,12 @@ class AuthDetail extends React.Component {
             <Text style={styles.lineText}>{data.email}</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              if (!data.lat) return;
               this.props.navigation.navigate(routes.pickObjOnMap, {
                 coordinate: [data.lat, data.lng]
-              })
-            }
+              });
+            }}
             style={[styles.line, styles.noBorderBottom]}
           >
             <Ionicons name="md-pin" style={styles.lineIcon} />

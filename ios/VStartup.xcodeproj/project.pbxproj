@@ -380,9 +380,9 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNPopoverMenu;
 		};
-		89A0DB8220C25B6000DA48BB /* PBXContainerItemProxy */ = {
+		897B45BF20CA2AB700FDC58A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 89A0DB7E20C25B6000DA48BB /* RCTYouTube.xcodeproj */;
+			containerPortal = 897B45BB20CA2AB700FDC58A /* RCTYouTube.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 8BDB9BC91B4289AE00EF9FEF;
 			remoteInfo = RCTYouTube;
@@ -469,7 +469,7 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		85603F81F5DB401A9D30F8EA /* RNPopoverMenu.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNPopoverMenu.xcodeproj; path = "../node_modules/react-native-popover-menu/ios/RNPopoverMenu.xcodeproj"; sourceTree = "<group>"; };
 		895A8C5F20B4391300428355 /* YTPlayerView-iframe-player.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "YTPlayerView-iframe-player.html"; path = "../node_modules/react-native-youtube/assets/YTPlayerView-iframe-player.html"; sourceTree = "<group>"; };
-		89A0DB7E20C25B6000DA48BB /* RCTYouTube.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTYouTube.xcodeproj; path = "../node_modules/react-native-youtube/RCTYouTube.xcodeproj"; sourceTree = "<group>"; };
+		897B45BB20CA2AB700FDC58A /* RCTYouTube.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTYouTube.xcodeproj; path = "../node_modules/react-native-youtube/RCTYouTube.xcodeproj"; sourceTree = "<group>"; };
 		89C2075A20AD9A9100FA05D0 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		89C2075C20AD9A9900FA05D0 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		89C2075E20AD9AA000FA05D0 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
@@ -712,7 +712,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				89A0DB7E20C25B6000DA48BB /* RCTYouTube.xcodeproj */,
+				897B45BB20CA2AB700FDC58A /* RCTYouTube.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -845,10 +845,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		89A0DB7F20C25B6000DA48BB /* Products */ = {
+		897B45BC20CA2AB700FDC58A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				89A0DB8320C25B6000DA48BB /* libRCTYouTube.a */,
+				897B45C020CA2AB700FDC58A /* libRCTYouTube.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1097,8 +1097,8 @@
 					ProjectRef = 139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */;
 				},
 				{
-					ProductGroup = 89A0DB7F20C25B6000DA48BB /* Products */;
-					ProjectRef = 89A0DB7E20C25B6000DA48BB /* RCTYouTube.xcodeproj */;
+					ProductGroup = 897B45BC20CA2AB700FDC58A /* Products */;
+					ProjectRef = 897B45BB20CA2AB700FDC58A /* RCTYouTube.xcodeproj */;
 				},
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
@@ -1445,11 +1445,11 @@
 			remoteRef = 897795C520BE817700AF39A6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		89A0DB8320C25B6000DA48BB /* libRCTYouTube.a */ = {
+		897B45C020CA2AB700FDC58A /* libRCTYouTube.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRCTYouTube.a;
-			remoteRef = 89A0DB8220C25B6000DA48BB /* PBXContainerItemProxy */;
+			remoteRef = 897B45BF20CA2AB700FDC58A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		89A61B3D20C81E6400390536 /* libRNGooglePlaces.a */ = {

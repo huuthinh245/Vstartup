@@ -6,6 +6,7 @@ import Carousel from '../Carousel';
 
 export default class SearchFront extends React.Component {
   render() {
+    console.log('re-render');
     return (
       <View style={{ flex: 1 }}>
         <MapView

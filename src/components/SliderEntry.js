@@ -96,8 +96,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: entryBorderRadius,
     borderWidth: 1 / PixelRatio.get(),
-    borderColor: 'silver',
-    resizeMode: 'center'
+    borderColor: 'silver'
   },
   image: {
     ...StyleSheet.absoluteFillObject,

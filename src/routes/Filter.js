@@ -10,68 +10,30 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
-import RNPopover from 'react-native-popover-menu';
+import { Dropdown } from 'react-native-material-dropdown';
 
-import { _dims, _colors, responsiveFontSize, responsiveWidth, _ios } from '../utils/constants';
+import { _dims, _colors, responsiveFontSize, responsiveWidth } from '../utils/constants';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import strings from '../localization/filter';
-import { _alert } from '../utils/alert';
 
 class Filter extends React.Component {
   constructor(props) {
     super(props);
+    const { options } = this.props.navigation.state.params;
+    console.log(options);
     this.state = {
       scrollEnabled: true,
-      utils: [],
-      priceRange: [0, 20],
-      areaRange: [0, 1000],
-      beds: 1,
-      baths: 1,
-      projType: _.values(this.props.options.data.realtyTypes)[0]
+      utils: options.utils || [],
+      priceRange: options.price || [0, 20],
+      areaRange: options.area || [0, 1000],
+      beds: options.bedroom || { id: 0, value: strings.pleaseSelect },
+      baths: options.bathroom || { id: 0, value: strings.pleaseSelect },
+      realtyType: options.type || { id: 0, value: strings.pleaseSelect }
     };
   }
-
-  _showPopOver = (ref, _menus, callback) => {
-    const menusValues = [];
-    _menus.forEach(item => {
-      menusValues.push({ label: item });
-    });
-
-    const menus = [
-      {
-        menus: menusValues
-      }
-    ];
-
-    RNPopover.Show(ref, {
-      menus,
-      onDone: (status, index) => {
-        if (_ios) {
-          callback(status);
-        } else {
-          callback(index);
-        }
-      },
-      tintColor: _colors.popup,
-      theme: 'dark',
-      rowHeight: 50,
-      perferedWidth: responsiveWidth(70)
-    });
-  };
-
-  _renderDropdownRow = option => {
-    return (
-      <View style={styles.dropdownRow}>
-        <Text numberOfLines={1} style={styles.dropdownRowText}>
-          {option}
-        </Text>
-      </View>
-    );
-  };
 
   _renderItem = ({ item }) => {
     const copy = _.map(this.state.utils, _.clone);
@@ -106,14 +68,60 @@ class Filter extends React.Component {
   _disableScroll = () => this.setState({ scrollEnabled: false });
   _enableScroll = () => this.setState({ scrollEnabled: true });
 
+  _onSave = () => {
+    const opts = this.state;
+    const result = {};
+    Object.assign(result, { price: opts.priceRange });
+    Object.assign(result, { area: opts.areaRange });
+    if (opts.beds.id !== 0) {
+      Object.assign(result, { bedroom: opts.beds });
+    }
+    if (opts.baths.id !== 0) {
+      Object.assign(result, { bathroom: opts.baths });
+    }
+    if (opts.utils.length > 0) {
+      Object.assign(result, { utils: opts.utils });
+    }
+    if (opts.realtyType.id !== 0) {
+      Object.assign(result, { type: opts.realtyType });
+    }
+    this.props.navigation.state.params.onDone(result);
+    this.props.navigation.goBack();
+  };
+
   render() {
+    const dataRealtyType = [{ id: 0, value: strings.pleaseSelect }].concat(
+      this.props.options.data.realtyTypes.map(item => ({
+        id: item.id,
+        value: item.name
+      }))
+    );
+
+    const dataBed = [
+      { id: 0, value: strings.pleaseSelect },
+      { id: 1, value: '1' },
+      { id: 2, value: '2' },
+      { id: 3, value: '3' },
+      { id: 4, value: '4' },
+      { id: 5, value: strings.moreThanFive }
+    ];
+
+    const dataBath = [
+      { id: 0, value: strings.pleaseSelect },
+      { id: 1, value: '1' },
+      { id: 2, value: '2' },
+      { id: 3, value: '3' },
+      { id: 4, value: '4' },
+      { id: 5, value: strings.moreThanFive }
+    ];
+
     return (
       <View style={styles.wrapper}>
         <Header
           onLeftPress={() => this.props.navigation.goBack()}
           title={headerStrings.filterScreen}
           right={
-            <TouchableOpacity onPress={() => _alert('ok', 'ok ok')}>
+            <TouchableOpacity onPress={this._onSave}>
               <Text style={{ color: _colors.mainColor }}>{headerStrings.save}</Text>
             </TouchableOpacity>
           }
@@ -123,7 +131,7 @@ class Filter extends React.Component {
             <Text style={styles.title}>{strings.price}</Text>
             <View style={styles.sliderWrapper}>
               <MultiSlider
-                sliderLength={_dims.screenWidth - _dims.defaultPadding * 2}
+                sliderLength={_dims.screenWidth - _dims.defaultPadding * 4}
                 onValuesChangeStart={this._disableScroll}
                 onValuesChangeFinish={this._enableScroll}
                 onValuesChange={values => this.setState({ priceRange: values })}
@@ -133,8 +141,8 @@ class Filter extends React.Component {
                 containerStyle={styles.sliderContainerStyle}
                 trackStyle={styles.trackStyle}
                 markerStyle={styles.markerStyle}
-                min={this.state.priceRange[0]}
-                max={this.state.priceRange[1]}
+                min={0}
+                max={20}
                 allowOverlap
                 snapped
               />
@@ -149,8 +157,9 @@ class Filter extends React.Component {
             </View>
 
             <View style={[styles.sliderWrapper, { marginTop: _dims.defaultPadding }]}>
+              <Text style={styles.title}>{strings.area}</Text>
               <MultiSlider
-                sliderLength={_dims.screenWidth - _dims.defaultPadding * 2}
+                sliderLength={_dims.screenWidth - _dims.defaultPadding * 4}
                 onValuesChangeStart={this._disableScroll}
                 onValuesChangeFinish={this._enableScroll}
                 onValuesChange={values => this.setState({ areaRange: values })}
@@ -160,9 +169,9 @@ class Filter extends React.Component {
                 containerStyle={styles.sliderContainerStyle}
                 trackStyle={styles.trackStyle}
                 markerStyle={styles.markerStyle}
-                min={this.state.areaRange[0]}
-                max={this.state.areaRange[1]}
-                step={50}
+                min={0}
+                max={1000}
+                step={100}
                 allowOverlap
                 snapped
               />
@@ -177,56 +186,43 @@ class Filter extends React.Component {
             </View>
 
             <View style={{ flexDirection: 'row' }}>
-              <View style={[styles.dropdownWrapper, { marginRight: _dims.defaultPadding / 2 }]}>
-                <Text style={[styles.title, { marginBottom: _dims.defaultPadding }]}>
-                  {strings.bedroom}
-                </Text>
-
-                <TouchableOpacity
-                  ref={ref => {
-                    this.bedContext = ref;
-                  }}
-                  onPress={() =>
-                    this._showPopOver(
-                      this.bedContext,
-                      this.props.options.data.realtyTypes.map(item => item.name),
-                      projType => this.setState({ projType })
-                    )
-                  }
-                  style={styles.selectWrapper}
-                >
-                  <Text style={styles.selectText}>{this.state.beds}</Text>
-                  <Ionicons
-                    name="ios-arrow-down"
-                    size={responsiveFontSize(_dims.defaultFontTitle + 2)}
-                    color={_colors.mainColor}
-                  />
-                </TouchableOpacity>
-              </View>
-
-              <View style={[styles.dropdownWrapper, { marginLeft: _dims.defaultPadding / 2 }]}>
-                <Text style={[styles.title, { marginBottom: _dims.defaultPadding }]}>
-                  {strings.bathroom}
-                </Text>
-
-                <TouchableOpacity
-                  onPress={() => this._dropdownBath.show()}
-                  style={styles.selectWrapper}
-                >
-                  <Text style={styles.selectText}>{this.state.baths}</Text>
-
-                  <Ionicons
-                    name="ios-arrow-down"
-                    size={responsiveFontSize(_dims.defaultFontTitle + 2)}
-                    color={_colors.mainColor}
-                  />
-                </TouchableOpacity>
-              </View>
+              <Dropdown
+                label={strings.bedroom}
+                containerStyle={{
+                  flex: 1,
+                  marginRight: _dims.defaultPadding,
+                  marginVertical: _dims.defaultPadding
+                }}
+                dropdownOffset={{ top: _dims.defaultPadding, left: 0 }}
+                fontSize={responsiveFontSize(_dims.defaultFontInput)}
+                labelFontSize={responsiveFontSize(_dims.defaultFontSubTitle)}
+                baseColor={_colors.mainColor}
+                value={this.state.beds.value}
+                data={dataBed}
+                itemCount={dataBed.length}
+                onChangeText={(value, index) => this.setState({ beds: dataBed[index] })}
+              />
+              <Dropdown
+                label={strings.bathroom}
+                containerStyle={{
+                  flex: 1,
+                  marginLeft: _dims.defaultPadding,
+                  marginVertical: _dims.defaultPadding
+                }}
+                itemCount={dataBath.length}
+                dropdownOffset={{ top: _dims.defaultPadding, left: 0 }}
+                fontSize={responsiveFontSize(_dims.defaultFontInput)}
+                labelFontSize={responsiveFontSize(_dims.defaultFontSubTitle)}
+                baseColor={_colors.mainColor}
+                value={this.state.baths.value}
+                data={dataBath}
+                onChangeText={(value, index) => this.setState({ baths: dataBath[index] })}
+              />
             </View>
             <Text
               style={[
                 styles.title,
-                { marginBottom: _dims.defaultPadding, marginTop: _dims.defaultPadding * 3 }
+                { marginBottom: _dims.defaultPadding, marginTop: _dims.defaultPadding }
               ]}
             >
               {strings.utils}
@@ -234,50 +230,42 @@ class Filter extends React.Component {
             <FlatList
               renderItem={this._renderItem}
               data={_.values(this.props.options.data.utils)}
+              extraData={this.state.utils}
               keyExtractor={() => `${Math.random()}`}
             />
-
             <View
-              style={[
-                styles.dropdownWrapper,
-                { flexDirection: 'row', marginTop: _dims.defaultPadding * 2 }
-              ]}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
             >
-              <Text style={styles.title}>{strings.projectType}</Text>
-
-              <TouchableOpacity
-                ref={ref => {
-                  this.projTypeContext = ref;
+              <Text
+                style={{
+                  fontSize: responsiveFontSize(_dims.defaultFontSubTitle),
+                  color: _colors.mainColor,
+                  marginRight: _dims.defaultPadding,
+                  marginTop: 32
                 }}
-                onPress={() =>
-                  this._showPopOver(
-                    this.projTypeContext,
-                    this.props.options.data.realtyTypes.map(item => item.name),
-                    projType => this.setState({ projType })
-                  )
-                }
-                style={styles.selectWrapper}
               >
-                <Text style={styles.selectText}>{this.state.projType.name}</Text>
-                <Ionicons
-                  name="ios-arrow-down"
-                  size={responsiveFontSize(_dims.defaultFontTitle + 2)}
-                  color={_colors.mainColor}
-                />
-              </TouchableOpacity>
+                {strings.projectType}
+              </Text>
+              <Dropdown
+                containerStyle={{
+                  flex: 1
+                }}
+                dropdownPosition={dataRealtyType.length}
+                itemCount={dataRealtyType.length}
+                fontSize={responsiveFontSize(_dims.defaultFontInput)}
+                labelFontSize={responsiveFontSize(_dims.defaultFontSubTitle)}
+                baseColor={_colors.mainColor}
+                value={this.state.realtyType.value}
+                data={dataRealtyType}
+                onChangeText={(value, index) =>
+                  this.setState({ realtyType: dataRealtyType[index] })
+                }
+              />
             </View>
-          </View>
-          <View style={styles.submit}>
-            <TouchableOpacity style={styles.viewSubmit}>
-              <Text numberOfLines={1} style={styles.submitText}>
-                {strings.show}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.defaultSubmit}>
-              <Text numberOfLines={1} style={styles.submitText}>
-                {strings.default}
-              </Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
@@ -293,10 +281,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   innerWrapper: {
-    paddingHorizontal: _dims.defaultPadding
+    paddingHorizontal: _dims.defaultPadding,
+    paddingTop: _dims.defaultPadding,
+    paddingBottom: _dims.defaultPadding * 2
   },
   title: {
-    marginVertical: _dims.defaultPadding * 2,
+    marginBottom: _dims.defaultPadding * 1.5,
     color: _colors.mainColor,
     fontWeight: 'bold',
     alignSelf: 'flex-start',
@@ -308,7 +298,9 @@ const styles = StyleSheet.create({
   },
   sliderValueWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginTop: 5,
+    marginBottom: _dims.defaultPadding
   },
   sliderValue: {
     alignSelf: 'flex-start',

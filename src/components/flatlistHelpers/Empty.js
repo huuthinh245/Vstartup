@@ -16,7 +16,7 @@ export default class Empty extends React.Component {
           }}
           resizeMode="contain"
         />
-        <Text style={{ marginVertical: 20, color: 'gray' }}>{this.props.title}</Text>
+        <Text style={{ margin: 20, color: 'gray', textAlign: 'center' }}>{this.props.title}</Text>
       </View>
     );
   }

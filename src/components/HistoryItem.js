@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, PixelRatio } from 'react-nati
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FastImage from 'react-native-fast-image';
 import { responsiveFontSize, _dims, responsiveHeight, _colors } from '../utils/constants';
+import strings from '../localization/filter';
 
 export default class HistoryItem extends React.Component {
   render() {
@@ -41,7 +42,9 @@ export default class HistoryItem extends React.Component {
           <Text style={styles.title} numberOfLines={2}>
             {data.address}
           </Text>
-          <Text numberOfLines={3}>{data.filter}</Text>
+          <Text numberOfLines={3} style={{ color: 'gray' }}>
+            {strings.filter}: {data.filter}
+          </Text>
         </View>
       </TouchableOpacity>
     );
