@@ -4,8 +4,6 @@ import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
-import fakeDate from './fakeData';
-
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE = 10.8941563;
@@ -14,7 +12,6 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const CARD_HEIGHT = height / 3.5;
 const CARD_WIDTH = width - 20;
-const FAKE_DATA_LENGTH = fakeDate.length;
 
 const styles = StyleSheet.create({
   main: {
@@ -163,6 +160,8 @@ export default class Map extends React.Component {
   }
 
   componentDidMount() {
+    const { listRealtyData } = this.props;
+    console.log('this.props', this.props);
     const { animation, currentMarkerIndex } = this.state;
 
     animation.addListener(({ value }) => {
@@ -171,15 +170,16 @@ export default class Map extends React.Component {
 
       setTimeout(() => {
         if (currentMarkerIndex !== index) {
-          const { coordinate } = fakeDate[index];
+          const { coordinate } = listRealtyData[index];
 
           this.map.animateToRegion(
             {
-              ...coordinate,
+              latitude: coordinate.lat,
+              longitude: coordinate.lng,
               latitudeDelta: LATITUDE_DELTA,
               longitudeDelta: LONGITUDE_DELTA
             },
-            350
+            200
           );
         }
       }, 10);
@@ -188,6 +188,8 @@ export default class Map extends React.Component {
 
   render() {
     const { animation, currentMarkerIndex } = this.state;
+    const { listRealtyData } = this.props;
+    const listRealtyDataLength = listRealtyData.length;
 
     return (
       <View style={styles.main}>
@@ -203,26 +205,29 @@ export default class Map extends React.Component {
             longitudeDelta: LONGITUDE_DELTA
           }}
         >
-          {fakeDate.map((marker, index) => {
+          {listRealtyData.map((marker, index) => {
+            const priceStyle = currentMarkerIndex === index ? styles.priceHighlight : styles.price;
             const bubbleStyle = [
               currentMarkerIndex === index ? styles.bubbleHighlight : styles.bubble,
-              { borderColor: renderColor(marker.type) }
+              marker.type ? { borderColor: renderColor(marker.type) } : { borderColor: '#2196F3' }
             ];
-            const priceStyle = currentMarkerIndex === index ? styles.priceHighlight : styles.price;
             const iconStyle = [
               currentMarkerIndex === index ? styles.iconHighlight : styles.icon,
-              { color: renderColor(marker.type) }
+              marker.type ? { color: renderColor(marker.type) } : { color: '#2196F3' }
             ];
 
             return (
               <Marker
-                key={marker.title}
-                coordinate={marker.coordinate}
+                key={marker.id}
+                coordinate={{
+                  latitude: marker.coordinate.lat,
+                  longitude: marker.coordinate.lng
+                }}
                 onPress={() => console.log('index', index)}
               >
                 <View style={styles.tooltip}>
                   <View style={bubbleStyle}>
-                    <Text style={priceStyle}>{marker.price}</Text>
+                    <Text style={priceStyle}>{`${marker.price} ${marker.price_unit}`}</Text>
                   </View>
                   <Icon name="md-pin" style={iconStyle} />
                 </View>
@@ -250,23 +255,33 @@ export default class Map extends React.Component {
           style={styles.scrollView}
           contentContainerStyle={styles.endPadding}
         >
-          {fakeDate.map((marker, index) => (
-            <View style={styles.card} key={marker.title}>
-              <Image source={{ uri: marker.image }} style={styles.cardImage} resizeMode="cover" />
-              <SimpleLineIcons name="heart" style={styles.cardLikeIcon} />
-              <SimpleLineIcons name="share" style={styles.cardSharingIcon} />
-              <Icon
-                name="md-pin"
-                style={[styles.cardPlaceIcon, { color: renderColor(marker.type) }]}
-              />
-              <Text style={styles.cardIndex}>
-                {`${index + 1}/${FAKE_DATA_LENGTH} - ${FAKE_DATA_LENGTH} hình`}
-              </Text>
-              <Text style={styles.cardTitle}>{marker.title}</Text>
-              <Text style={styles.cardPrice}>{marker.price}</Text>
-              <Text style={styles.cardAddress}>{marker.address}</Text>
-            </View>
-          ))}
+          {listRealtyData.map((marker, index) => {
+            const iconStyle = [
+              styles.cardPlaceIcon,
+              marker.type ? { color: renderColor(marker.type) } : { color: '#2196F3' }
+            ];
+
+            return (
+              <View style={styles.card} key={marker.id}>
+                <Image source={{ uri: marker.thumb }} style={styles.cardImage} resizeMode="cover" />
+                <SimpleLineIcons name="heart" style={styles.cardLikeIcon} />
+                <SimpleLineIcons name="share" style={styles.cardSharingIcon} />
+                <Icon name="md-pin" style={iconStyle} />
+                <Text style={styles.cardIndex}>
+                  {`${index + 1}/${listRealtyDataLength} - ${listRealtyDataLength} hình`}
+                </Text>
+                <Text style={styles.cardTitle} numberOfLines={1}>
+                  {marker.title}
+                </Text>
+                <Text style={styles.cardPrice} numberOfLines={1}>
+                  {`${marker.price} ${marker.price_unit}`}
+                </Text>
+                <Text style={styles.cardAddress} numberOfLines={1}>
+                  {marker.address}
+                </Text>
+              </View>
+            );
+          })}
         </Animated.ScrollView>
       </View>
     );
