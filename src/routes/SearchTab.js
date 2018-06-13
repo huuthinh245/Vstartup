@@ -76,7 +76,7 @@ class SearchTab extends React.Component {
             <Overlay />
             <FlipView
               style={{ flex: 1 }}
-              front={<SearchFront {...this.props} />}
+              front={<Map {...this.props} />}
               back={<SearchBack {...this.props} />}
               isFlipped={this.state.isFlipped}
               flipAxis="y"

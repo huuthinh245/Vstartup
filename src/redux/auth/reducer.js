@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions';
 
 import {
+  SET_TOKEN,
   LOGIN,
   LOGOUT,
   FORGOT,
@@ -35,6 +36,9 @@ const initial = {
 
 export const authReducer = handleActions(
   {
+    [SET_TOKEN]: (state, { payload }) => {
+      return Object.assign({}, state, { token: payload });
+    },
     [LOGIN]: state => {
       return Object.assign({}, state, { fetching: true });
     },
@@ -66,7 +70,7 @@ export const authReducer = handleActions(
       return Object.assign({}, state, { fetching: false, error: null, token: '', user: '' });
     },
     [GET_ME_SUCCESS]: (state, { payload }) => {
-      return Object.assign({}, state, payload, { fetching: false, error: null });
+      return Object.assign({}, state, { fetching: false, user: payload, error: null });
     },
     [REGISTER_SUCCESS]: (state, { payload }) => {
       return Object.assign({}, state, payload, { fetching: false, error: null });
@@ -78,7 +82,8 @@ export const authReducer = handleActions(
       return Object.assign({}, state, { updating: true });
     },
     [UPDATE_INFO_SUCCESS]: (state, { payload }) => {
-      return Object.assign({}, state, { updating: false, user: payload, error: null });
+      Object.assign(state.user, payload);
+      return Object.assign({}, state, { updating: false, error: null });
     },
     [UPDATE_INFO_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, payload, { updating: false, error: payload });

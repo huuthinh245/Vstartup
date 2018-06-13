@@ -30,13 +30,15 @@ const strings = new LocalizedStrings({
     forgotScreen: 'Forgot',
     listProject: 'List Project',
     listAgency: 'List Agency',
+    listInvestor: 'List Investor',
     agencyDetail: 'Agency detail',
     settings: 'Settings',
     feedback: 'Feedback',
     createRealty: 'Create realty',
     listContact: 'List contact',
     agencyProject: 'All projects',
-    postRealty: 'Post new realty'
+    postRealty: 'Post new realty',
+    editRealty: 'Edit realty'
   },
   vni: {
     close: 'Huỷ',
@@ -66,13 +68,15 @@ const strings = new LocalizedStrings({
     forgotScreen: 'Quên mật khẩu',
     listProject: 'Danh sách dự án',
     listAgency: 'Danh sách nhà môi giới',
+    listInvestor: 'Danh sách nhà đầu tư',
     agencyDetail: 'Chi tiết nhà môi giới',
     settings: 'Cài đặt',
     feedback: 'Phản hồi',
     createRealty: 'Đăng tin BĐS',
     listContact: 'Danh sách liên hệ',
     agencyProject: 'Tất cả dự án',
-    postRealty: 'Đăng tin BĐS'
+    postRealty: 'Đăng tin BĐS',
+    editRealty: 'Chỉnh sửa tin BĐS'
   }
 });
 

@@ -7,6 +7,7 @@ export const SOCIAL = 'SOCIAL';
 export const GET_ME = 'GET_ME';
 export const LOGOUT = 'LOGOUT';
 
+export const SET_TOKEN = 'SET_TOKEN';
 export const GET_ME_SUCCESS = 'GET_ME_SUCCESS';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const FORGOT_SUCCESS = 'FORGOT_SUCCESS';

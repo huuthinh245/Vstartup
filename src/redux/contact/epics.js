@@ -24,6 +24,7 @@ const postContact = actions$ =>
   actions$.ofType(SEND_CONTACT).switchMap(async action => {
     try {
       const resp = await contactApi.postContact(action.payload);
+      action.payload.callback();
       return { type: SEND_CONTACT_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);

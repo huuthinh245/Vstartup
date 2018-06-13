@@ -8,9 +8,6 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  Modal, 
-  Picker,
-  Animated
 } from 'react-native';
 import ActionSheet from 'react-native-actionsheet';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,6 +15,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import ModalDropdown from 'react-native-modal-dropdown';
+import RNGooglePlaces from 'react-native-google-places';
 import RNFetchBlob from 'react-native-fetch-blob';
 import * as Progress from 'react-native-progress';
 
@@ -74,7 +72,6 @@ class PostRealty extends React.Component {
     //   contactPhone: this.props.auth.user.phone
     // };
     this.state = {
-      enableCityPicker: false,
       method: this.props.options.data.methods[0],
       title: 'aaa',
       project: { id: 1, title: 'hehe' },
@@ -266,8 +263,8 @@ class PostRealty extends React.Component {
       form.push({ name: 'toilet', data: `${state.toilet.id}` });
       form.push({ name: 'bedroom', data: `${state.bedroom.id}` });
       form.push({ name: 'bathroom', data: `${state.bathroom.id}` });
-      form.push({ name: 'utility', data: state.utils.map(item => item.id).toString() });
-      form.push({ name: 'body', data: state.description });
+      form.push({ name: 'utils', data: state.utils.map(item => item.id).toString() });
+      form.push({ name: 'description', data: state.description });
       form.push({ name: 'youtube', data: state.youtube });
       form.push({ name: 'address', data: state.address.address });
       form.push({ name: 'coordinate', data: JSON.stringify({ lat: `${state.address.latitude}`, lng: `${state.address.longitude}` }) });
@@ -277,7 +274,7 @@ class PostRealty extends React.Component {
       state.images.forEach((item, index) => {
         if(item !== 'flag') {
           form.push({
-            name: 'photo[]', 
+            name: `photo${index}`, 
             type: 'image/jpeg',
             filename: 'photo.jpg',
             data: RNFetchBlob.wrap(this.state.images[index][path])
@@ -516,7 +513,10 @@ class PostRealty extends React.Component {
 
           <TouchableOpacity 
             style={styles.line}
-            onPress={() => {}}
+            onPress={async () => {
+              const address = await RNGooglePlaces.openPlacePickerModal();
+              this.setState({ address });
+            }}
           >
             <Text style={styles.lineLeft}>
               <Text style={styles.require}>* </Text>
@@ -683,6 +683,14 @@ class PostRealty extends React.Component {
             <Text style={styles.submitText}>{strings.submit}</Text>
           </TouchableOpacity>
         </ScrollView>
+        <ActionSheet
+          ref={o => {
+            this.actionSheetPostRealty = o;
+          }}
+          options={[strings.actionCamera, strings.actionPhoto, strings.cancel]}
+          cancelButtonIndex={2}
+          onPress={this._onActionSheetSelected}
+        />
       </View>
     );
   }
@@ -691,190 +699,5 @@ class PostRealty extends React.Component {
 export default connect(state => ({
   options: state.options,
   auth: state.auth,
-  realtyDetail: state.realtyDetail,
-  city: state.city
+  realtyDetail: state.realtyDetail
 }))(PostRealty);
-
-export const styles = StyleSheet.create({
-  name: {
-    paddingBottom: 5,
-    borderBottomWidth: 1,
-    borderColor: 'silver',
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  line: {
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderColor: 'silver',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  require: {
-    color: 'red',
-    fontSize: responsiveFontSize(_dims.defaultFontTitle)
-  },
-  lineRight: {
-    flex: 6.5,
-    paddingRight: 10
-  },
-  lineLeft: {
-    color: 'gray',
-    marginRight: 10,
-    flex: 3,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  icon: {
-    alignSelf: 'center',
-    width: responsiveFontSize(_dims.defaultFontSize),
-    height: responsiveFontSize(_dims.defaultFontSize)
-  },
-  wrap: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 15
-  },
-  part: {
-    flex: 1
-  },
-  label: {
-    color: 'gray',
-    marginBottom: 5,
-    textAlign: 'center'
-  },
-  value: {
-    borderWidth: 1,
-    borderColor: '#3bcce1',
-    padding: 10,
-    textAlign: 'center'
-  },
-  description: {
-    paddingVertical: 10,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: 'silver',
-    height: responsiveWidth(50),
-    marginVertical: _dims.defaultPadding * 2
-  },
-  images: {
-    borderRadius: 13,
-    borderWidth: 0.5,
-    borderColor: 'silver',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#777',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 1,
-    padding: _dims.defaultPadding,
-    backgroundColor: 'rgba(192,192,192,0.1)',
-    flexDirection: 'row'
-  },
-  imageCamera: {
-    width: (_dims.screenWidth - _dims.defaultPadding * 10 - 1) / 3,
-    height: (_dims.screenWidth - _dims.defaultPadding * 10 - 1) / 3,
-    margin: 10,
-    padding: 0,
-    borderRadius: 5,
-    backgroundColor: '#fff'
-  },
-  image: {
-    width: (_dims.screenWidth - _dims.defaultPadding * 4 - 1) / 3,
-    height: (_dims.screenWidth - _dims.defaultPadding * 4 - 1) / 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: _dims.defaultPadding
-  },
-  utilsTitle: {
-    fontSize: responsiveFontSize(_dims.defaultFontTitle),
-    color: _colors.mainColor,
-    marginBottom: 5
-  },
-  img: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 5
-  },
-  close: {
-    color: 'tomato',
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    fontSize: _dims.defaultPadding * 2
-  },
-  input: {
-    padding: 0,
-    fontSize: responsiveFontSize(_dims.defaultFontSize),
-    paddingHorizontal: 6
-  },
-  utilsLine: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 5
-  },
-  form: {
-    marginHorizontal: _dims.defaultPadding,
-    marginVertical: _dims.defaultPadding
-  },
-  formLine: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: _colors.mainColor,
-    marginBottom: _dims.defaultPadding
-  },
-  formLineIcon: {
-    color: _colors.mainColor,
-    fontSize: responsiveFontSize(_dims.defaultFontTitle + 6)
-  },
-  formLineInput: {
-    backgroundColor: 'transparent',
-    flex: 1
-  },
-  submit: {
-    backgroundColor: '#3bcce1',
-    borderRadius: 5,
-    marginBottom: 20,
-    padding: 15,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  submitText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  dropdown_2_dropdown: {
-    width: '90%',
-    height: 320,
-    borderColor: 'rgba(192,192,192,0.4)',
-    borderWidth: 1,
-    borderRadius: 3
-  },
-  part_dropdown: {
-    width: (_dims.screenWidth - _dims.defaultPadding * 4) / 3,
-    height: dataSelect.length * 50
-  }, 
-  illustratorImage: {
-    marginTop: _dims.defaultPadding * 2, 
-    marginBottom: _dims.defaultPadding,
-    color: '#444'
-  },
-  progress: {
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    top: 0,
-    left: 0,
-    zIndex: Number.MAX_SAFE_INTEGER,
-    width: _dims.screenWidth,
-    height: _dims.screenHeight,
-    backgroundColor: 'rgba(0,0,0,0.2)'
-  }
-});

@@ -31,7 +31,8 @@ const strings = new LocalizedStrings({
     phoneInvalid: 'Incorrect phone number',
 
     updateInfoSuccess: 'Update information successfully !',
-    registerSuccess: 'Register account successfully !'
+    registerSuccess: 'Register account successfully !',
+    postContactSuccess: 'Send contact successfully !'
   },
   vni: {
     error: 'Lỗi',
@@ -62,7 +63,8 @@ const strings = new LocalizedStrings({
     phoneInvalid: 'Số điện thoại không đúng định dạng',
 
     updateInfoSuccess: 'Cập nhật tài khoản thành công !',
-    registerSuccess: 'Đăng ký tài khoản thành công !'
+    registerSuccess: 'Đăng ký tài khoản thành công !',
+    postContactSuccess: 'Gửi liên hệ thành công !'
   }
 });
 

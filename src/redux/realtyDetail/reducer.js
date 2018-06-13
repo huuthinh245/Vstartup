@@ -9,10 +9,14 @@ import {
   LIKE_REALTY_FAILURE,
   UNLIKE_REALTY,
   UNLIKE_REALTY_SUCCESS,
-  UNLIKE_REALTY_FAILURE
+  UNLIKE_REALTY_FAILURE,
+  POST_REALTY,
+  POST_REALTY_SUCCESS,
+  POST_REALTY_FAILURE
 } from './actions';
 
 const initial = {
+  postRealty: false,
   fetching: false,
   postingFavorite: false,
   data: {},
@@ -72,6 +76,19 @@ export const realtyDetailReducer = handleActions(
         Object.assign(realty, { is_favorite: !is_favorite });
       }
       return Object.assign({}, state, { postingFavorite: false, error: payload.error });
+    },
+    [POST_REALTY]: state => {
+      return Object.assign({}, state, { postRealty: true });
+    },
+    [POST_REALTY_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, { postRealty: false, error: payload });
+    },
+    [POST_REALTY_SUCCESS]: (state, { payload }) => {
+      if (!state.data[payload.author_id]) {
+        state.data[payload.author_id] = [];
+      }
+      state.data[payload.author_id].push(payload);
+      return Object.assign({}, state, { postRealty: false, error: null });
     }
   },
   initial

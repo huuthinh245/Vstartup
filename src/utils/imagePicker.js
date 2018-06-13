@@ -70,8 +70,7 @@ const imagePickerIos = async (multiple = true, callback = () => {}) => {
         multiple,
         width: 160,
         height: 90,
-        cropping: true,
-        includeBase64: true
+        cropping: true
       });
       callback(images);
     } catch (error) {
@@ -90,8 +89,7 @@ const imagePickerAndroid = async (multiple = true, callback = () => {}) => {
     try {
       const images = await ImagePicker.openPicker({
         mediaType: 'photo',
-        multiple,
-        includeBase64: true
+        multiple
       });
       callback(images);
     } catch (error) {
@@ -120,8 +118,7 @@ const cameraPickerIos = async (callback = () => {}) => {
       const image = await ImagePicker.openCamera({
         width: 1600,
         height: 900,
-        cropping: true,
-        includeBase64: true
+        cropping: true
       });
       callback(image);
     } catch (error) {
@@ -141,8 +138,7 @@ const cameraPickerAndroid = async (callback = () => {}) => {
       const image = await ImagePicker.openCamera({
         width: 1600,
         height: 900,
-        cropping: true,
-        includeBase64: true
+        cropping: true
       });
       callback(image);
     } catch (error) {

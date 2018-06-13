@@ -5,11 +5,12 @@ const strings = new LocalizedStrings({
   eng: {
     name: 'Title',
     ownedByProject: 'Project owned',
-    projectType: 'Project type',
+    projectType: 'Realty type',
     price: 'Price',
     priceUnit: 'Price unit',
     width: 'Width',
-    height: 'Length',
+    length: 'Length',
+    direction: 'Direction',
     area: 'Area',
     address: 'Address',
     toilet: 'Toilet',
@@ -24,16 +25,22 @@ const strings = new LocalizedStrings({
     actionTitle: 'Upload avatar',
     actionCamera: 'Take a photo',
     actionPhoto: 'Select from library',
-    cancel: 'Cancel'
+    cancel: 'Cancel',
+    moreThanFive: 'More than 5',
+    select: '--- Please select ---',
+    uploadImage: 'Upload images',
+    image: 'Illustrating images',
+    youtube: 'Youtube link'
   },
   vni: {
     name: 'Tiêu đề',
     ownedByProject: 'Thuộc dự án',
-    projectType: 'Loại dự án',
+    projectType: 'Loại bđs',
     price: 'Giá',
     priceUnit: 'Đơn vị giá',
     width: 'Chiều rộng',
-    height: 'Chiều dài',
+    length: 'Chiều dài',
+    direction: 'Hướng',
     area: 'Diện tích',
     address: 'Địa chỉ',
     toilet: 'Toilet',
@@ -48,7 +55,12 @@ const strings = new LocalizedStrings({
     actionTitle: 'Tải ảnh lên',
     actionCamera: 'Chụp ảnh',
     actionPhoto: 'Thư viện ảnh',
-    cancel: 'Huỷ'
+    cancel: 'Huỷ',
+    moreThanFive: 'Nhiều hơn 5',
+    select: '--- Vui lòng chọn ---',
+    uploadImage: 'Tải ảnh lên',
+    image: 'Hình ảnh minh hoạ',
+    youtube: 'Youtube link'
   }
 });
 

@@ -33,7 +33,7 @@ target 'VStartup' do
     'RCTSettings',
     'RCTText',
     'RCTVibration',
-    'RCTWebSocket',
+    'RCTWebSocket'
   ]
 
   # React Native third party dependencies podspecs
@@ -56,6 +56,7 @@ target 'VStartup' do
   pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
 
   pod 'RNImageCropPicker', :path =>  '../node_modules/react-native-image-crop-picker'
+
 
 
 end

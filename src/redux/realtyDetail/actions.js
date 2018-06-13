@@ -12,6 +12,10 @@ export const UNLIKE_REALTY = 'UNLIKE_REALTY';
 export const UNLIKE_REALTY_SUCCESS = 'UNLIKE_REALTY_SUCCESS';
 export const UNLIKE_REALTY_FAILURE = 'UNLIKE_REALTY_FAILURE';
 
+export const POST_REALTY = 'POST_REALTY';
+export const POST_REALTY_SUCCESS = 'POST_REALTY_SUCCESS';
+export const POST_REALTY_FAILURE = 'POST_REALTY_FAILURE';
+
 export const getRealtyDetailAction = payload =>
   store.dispatch({
     type: GET_REALTY_DETAIL,
@@ -27,5 +31,11 @@ export const likeRealtyAction = payload =>
 export const unlikeRealtyAction = payload =>
   store.dispatch({
     type: UNLIKE_REALTY,
+    payload
+  });
+
+export const postRealtyAction = payload =>
+  store.dispatch({
+    type: POST_REALTY,
     payload
   });

@@ -33,11 +33,12 @@ const strings = new LocalizedStrings({
     changePassword: 'Đổi mật khẩu',
     logOut: 'Đăng xuất',
     areYouSure: 'Bạn chắc chắn muốn đăng xuất ?',
-    hideRealty: 'Ẩn tin bất động sản',
-    editRealty: 'Chỉnh sửa tin bất động sản',
+    hideRealty: 'Ẩn tin',
+    editRealty: 'Chỉnh sửa tin',
     actionTitle: 'Tải ảnh lên',
     actionCamera: 'Chụp ảnh',
     actionPhoto: 'Thư viện ảnh',
+    cancel: 'Huỷ',
     manageContact: 'Quản lý liên hệ',
     manageProject: 'Tất cả dự án'
   }

@@ -12,7 +12,7 @@ import {
   setListCityAction,
   setListOptionsAction
 } from '../redux/preload/actions';
-import { loginAction, getMeAction } from '../redux/auth/actions';
+import { loginAction, getMeAction, SET_TOKEN } from '../redux/auth/actions';
 import strings from '../localization/authorization';
 import { ApiClient } from '../swaggerApi/src';
 
@@ -37,9 +37,8 @@ class SplashScreen extends React.Component {
       ApiClient.instance.authentications.Bearer.type = 'apiKey';
       ApiClient.instance.authentications.Bearer.apiKeyPrefix = 'Bearer';
       ApiClient.instance.authentications.Bearer.apiKey = token;
-      loginAction({ email: 'mra@gmail.com', password: '123admin', reset: true });
-      // getMeAction();
-      // getListKeywordAction();
+      this.props.dispatch({ type: SET_TOKEN, payload: token });
+      getMeAction();
     } else {
       const resetAction = StackActions.reset({
         index: 0,

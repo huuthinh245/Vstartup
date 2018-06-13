@@ -1,4 +1,5 @@
 import 'rxjs';
+import RNFetchBlob from 'react-native-fetch-blob';
 import { combineEpics } from 'redux-observable';
 import { realtyApi, handleError } from '../../utils/api';
 
@@ -11,7 +12,10 @@ import {
   LIKE_REALTY_FAILURE,
   UNLIKE_REALTY,
   UNLIKE_REALTY_SUCCESS,
-  UNLIKE_REALTY_FAILURE
+  UNLIKE_REALTY_FAILURE,
+  POST_REALTY,
+  POST_REALTY_SUCCESS,
+  POST_REALTY_FAILURE
 } from './actions';
 
 const getRealtyDetail = actions$ =>
@@ -47,4 +51,26 @@ const unlikeRealty = actions$ =>
     }
   });
 
-export const realtyDetailEpic = combineEpics(getRealtyDetail, likeRealty, unlikeRealty);
+const postRealty = actions$ =>
+  actions$.ofType(POST_REALTY).switchMap(async action => {
+    try {
+      const resp = await RNFetchBlob.fetch(
+        'POST',
+        'https://rems.dfm-engineering.com/api/v1/realty',
+        {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${action.payload.token}}`,
+          otherHeader: 'foo'
+        },
+        action.payload.data
+      );
+      console.log(resp.json());
+      return { type: POST_REALTY_SUCCESS, payload: resp.json() };
+    } catch (error) {
+      console.log(error);
+      handleError(error, true);
+      return { type: POST_REALTY_FAILURE, payload: { realty: action.payload, error } };
+    }
+  });
+
+export const realtyDetailEpic = combineEpics(getRealtyDetail, likeRealty, unlikeRealty, postRealty);

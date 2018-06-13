@@ -17,8 +17,8 @@ import RNPopover from 'react-native-popover-menu';
 import ActionSheet from 'react-native-actionsheet';
 import RNFetchBlob from 'react-native-fetch-blob';
 import call from 'react-native-phone-call';
+import * as Progress from 'react-native-progress';
 
-import Overlay from '../components/common/Overlay';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import errorStrings from '../localization/error';
@@ -41,8 +41,7 @@ import {
   refreshAgencyRealtyAction
 } from '../redux/agencyRealty/actions';
 import { imagePicker, cameraPicker } from '../utils/imagePicker';
-import { userApi } from '../utils/api';
-import { logoutAction, updateAvatarAction, UPDATE_AVATAR } from '../redux/auth/actions';
+import { logoutAction, updateAvatarAction } from '../redux/auth/actions';
 import { _alert } from '../utils/alert';
 
 const size = _ios
@@ -53,15 +52,14 @@ class AuthDetail extends React.Component {
   constructor(props) {
     super(props);
     this.onEndReachedCalledDuringMomentum = true;
-    this.state = {
-      uploading: false
-    };
   }
 
   componentDidMount() {
     const { data } = this.props;
     getAgencyRealtyAction({ author_id: data.id });
   }
+
+  _navigate = (route, params) => this.props.navigation.navigate(route, params);
 
   _showHeaderPopup = ref => {
     const { user } = this.props.auth;
@@ -76,14 +74,12 @@ class AuthDetail extends React.Component {
     let menus;
     if (data.id !== user.id) {
       menus = [
-        {
-          menus: [{ label: strings.manageProject, icon: project }]
-        }
+        { menus: [{ label: strings.manageProject, icon: project }] }
       ];
     } else if (user.role_id !== 3) {
       menus = [
-        {
-          menus: [
+        { menus: 
+          [
             { label: strings.editAccount, icon: edit },
             { label: strings.changePassword, icon: changePassword },
             { label: strings.logOut, icon: logOut }
@@ -92,8 +88,8 @@ class AuthDetail extends React.Component {
       ];
     } else {
       menus = [
-        {
-          menus: [
+        { menus: 
+          [
             { label: strings.manageContact, icon: manage },
             { label: strings.manageProject, icon: project },
             { label: strings.editAccount, icon: edit },
@@ -107,20 +103,16 @@ class AuthDetail extends React.Component {
     handleOnDone = index => {
       if (data.id === user.id) {
         let _index = index;
-        if(data.role_id === 3) {
-          _index = index - 2;
-        }
+        if (data.role_id === 3) _index = index - 2;
 
-        console.log(_index);
-
-        if(_index === -2) {
-          this.props.navigation.navigate(routes.contacts);
-        } else if(_index === -1) {
-          this.props.navigation.navigate(routes.agencyProject, { user });
+        if (_index === -2) {
+          this._navigate(routes.contacts);
+        } else if (_index === -1) {
+          this._navigate(routes.agencyProject, { user });
         } else if (_index === 0) {
-          this.props.navigation.navigate(routes.additionalInformation);
+          this._navigate(routes.additionalInformation);
         } else if (_index === 1) {
-          this.props.navigation.navigate(routes.changePassword);
+          this._navigate(routes.changePassword);
         } else if (_index === 2) {
           _alert(strings.logOut, strings.areYouSure, [
             {
@@ -132,56 +124,16 @@ class AuthDetail extends React.Component {
             }
           ]);
         }
-      }else {
-        this.props.navigation.navigate(routes.agencyProject, { user: data });
+      } else {
+        this._navigate(routes.agencyProject, { user: data });
       }
     };
 
     RNPopover.Show(ref, {
       menus,
       onDone: (status, index) => {
-        if (_ios) {
-          handleOnDone(status);
-        } else {
-          handleOnDone(index);
-        }
-      },
-      tintColor: _colors.popup,
-      theme: 'dark',
-      rowHeight: 50,
-      perferedWidth: responsiveWidth(70)
-    });
-  };
-
-  _showItemPopup = ref => {
-    const hide = <Icon name="eye-slash" size={size} color="#ffffff" family="FontAwesome" />;
-    const edit = <Icon name="edit" size={size} color="#ffffff" family="FontAwesome" />;
-
-    const menus = [
-      {
-        menus: [
-          { label: strings.hideRealty, icon: hide },
-          { label: strings.editRealty, icon: edit }
-        ]
-      }
-    ];
-
-    handleOnDone = index => {
-      if (index === 0) {
-        // hide realty
-      } else if (index === 1) {
-        // edit realty
-      }
-    };
-
-    RNPopover.Show(ref, {
-      menus,
-      onDone: (status, index) => {
-        if (_ios) {
-          handleOnDone(status);
-        } else {
-          handleOnDone(index);
-        }
+        if (_ios) handleOnDone(status);
+        else handleOnDone(index);
       },
       tintColor: _colors.popup,
       theme: 'dark',
@@ -224,9 +176,7 @@ class AuthDetail extends React.Component {
         outer
         right={
           <TouchableOpacity
-            ref={ref => {
-              this.headerDom = ref;
-            }}
+            ref={ref => { this.headerDom = ref; }}
             onPress={() => this._showHeaderPopup(this.headerDom)}
           >
             <Ionicons name="md-more" size={30} color={_colors.mainColor} style={{ padding: 10 }} />
@@ -253,13 +203,7 @@ class AuthDetail extends React.Component {
   _renderItem = ({ item }) => {
     return (
       <TouchableOpacity
-        ref={ref => {
-          this[`realty(${item.id})`] = ref;
-        }}
-        onPress={() => {
-          this.props.navigation.navigate(routes.realtyDetail, { data: item });
-        }}
-        onLongPress={() => this._showItemPopup(this[`realty(${item.id})`])}
+        onPress={() => this._navigate(routes.realtyDetail, { data: item })}
         style={styles.item}
       >
         <View style={styles.itemImage}>
@@ -271,30 +215,26 @@ class AuthDetail extends React.Component {
             resizeMode={FastImage.resizeMode.cover}
           />
         </View>
-
         <View style={styles.itemInfo}>
-          <Text numberOfLines={2} style={styles.itemName}>
-            {item.title}
-          </Text>
-          <Text numberOfLines={1} style={styles.itemPrice}>
-            {item.price} {item.price_unit}
-          </Text>
-          <Text numberOfLines={1} style={styles.itemAddress}>
-            {item.address}
-          </Text>
+          <Text numberOfLines={2} style={styles.itemName}>{item.title}</Text>
+          <Text numberOfLines={1} style={styles.itemPrice}>{item.price} {item.price_unit}</Text>
+          <Text numberOfLines={1} style={styles.itemAddress}>{item.address}</Text>
         </View>
       </TouchableOpacity>
     );
   };
 
-  _uploadAvatar = async image => {
-    const body = new FormData();
-    body.append('file', {
+  _uploadAvatar = image => {
+    const form = [];
+    const path = _ios ? 'path' : 'uri';
+    form.push({
+      name: 'file', 
       type: 'image/jpeg',
-      name: 'photo.jpg',
-      uri: image.path
+      filename: 'photo.jpg',
+      data: RNFetchBlob.wrap(image[path])
     });
-    this.props.dispatch(updateAvatarAction(body, this.props.auth.token));
+
+    updateAvatarAction({ data: form, token: this.props.auth.token });
   };
 
   _renderProfile = () => {
@@ -325,7 +265,7 @@ class AuthDetail extends React.Component {
 
         {data.role_id === 3 && (
           <AirbnbRating
-            count={4}
+            count={data.rating}
             size={responsiveFontSize(_dims.defaultFontSubTitle)}
             showRating={false}
           />
@@ -344,9 +284,7 @@ class AuthDetail extends React.Component {
             style={styles.line}
           >
             <Ionicons name="ios-call" style={styles.lineIcon} />
-            <Text style={[styles.lineText, !data.phone && { color: 'silver' }]}>
-              {data.phone || strings.unset}
-            </Text>
+            <Text style={[styles.lineText, !data.phone && { color: 'silver' }]}>{data.phone || strings.unset}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -364,21 +302,15 @@ class AuthDetail extends React.Component {
           <TouchableOpacity
             onPress={() => {
               if (!data.lat) return;
-              this.props.navigation.navigate(routes.pickObjOnMap, {
-                coordinate: [data.lat, data.lng]
-              });
+              this._navigate(routes.pickObjOnMap, { coordinate: [data.lat, data.lng] });
             }}
             style={[styles.line, styles.noBorderBottom]}
           >
             <Ionicons name="md-pin" style={styles.lineIcon} />
-            <Text style={[styles.lineText, !data.address && { color: 'silver' }]}>
-              {data.address || strings.unset}
-            </Text>
+            <Text style={[styles.lineText, !data.address && { color: 'silver' }]}>{data.address || strings.unset}</Text>
           </TouchableOpacity>
         </View>
-
         <Text style={styles.showProj}>{strings.showProj}</Text>
-
         {this.props.agencyRealty.fetching && <PlaceHolder />}
       </View>
     );
@@ -394,11 +326,8 @@ class AuthDetail extends React.Component {
   _renderEmpty = () => {
     const { user } = this.props.auth;
     const { data, agencyRealty } = this.props;
-    if (agencyRealty.fetching) {
-      return null;
-    }
-    const str =
-      user.id === data.id ? errorStrings.emptyListMyRealty : errorStrings.emptyListAgencyRealty;
+    if (agencyRealty.fetching) return null;
+    const str = user.id === data.id ? errorStrings.emptyListMyRealty : errorStrings.emptyListAgencyRealty;
     return <Empty title={str} />;
   };
 
@@ -407,8 +336,11 @@ class AuthDetail extends React.Component {
     const { user } = this.props.auth;
     return (
       <View style={styles.wrapper}>
-        <Overlay visible={this.state.uploading} />
         {this._renderHeader()}
+        { 
+          this.props.auth.updating && 
+          (<View style={styles.progress}><Progress.Pie indeterminate size={50} /></View>)
+        }
         {data.id === user.id && (
           <TouchableOpacity
             style={styles.fab}
@@ -433,28 +365,19 @@ class AuthDetail extends React.Component {
           ListFooterComponent={this._renderFooter}
           onEndReached={this._onLoadMore}
           onEndReachedThreshold={0}
-          onMomentumScrollBegin={() => {
-            this.onEndReachedCalledDuringMomentum = false;
-          }}
+          onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
           refreshing={agencyRealty.refreshing}
           onRefresh={this._onRefresh}
         />
         <ActionSheet
-          ref={o => {
-            this.actionSheetAuth = o;
-          }}
+          ref={o => { this.actionSheetAuth = o; }}
           options={[strings.actionCamera, strings.actionPhoto, strings.cancel]}
           cancelButtonIndex={2}
           onPress={index => {
             if (index === 1) {
-              imagePicker({
-                multiple: false,
-                callback: this._uploadAvatar
-              });
+              imagePicker({ multiple: false, callback: this._uploadAvatar });
             } else if (index === 0) {
-              cameraPicker({
-                callback: this._uploadAvatar
-              });
+              cameraPicker({ callback: this._uploadAvatar });
             }
           }}
         />
@@ -613,5 +536,16 @@ export const styles = StyleSheet.create({
     flex: 1,
     marginLeft: _dims.defaultPadding,
     color: '#555'
+  },
+  progress: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: 0,
+    left: 0,
+    zIndex: Number.MAX_SAFE_INTEGER,
+    width: _dims.screenWidth,
+    height: _dims.screenHeight,
+    backgroundColor: 'rgba(0,0,0,0.2)'
   }
 });

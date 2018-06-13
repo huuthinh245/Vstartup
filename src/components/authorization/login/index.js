@@ -64,15 +64,6 @@ class Login extends Component {
       });
       this.password.focus();
     } else {
-      const resp = await authApi.login({
-        email: this.state.email,
-        password: this.state.password,
-        callback
-      });
-
-      ApiClient.instance.authentications.Bearer.apiKeyPrefix = 'Bearer';
-      ApiClient.instance.authentications.Bearer.apiKey = resp.body.token;
-
       const callback = this.props.navigation.state.params
         ? () => this.props.navigation.goBack()
         : null;

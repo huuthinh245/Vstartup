@@ -13,27 +13,52 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
 import { Dropdown } from 'react-native-material-dropdown';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 import { _dims, _colors, responsiveFontSize, responsiveWidth } from '../utils/constants';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import strings from '../localization/filter';
 
+const dataSelect = [
+  { id: 0, value: '_' },
+  { id: 1, value: '1' },
+  { id: 2, value: '2' },
+  { id: 3, value: '3' },
+  { id: 4, value: '4' },
+  { id: 5, value: '>= 5' }
+];
+
 class Filter extends React.Component {
   constructor(props) {
     super(props);
     const { options } = this.props.navigation.state.params;
-    console.log(options);
     this.state = {
       scrollEnabled: true,
       utils: options.utils || [],
       priceRange: options.price || [0, 20],
       areaRange: options.area || [0, 1000],
-      beds: options.bedroom || { id: 0, value: strings.pleaseSelect },
-      baths: options.bathroom || { id: 0, value: strings.pleaseSelect },
-      realtyType: options.type || { id: 0, value: strings.pleaseSelect }
+      toilet: options.toilet || 0,
+      bedroom: options.bedroom || 0,
+      bathroom: options.bathroom || 0,
+      realtyType: options.type || 0
     };
   }
+
+  _renderDropdownItem = (option, index, isSelected) => {
+    return (
+      <View
+        style={{
+          height: 50,
+          paddingHorizontal: _dims.defaultPadding,
+          justifyContent: 'center',
+          backgroundColor: isSelected ? _colors.popup : '#aaa'
+        }}
+      >
+        <Text style={{ color: isSelected ? '#fff' : '#eee' }}>{option}</Text>
+      </View>
+    );
+  };
 
   _renderItem = ({ item }) => {
     const copy = _.map(this.state.utils, _.clone);
@@ -73,16 +98,19 @@ class Filter extends React.Component {
     const result = {};
     Object.assign(result, { price: opts.priceRange });
     Object.assign(result, { area: opts.areaRange });
-    if (opts.beds.id !== 0) {
-      Object.assign(result, { bedroom: opts.beds });
+    if (opts.bedroom !== 0) {
+      Object.assign(result, { bedroom: opts.bedroom });
     }
-    if (opts.baths.id !== 0) {
-      Object.assign(result, { bathroom: opts.baths });
+    if (opts.bathroom !== 0) {
+      Object.assign(result, { bathroom: opts.bathroom });
+    }
+    if (opts.toilet !== 0) {
+      Object.assign(result, { toilet: opts.toilet });
     }
     if (opts.utils.length > 0) {
       Object.assign(result, { utils: opts.utils });
     }
-    if (opts.realtyType.id !== 0) {
+    if (opts.realtyType !== 0) {
       Object.assign(result, { type: opts.realtyType });
     }
     this.props.navigation.state.params.onDone(result);
@@ -90,31 +118,6 @@ class Filter extends React.Component {
   };
 
   render() {
-    const dataRealtyType = [{ id: 0, value: strings.pleaseSelect }].concat(
-      this.props.options.data.realtyTypes.map(item => ({
-        id: item.id,
-        value: item.name
-      }))
-    );
-
-    const dataBed = [
-      { id: 0, value: strings.pleaseSelect },
-      { id: 1, value: '1' },
-      { id: 2, value: '2' },
-      { id: 3, value: '3' },
-      { id: 4, value: '4' },
-      { id: 5, value: strings.moreThanFive }
-    ];
-
-    const dataBath = [
-      { id: 0, value: strings.pleaseSelect },
-      { id: 1, value: '1' },
-      { id: 2, value: '2' },
-      { id: 3, value: '3' },
-      { id: 4, value: '4' },
-      { id: 5, value: strings.moreThanFive }
-    ];
-
     return (
       <View style={styles.wrapper}>
         <Header
@@ -185,39 +188,65 @@ class Filter extends React.Component {
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row' }}>
-              <Dropdown
-                label={strings.bedroom}
-                containerStyle={{
-                  flex: 1,
-                  marginRight: _dims.defaultPadding,
-                  marginVertical: _dims.defaultPadding
-                }}
-                dropdownOffset={{ top: _dims.defaultPadding, left: 0 }}
-                fontSize={responsiveFontSize(_dims.defaultFontInput)}
-                labelFontSize={responsiveFontSize(_dims.defaultFontSubTitle)}
-                baseColor={_colors.mainColor}
-                value={this.state.beds.value}
-                data={dataBed}
-                itemCount={dataBed.length}
-                onChangeText={(value, index) => this.setState({ beds: dataBed[index] })}
-              />
-              <Dropdown
-                label={strings.bathroom}
-                containerStyle={{
-                  flex: 1,
-                  marginLeft: _dims.defaultPadding,
-                  marginVertical: _dims.defaultPadding
-                }}
-                itemCount={dataBath.length}
-                dropdownOffset={{ top: _dims.defaultPadding, left: 0 }}
-                fontSize={responsiveFontSize(_dims.defaultFontInput)}
-                labelFontSize={responsiveFontSize(_dims.defaultFontSubTitle)}
-                baseColor={_colors.mainColor}
-                value={this.state.baths.value}
-                data={dataBath}
-                onChangeText={(value, index) => this.setState({ baths: dataBath[index] })}
-              />
+            <View style={styles.wrap}>
+              <View style={styles.part}>
+                <Text style={styles.label}>{strings.toilet}</Text>
+                <ModalDropdown
+                  renderRow={this._renderDropdownItem}
+                  dropdownStyle={[
+                    styles.dropdown_2_dropdown,
+                    {
+                      width: (_dims.screenWidth - _dims.defaultPadding * 4) / 3,
+                      height: dataSelect.length * 50
+                    }
+                  ]}
+                  dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
+                  options={dataSelect.map(item => item.value)}
+                  defaultIndex={this.state.toilet}
+                  onSelect={index => this.setState({ toilet: index })}
+                >
+                  <Text style={styles.value}>{dataSelect[this.state.toilet].value}</Text>
+                </ModalDropdown>
+              </View>
+
+              <View style={[styles.part, { marginHorizontal: _dims.defaultPadding }]}>
+                <Text style={styles.label}>{strings.bathroom}</Text>
+                <ModalDropdown
+                  renderRow={this._renderDropdownItem}
+                  dropdownStyle={[
+                    styles.dropdown_2_dropdown,
+                    {
+                      width: (_dims.screenWidth - _dims.defaultPadding * 4) / 3,
+                      height: dataSelect.length * 50
+                    }
+                  ]}
+                  dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
+                  options={dataSelect.map(item => item.value)}
+                  defaultIndex={this.state.bathroom}
+                  onSelect={index => this.setState({ bathroom: index })}
+                >
+                  <Text style={styles.value}>{dataSelect[this.state.bathroom].value}</Text>
+                </ModalDropdown>
+              </View>
+              <View style={styles.part}>
+                <Text style={styles.label}>{strings.bedroom}</Text>
+                <ModalDropdown
+                  renderRow={this._renderDropdownItem}
+                  dropdownStyle={[
+                    styles.dropdown_2_dropdown,
+                    {
+                      width: (_dims.screenWidth - _dims.defaultPadding * 4) / 3,
+                      height: dataSelect.length * 50
+                    }
+                  ]}
+                  dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
+                  options={dataSelect.map(item => item.value)}
+                  defaultIndex={this.state.bedroom}
+                  onSelect={index => this.setState({ bedroom: index })}
+                >
+                  <Text style={styles.value}>{dataSelect[this.state.bedroom].value}</Text>
+                </ModalDropdown>
+              </View>
             </View>
             <Text
               style={[
@@ -236,35 +265,40 @@ class Filter extends React.Component {
             <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                marginTop: _dims.defaultPadding * 2
               }}
             >
               <Text
                 style={{
                   fontSize: responsiveFontSize(_dims.defaultFontSubTitle),
                   color: _colors.mainColor,
-                  marginRight: _dims.defaultPadding,
-                  marginTop: 32
+                  marginRight: _dims.defaultPadding
                 }}
               >
                 {strings.projectType}
               </Text>
-              <Dropdown
-                containerStyle={{
-                  flex: 1
-                }}
-                dropdownPosition={dataRealtyType.length}
-                itemCount={dataRealtyType.length}
-                fontSize={responsiveFontSize(_dims.defaultFontInput)}
-                labelFontSize={responsiveFontSize(_dims.defaultFontSubTitle)}
-                baseColor={_colors.mainColor}
-                value={this.state.realtyType.value}
-                data={dataRealtyType}
-                onChangeText={(value, index) =>
-                  this.setState({ realtyType: dataRealtyType[index] })
-                }
-              />
+              <View style={{ flex: 1 }}>
+                <ModalDropdown
+                  renderRow={this._renderDropdownItem}
+                  dropdownStyle={[
+                    styles.dropdown_2_dropdown,
+                    { width: '80%', height: dataSelect.length * 50 }
+                  ]}
+                  adjustFrame={style => {
+                    style.left -= responsiveWidth(10) - _dims.defaultPadding * 1.5;
+                    return style;
+                  }}
+                  dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
+                  options={this.props.options.data.realtyTypes.map(item => item.name)}
+                  defaultIndex={this.state.realtyType}
+                  onSelect={index => this.setState({ realtyType: index })}
+                >
+                  <Text style={[styles.value, { flex: 1 }]}>
+                    {this.props.options.data.realtyTypes[this.state.realtyType].name}
+                  </Text>
+                </ModalDropdown>
+              </View>
             </View>
           </View>
         </ScrollView>
@@ -404,5 +438,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderWidth: 3,
     borderColor: '#3bcce1'
+  },
+  wrap: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15
+  },
+  part: {
+    flex: 1
+  },
+  label: {
+    color: 'gray',
+    marginBottom: 5,
+    textAlign: 'center'
+  },
+  value: {
+    borderWidth: 1,
+    borderColor: '#3bcce1',
+    padding: 10,
+    textAlign: 'center'
+  },
+  dropdown_2_dropdown: {
+    width: '90%',
+    height: 320,
+    borderColor: 'rgba(192,192,192,0.4)',
+    borderWidth: 1,
+    borderRadius: 3
   }
 });

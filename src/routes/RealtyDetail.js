@@ -19,6 +19,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import call from 'react-native-phone-call';
 import { connect } from 'react-redux';
 import YouTube from 'react-native-youtube';
+import ActionSheet from 'react-native-actionsheet';
 
 import PlaceHolder from '../components/flatlistHelpers/PlaceHolder_Detail';
 import * as routes from './routes';
@@ -30,7 +31,7 @@ import {
   pluralNoun
 } from '../utils/constants';
 import SliderEntry from '../components/SliderEntry';
-import strings from '../localization/projectDetail';
+import strings from '../localization/realtyDetail';
 import alertStrings from '../localization/alert';
 import Header from '../navigators/headers/CommonHeader';
 import { _alert } from '../utils/alert';
@@ -91,7 +92,7 @@ class RealtyDetail extends Component {
   };
 
   _sendContact = () => {
-    if(this.props.listContact.sending) return;
+    if (this.props.listContact.sending) return;
     if (!this.state.name) {
       emitter.emit('alert', {
         type: 'warn',
@@ -114,13 +115,16 @@ class RealtyDetail extends Component {
       });
       this.phone.focus();
     } else {
+      callback = () => _alert(alertStrings.success, alertStrings.postContactSuccess);
       const obj = {
         body: {
           name: this.state.name,
           email: this.state.email,
           phone: this.state.phone
-        }
+        },
+        callback
       };
+
       postContactAction(obj);
     }
   };
@@ -224,9 +228,9 @@ class RealtyDetail extends Component {
             </View>
           </View>
           <View style={styles.priceWrapper}>
-            <Text style={[styles.priceMethod, styles.color4]}>{realty.method}</Text>
+            <Text style={[styles.priceMethod, styles.color4]}>{realty.method.name}</Text>
             <Text style={styles.price}>
-              {realty.price} {realty.price_unit}
+              {realty.price} {realty.price_unit.name}
             </Text>
           </View>
         </View>
@@ -421,7 +425,22 @@ class RealtyDetail extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        <Header onLeftPress={() => this.props.navigation.goBack()} title={params.data.title} />
+        <Header
+          onLeftPress={() => this.props.navigation.goBack()}
+          title={params.data.title}
+          right={
+            realty && this.props.auth.user.id === realty.author_id ? (
+              <TouchableOpacity onPress={() => this.actionSheetRealty.show()} >
+                <Ionicons
+                  name="md-more"
+                  size={30}
+                  color={_colors.mainColor}
+                  style={{ padding: 10 }}
+                />
+              </TouchableOpacity>
+            ) : null
+          }
+        />
         <KeyboardAwareScrollView
           ref={scroll => {
             this.scroll = scroll;
@@ -439,6 +458,18 @@ class RealtyDetail extends Component {
         >
           {this.props.realtyDetail.fetching ? <PlaceHolder /> : this._renderLoadDone(realty)}
         </KeyboardAwareScrollView>
+        <ActionSheet
+          ref={o => { this.actionSheetRealty = o; }}
+          options={[strings.hideRealty, strings.editRealty, strings.cancel]}
+          cancelButtonIndex={2}
+          onPress={index => {
+            if (index === 1) {
+              imagePicker({ multiple: false, callback: this._uploadAvatar });
+            } else if (index === 0) {
+              cameraPicker({ callback: this._uploadAvatar });
+            }
+          }}
+        />
       </View>
     );
   }

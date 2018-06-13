@@ -1,5 +1,6 @@
 import 'rxjs';
 import { combineEpics } from 'redux-observable';
+import RNFetchBlob from 'react-native-fetch-blob';
 import { AsyncStorage } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import * as routes from '../../routes/routes';
@@ -86,12 +87,10 @@ const logoutEpic = actions$ =>
   });
 
 const getMeEpic = actions$ =>
-  actions$.ofType(GET_ME).switchMap(async action => {
+  actions$.ofType(GET_ME).switchMap(async () => {
     try {
       const resp = await userApi.me();
-      ApiClient.instance.authentications.Bearer.apiKeyPrefix = '';
-      ApiClient.instance.authentications.Bearer.apiKey = '';
-      AsyncStorage.setItem('token', '');
+      reset();
       return { type: GET_ME_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
@@ -183,11 +182,20 @@ const updatePasswordEpic = actions$ =>
 const updateAvatarEpic = actions$ =>
   actions$.ofType(UPDATE_AVATAR).switchMap(async action => {
     try {
-      const resp = await userApi.uploadAvatar(action.payload);
-      return { type: UPDATE_AVATAR_SUCCESS, payload: resp.body };
+      const resp = await RNFetchBlob.fetch(
+        'POST',
+        'https://rems.dfm-engineering.com/api/v1/user/avatar',
+        {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${action.payload.token}}`,
+          otherHeader: 'foo'
+        },
+        action.payload.data
+      );
+      return { type: UPDATE_AVATAR_SUCCESS, payload: resp.json() };
     } catch (error) {
       handleError(error, true);
-      return { type: UPDATE_AVATAR_FAILURE, payload: error };
+      return { type: UPDATE_AVATAR_FAILURE, payload: { realty: action.payload, error } };
     }
   });
 

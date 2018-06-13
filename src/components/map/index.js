@@ -235,7 +235,7 @@ export default class Map extends React.Component {
           scrollEventThrottle={1}
           showsHorizontalScrollIndicator={false}
           snapToInterval={CARD_WIDTH}
-          onScroll={Animated.event(
+          onScrollEndDrag={Animated.event(
             [
               {
                 nativeEvent: {
