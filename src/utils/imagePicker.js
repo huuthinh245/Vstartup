@@ -57,14 +57,14 @@ export const imagePicker = ({ multiple, callback }) => {
 };
 
 const imagePickerIos = async (multiple = true, callback = () => {}) => {
-  const per = await Permissions.request('photo', { type: 'always' });
-  if (per === 'restricted') {
-    _alert(
-      'Error',
-      'This feature is not supported by the device or because it has been blocked by parental controls'
-    );
-  } else if (per === 'authorized') {
-    try {
+  try {
+    const per = await Permissions.request('photo', { type: 'always' });
+    if (per === 'restricted') {
+      _alert(
+        'Error',
+        'This feature is not supported by the device or because it has been blocked by parental controls'
+      );
+    } else if (per === 'authorized') {
       const images = await ImagePicker.openPicker({
         mediaType: 'photo',
         multiple,
@@ -73,32 +73,40 @@ const imagePickerIos = async (multiple = true, callback = () => {}) => {
         cropping: true
       });
       callback(images);
-    } catch (error) {
-      if (error.code !== 'E_PICKER_CANCELLED') {
-        _alert('Error', error.message);
-      }
+    } else if (per === 'denied') {
+      openSettingsIos('Photo');
     }
-  } else if (per === 'denied') {
-    openSettingsIos('Photo');
+  } catch (error) {
+    if (error.code !== 'E_PICKER_CANCELLED') {
+      _alert('Error', error.message);
+    }
   }
 };
 
 const imagePickerAndroid = async (multiple = true, callback = () => {}) => {
-  const per = await PermissionsAndroid.request(permissionStorage);
-  if (per === resultGranted) {
-    try {
+  try {
+    if (Platform.Version >= 23) {
+      const per = await PermissionsAndroid.request(permissionStorage);
+      if (per === resultGranted) {
+        const images = await ImagePicker.openPicker({
+          mediaType: 'photo',
+          multiple
+        });
+        callback(images);
+      } else if (per === resultNever) {
+        openSettingsAndroid('Storage');
+      }
+    } else {
       const images = await ImagePicker.openPicker({
         mediaType: 'photo',
         multiple
       });
       callback(images);
-    } catch (error) {
-      if (error.code !== 'E_PICKER_CANCELLED') {
-        _alert('Error', error.message);
-      }
     }
-  } else if (per === resultNever) {
-    openSettingsAndroid('Storage');
+  } catch (error) {
+    if (error.code !== 'E_PICKER_CANCELLED') {
+      _alert('Error', error.message);
+    }
   }
 };
 
@@ -107,46 +115,55 @@ export const cameraPicker = ({ callback }) => {
 };
 
 const cameraPickerIos = async (callback = () => {}) => {
-  const per = await Permissions.request('camera');
-  if (per === 'restricted') {
-    _alert(
-      'Error',
-      'This feature is not supported by the device or because it has been blocked by parental controls'
-    );
-  } else if (per === 'authorized') {
-    try {
+  try {
+    const per = await Permissions.request('camera');
+    if (per === 'restricted') {
+      _alert(
+        'Error',
+        'This feature is not supported by the device or because it has been blocked by parental controls'
+      );
+    } else if (per === 'authorized') {
       const image = await ImagePicker.openCamera({
         width: 1600,
         height: 900,
         cropping: true
       });
       callback(image);
-    } catch (error) {
-      if (error.code !== 'E_PICKER_CANCELLED') {
-        _alert('Error', error.message);
-      }
+    } else if (per === 'denied') {
+      openSettingsIos('Camera');
     }
-  } else if (per === 'denied') {
-    openSettingsIos('Camera');
+  } catch (error) {
+    if (error.code !== 'E_PICKER_CANCELLED') {
+      _alert('Error', error.message);
+    }
   }
 };
 
 const cameraPickerAndroid = async (callback = () => {}) => {
-  const per = await PermissionsAndroid.request(permissionCamera);
-  if (per === resultGranted) {
-    try {
+  try {
+    if (Platform.Version >= 23) {
+      const per = await PermissionsAndroid.request(permissionCamera);
+      if (per === resultGranted) {
+        const image = await ImagePicker.openCamera({
+          width: 1600,
+          height: 900,
+          cropping: true
+        });
+        callback(image);
+      } else if (per === resultNever) {
+        openSettingsAndroid('Camera');
+      }
+    } else {
       const image = await ImagePicker.openCamera({
         width: 1600,
         height: 900,
         cropping: true
       });
       callback(image);
-    } catch (error) {
-      if (error.code !== 'E_PICKER_CANCELLED') {
-        _alert('Error', error.message);
-      }
     }
-  } else if (per === resultNever) {
-    openSettingsAndroid('Camera');
+  } catch (error) {
+    if (error.code !== 'E_PICKER_CANCELLED') {
+      _alert('Error', error.message);
+    }
   }
 };

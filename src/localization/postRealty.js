@@ -30,7 +30,10 @@ const strings = new LocalizedStrings({
     select: '--- Please select ---',
     uploadImage: 'Upload images',
     image: 'Illustrating images',
-    youtube: 'Youtube link'
+    youtube: 'Youtube link',
+    city: 'City',
+    district: 'District',
+    ward: 'Ward'
   },
   vni: {
     name: 'Tiêu đề',
@@ -60,7 +63,10 @@ const strings = new LocalizedStrings({
     select: '--- Vui lòng chọn ---',
     uploadImage: 'Tải ảnh lên',
     image: 'Hình ảnh minh hoạ',
-    youtube: 'Youtube link'
+    youtube: 'Youtube link',
+    city: 'Tỉnh/Thành phố',
+    district: 'Quận/huyện',
+    ward: 'Phường/xã'
   }
 });
 

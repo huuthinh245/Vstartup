@@ -16,6 +16,7 @@ import {
   refreshAgencyProjectAction
 } from '../redux/agencyProject/actions';
 import { styles } from '../components/AuthDetail';
+import ProjectItem from '../components/ProjectItem';
 
 class AgencyProject extends React.Component {
   constructor(props) {
@@ -44,34 +45,12 @@ class AgencyProject extends React.Component {
 
   _renderItem = ({ item }) => {
     return (
-      <TouchableOpacity
+      <ProjectItem
+        item={item}
         onPress={() => {
           this.props.navigation.navigate(routes.projectDetail, { data: item });
         }}
-        style={styles.item}
-      >
-        <View style={styles.itemImage}>
-          <FastImage
-            source={{
-              uri: item.thumb,
-              priority: FastImage.priority.high
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-        </View>
-
-        <View style={styles.itemInfo}>
-          <Text numberOfLines={2} style={styles.itemName}>
-            {item.title}
-          </Text>
-          <Text numberOfLines={1} style={styles.itemPrice}>
-            {item.price} {item.price_unit}
-          </Text>
-          <Text numberOfLines={1} style={styles.itemAddress}>
-            {item.address}
-          </Text>
-        </View>
-      </TouchableOpacity>
+      />
     );
   };
 

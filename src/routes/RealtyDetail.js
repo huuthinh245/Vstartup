@@ -209,15 +209,11 @@ class RealtyDetail extends Component {
           <View style={styles.infoWrapper}>
             <View style={styles.info}>
               <Text style={[styles.infoText, styles.fontBold]}>{realty.bedroom}</Text>
-              <Text style={[styles.infoText, styles.color4]}>
-                {pluralNoun(realty.bedroom, strings.bedroom)}
-              </Text>
+              <Text style={[styles.infoText, styles.color4]}>{strings.bedroom}</Text>
             </View>
             <View style={styles.info}>
               <Text style={[styles.infoText, styles.fontBold]}>{realty.bathroom}</Text>
-              <Text style={[styles.infoText, styles.color4]}>
-                {pluralNoun(realty.bathroom, strings.bathroom)}
-              </Text>
+              <Text style={[styles.infoText, styles.color4]}>{strings.bathroom}</Text>
             </View>
             <View style={[styles.info, styles.noBorderRight]}>
               <Text style={[styles.infoText, styles.fontBold]}>
@@ -456,7 +452,9 @@ class RealtyDetail extends Component {
             }
           }}
         >
-          {this.props.realtyDetail.fetching ? <PlaceHolder /> : this._renderLoadDone(realty)}
+          { 
+            this.props.realtyDetail.fetching ? <PlaceHolder /> : this._renderLoadDone(realty)
+          }
         </KeyboardAwareScrollView>
         <ActionSheet
           ref={o => { this.actionSheetRealty = o; }}

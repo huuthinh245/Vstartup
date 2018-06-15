@@ -226,12 +226,11 @@ class AuthDetail extends React.Component {
 
   _uploadAvatar = image => {
     const form = [];
-    const path = _ios ? 'path' : 'uri';
     form.push({
       name: 'file', 
       type: 'image/jpeg',
       filename: 'photo.jpg',
-      data: RNFetchBlob.wrap(image[path])
+      data: RNFetchBlob.wrap(image.path)
     });
 
     updateAvatarAction({ data: form, token: this.props.auth.token });
@@ -297,7 +296,7 @@ class AuthDetail extends React.Component {
             style={styles.line}
           >
             <Ionicons name="ios-mail" style={styles.lineIcon} />
-            <Text style={styles.lineText}>{data.email}</Text>
+            <Text style={[styles.lineText, !data.address && { color: 'silver' }]}>{data.email || strings.unset}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {

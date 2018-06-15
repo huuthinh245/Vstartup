@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 
 import {
@@ -46,7 +46,6 @@ class ListAgency extends React.Component {
 
   _onLoadMore = () => {
     if (this.props.listAgency.loadMore || this.onEndReachedCalledDuringMomentum) return;
-
     const len = this.props.listAgency.data.length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
     loadMoreListAgencyAction({ page });
@@ -56,6 +55,13 @@ class ListAgency extends React.Component {
   _onRefresh = () => {
     if (this.props.listAgency.refreshing) return;
     refreshListAgencyAction();
+  };
+
+  _renderFooter = () => {
+    if (this.props.listAgency.fetching || !this.props.listAgency.loadMore) {
+      return <View style={{ height: _dims.defaultPadding }} />;
+    }
+    return <ActivityIndicator animating style={{ alignSelf: 'center', marginVertical: 10 }} />;
   };
 
   render() {

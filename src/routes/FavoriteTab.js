@@ -11,63 +11,51 @@ class FavoriteTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalCity: false,
-      modalDistrict: false,
-      modalWard: false,
-      valueCity: {},
-      valueDistrict: {},
-      valueWard: {},
-      dataDistrict: [],
-      dataWard: []
+      modalVisible: false,
+      data: this.props.city.data.city,
+      modal: 'city',
+      city: {},
+      district: {},
+      ward: {}
     };
   }
   render() {
-    return (
-      <View>
-        <Button title="show" onPress={() => this.setState({ modalCity: true })} />
-        <ModalPicker
-          selected={this.state.valueCity}
-          visible={this.state.modalCity}
-          data={this.props.city.data.city}
-          onDone={valueCity => {
-            const dataDistrict = this.props.city.data.district.filter(
-              item => item.city_id === valueCity.id
-            );
-            console.log(valueCity, dataDistrict);
-            this.setState({ valueCity, dataDistrict, modalCity: false, modalDistrict: true });
-          }}
-          requestClose={() => this.setState({ modalCity: false })}
-        />
-
-        <ModalPicker
-          selected={this.state.valueDistrict}
-          visible={this.state.modalDistrict}
-          data={this.state.dataDistrict}
-          onDone={valueDistrict => {
-            const dataWard = this.props.city.data.ward.filter(
-              item => item.district_id === valueDistrict.id
-            );
-            this.setState({ valueDistrict, dataWard, modalDistrict: false, modalWard: true });
-          }}
-          requestClose={() => this.setState({ modalCity: false })}
-        />
-
-        <ModalPicker
-          selected={this.state.valueWard}
-          visible={this.state.modalWard}
-          data={this.state.dataWard}
-          onDone={valueWard => {
-            this.setState({ valueWard, modalWard: false });
-          }}
-          requestClose={() => this.setState({ modalCity: false })}
-        />
-      </View>
-    );
-    // return this.props.auth.token ? (
-    //   <ListFavorite navigation={this.props.navigation} />
-    // ) : (
-    //   <Login navigation={this.props.navigation} />
+    // return (
+    //   <View>
+    //     <Button title="show" onPress={() => this.setState({ modalVisible: true })} />
+    //     <ModalPicker
+    //       visible={this.state.modalVisible}
+    //       closeModal={() =>
+    //         this.setState({ modalVisible: false, data: this.props.data.city, modal: 'city' })
+    //       }
+    //       requestClose={() =>
+    //         this.setState({ modalVisible: false, data: this.props.data.city, modal: 'city' })
+    //       }
+    //       data={this.state.data}
+    //       onDone={value => {
+    //         if (this.state.modal === 'city') {
+    //           const data = this.props.city.data.district.filter(item => item.city_id === value.id);
+    //           this.setState({ data, city: value, modal: 'district' });
+    //         } else if (this.state.modal === 'district') {
+    //           const data = this.props.city.data.ward.filter(item => item.district_id === value.id);
+    //           this.setState({ data, district: value, modal: 'ward' });
+    //         } else if (this.state.modal === 'ward') {
+    //           this.setState({
+    //             data: this.props.data.city,
+    //             ward: value,
+    //             modal: 'city',
+    //             modalVisible: false
+    //           });
+    //         }
+    //       }}
+    //     />
+    //   </View>
     // );
+    return this.props.auth.token ? (
+      <ListFavorite navigation={this.props.navigation} />
+    ) : (
+      <Login navigation={this.props.navigation} />
+    );
   }
 }
 

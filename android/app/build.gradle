@@ -25,8 +25,8 @@ android {
         applicationId "com.dfm.vstartup"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -74,6 +74,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-picker')
     compile(project(':react-native-google-places')){
         exclude group: 'com.google.android.gms', module: 'play-services-base'
         exclude group: 'com.google.android.gms', module: 'play-services-places'

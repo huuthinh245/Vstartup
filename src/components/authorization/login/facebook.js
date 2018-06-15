@@ -40,7 +40,6 @@ export const _requestFB = async callback => {
               }
             },
             (error, result) => {
-              console.log(result);
               if (error) {
                 _alert(alertStrings.error, `(code = ${error.code}), ${error.message}`, [
                   { text: alertStrings.ok }

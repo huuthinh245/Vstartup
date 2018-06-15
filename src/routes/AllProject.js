@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import errorStrings from '../localization/error';
+
 import { Separator, Empty, PlaceHolder } from '../components/flatlistHelpers';
 import { _dims, LIMIT_SERVICES } from '../utils/constants';
 import ProjectItem from '../components/ProjectItem';
@@ -44,7 +45,7 @@ class ListProject extends React.Component {
   _renderItem = ({ item }) => {
     return (
       <ProjectItem
-        data={item}
+        item={item}
         onPress={() => {
           // callback if there is a component invoke this component to get projectId
           if (this.props.navigation.state.params && this.props.navigation.state.params.callback) {

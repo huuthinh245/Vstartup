@@ -10,6 +10,8 @@ target 'VStartup' do
 	# google signin
 	pod ‘GoogleSignIn'
 
+	pod 'Picker', :path => '../node_modules/react-native-picker'
+
 	# permissions
 	pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
 
@@ -58,6 +60,8 @@ target 'VStartup' do
   pod 'RNImageCropPicker', :path =>  '../node_modules/react-native-image-crop-picker'
 
 
+
+  pod 'Picker', :path => '../node_modules/react-native-picker'
 
 end
 

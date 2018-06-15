@@ -1,34 +1,36 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, PixelRatio } from 'react-native';
-
 import FastImage from 'react-native-fast-image';
 
-import { _colors, _dims, responsiveFontSize, responsiveHeight } from '../utils/constants';
+import strings from '../localization/projectDetail';
+import { _colors, _dims, responsiveFontSize } from '../utils/constants';
 
 export default class ProjectItem extends React.Component {
   render() {
-    const { data } = this.props;
+    const { item } = this.props;
     return (
-      <TouchableOpacity style={styles.wrapper} onPress={this.props.onPress} activeOpacity={0.8}>
-        <FastImage
-          style={styles.image}
-          source={{
-            uri: data.thumb,
-            priority: FastImage.priority.high
-          }}
-          resizeMode={FastImage.resizeMode.cover}
-        />
-        <View style={styles.infoWrapper}>
-          <View style={{ flexDirection: 'row' }}>
-            <Text numberOfLines={1} style={[styles.text, styles.title]}>
-              {data.title}
-            </Text>
-          </View>
-          <Text numberOfLines={1} style={styles.text}>
-            {data.price} {data.price_unit} - {data.area}
+      <TouchableOpacity style={styles.item} onPress={this.props.onPress}>
+        <View style={styles.itemImage}>
+          <FastImage
+            source={{
+              uri: item.thumb,
+              priority: FastImage.priority.high
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
+        </View>
+        <View style={styles.itemInfo}>
+          <Text numberOfLines={2} style={styles.itemName}>
+            {item.title}
           </Text>
-          <Text numberOfLines={1} style={[styles.text, styles.address]}>
-            {data.address}
+          <Text numberOfLines={1} style={styles.itemPrice}>
+            {item.price} {item.price_unit}
+          </Text>
+          <Text numberOfLines={1} style={styles.itemAddress}>
+            {item.address}
+          </Text>
+          <Text numberOfLines={1} style={styles.itemCommission}>
+            {`${strings.commission}: ${item.commission}`}
           </Text>
         </View>
       </TouchableOpacity>
@@ -36,102 +38,43 @@ export default class ProjectItem extends React.Component {
   }
 }
 
-const borderRadius = 10;
-
-export const styles = StyleSheet.create({
-  wrapper: {
-    borderRadius,
+const styles = StyleSheet.create({
+  item: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  itemImage: {
+    width: (_dims.screenWidth - _dims.defaultPadding * 2) / 4,
+    height: (_dims.screenWidth - _dims.defaultPadding * 2) / 4,
+    borderRadius: 20,
     borderWidth: 1 / PixelRatio.get(),
-    borderColor: 'rgba(192,192,192,0.5)',
-    backgroundColor: '#fff',
-    marginHorizontal: _dims.defaultPadding,
-    height: (_dims.screenHeight - 128 - 3 * _dims.defaultPadding) / 2.5,
-    shadowColor: '#333',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 2
+    borderColor: 'silver'
   },
-  placeHolder: {
-    borderRadius,
-    borderWidth: 1 / PixelRatio.get(),
-    borderColor: 'rgba(192,192,192,0.5)',
-    backgroundColor: '#fff',
-    marginHorizontal: _dims.defaultPadding,
-    height: (_dims.screenHeight - 128 - 3 * _dims.defaultPadding) / 2.5
+  itemInfo: {
+    flex: 1,
+    marginLeft: _dims.defaultPadding,
+    justifyContent: 'space-between'
   },
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius,
-    position: 'absolute',
-    top: 0,
-    left: 0
-  },
-  favoriteButton: {
-    position: 'absolute',
-    top: _dims.defaultPadding,
-    right: _dims.defaultPadding,
-    fontSize: 24,
-    color: 'tomato'
-  },
-  touch: {
-    height: responsiveHeight(10)
-  },
-  infoWrapper: {
-    backgroundColor: _colors.overlay,
-    borderBottomLeftRadius: borderRadius,
-    borderBottomRightRadius: borderRadius,
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    left: 0,
-    padding: 10
-  },
-  infoWrapperPlaceHolder: {
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    width: '100%',
-    padding: 10,
-    alignContent: 'flex-end',
-    borderBottomLeftRadius: borderRadius,
-    borderBottomRightRadius: borderRadius
-  },
-  pin: {
-    fontSize: 20,
-    marginRight: 10
-  },
-  text: {
-    color: '#fff',
-    fontWeight: 'bold',
-    marginVertical: 2
-  },
-  titleWrapper: {
+  titleItem: {
     flexDirection: 'row'
   },
-  title: {
-    fontSize: responsiveFontSize(_dims.defaultFontTitle)
+  itemName: {
+    color: '#333'
   },
-  invisible: {
-    display: 'none'
+  itemPrice: {
+    color: '#44cee2',
+    fontWeight: 'bold',
+    marginVertical: 3
   },
-  address: {
-    fontWeight: 'normal'
+  itemAddress: {
+    color: '#777'
   },
-  checkedOverlay: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 20,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    zIndex: Number.MAX_SAFE_INTEGER,
-    backgroundColor: _colors.overlay
-  },
-  checked: {
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
+  itemIcon: {
+    paddingHorizontal: _dims.defaultPadding,
     color: _colors.mainColor,
-    fontSize: 36
+    fontSize: responsiveFontSize(_dims.defaultFontTitle + 8)
+  },
+  itemCommission: {
+    color: 'red'
   }
 });

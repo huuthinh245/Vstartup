@@ -64,6 +64,10 @@ PODS:
   - GTMSessionFetcher/Core (1.1.13)
   - GTMSessionFetcher/Full (1.1.13):
     - GTMSessionFetcher/Core (= 1.1.13)
+  - Picker (4.3.7):
+    - Picker/Core (= 4.3.7)
+  - Picker/Core (4.3.7):
+    - React
   - QBImagePickerController (3.4.0)
   - React (0.54.4):
     - React/Core (= 0.54.4)
@@ -141,6 +145,7 @@ DEPENDENCIES:
   - GooglePlacePicker
   - GooglePlaces
   - GoogleSignIn
+  - Picker (from `../node_modules/react-native-picker`)
   - react-native-fetch-blob (from `../node_modules/react-native-fetch-blob`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
@@ -168,6 +173,8 @@ EXTERNAL SOURCES:
     :podspec: ../node_modules/react-native/third-party-podspecs/Folly.podspec
   glog:
     :podspec: ../node_modules/react-native/third-party-podspecs/glog.podspec
+  Picker:
+    :path: ../node_modules/react-native-picker
   React:
     :path: ../node_modules/react-native
   react-native-fetch-blob:
@@ -200,6 +207,7 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
   GTMSessionFetcher: 5bb1eae636127de695590f50e7d248483eb891e6
+  Picker: 4f1722c94059567cabd80e53d0ef72ca290d2b93
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   React: e8b3cf60f93a0e64045862a003c1bf9408098cff
   react-native-fetch-blob: 2bef9be702de8726f4d7bf58d2345579aaaee60d
@@ -210,6 +218,6 @@ SPEC CHECKSUMS:
   RSKImageCropper: d9a1acbc0600bf8decc8f0d21895872c99a9e4cf
   yoga: 4cf45c8bdb4d7e1a1f285e273009756314e6df53
 
-PODFILE CHECKSUM: 2b99a55d7005c9d5ffa8a3fe83659db8631faa76
+PODFILE CHECKSUM: 459945a876fc530ad3d02336374640538a828993
 
 COCOAPODS: 1.3.1

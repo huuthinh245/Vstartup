@@ -166,7 +166,7 @@ class Login extends Component {
           <View style={[styles.controlWrapper, styles.center]}>
             <TouchableOpacity
               style={styles.social}
-              onPress={() => _requestFB(opts => this._registerSocial(opts))}
+              onPress={() => _requestFB(opts => socialAction(opts))}
             >
               <Image source={facebook} style={styles.socialImage} />
             </TouchableOpacity>

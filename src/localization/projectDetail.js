@@ -15,7 +15,8 @@ const strings = new LocalizedStrings({
     contactAgency: 'Contact Agency',
     bedroom: 'bedroom',
     bathroom: 'bathroom',
-    area: 'area'
+    area: 'area',
+    commission: 'Commission'
   },
   vni: {
     describe: 'Mô tả',
@@ -30,7 +31,8 @@ const strings = new LocalizedStrings({
     contactAgency: 'Liên hệ nhà môi giới',
     bedroom: 'phòng ngủ',
     bathroom: 'phòng tắm',
-    area: 'diện tích'
+    area: 'diện tích',
+    commission: 'Hoa hồng'
   }
 });
 

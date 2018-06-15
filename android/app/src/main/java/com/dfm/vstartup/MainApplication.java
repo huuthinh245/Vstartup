@@ -3,6 +3,7 @@ package com.dfm.vstartup;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.beefe.picker.PickerViewPackage;
 import com.arttitude360.reactnative.rngoogleplaces.RNGooglePlacesPackage;
 import com.RNRate.RNRatePackage;
 import ui.popovermenu.RNPopoverMenuPackage;
@@ -24,6 +25,7 @@ import com.opensettings.OpenSettingsPakage;
 import java.util.List;
 import java.util.Arrays;
 import com.react.rnspinkit.RNSpinkitPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new PickerViewPackage(),
           new RNGooglePlacesPackage(),
           new RNRatePackage(),
           new RNPopoverMenuPackage(),
@@ -58,7 +61,8 @@ public class MainApplication extends Application implements ReactApplication {
           new RNGoogleSigninPackage(),
           new RNSpinkitPackage(),
           new FastImageViewPackage(),
-          new PickerPackage()
+          new PickerPackage(),
+          new RNFetchBlobPackage()
       );
     }
 

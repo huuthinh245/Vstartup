@@ -8,11 +8,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  Modal, 
-  Picker,
-  Animated
 } from 'react-native';
-import ActionSheet from 'react-native-actionsheet';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
@@ -20,6 +16,7 @@ import _ from 'lodash';
 import ModalDropdown from 'react-native-modal-dropdown';
 import RNFetchBlob from 'react-native-fetch-blob';
 import * as Progress from 'react-native-progress';
+import Picker from 'react-native-picker';
 
 import { EMAIL_REGEX, PHONE_REGEX } from '../utils/validation';
 import { allProject } from '../routes/routes';
@@ -74,7 +71,9 @@ class PostRealty extends React.Component {
     //   contactPhone: this.props.auth.user.phone
     // };
     this.state = {
-      enableCityPicker: false,
+      dataCity: this.props.city.data.city,
+      dataDistrict: [],
+      dataWard: [],
       method: this.props.options.data.methods[0],
       title: 'aaa',
       project: { id: 1, title: 'hehe' },
@@ -85,7 +84,10 @@ class PostRealty extends React.Component {
       length: '3',
       area: '4',
       direction: this.props.options.data.directions[0],
-      address: { address: 'vn', latitude: 1.222, longitude: 223.444 },
+      address: '',
+      city: '',
+      district: '',
+      ward: '',
       toilet: dataSelect[1],
       bedroom: dataSelect[2],
       bathroom: dataSelect[3],
@@ -516,14 +518,43 @@ class PostRealty extends React.Component {
 
           <TouchableOpacity 
             style={styles.line}
-            onPress={() => {}}
+            onPress={() => {
+              Picker.init({
+                pickerData: this.state.dataCity.map(item => item.name),
+                selectedValue: [this.state.city.name],
+                onPickerConfirm: data => {
+                  console.log(data);
+                },
+                onPickerCancel: data => {
+                  console.log(data);
+                },
+                onPickerSelect: data => {
+                  this.setState({ city: data });
+                }
+              });
+              Picker.show();
+            }}
           >
             <Text style={styles.lineLeft}>
               <Text style={styles.require}>* </Text>
-              {strings.address}
+              {strings.city}
             </Text>
-            <Text style={styles.lineRight}>{state.address.address || state.address.name}</Text>
+            <Text style={styles.lineRight}>{state.city.name}</Text>
             <Ionicons name="ios-arrow-forward-outline" color="gray" style={styles.icon} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.line} onPress={() => this.addressDom.focus()}>
+            <Text style={styles.lineLeft}>{strings.address}</Text>
+            <TextInput
+              ref={ref => { this.addressDom = ref; }}
+              style={[styles.lineRight, styles.input]}
+              value={state.address}
+              onChangeText={val => this.setState({ address: val })}
+              returnKeyType="next"
+              autoCapitalize="none"
+              autoCorrect={false}
+              clearButtonMode="always"
+            />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.line} onPress={() => this.youtubeDom.focus()}>
