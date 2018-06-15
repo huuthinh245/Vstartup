@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, PixelRatio } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import PropsTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
+import { _dims, _colors, responsiveFontSize, responsiveHeight } from '../utils/constants';
 
 export default class RealtyItem extends React.Component {
   static propsType = {
@@ -55,7 +56,6 @@ export default class RealtyItem extends React.Component {
     );
   }
 }
-
 
 const borderRadius = 10;
 

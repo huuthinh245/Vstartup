@@ -12,7 +12,6 @@ import { connect } from 'react-redux';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
-import { Dropdown } from 'react-native-material-dropdown';
 import ModalDropdown from 'react-native-modal-dropdown';
 
 import { _dims, _colors, responsiveFontSize, responsiveWidth } from '../utils/constants';
@@ -36,8 +35,8 @@ class Filter extends React.Component {
     this.state = {
       scrollEnabled: true,
       utils: options.utils || [],
-      priceRange: options.price || [0, 20],
-      areaRange: options.area || [0, 1000],
+      priceRange: options.price && JSON.parse(`[${options.price}]`) || [0, 20],
+      areaRange: options.area && JSON.parse(`[${options.area}]`) || [0, 1000],
       toilet: options.toilet || 0,
       bedroom: options.bedroom || 0,
       bathroom: options.bathroom || 0,
@@ -95,9 +94,9 @@ class Filter extends React.Component {
 
   _onSave = () => {
     const opts = this.state;
-    const result = {};
-    Object.assign(result, { price: opts.priceRange });
-    Object.assign(result, { area: opts.areaRange });
+    const result = Object.assign({}, this.props.navigation.state.params.options);
+    Object.assign(result, { price: opts.priceRange.toString() });
+    Object.assign(result, { area: opts.areaRange.toString() });
     if (opts.bedroom !== 0) {
       Object.assign(result, { bedroom: opts.bedroom });
     }
@@ -108,12 +107,14 @@ class Filter extends React.Component {
       Object.assign(result, { toilet: opts.toilet });
     }
     if (opts.utils.length > 0) {
-      Object.assign(result, { utils: opts.utils });
+      Object.assign(result, { utils: opts.utils.map(item => item.id).toString() });
     }
     if (opts.realtyType !== 0) {
-      Object.assign(result, { type: opts.realtyType });
+      Object.assign(result, { type: `${opts.realtyType}` });
     }
-    this.props.navigation.state.params.onDone(result);
+    if (JSON.stringify(this.props.navigation.state.params.options) !== JSON.stringify(result)) {
+      this.props.navigation.state.params.onDone(result);
+    }
     this.props.navigation.goBack();
   };
 

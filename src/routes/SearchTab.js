@@ -6,7 +6,6 @@ import RNGooglePlaces from 'react-native-google-places';
 
 import Overlay from '../components/common/Overlay';
 import Header from '../navigators/headers/SearchTab';
-import SearchFront from '../components/tabs/SearchFront';
 import SearchBack from '../components/tabs/SearchBack';
 import { PlaceHolder } from '../components/flatlistHelpers';
 import { getMapRealtyAction } from '../redux/mapRealty/actions';
@@ -21,8 +20,10 @@ class SearchTab extends React.Component {
     super(props);
     this.state = {
       isFlipped: false,
-      searchAddress: '',
-      options: {}
+      options: {
+        lat: undefined,
+        lng: undefined
+      }
     };
   }
 
@@ -48,22 +49,17 @@ class SearchTab extends React.Component {
               val.latitude !== this.state.options.lat &&
               val.longitude !== this.state.options.lng
             ) {
-              this.setState({
-                lat: val.latitude,
-                lng: val.longitude,
-                searchAddress: val.address || val.name
-              });
-              const enhance = Object.assign(this.state.options, {
+              const options = Object.assign({}, this.state.options, {
                 lat: val.latitude,
                 lng: val.longitude
               });
-              getSearchRealtyAction(enhance);
-              getMapRealtyAction(enhance);
+              this.setState({ options }, () => getSearchRealtyAction(this.state.options));
             }
           }}
           onFilterPress={() =>
             this.props.navigation.navigate(routes.filterScreen, {
-              onDone: value => this.setState({ options: value }),
+              onDone: options =>
+                this.setState({ options }, () => getSearchRealtyAction(this.state.options)),
               options: this.state.options
             })
           }
@@ -76,7 +72,7 @@ class SearchTab extends React.Component {
             <Overlay />
             <FlipView
               style={{ flex: 1 }}
-              front={<Map {...this.props} />}
+              front={<Map {...this.props} listRealtyData={this.props.searchRealty.data} />}
               back={<SearchBack {...this.props} />}
               isFlipped={this.state.isFlipped}
               flipAxis="y"
@@ -91,4 +87,4 @@ class SearchTab extends React.Component {
   }
 }
 
-export default connect(state => ({ mapRealty: state.mapRealty }))(SearchTab);
+export default connect(state => ({ mapRealty: state.mapRealty, searchRealty: state.searchRealty }))(SearchTab);

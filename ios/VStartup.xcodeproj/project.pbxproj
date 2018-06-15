@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -62,7 +63,6 @@
 		EE279CE2C01A484EB3B82F24 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 367F896277214CE394493DC4 /* Feather.ttf */; };
 		F6D93A7A65744DC7B20736DC /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9B9AE3122C1D4BC98C5E3B4D /* MaterialCommunityIcons.ttf */; };
 		FE796AD220494CCCAFFA118A /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5AC3CECA7D304705AD2370E3 /* MaterialIcons.ttf */; };
-		978CA9C206784DEDA0C38411 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B159A86AA194A1C9A5C055D /* libRNFetchBlob.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -490,6 +490,7 @@
 		89C2075C20AD9A9900FA05D0 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		89C2075E20AD9AA000FA05D0 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		89C2076020AD9AA800FA05D0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		8B159A86AA194A1C9A5C055D /* libRNFetchBlob.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFetchBlob.a; sourceTree = "<group>"; };
 		8C16F93BF43441B9AB879008 /* libRNRate.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNRate.a; sourceTree = "<group>"; };
 		8E83D5D14D284465A7B34E02 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		8FB3CE9F450152E58EF27D91 /* Pods-VStartup.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VStartup.release.xcconfig"; path = "Pods/Target Support Files/Pods-VStartup/Pods-VStartup.release.xcconfig"; sourceTree = "<group>"; };
@@ -510,8 +511,6 @@
 		E97CE4B4DB854C7B895F6A35 /* libRNGooglePlaces.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNGooglePlaces.a; sourceTree = "<group>"; };
 		EE4AD88997D944E987202707 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		F99600188EAB48AB616114AB /* libPods-VStartup.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VStartup.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		544EB8513B8941BEA4BFF58D /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; name = "RNFetchBlob.xcodeproj"; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		8B159A86AA194A1C9A5C055D /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -553,7 +552,6 @@
 				B6F397BE02AF43BEBE9AF659 /* libRNPopoverMenu.a in Frameworks */,
 				0C7DBF0723344C7681B4B616 /* libRNRate.a in Frameworks */,
 				D6F7E7F8419B49219532EE76 /* libRNGooglePlaces.a in Frameworks */,
-				978CA9C206784DEDA0C38411 /* libRNFetchBlob.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -756,7 +754,6 @@
 				85603F81F5DB401A9D30F8EA /* RNPopoverMenu.xcodeproj */,
 				3BE2453CE137479EA474C4EC /* RNRate.xcodeproj */,
 				6977186AD5BC45FC80CDA6CE /* RNGooglePlaces.xcodeproj */,
-				544EB8513B8941BEA4BFF58D /* RNFetchBlob.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -838,6 +835,7 @@
 				8C16F93BF43441B9AB879008 /* libRNRate.a */,
 				3775F62E0F904D4F913D9AA4 /* libRNGooglePlacePicker.a */,
 				E97CE4B4DB854C7B895F6A35 /* libRNGooglePlaces.a */,
+				8B159A86AA194A1C9A5C055D /* libRNFetchBlob.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
