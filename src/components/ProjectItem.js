@@ -41,7 +41,8 @@ export default class ProjectItem extends React.Component {
 const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginHorizontal: _dims.defaultPadding
   },
   itemImage: {
     width: (_dims.screenWidth - _dims.defaultPadding * 2) / 4,

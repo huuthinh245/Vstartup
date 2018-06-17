@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, TouchableOpacity, Text } from 'react-native';
+import { View, FlatList, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
@@ -16,11 +16,20 @@ import HistoryItem from '../components/HistoryItem';
 import {
   getListContactAction,
   refreshListContactAction,
-  deleteContactAction
+  deleteContactAction,
+  loadMoreListContactAction
 } from '../redux/contact/actions';
 import { _alert } from '../utils/alert';
 
 const textStyle = color => ({ color: color || _colors.mainColor });
+
+const indicator = {
+  alignSelf: 'center',
+  bottom: 10,
+  position: 'absolute',
+  zIndex: 100
+};
+
 
 class ListContact extends React.Component {
   constructor(props) {
@@ -109,6 +118,15 @@ class ListContact extends React.Component {
     );
   };
 
+  _onLoadMore = () => {
+    if (this.props.listContact.loadMore || this.onEndReachedCalledDuringMomentum) return;
+    const len = this.props.listContact.data.length;
+    const page = Math.round(len / LIMIT_SERVICES) + 1;
+    loadMoreListContactAction({ page });
+    this.onEndReachedCalledDuringMomentum = true;
+  };
+
+
   render = () => {
     const { listContact } = this.props;
     return (
@@ -118,20 +136,26 @@ class ListContact extends React.Component {
         {listContact.fetching ? (
           <PlaceHolder />
         ) : (
-          <FlatList
-            style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
-            data={listContact.data}
-            renderItem={this._renderItem}
-            keyExtractor={item => `${item.id}`}
-            ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
-            ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
-            ListEmptyComponent={() => <Empty title={errorStrings.emptyListContact} />}
-            onMomentumScrollBegin={() => {
-              this.onEndReachedCalledDuringMomentum = false;
-            }}
-            refreshing={listContact.refreshing}
-            onRefresh={this._onRefresh}
-          />
+          <View style={{ flex: 1 }}>
+            <FlatList
+              style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
+              data={listContact.data}
+              renderItem={this._renderItem}
+              keyExtractor={item => `${item.id}`}
+              ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
+              ListFooterComponent={() => <View style={{ height: _dims.defaultPadding }} />}
+              ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
+              ListEmptyComponent={() => <Empty title={errorStrings.emptyListContact} />}
+              onMomentumScrollBegin={() => {
+                this.onEndReachedCalledDuringMomentum = false;
+              }}
+              refreshing={listContact.refreshing}
+              onRefresh={this._onRefresh}
+              onEndReachedThreshold={0.1}
+              onEndReached={this._onLoadMore}
+            />
+            {listContact.loadMore && <ActivityIndicator animating style={indicator} />}
+          </View>
         )}
       </View>
     );

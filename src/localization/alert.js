@@ -11,7 +11,7 @@ const strings = new LocalizedStrings({
     requireRestart: 'Restart application to change settings',
     maxCountImages: 'Maximum images',
     requireRemoveImage:
-      'You only can upload 10 images at once, please remove some image before select other image .',
+      'You only can upload 10 images at once, please remove some image before select other image.',
 
     deleteSuccess: 'Delete successfully.',
     delete: 'Confirm delete',
@@ -43,7 +43,7 @@ const strings = new LocalizedStrings({
     requireRestart: 'Khởi động lại ứng dụng để áp dụng cài đặt',
     maxCountImages: 'Số lượng ảnh tối đa',
     requireRemoveImage:
-      'Bạn chỉ có thể upload tối đa 10 hình trong 1 lần, vui lòng xoá bớt để chọn lại .',
+      'Bạn chỉ có thể upload tối đa 10 hình trong 1 lần, vui lòng xoá bớt để chọn lại.',
 
     deleteSuccess: 'Xoá thành công.',
     delete: 'Xác nhận xoá',

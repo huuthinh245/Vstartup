@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
     borderRadius: 5
   },
   searchBarInput: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#fff',
     fontSize: 15,
     flex: 1,
     color: 'gray'
@@ -82,5 +82,12 @@ export const styles = StyleSheet.create({
     fontSize: responsiveFontSize(_dims.defaultFontTitle),
     fontWeight: 'bold',
     textAlign: 'center'
+  },
+  input: {
+    flex: 1,
+    padding: 0,
+    margin: 0,
+    alignSelf: 'center',
+    height: 30
   }
 });

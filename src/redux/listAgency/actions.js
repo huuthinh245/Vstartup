@@ -4,6 +4,10 @@ export const GET_LIST_AGENCY = 'GET_LIST_AGENCY';
 export const GET_LIST_AGENCY_SUCCESS = 'GET_LIST_AGENCY_SUCCESS';
 export const GET_LIST_AGENCY_FAILURE = 'GET_LIST_AGENCY_FAILURE';
 
+export const SEARCH_LIST_AGENCY = 'SEARCH_LIST_AGENCY';
+export const SEARCH_LIST_AGENCY_SUCCESS = 'SEARCH_LIST_AGENCY_SUCCESS';
+export const SEARCH_LIST_AGENCY_FAILURE = 'SEARCH_LIST_AGENCY_FAILURE';
+
 export const LOAD_MORE_LIST_AGENCY = 'LOAD_MORE_LIST_AGENCY';
 export const LOAD_MORE_LIST_AGENCY_SUCCESS = 'LOAD_MORE_LIST_AGENCY_SUCCESS';
 export const LOAD_MORE_LIST_AGENCY_FAILURE = 'LOAD_MORE_LIST_AGENCY_FAILURE';
@@ -15,6 +19,12 @@ export const REFRESH_LIST_AGENCY_FAILURE = 'REFRESH_LIST_AGENCY_FAILURE';
 export const getListAgencyAction = payload =>
   store.dispatch({
     type: GET_LIST_AGENCY,
+    payload
+  });
+
+export const searchListAgencyAction = payload =>
+  store.dispatch({
+    type: SEARCH_LIST_AGENCY,
     payload
   });
 

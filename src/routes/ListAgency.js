@@ -9,21 +9,26 @@ import {
   _colors,
   LIMIT_SERVICES
 } from '../utils/constants';
-import Header from '../navigators/headers/CommonHeader';
-import headerStrings from '../localization/header';
+import Header from '../navigators/headers/ListAgency';
+import errorStrings from '../localization/error';
 import AgencyItem from '../components/AgencyItem';
-import { Separator, PlaceHolder } from '../components/flatlistHelpers';
+import { Separator, PlaceHolder, Empty } from '../components/flatlistHelpers';
 import * as routes from './routes';
 import {
   getListAgencyAction,
   refreshListAgencyAction,
-  loadMoreListAgencyAction
+  loadMoreListAgencyAction,
+  searchListAgencyAction
 } from '../redux/listAgency/actions';
+import Overlay from '../components/common/Overlay';
 
 class ListAgency extends React.Component {
   constructor(props) {
     super(props);
     this.onEndReachedCalledDuringMomentum = true;
+    this.state = {
+      keyword: ''
+    };
   }
 
   componentDidMount() {
@@ -48,13 +53,13 @@ class ListAgency extends React.Component {
     if (this.props.listAgency.loadMore || this.onEndReachedCalledDuringMomentum) return;
     const len = this.props.listAgency.data.length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
-    loadMoreListAgencyAction({ page });
+    loadMoreListAgencyAction({ page, keyword: this.state.keyword });
     this.onEndReachedCalledDuringMomentum = true;
   };
 
   _onRefresh = () => {
     if (this.props.listAgency.refreshing) return;
-    refreshListAgencyAction();
+    refreshListAgencyAction({ keyword: this.state.keyword });
   };
 
   _renderFooter = () => {
@@ -69,29 +74,41 @@ class ListAgency extends React.Component {
     return (
       <View style={styles.wrapper}>
         <Header
-          onLeftPress={() => this.props.navigation.goBack()}
-          title={headerStrings.listAgency}
+          navigation={this.props.navigation}
+          value={this.state.keyword}
+          onChangeText={keyword => {
+            this.setState({ keyword }, () => {
+              if (!this.props.listAgency.searching) {
+                searchListAgencyAction({ keyword });
+              }
+            });
+          }}
         />
         {listAgency.fetching ? (
           <PlaceHolder />
         ) : (
-          <FlatList
-            style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
-            data={listAgency.data}
-            numColumns={2}
-            renderItem={this._renderItem}
-            keyExtractor={item => `${item.id}`}
-            ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
-            ListFooterComponent={this._renderFooter}
-            ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
-            onMomentumScrollBegin={() => {
-              this.onEndReachedCalledDuringMomentum = false;
-            }}
-            refreshing={listAgency.refreshing}
-            onEndReachedThreshold={0}
-            onRefresh={this._onRefresh}
-            onEndReached={this._onLoadMore}
-          />
+          <View style={{ flex: 1 }}>
+            <Overlay visible={listAgency.searching} />
+            <FlatList
+              style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
+              data={listAgency.data}
+              numColumns={2}
+              renderItem={this._renderItem}
+              keyExtractor={item => `${item.id}`}
+              ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
+              ListFooterComponent={() => <View style={{ height: _dims.defaultPadding }} />}
+              ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
+              ListEmptyComponent={() => <Empty title={errorStrings.emptyAgency} />}
+              onMomentumScrollBegin={() => {
+                this.onEndReachedCalledDuringMomentum = false;
+              }}
+              refreshing={listAgency.refreshing}
+              onEndReachedThreshold={0.1}
+              onRefresh={this._onRefresh}
+              onEndReached={this._onLoadMore}
+            />
+            {listAgency.loadMore && <ActivityIndicator animating style={styles.indicator} />}
+          </View>
         )}
       </View>
     );
@@ -129,5 +146,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     paddingLeft: _dims.defaultPadding
+  },
+  indicator: {
+    alignSelf: 'center',
+    bottom: 10,
+    position: 'absolute',
+    zIndex: 100
   }
 });

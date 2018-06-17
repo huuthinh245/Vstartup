@@ -9,6 +9,7 @@ import {
   StyleSheet
 } from 'react-native';
 import { connect } from 'react-redux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import strings from '../../../localization/authorization';
 import { EMAIL_REGEX } from '../../../utils/validation';
@@ -101,7 +102,11 @@ class Login extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <KeyboardAwareScrollView
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        contentContainerStyle={styles.wrapper}
+        scrollEnabled={false}
+      >
         {this.props.navigation.state.params && (
           <Header
             title={headerStrings.loginScreen}
@@ -113,7 +118,7 @@ class Login extends Component {
             }}
           />
         )}
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
+        <View style={{ flex: 1 }} behavior="padding" enabled>
           <Overlay visible={this.props.auth.fetching} />
           <Image style={styles.bg} resizeMode="cover" source={background} />
           <View style={styles.logoContainer}>
@@ -177,8 +182,8 @@ class Login extends Component {
               <Image source={google} style={styles.socialImage} />
             </TouchableOpacity>
           </View>
-        </KeyboardAvoidingView>
-      </View>
+        </View>
+      </KeyboardAwareScrollView>
     );
   }
 }

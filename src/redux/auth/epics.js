@@ -181,21 +181,26 @@ const updatePasswordEpic = actions$ =>
 
 const updateAvatarEpic = actions$ =>
   actions$.ofType(UPDATE_AVATAR).switchMap(async action => {
+    const resp = await RNFetchBlob.fetch(
+      'POST',
+      'https://rems.dfm-engineering.com/api/v1/user/avatar',
+      {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${action.payload.token}}`
+      },
+      action.payload.data
+    );
     try {
-      const resp = await RNFetchBlob.fetch(
-        'POST',
-        'https://rems.dfm-engineering.com/api/v1/user/avatar',
-        {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${action.payload.token}}`,
-          otherHeader: 'foo'
-        },
-        action.payload.data
-      );
-      return { type: UPDATE_AVATAR_SUCCESS, payload: resp.json() };
+      const { status } = resp.info();
+      const value = resp.json();
+      if (status === 200) {
+        return { type: UPDATE_AVATAR_SUCCESS, payload: value };
+      }
+      _alert(`${alertStrings.error} ${value.code}`, value.message);
+      return { type: UPDATE_AVATAR_FAILURE, payload: value };
     } catch (error) {
-      handleError(error, true);
-      return { type: UPDATE_AVATAR_FAILURE, payload: { realty: action.payload, error } };
+      _alert(`${alertStrings.error} ${value.code}`, value.message);
+      return { type: UPDATE_AVATAR_FAILURE, payload: error };
     }
   });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, ActivityIndicator, View, Text } from 'react-native';
+import { FlatList, ActivityIndicator, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import Header from '../navigators/headers/CommonHeader';
@@ -15,6 +15,13 @@ import {
   refreshListFavoriteAction
 } from '../redux/listFavorite/actions';
 import * as routes from '../routes/routes';
+
+const indicator = {
+  alignSelf: 'center',
+  bottom: 10,
+  position: 'absolute',
+  zIndex: 100
+};
 
 class ListFavorite extends React.Component {
   constructor(props) {
@@ -65,44 +72,34 @@ class ListFavorite extends React.Component {
     );
   };
 
-  _renderFooter = () => {
-    if (this.props.listFavorite.loadMore) {
-      return (
-        <ActivityIndicator
-          style={{
-            alignSelf: 'center',
-            marginVertical: 10
-          }}
-        />
-      );
-    }
-    return null;
-  };
-
   render = () => {
     const { listFavorite } = this.props;
+
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header title={headerStrings.favoriteTitle} outer />
         {listFavorite.fetching ? (
           <PlaceHolder />
         ) : (
-          <FlatList
-            data={this.props.listFavorite.data}
-            renderItem={this._renderItem}
-            keyExtractor={item => `${item.id}`}
-            ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
-            ListFooterComponent={this._renderFooter}
-            ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
-            ListEmptyComponent={<Empty title={errorStrings.emptyListFavorite} />}
-            onMomentumScrollBegin={() => {
-              this.onEndReachedCalledDuringMomentum = false;
-            }}
-            refreshing={this.props.listFavorite.refreshing}
-            onEndReachedThreshold={0}
-            onRefresh={this._onRefresh}
-            onEndReached={this._onLoadMore}
-          />
+          <View style={{ flex: 1 }}>
+            <FlatList
+              data={listFavorite.data}
+              renderItem={this._renderItem}
+              keyExtractor={item => `${item.id}`}
+              ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
+              ListFooterComponent={() => <View style={{ height: _dims.defaultPadding }} />}
+              ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
+              ListEmptyComponent={<Empty title={errorStrings.emptyListFavorite} />}
+              onMomentumScrollBegin={() => {
+                this.onEndReachedCalledDuringMomentum = false;
+              }}
+              refreshing={listFavorite.refreshing}
+              onEndReachedThreshold={0.1}
+              onRefresh={this._onRefresh}
+              onEndReached={this._onLoadMore}
+            />
+            {this.props.listFavorite.loadMore && <ActivityIndicator animating style={indicator} />}
+          </View>
         )}
       </View>
     );

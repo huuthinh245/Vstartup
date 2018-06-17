@@ -1,9 +1,6 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, FlatList, ActivityIndicator } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import { View, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-
-import { Empty } from '../components/flatlistHelpers';
 
 import Header from '../navigators/headers/CommonHeader';
 import errorStrings from '../localization/error';
@@ -17,6 +14,14 @@ import {
 } from '../redux/agencyProject/actions';
 import { styles } from '../components/AuthDetail';
 import ProjectItem from '../components/ProjectItem';
+import { Empty, PlaceHolder } from '../components/flatlistHelpers';
+
+const indicator = {
+  alignSelf: 'center',
+  bottom: 10,
+  position: 'absolute',
+  zIndex: 100
+};
 
 class AgencyProject extends React.Component {
   constructor(props) {
@@ -54,13 +59,6 @@ class AgencyProject extends React.Component {
     );
   };
 
-  _renderFooter = () => {
-    if (this.props.agencyProject.fetching || !this.props.agencyProject.loadMore) {
-      return <View style={{ height: _dims.defaultPadding }} />;
-    }
-    return <ActivityIndicator animating style={styles.indicator} />;
-  };
-
   _renderEmpty = () => {
     if (this.props.agencyProject.fetching) {
       return null;
@@ -76,25 +74,27 @@ class AgencyProject extends React.Component {
           onLeftPress={() => this.props.navigation.goBack()}
         />
         {this.props.agencyProject.fetching ? (
-          <ActivityIndicator animating style={styles.indicator} />
+          <PlaceHolder />
         ) : (
-          <FlatList
-            style={{ paddingHorizontal: _dims.defaultPadding, backgroundColor: '#fff' }}
-            data={this.props.agencyProject.data[this.props.navigation.state.params.user.id]}
-            renderItem={this._renderItem}
-            keyExtractor={item => `${item.id}`}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
-            ListEmptyComponent={this._renderEmpty}
-            ListHeaderComponent={() => <View style={{ height: _dims.defaultPadding }} />}
-            ListFooterComponent={this._renderFooter}
-            onEndReached={this._onLoadMore}
-            onEndReachedThreshold={0}
-            onMomentumScrollBegin={() => {
-              this.onEndReachedCalledDuringMomentum = false;
-            }}
-            refreshing={this.props.agencyProject.refreshing}
-            onRefresh={this._onRefresh}
-          />
+          <View style={{ flex: 1 }}>
+            <FlatList
+              data={this.props.agencyProject.data[this.props.navigation.state.params.user.id]}
+              renderItem={this._renderItem}
+              keyExtractor={item => `${item.id}`}
+              ItemSeparatorComponent={() => <View style={styles.separator} />}
+              ListEmptyComponent={this._renderEmpty}
+              ListHeaderComponent={() => <View style={{ height: _dims.defaultPadding }} />}
+              ListFooterComponent={() => <View style={{ height: _dims.defaultPadding }} />}
+              onEndReached={this._onLoadMore}
+              onEndReachedThreshold={0.1}
+              onMomentumScrollBegin={() => {
+                this.onEndReachedCalledDuringMomentum = false;
+              }}
+              refreshing={this.props.agencyProject.refreshing}
+              onRefresh={this._onRefresh}
+            />
+            {this.props.agencyProject.loadMore && <ActivityIndicator animating style={indicator} />}
+          </View>
         )}
       </View>
     );

@@ -17,6 +17,8 @@ import {
   POST_REALTY_SUCCESS,
   POST_REALTY_FAILURE
 } from './actions';
+import { _alert } from '../../utils/alert';
+import alertStrings from '../../localization/alert';
 
 const getRealtyDetail = actions$ =>
   actions$.ofType(GET_REALTY_DETAIL).switchMap(async action => {
@@ -53,23 +55,26 @@ const unlikeRealty = actions$ =>
 
 const postRealty = actions$ =>
   actions$.ofType(POST_REALTY).switchMap(async action => {
+    const resp = await RNFetchBlob.fetch(
+      'POST',
+      'https://rems.dfm-engineering.com/api/v1/realty',
+      {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${action.payload.token}}`
+      },
+      action.payload.data
+    );
     try {
-      const resp = await RNFetchBlob.fetch(
-        'POST',
-        'https://rems.dfm-engineering.com/api/v1/realty',
-        {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${action.payload.token}}`,
-          otherHeader: 'foo'
-        },
-        action.payload.data
-      );
-      console.log(resp.json());
-      return { type: POST_REALTY_SUCCESS, payload: resp.json() };
+      const { status } = resp.info();
+      const value = resp.json();
+      if (status === 200) {
+        return { type: POST_REALTY_SUCCESS, payload: value };
+      }
+      _alert(`${alertStrings.error} ${value.code}`, value.message);
+      return { type: POST_REALTY_FAILURE, payload: value };
     } catch (error) {
-      console.log(error);
-      handleError(error, true);
-      return { type: POST_REALTY_FAILURE, payload: { realty: action.payload, error } };
+      _alert(`${alertStrings.error} ${value.code}`, value.message);
+      return { type: POST_REALTY_FAILURE, payload: error };
     }
   });
 

@@ -65,6 +65,11 @@
 				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 			</dict>
+      <key>rems.local</key>
+      <dict>
+        <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+        <true/>
+      </dict>
 			<key>rems.dfm-engineering.com</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>

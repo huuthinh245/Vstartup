@@ -8,7 +8,6 @@ export const forgot = 'SC_FORGOT';
 export const agencyDetail = 'SC_AGENCY_DETAIL';
 export const projectDetail = 'SC_PROJECT_DETAIL';
 export const realtyDetail = 'SC_REALTY_DETAIL';
-export const suggestPlace = 'SC_SUGGEST_PLACE';
 export const additionalInformation = 'SC_ADDITIONAL_INFORMATION';
 export const changePassword = 'SC_CHANGE_PASSWORD';
 export const sortScreen = 'SC_SORT';

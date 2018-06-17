@@ -33,7 +33,17 @@ const strings = new LocalizedStrings({
     youtube: 'Youtube link',
     city: 'City',
     district: 'District',
-    ward: 'Ward'
+    ward: 'Ward',
+    confirm: 'Confirm',
+    selectDirection: 'Select direction',
+    selectPriceUnit: 'Select unit',
+    selectToilet: 'Number of toilet',
+    selectBathroom: 'Number of bathroom',
+    selectBedroom: 'Number of bedroom',
+    selectRealtyType: 'Select realty type',
+    selectCity: 'Select city',
+    selectDistrict: 'Select district',
+    selectWard: 'Select ward'
   },
   vni: {
     name: 'Tiêu đề',
@@ -66,7 +76,17 @@ const strings = new LocalizedStrings({
     youtube: 'Youtube link',
     city: 'Tỉnh/Thành phố',
     district: 'Quận/huyện',
-    ward: 'Phường/xã'
+    ward: 'Phường/xã',
+    confirm: 'Xác nhận',
+    selectDirection: 'Chọn hướng',
+    selectPriceUnit: 'Chọn đơn vị',
+    selectToilet: 'Số lượng toilet',
+    selectBathroom: 'Số phòng tắm',
+    selectBedroom: 'Số phòng ngủ',
+    selectRealtyType: 'Chọn loại bđs',
+    selectCity: 'Chọn tỉnh/thành phố',
+    selectDistrict: 'Chọn quận/huyện',
+    selectWard: 'Chọn phường/xã'
   }
 });
 

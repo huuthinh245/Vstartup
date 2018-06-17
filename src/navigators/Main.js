@@ -15,7 +15,6 @@ import PickObjOnMap from '../routes/PickObjOnMap';
 import ProjectDetail from '../routes/ProjectDetail';
 import RealtyDetail from '../routes/RealtyDetail';
 import AgencyDetail from '../routes/AgencyDetail';
-import SuggestPlace from '../routes/SuggestPlace';
 import AdditionalInformation from '../routes/AdditionalInformation';
 import Sort from '../routes/Sort';
 import Filter from '../routes/Filter';
@@ -107,7 +106,6 @@ const stackConfig = {
   [routes.projectDetail]: { screen: ProjectDetail },
   [routes.agencyDetail]: { screen: AgencyDetail },
   [routes.realtyDetail]: { screen: RealtyDetail },
-  [routes.suggestPlace]: { screen: SuggestPlace },
   [routes.additionalInformation]: { screen: AdditionalInformation },
   [routes.sortScreen]: { screen: Sort },
   [routes.filterScreen]: { screen: Filter },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, ActivityIndicator, View } from 'react-native';
+import { FlatList, ActivityIndicator, View, PixelRatio } from 'react-native';
 import { connect } from 'react-redux';
 
 import Header from '../navigators/headers/CommonHeader';
@@ -15,6 +15,19 @@ import {
   refreshAgencyProjectAction
 } from '../redux/agencyProject/actions';
 import * as routes from '../routes/routes';
+
+const indicator = {
+  alignSelf: 'center',
+  bottom: 10,
+  position: 'absolute',
+  zIndex: 100
+};
+const separator = {
+  height: 1 / PixelRatio.get(),
+  backgroundColor: '#44cee2',
+  marginVertical: _dims.defaultPadding,
+  marginLeft: _dims.screenWidth / 4 + _dims.defaultPadding / 2
+};
 
 class ListProject extends React.Component {
   constructor(props) {
@@ -59,13 +72,6 @@ class ListProject extends React.Component {
     );
   };
 
-  _renderFooter = () => {
-    if (this.props.agencyProject.loadMore) {
-      return <ActivityIndicator style={{ alignSelf: 'center', marginVertical: 10 }} />;
-    }
-    return <View style={{ height: _dims.defaultPadding }} />;
-  };
-
   _renderEmpty = () => {
     if (this.props.agencyProject.fetching) {
       return null;
@@ -84,21 +90,24 @@ class ListProject extends React.Component {
         {agencyProject.fetching ? (
           <PlaceHolder />
         ) : (
-          <FlatList
-            data={this.props.agencyProject.data[0]}
-            renderItem={this._renderItem}
-            keyExtractor={item => `${item.id}`}
-            ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
-            ListFooterComponent={this._renderFooter}
-            ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
-            onMomentumScrollBegin={() => {
-              this.onEndReachedCalledDuringMomentum = false;
-            }}
-            refreshing={this.props.agencyProject.refreshing}
-            onEndReachedThreshold={0}
-            onRefresh={this._onRefresh}
-            onEndReached={this._onLoadMore}
-          />
+          <View style={{ flex: 1 }}>
+            <FlatList
+              data={this.props.agencyProject.data[0]}
+              renderItem={this._renderItem}
+              keyExtractor={item => `${item.id}`}
+              ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
+              ListFooterComponent={() => <View style={{ height: _dims.defaultPadding }} />}
+              ItemSeparatorComponent={() => <View style={separator} />}
+              onMomentumScrollBegin={() => {
+                this.onEndReachedCalledDuringMomentum = false;
+              }}
+              refreshing={this.props.agencyProject.refreshing}
+              onEndReachedThreshold={0.1}
+              onRefresh={this._onRefresh}
+              onEndReached={this._onLoadMore}
+            />
+            {this.props.agencyProject.loadMore && <ActivityIndicator style={indicator} animating />}
+          </View>
         )}
       </View>
     );

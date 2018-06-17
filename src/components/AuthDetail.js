@@ -3,11 +3,13 @@ import {
   View,
   TouchableOpacity,
   Text,
+  TextInput,
   StyleSheet,
   FlatList,
   ActivityIndicator,
   PixelRatio,
-  Linking
+  Linking,
+  RefreshControl
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -40,9 +42,13 @@ import {
   loadMoreAgencyRealtyAction,
   refreshAgencyRealtyAction
 } from '../redux/agencyRealty/actions';
+import { postContactAction } from '../redux/contact/actions';
 import { imagePicker, cameraPicker } from '../utils/imagePicker';
 import { logoutAction, updateAvatarAction } from '../redux/auth/actions';
 import { _alert } from '../utils/alert';
+import Overlay from './common/Overlay';
+import { PHONE_REGEX, EMAIL_REGEX } from '../utils/validation';
+import emitter from '../emitter';
 
 const size = _ios
   ? responsiveFontSize(_dims.defaultFontTitle + 2)
@@ -52,11 +58,18 @@ class AuthDetail extends React.Component {
   constructor(props) {
     super(props);
     this.onEndReachedCalledDuringMomentum = true;
+    this.state = {
+      name: this.props.auth.user.name,
+      email: this.props.auth.user.email,
+      phone: this.props.auth.user.phone,
+    };
   }
 
   componentDidMount() {
     const { data } = this.props;
-    getAgencyRealtyAction({ author_id: data.id });
+    if(data.role_id === 3) {
+      getAgencyRealtyAction({ author_id: data.id });
+    }
   }
 
   _navigate = (route, params) => this.props.navigation.navigate(route, params);
@@ -189,14 +202,14 @@ class AuthDetail extends React.Component {
   _onLoadMore = () => {
     const { data, agencyRealty } = this.props;
 
-    if (agencyRealty.fetching || this.onEndReachedCalledDuringMomentum) return;
+    if (agencyRealty.loadMore || this.onEndReachedCalledDuringMomentum || data.role_id !== 3) return;
     const len = agencyRealty.data[data.id].length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
     loadMoreAgencyRealtyAction({ author_id: data.id, page });
   };
 
   _onRefresh = () => {
-    if (this.props.agencyRealty.refreshing) return;
+    if (this.props.agencyRealty.refreshing || this.props.data.role_id !== 3) return;
     refreshAgencyRealtyAction({ author_id: this.props.data.id });
   };
 
@@ -228,8 +241,8 @@ class AuthDetail extends React.Component {
     const form = [];
     form.push({
       name: 'file', 
-      type: 'image/jpeg',
-      filename: 'photo.jpg',
+      type: image.mime,
+      filename: image.filename,
       data: RNFetchBlob.wrap(image.path)
     });
 
@@ -296,7 +309,7 @@ class AuthDetail extends React.Component {
             style={styles.line}
           >
             <Ionicons name="ios-mail" style={styles.lineIcon} />
-            <Text style={[styles.lineText, !data.address && { color: 'silver' }]}>{data.email || strings.unset}</Text>
+            <Text style={[styles.lineText, !data.email && { color: 'silver' }]}>{data.email || strings.unset}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -309,25 +322,116 @@ class AuthDetail extends React.Component {
             <Text style={[styles.lineText, !data.address && { color: 'silver' }]}>{data.address || strings.unset}</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.showProj}>{strings.showProj}</Text>
+        { data.id !== user.id && (
+        <View>
+          <Text style={styles.showProj}>{strings.contactWith}</Text>
+          <View style={styles.form}>
+            <View style={styles.formLine}>
+              <Ionicons name="ios-person" style={styles.formLineIcon} />
+              <TextInput
+                ref={name => {
+                this.nameDom = name;
+              }}
+                style={styles.input}
+                placeholder={strings.name}
+                value={this.state.name}
+                onChangeText={name => this.setState({ name })}
+                returnKeyType="next"
+                autoCapitalize="none"
+                autoCorrect={false}
+                clearButtonMode="always"
+              />
+            </View>
+            <View style={styles.formLine}>
+              <Ionicons name="ios-mail" style={styles.formLineIcon} />
+              <TextInput
+                ref={email => {
+                this.emailDom = email;
+              }}
+                style={styles.input}
+                placeholder={strings.email}
+                value={this.state.email}
+                onChangeText={email => this.setState({ email })}
+                returnKeyType="next"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                clearButtonMode="always"
+              />
+            </View>
+            <View style={styles.formLine}>
+              <Ionicons name="ios-call" style={styles.formLineIcon} />
+              <TextInput
+                ref={phone => {
+                this.phoneDom = phone;
+              }}
+                style={styles.input}
+                placeholder={strings.phone}
+                value={this.state.phone}
+                onChangeText={phone => this.setState({ phone })}
+                returnKeyType="go"
+                autoCapitalize="none"
+                keyboardType="phone-pad"
+                autoCorrect={false}
+                clearButtonMode="always"
+              />
+            </View>
+            <TouchableOpacity style={styles.submit} onPress={this._sendContact}>
+              <Text style={styles.submitText}>{strings.sendContact}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        ) }
+        { data.role_id === 3 && <Text style={styles.showProj}>{strings.showProj}</Text>}
         {this.props.agencyRealty.fetching && <PlaceHolder />}
       </View>
     );
   };
 
-  _renderFooter = () => {
-    if (this.props.agencyRealty.fetching || !this.props.agencyRealty.loadMore) {
-      return <View style={{ height: _dims.defaultPadding }} />;
-    }
-    return <ActivityIndicator animating style={styles.indicator} />;
-  };
-
   _renderEmpty = () => {
     const { user } = this.props.auth;
     const { data, agencyRealty } = this.props;
-    if (agencyRealty.fetching) return null;
+    if (agencyRealty.fetching || data.role_id !== 3) return null;
     const str = user.id === data.id ? errorStrings.emptyListMyRealty : errorStrings.emptyListAgencyRealty;
     return <Empty title={str} />;
+  };
+
+  _sendContact = () => {
+    if (this.props.listContact.sending) return;
+    if (!this.state.name) {
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.nameEmpty
+      });
+      this.nameDom.focus();
+    } else if (!EMAIL_REGEX.test(this.state.email)) {
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.emailInvalid
+      });
+      this.emailDom.focus();
+    } else if (!PHONE_REGEX.test(this.state.phone)) {
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.phoneInvalid
+      });
+      this.phoneDom.focus();
+    } else {
+      callback = () => _alert(alertStrings.success, alertStrings.postContactSuccess);
+      const obj = {
+        body: {
+          name: this.state.name,
+          email: this.state.email,
+          phone: this.state.phone
+        },
+        callback
+      };
+
+      postContactAction(obj);
+    }
   };
 
   render() {
@@ -335,12 +439,13 @@ class AuthDetail extends React.Component {
     const { user } = this.props.auth;
     return (
       <View style={styles.wrapper}>
+        <Overlay visible={this.props.auth.fetching || this.props.listContact.sending} />
         {this._renderHeader()}
         { 
           this.props.auth.updating && 
           (<View style={styles.progress}><Progress.Pie indeterminate size={50} /></View>)
         }
-        {data.id === user.id && (
+        {data.id === user.id && data.role_id === 3 && (
           <TouchableOpacity
             style={styles.fab}
             onPress={() => this.props.navigation.navigate(routes.createRealty)}
@@ -354,20 +459,24 @@ class AuthDetail extends React.Component {
         )}
 
         <FlatList
-          style={{ marginHorizontal: _dims.defaultPadding, paddingBottom: 100 }}
+          style={{ marginHorizontal: _dims.defaultPadding, paddingBottom: _dims.defaultPadding }}
           data={agencyRealty.data[data.id]}
           renderItem={this._renderItem}
           keyExtractor={item => `${item.id}`}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListEmptyComponent={this._renderEmpty}
           ListHeaderComponent={this._renderProfile}
-          ListFooterComponent={this._renderFooter}
+          ListFooterComponent={() => <View style={{ height: _dims.defaultPadding }} />}
           onEndReached={this._onLoadMore}
-          onEndReachedThreshold={0}
+          onEndReachedThreshold={0.1}
           onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
-          refreshing={agencyRealty.refreshing}
-          onRefresh={this._onRefresh}
+          refreshing={this.props.data.role_id === 3 && agencyRealty.refreshing}
+          refreshControl={this.props.data.role_id === 3 && <RefreshControl
+            refreshing={this.props.data.role_id === 3 && agencyRealty.refreshing}
+            onRefresh={this._onRefresh}
+          />}
         />
+        { this.props.agencyRealty.loadMore && <ActivityIndicator animating style={styles.indicator} /> }
         <ActionSheet
           ref={o => { this.actionSheetAuth = o; }}
           options={[strings.actionCamera, strings.actionPhoto, strings.cancel]}
@@ -385,14 +494,14 @@ class AuthDetail extends React.Component {
   }
 }
 
-export default connect(state => ({ auth: state.auth, agencyRealty: state.agencyRealty }))(
+export default connect(state => ({ auth: state.auth, agencyRealty: state.agencyRealty, listContact: state.listContact }))(
   AuthDetail
 );
 
 export const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#fbfbfb'
+    backgroundColor: '#fff'
   },
   fab: {
     zIndex: 100,
@@ -463,8 +572,9 @@ export const styles = StyleSheet.create({
   showProj: {
     marginLeft: _dims.defaultPadding * 2,
     color: _colors.mainColor,
-    marginTop: _dims.defaultPadding * 2,
-    marginBottom: _dims.defaultPadding
+    marginTop: _dims.defaultPadding * 3,
+    marginBottom: _dims.defaultPadding,
+    fontSize: responsiveFontSize(_dims.defaultFontTitle)
   },
   item: {
     flexDirection: 'row',
@@ -509,7 +619,9 @@ export const styles = StyleSheet.create({
   },
   indicator: {
     alignSelf: 'center',
-    marginVertical: 10
+    bottom: 10,
+    position: 'absolute',
+    zIndex: 100
   },
   empty: {
     alignSelf: 'center',
@@ -546,5 +658,51 @@ export const styles = StyleSheet.create({
     width: _dims.screenWidth,
     height: _dims.screenHeight,
     backgroundColor: 'rgba(0,0,0,0.2)'
-  }
+  },
+  form: {
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: _dims.defaultPadding * 2,
+    paddingVertical: _dims.defaultPadding,
+    shadowColor: '#777',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 1,
+    marginHorizontal: _dims.defaultPadding,
+    padding: _dims.defaultPadding
+  },
+  formLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: _colors.mainColor,
+    marginBottom: _dims.defaultPadding * 2
+  },
+  formLineIcon: {
+    color: _colors.mainColor,
+    fontSize: responsiveFontSize(_dims.defaultFontTitle + 6)
+  },
+  input: {
+    backgroundColor: 'transparent',
+    flex: 1
+  },
+  submit: {
+    padding: 10,
+    minWidth: responsiveWidth(40),
+    alignSelf: 'center',
+    backgroundColor: _colors.mainColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 3,
+    marginTop: _dims.defaultPadding,
+    marginBottom: _dims.defaultPadding * 2
+  },
+  submitText: {
+    color: '#fff',
+    fontSize: responsiveFontSize(_dims.defaultFontTitle + 2),
+    fontWeight: 'bold'
+  },
 });

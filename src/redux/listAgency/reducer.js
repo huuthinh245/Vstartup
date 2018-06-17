@@ -4,6 +4,9 @@ import {
   GET_LIST_AGENCY,
   GET_LIST_AGENCY_SUCCESS,
   GET_LIST_AGENCY_FAILURE,
+  SEARCH_LIST_AGENCY,
+  SEARCH_LIST_AGENCY_SUCCESS,
+  SEARCH_LIST_AGENCY_FAILURE,
   REFRESH_LIST_AGENCY,
   REFRESH_LIST_AGENCY_SUCCESS,
   REFRESH_LIST_AGENCY_FAILURE,
@@ -14,6 +17,7 @@ import {
 
 const initial = {
   fetching: false,
+  searching: false,
   refreshing: false,
   loadMore: false,
   data: [],
@@ -30,6 +34,15 @@ export const listAgencyReducer = handleActions(
     },
     [GET_LIST_AGENCY_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { fetching: false, error: payload });
+    },
+    [SEARCH_LIST_AGENCY]: state => {
+      return Object.assign({}, state, { searching: true });
+    },
+    [SEARCH_LIST_AGENCY_SUCCESS]: (state, { payload }) => {
+      return Object.assign({}, state, { data: payload, searching: false, error: null });
+    },
+    [SEARCH_LIST_AGENCY_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, { searching: false, error: payload });
     },
     [LOAD_MORE_LIST_AGENCY]: state => {
       return Object.assign({}, state, { loadMore: true });

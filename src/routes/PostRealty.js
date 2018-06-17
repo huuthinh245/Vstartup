@@ -7,16 +7,16 @@ import {
   StyleSheet,
   FlatList,
   Image,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import ModalDropdown from 'react-native-modal-dropdown';
 import RNFetchBlob from 'react-native-fetch-blob';
 import * as Progress from 'react-native-progress';
 import Picker from 'react-native-picker';
+import ActionSheet from 'react-native-actionsheet';
 
 import { EMAIL_REGEX, PHONE_REGEX } from '../utils/validation';
 import { allProject } from '../routes/routes';
@@ -24,21 +24,13 @@ import { imagePicker, cameraPicker } from '../utils/imagePicker';
 import emitter from '../emitter';
 import alertStrings from '../localization/alert';
 import headerStrings from '../localization/header';
+import errorStrings from '../localization/error';
 import strings from '../localization/postRealty';
 import Header from '../navigators/headers/CommonHeader';
 import { _dims, responsiveWidth, _colors, responsiveFontSize, _ios } from '../utils/constants';
 import { postRealtyAction } from '../redux/realtyDetail/actions';
 
 const LIMIT_IMAGES_UPLOAD = 10;
-
-const dataSelect = [
-  { id: 0, value: '---' },
-  { id: 1, value: '1' },
-  { id: 2, value: '2' },
-  { id: 3, value: '3' },
-  { id: 4, value: '4' },
-  { id: 5, value: '>= 5' }
-];
 
 class PostRealty extends React.Component {
   static navigationOptions = {
@@ -70,7 +62,17 @@ class PostRealty extends React.Component {
     //   contactEmail: this.props.auth.user.email,
     //   contactPhone: this.props.auth.user.phone
     // };
+    this.dataSelect = [
+      { id: 0, name: '---' },
+      { id: 1, name: '1' },
+      { id: 2, name: '2' },
+      { id: 3, name: '3' },
+      { id: 4, name: '4' },
+      { id: 5, name: '>= 5' }
+    ];
+
     this.state = {
+      overlay: false,
       dataCity: this.props.city.data.city,
       dataDistrict: [],
       dataWard: [],
@@ -84,13 +86,13 @@ class PostRealty extends React.Component {
       length: '3',
       area: '4',
       direction: this.props.options.data.directions[0],
-      address: '',
-      city: '',
-      district: '',
-      ward: '',
-      toilet: dataSelect[1],
-      bedroom: dataSelect[2],
-      bathroom: dataSelect[3],
+      address: 'Viet nam',
+      city: '1',
+      district: '3',
+      ward: '4',
+      toilet: this.dataSelect[1],
+      bedroom: this.dataSelect[2],
+      bathroom: this.dataSelect[3],
       description: 'hehehe',
       youtube: 'ah uh',
       images: ['flag'],
@@ -102,19 +104,49 @@ class PostRealty extends React.Component {
   }
 
   _renderItemMethods = ({ item }) => {
-    const name =
-      this.state.method.id === item.id ? 'md-radio-button-on' : 'md-radio-button-off';
+    const name = this.state.method.id === item.id ? 'md-radio-button-on' : 'md-radio-button-off';
     return (
       <TouchableOpacity
         onPress={() => this.setState({ method: item })}
         style={{ flexDirection: 'row', alignItems: 'center' }}
       >
-        <Ionicons name={name} size={17} color={this.state.method.id === item.id ? _colors.mainColor : 'gray'} />
-        <Text style={{ marginLeft: 10, color: this.state.method.id === item.id ? _colors.mainColor : 'gray' }}>{item.name}</Text>
+        <Ionicons
+          name={name}
+          size={17}
+          color={this.state.method.id === item.id ? _colors.mainColor : 'gray'}
+        />
+        <Text
+          style={{
+            marginLeft: 10,
+            color: this.state.method.id === item.id ? _colors.mainColor : 'gray'
+          }}
+        >
+          {item.name}
+        </Text>
       </TouchableOpacity>
     );
   };
 
+  _showPicker = ({ pickerData, title, value, confirmCallBack }) => {
+    this.setState({ overlay: true });
+    Picker.init({
+      pickerData,
+      pickerConfirmBtnText: strings.confirm,
+      pickerCancelBtnText: strings.cancel,
+      pickerTitleText: title,
+      pickerToolBarFontSize: responsiveFontSize(_dims.defaultFontTitle),
+      pickerFontSize: responsiveFontSize(_dims.defaultFontSize),
+      selectedValue: [value],
+      onPickerConfirm: data => {
+        confirmCallBack(data);
+        this.setState({ overlay: false });
+      },
+      onPickerCancel: () => {
+        this.setState({ overlay: false });
+      }
+    });
+    Picker.show();
+  }
 
   _renderItemImages = ({ item }) => {
     if (item === 'flag') {
@@ -145,11 +177,7 @@ class PostRealty extends React.Component {
           resizeMode="cover"
           source={{ uri: _ios ? item.path : item.uri }}
         />
-        <Ionicons
-          onPress={() => __removeImage()}
-          name="ios-close-circle"
-          style={styles.close}
-        />
+        <Ionicons onPress={() => __removeImage()} name="ios-close-circle" style={styles.close} />
       </TouchableOpacity>
     );
   };
@@ -169,10 +197,7 @@ class PostRealty extends React.Component {
       }
     };
     return (
-      <TouchableOpacity
-        onPress={() => __handleCheck()}
-        style={styles.utilsLine}
-      >
+      <TouchableOpacity onPress={() => __handleCheck()} style={styles.utilsLine}>
         <MaterialIcons
           size={responsiveFontSize(_dims.defaultFontTitle + 4)}
           color="#3bcce1"
@@ -198,6 +223,7 @@ class PostRealty extends React.Component {
   _onActionSheetSelected = index => {
     if (index === 1) {
       imagePicker({
+        multiple: true,
         callback: images => {
           this.setState({
             images: this.state.images.concat(
@@ -223,17 +249,33 @@ class PostRealty extends React.Component {
   };
 
   _generateError = () => {
-    if (!this.state.title) return { title: 'title empty', callback: () => this.titleDom.focus() };
-    if (!this.state.project.id) return { title: 'project owned empty' };
-    if (!this.state.price) return { title: 'price empty', callback: () => this.priceDom.focus() };
-    if (!this.state.width) return { title: 'width empty', callback: () => this.widthDom.focus() };
-    if (!this.state.length) return { title: 'length empty', callback: () => this.lengthDom.focus() };
-    if (!this.state.area) return { title: 'area empty', callback: () => this.areaDom.focus() };
-    if (!this.state.address.latitude) return { title: 'address empty' };
-    if (this.state.images.length <= 1) { return { title: 'image empty' }; }
-    if (!this.state.contactName) { return { title: 'contact name empty', callback: () => this.contactNameDom.focus() }; }
-    if (!EMAIL_REGEX.test(this.state.contactEmail)) { return { title: 'contact email empty', callback: () => this.contactEmailDom.focus() }; }
-    if (!PHONE_REGEX.test(this.state.contactPhone)) { return { title: 'contact phone empty', callback: () => this.contactPhoneDom.focus() }; }
+    if (!this.state.title) { return { title: errorStrings.titleEmpty, callback: () => this.titleDom.focus() }; }
+    if (!this.state.project.id) return { title: errorStrings.ownedProjectEmpty };
+    if (!this.state.price) { return { title: errorStrings.priceEmpty, callback: () => this.priceDom.focus() }; }
+    if (!this.state.width) { return { title: errorStrings.widthEmpty, callback: () => this.widthDom.focus() }; }
+    if (!this.state.length) { return { title: errorStrings.lengthEmpty, callback: () => this.lengthDom.focus() }; }
+    if (!this.state.area) { return { title: errorStrings.areaEmpty, callback: () => this.areaDom.focus() }; }
+    if (!this.state.city) return { title: errorStrings.cityEmpty };
+    if (!this.state.district) return { title: errorStrings.districtEmpty };
+    if (!this.state.address) return { title: errorStrings.addressEmpty };
+    if (this.state.images.length <= 1) {
+      return { title: errorStrings.imagesEmpty };
+    }
+    if (!this.state.contactName) {
+      return { title: errorStrings.contactNameEmpty, callback: () => this.contactNameDom.focus() };
+    }
+    if (!EMAIL_REGEX.test(this.state.contactEmail)) {
+      return {
+        title: errorStrings.contactEmailEmpty,
+        callback: () => this.contactEmailDom.focus()
+      };
+    }
+    if (!PHONE_REGEX.test(this.state.contactPhone)) {
+      return {
+        title: errorStrings.contactPhoneEmpty,
+        callback: () => this.contactPhoneDom.focus()
+      };
+    }
     return null;
   };
 
@@ -242,7 +284,7 @@ class PostRealty extends React.Component {
     if (err) {
       emitter.emit('alert', {
         type: 'warn',
-        title: 'Invalid fields',
+        title: alertStrings.invalidField,
         error: err.title
       });
       if (err.callback) {
@@ -271,18 +313,25 @@ class PostRealty extends React.Component {
       form.push({ name: 'utility', data: state.utils.map(item => item.id).toString() });
       form.push({ name: 'body', data: state.description });
       form.push({ name: 'youtube', data: state.youtube });
-      form.push({ name: 'address', data: state.address.address });
-      form.push({ name: 'coordinate', data: JSON.stringify({ lat: `${state.address.latitude}`, lng: `${state.address.longitude}` }) });
-      
-      
-      const path = _ios ? 'path' : 'uri';
+      form.push({ name: 'address', data: state.address });
+      form.push({ name: 'city', data: state.city });
+      form.push({ name: 'district', data: state.district });
+      form.push({ name: 'ward', data: state.ward });
+      form.push({
+        name: 'coordinate',
+        data: JSON.stringify({
+          lat: `${state.address.latitude}`,
+          lng: `${state.address.longitude}`
+        })
+      });
+
       state.images.forEach((item, index) => {
-        if(item !== 'flag') {
+        if (item !== 'flag') {
           form.push({
-            name: 'photo[]', 
-            type: 'image/jpeg',
-            filename: 'photo.jpg',
-            data: RNFetchBlob.wrap(this.state.images[index][path])
+            name: 'files[]',
+            type: item.mime,
+            filename: item.filename,
+            data: RNFetchBlob.wrap(this.state.images[index].path)
           });
         }
       });
@@ -312,11 +361,28 @@ class PostRealty extends React.Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        <Header
-          title={headerStrings.postRealty}
-          onLeftPress={() => props.navigation.goBack()}
+        <Header 
+          title={headerStrings.postRealty} 
+          onLeftPress={() => {
+            Picker.toggle();
+            props.navigation.goBack();
+          }} 
         />
-        { this.props.realtyDetail.postRealty && <View style={styles.progress}><Progress.Pie indeterminate size={50} /></View> }
+        {this.state.overlay && (
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {
+              this.setState({ overlay: false });
+              Picker.toggle();
+            }}
+            style={styles.overlay}
+          />
+        )}
+        {this.props.realtyDetail.postRealty && (
+          <View style={styles.progress}>
+            <Progress.Pie indeterminate size={50} />
+          </View>
+        )}
         <ScrollView style={{ paddingHorizontal: _dims.defaultPadding }}>
           <FlatList
             style={{ alignSelf: 'center', marginVertical: _dims.defaultPadding / 2, flex: 1 }}
@@ -364,23 +430,29 @@ class PostRealty extends React.Component {
             <Ionicons name="ios-arrow-forward-outline" color="gray" style={styles.icon} />
           </TouchableOpacity>
 
-          <ModalDropdown
-            renderRow={this._renderDropdownItem}
-            dropdownStyle={[styles.dropdown_2_dropdown]}
-            dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
-            options={options.realtyTypes.map(item => item.name)}
-            defaultIndex={options.realtyTypes.findIndex(item => item.id === state.type.id)}
-            onSelect={index => this.setState({ type: options.realtyTypes[index - 1] })}
+          <TouchableOpacity
+            onPress={() => {
+              this._showPicker({
+                pickerData: options.realtyTypes.map(item => item.name),
+                title: strings.selectRealtyType,
+                value: state.type.name,
+                confirmCallBack: data => {
+                  const type = options.realtyTypes.find(item => item.name === data[0]);
+                  this.setState({ type });
+                }
+              });
+            }}
+            style={styles.line}
           >
-            <View style={styles.line}>
-              <Text style={styles.lineLeft}>
-                <Text style={styles.require}>* </Text>
-                {strings.projectType}
-              </Text>
-              <Text numberOfLines={1} style={styles.lineRight}>{state.type.name}</Text>
-              <Ionicons name="ios-arrow-forward-outline" color="gray" style={styles.icon} />
-            </View>
-          </ModalDropdown>
+            <Text style={styles.lineLeft}>
+              <Text style={styles.require}>* </Text>
+              {strings.projectType}
+            </Text>
+            <Text numberOfLines={1} style={styles.lineRight}>
+              {state.type.name}
+            </Text>
+            <Ionicons name="ios-arrow-forward-outline" color="gray" style={styles.icon} />
+          </TouchableOpacity>
 
           <TouchableOpacity style={styles.line} onPress={() => this.priceDom.focus()}>
             <Text style={styles.lineLeft}>
@@ -404,28 +476,29 @@ class PostRealty extends React.Component {
             <View style={styles.icon} />
           </TouchableOpacity>
 
-          <ModalDropdown
-            renderRow={this._renderDropdownItem}
-            dropdownStyle={[
-              styles.dropdown_2_dropdown,
-              { height: options.priceUnits.length * 50 }
-            ]}
-            dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
-            options={options.priceUnits.map(item => item.name)}
-            defaultIndex={options.priceUnits.findIndex(item => item.id === state.priceUnit.id)}
-            onSelect={index => this.setState({ priceUnit: options.priceUnits[index] })}
+
+          <TouchableOpacity 
+            style={styles.line} 
+            onPress={() => {
+              this._showPicker({
+                pickerData: options.priceUnits.map(item => item.name),
+                title: strings.selectPriceUnit,
+                value: this.state.priceUnit.name,
+                confirmCallBack: data => {
+                  const priceUnit = options.priceUnits.find(item => item.name === data[0]);
+                  this.setState({ priceUnit });
+                }
+              });
+            }}
           >
-            <View style={styles.line}>
-              <Text style={styles.lineLeft}>
-                <Text style={styles.require}>* </Text>
-                {strings.priceUnit}
-              </Text>
-              <Text style={styles.lineRight}>
-                {state.priceUnit.name}
-              </Text>
-              <View style={styles.icon} />
-            </View>
-          </ModalDropdown>
+            <Text style={styles.lineLeft}>
+              <Text style={styles.require}>* </Text>
+              {strings.priceUnit}
+            </Text>
+            <Text style={styles.lineRight}>{state.priceUnit.name}</Text>
+            <View style={styles.icon} />
+          </TouchableOpacity>
+
 
           <TouchableOpacity style={styles.line} onPress={() => this.widthDom.focus()}>
             <Text style={styles.lineLeft}>
@@ -493,30 +566,29 @@ class PostRealty extends React.Component {
             <Text style={{ color: 'gray' }}>m2</Text>
           </TouchableOpacity>
 
-          <ModalDropdown
-            renderRow={this._renderDropdownItem}
-            dropdownStyle={[
-              styles.dropdown_2_dropdown,
-              { height: 250 }
-            ]}
-            dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
-            options={options.directions.map(item => item.name)}
-            defaultIndex={options.directions.findIndex(item => item.id === state.direction.id)}
-            onSelect={index => this.setState({ direction: options.directions[index] })}
+          <TouchableOpacity
+            onPress={() => {
+              this._showPicker({
+                pickerData: options.directions.map(item => item.name),
+                title: strings.selectDirection,
+                value: this.state.direction.name,
+                confirmCallBack: data => {
+                  const direction = options.directions.find(item => item.name === data[0]);
+                  this.setState({ direction });
+                }
+              });
+            }}
+            style={styles.line}
           >
-            <View style={styles.line}>
-              <Text style={styles.lineLeft}>
-                <Text style={styles.require}>* </Text>
-                {strings.direction}
-              </Text>
-              <Text style={styles.lineRight}>
-                {state.direction.name}
-              </Text>
-              <View style={styles.icon} />
-            </View>
-          </ModalDropdown>
+            <Text style={styles.lineLeft}>
+              <Text style={styles.require}>* </Text>
+              {strings.direction}
+            </Text>
+            <Text style={styles.lineRight}>{state.direction.name}</Text>
+            <View style={styles.icon} />
+          </TouchableOpacity>
 
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.line}
             onPress={() => {
               Picker.init({
@@ -539,14 +611,16 @@ class PostRealty extends React.Component {
               <Text style={styles.require}>* </Text>
               {strings.city}
             </Text>
-            <Text style={styles.lineRight}>{state.city.name}</Text>
+            <Text style={styles.lineRight}>{state.city}</Text>
             <Ionicons name="ios-arrow-forward-outline" color="gray" style={styles.icon} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.line} onPress={() => this.addressDom.focus()}>
             <Text style={styles.lineLeft}>{strings.address}</Text>
             <TextInput
-              ref={ref => { this.addressDom = ref; }}
+              ref={ref => {
+                this.addressDom = ref;
+              }}
               style={[styles.lineRight, styles.input]}
               value={state.address}
               onChangeText={val => this.setState({ address: val })}
@@ -574,46 +648,61 @@ class PostRealty extends React.Component {
           </TouchableOpacity>
 
           <View style={styles.wrap}>
-            <View style={styles.part}>
+            <TouchableOpacity
+              onPress={() => {
+                this._showPicker({
+                  pickerData: this.dataSelect.map(item => item.name),
+                  title: strings.selectToilet,
+                  value: state.toilet.name,
+                  confirmCallBack: data => {
+                    const toilet = this.dataSelect.find(item => item.name === data[0]);
+                    this.setState({ toilet });
+                  }
+                });
+              }}
+              style={styles.part}
+            >
               <Text style={styles.label}>{strings.toilet}</Text>
-              <ModalDropdown
-                renderRow={this._renderDropdownItem}
-                dropdownStyle={[styles.dropdown_2_dropdown, styles.part_dropdown]}
-                dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
-                options={dataSelect.map(item => item.value)}
-                defaultIndex={dataSelect.findIndex(item => item.id === state.toilet.id)}
-                onSelect={index => this.setState({ toilet: dataSelect[index] })}
-              >
-                <Text style={styles.value}>{state.toilet.value}</Text>
-              </ModalDropdown>
-            </View>
+              <Text style={styles.value}>{state.toilet.name}</Text>
+            </TouchableOpacity>
 
-            <View style={[styles.part, { marginHorizontal: _dims.defaultPadding }]}>
+            <TouchableOpacity
+              onPress={() => {
+                this._showPicker({
+                  pickerData: this.dataSelect.map(item => item.name),
+                  title: strings.selectBathroom,
+                  value: state.bathroom.name,
+                  confirmCallBack: data => {
+                    const bathroom = this.dataSelect.find(item => item.name === data[0]);
+                    this.setState({ bathroom });
+                  }
+                });
+              }}
+              style={[styles.part, { marginHorizontal: _dims.defaultPadding }]}
+            >
               <Text style={styles.label}>{strings.bathroom}</Text>
-              <ModalDropdown
-                renderRow={this._renderDropdownItem}
-                dropdownStyle={[styles.dropdown_2_dropdown, styles.part_dropdown]}
-                dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
-                options={dataSelect.map(item => item.value)}
-                defaultIndex={dataSelect.findIndex(item => item.id === state.bathroom.id)}
-                onSelect={index => this.setState({ bathroom: dataSelect[index] })}
-              >
-                <Text style={styles.value}>{state.bathroom.value}</Text>
-              </ModalDropdown>
-            </View>
-            <View style={styles.part}>
+              <Text style={styles.value}>{state.bathroom.name}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                this._showPicker({
+                  pickerData: this.dataSelect.map(item => item.name),
+                  title: strings.selectBedroom,
+                  value: state.bedroom.name,
+                  confirmCallBack: data => {
+                    const bedroom = this.dataSelect.find(item => item.name === data[0]);
+                    this.setState({ bedroom });
+                  }
+                });
+              }}
+              style={[styles.part, { marginHorizontal: _dims.defaultPadding }]}
+            >
               <Text style={styles.label}>{strings.bedroom}</Text>
-              <ModalDropdown
-                renderRow={this._renderDropdownItem}
-                dropdownStyle={[styles.dropdown_2_dropdown, styles.part_dropdown]}
-                dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
-                options={dataSelect.map(item => item.value)}
-                defaultIndex={dataSelect.findIndex(item => item.id === state.bedroom.id)}
-                onSelect={index => this.setState({ bedroom: dataSelect[index] })}
-              >
-                <Text style={styles.value}>{state.bedroom.value}</Text>
-              </ModalDropdown>
-            </View>
+              <Text style={styles.value}>{state.bedroom.name}</Text>
+            </TouchableOpacity>
+
+
           </View>
 
           <Text style={styles.illustratorImage}>{strings.image}</Text>
@@ -631,7 +720,9 @@ class PostRealty extends React.Component {
               <View style={[styles.image, styles.imageCamera]}>
                 <Ionicons name="ios-camera" size={responsiveFontSize(60)} color="gray" />
               </View>
-              <Text style={{ textAlign: 'center', alignSelf: 'center' }}>{strings.uploadImage}</Text>
+              <Text style={{ textAlign: 'center', alignSelf: 'center' }}>
+                {strings.uploadImage}
+              </Text>
             </TouchableOpacity>
           )}
 
@@ -714,6 +805,14 @@ class PostRealty extends React.Component {
             <Text style={styles.submitText}>{strings.submit}</Text>
           </TouchableOpacity>
         </ScrollView>
+        <ActionSheet
+          ref={o => {
+            this.actionSheetPostRealty = o;
+          }}
+          options={[strings.actionCamera, strings.actionPhoto, strings.cancel]}
+          cancelButtonIndex={2}
+          onPress={this._onActionSheetSelected}
+        />
       </View>
     );
   }
@@ -733,6 +832,15 @@ export const styles = StyleSheet.create({
     borderColor: 'silver',
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  overlay: {
+    width: _dims.screenWidth,
+    height: _dims.screenHeight,
+    backgroundColor: 'transparent',
+    zIndex: 100,
+    position: 'absolute',
+    top: 0,
+    left: 0
   },
   line: {
     paddingVertical: 15,
@@ -881,19 +989,8 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center'
   },
-  dropdown_2_dropdown: {
-    width: '90%',
-    height: 320,
-    borderColor: 'rgba(192,192,192,0.4)',
-    borderWidth: 1,
-    borderRadius: 3
-  },
-  part_dropdown: {
-    width: (_dims.screenWidth - _dims.defaultPadding * 4) / 3,
-    height: dataSelect.length * 50
-  }, 
   illustratorImage: {
-    marginTop: _dims.defaultPadding * 2, 
+    marginTop: _dims.defaultPadding * 2,
     marginBottom: _dims.defaultPadding,
     color: '#444'
   },

@@ -5,6 +5,9 @@ import {
   GET_LIST_AGENCY,
   GET_LIST_AGENCY_SUCCESS,
   GET_LIST_AGENCY_FAILURE,
+  SEARCH_LIST_AGENCY,
+  SEARCH_LIST_AGENCY_SUCCESS,
+  SEARCH_LIST_AGENCY_FAILURE,
   REFRESH_LIST_AGENCY,
   REFRESH_LIST_AGENCY_SUCCESS,
   REFRESH_LIST_AGENCY_FAILURE,
@@ -22,6 +25,17 @@ const getListAgencyEpic = actions$ =>
     } catch (error) {
       handleError(error, true);
       return { type: GET_LIST_AGENCY_FAILURE, payload: error };
+    }
+  });
+
+const searchListAgencyEpic = actions$ =>
+  actions$.ofType(SEARCH_LIST_AGENCY).switchMap(async action => {
+    try {
+      const resp = await agencyApi.listAgency(action.payload);
+      return { type: SEARCH_LIST_AGENCY_SUCCESS, payload: resp.body };
+    } catch (error) {
+      handleError(error, true);
+      return { type: SEARCH_LIST_AGENCY_FAILURE, payload: error };
     }
   });
 
@@ -50,5 +64,6 @@ const refreshListAgencyEpic = actions$ =>
 export const listAgencyEpic = combineEpics(
   getListAgencyEpic,
   refreshListAgencyEpic,
-  loadMoreListAgencyEpic
+  loadMoreListAgencyEpic,
+  searchListAgencyEpic
 );

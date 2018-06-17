@@ -20,7 +20,8 @@ const strings = new LocalizedStrings({
     actionPhoto: 'Select from library',
     cancel: 'Cancel',
     manageContact: 'Manage contacts',
-    manageProject: 'All projects'
+    manageProject: 'All projects',
+    sendContact: 'Send contact'
   },
   vni: {
     name: 'họ và tên',
@@ -40,7 +41,8 @@ const strings = new LocalizedStrings({
     actionPhoto: 'Thư viện ảnh',
     cancel: 'Huỷ',
     manageContact: 'Quản lý liên hệ',
-    manageProject: 'Tất cả dự án'
+    manageProject: 'Tất cả dự án',
+    sendContact: 'Gửi thông tin'
   }
 });
 

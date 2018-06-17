@@ -3,6 +3,7 @@ import { View, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import FlipView from 'react-native-flip-view-next';
 import RNGooglePlaces from 'react-native-google-places';
+import { isEmpty } from 'lodash';
 
 import Overlay from '../components/common/Overlay';
 import Header from '../navigators/headers/SearchTab';
@@ -37,6 +38,7 @@ class SearchTab extends React.Component {
   };
 
   render() {
+    const { listRealty } = this.props;
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header
@@ -82,9 +84,12 @@ class SearchTab extends React.Component {
             />
           </View>
         )}
+        {isEmpty(listRealty.data) ? null : <Map listRealtyData={listRealty.data} />}
       </View>
     );
   }
 }
 
-export default connect(state => ({ mapRealty: state.mapRealty, searchRealty: state.searchRealty }))(SearchTab);
+export default connect(state => ({ mapRealty: state.mapRealty, searchRealty: state.searchRealty }))(
+  SearchTab
+);
