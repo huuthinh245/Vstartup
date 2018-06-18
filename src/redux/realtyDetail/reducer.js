@@ -87,7 +87,7 @@ export const realtyDetailReducer = handleActions(
       if (!state.data[payload.author_id]) {
         state.data[payload.author_id] = [];
       }
-      state.data[payload.author_id].push(payload);
+      state.data[payload.author_id].splice(0, 0, payload);
       return Object.assign({}, state, { postRealty: false, error: null });
     }
   },

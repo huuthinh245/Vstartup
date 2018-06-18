@@ -11,6 +11,8 @@ import {
   REFRESH_AGENCY_REALTY_FAILURE
 } from './actions';
 
+import { POST_REALTY_SUCCESS } from '../realtyDetail/actions';
+
 const initial = {
   fetching: false,
   loadMore: false,
@@ -61,6 +63,23 @@ export const agencyRealtyReducer = handleActions(
     },
     [LOAD_MORE_AGENCY_REALTY_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { loadMore: false, error: payload });
+    },
+    [POST_REALTY_SUCCESS]: (state, { payload }) => {
+      if (!state.data[payload.author_id]) {
+        state.data[payload.author_id] = [];
+      }
+      const obj = {
+        id: payload.id,
+        title: payload.title,
+        price: payload.price,
+        price_unit: payload.price_unit.name,
+        thumb: payload.thumb,
+        address: payload.address,
+        coordinate: payload.coordinate,
+        is_favorite: payload.is_favorite
+      };
+      state.data[payload.author_id].splice(0, 0, obj);
+      return Object.assign({}, state);
     }
   },
   initial

@@ -39,29 +39,6 @@ class PostRealty extends React.Component {
 
   constructor(props) {
     super(props);
-    // this.state = {
-    //   method: this.props.options.data.methods[0],
-    //   title: '',
-    //   project: {},
-    //   type: this.props.options.data.realtyTypes[0],
-    //   price: '',
-    //   priceUnit: this.props.options.data.priceUnits[0],
-    //   width: undefined,
-    //   length: undefined,
-    //   area: undefined,
-    //   direction: this.props.options.data.directions[0],
-    //   address: {},
-    //   toilet: dataSelect[0],
-    //   bedroom: dataSelect[0],
-    //   bathroom: dataSelect[0],
-    //   description: '',
-    //   youtube: '',
-    //   images: ['flag'],
-    //   utils: [],
-    //   contactName: this.props.auth.user.name,
-    //   contactEmail: this.props.auth.user.email,
-    //   contactPhone: this.props.auth.user.phone
-    // };
     this.dataSelect = [
       { id: 0, name: '---' },
       { id: 1, name: '1' },
@@ -73,33 +50,30 @@ class PostRealty extends React.Component {
 
     this.state = {
       overlay: false,
-      dataCity: this.props.city.data.city,
-      dataDistrict: [],
-      dataWard: [],
       method: this.props.options.data.methods[0],
-      title: 'aaa',
-      project: { id: 1, title: 'hehe' },
+      title: '',
+      project: {},
       type: this.props.options.data.realtyTypes[0],
-      price: '1',
+      price: undefined,
       priceUnit: this.props.options.data.priceUnits[0],
-      width: '2',
-      length: '3',
-      area: '4',
+      width: undefined,
+      length: undefined,
+      area: undefined,
       direction: this.props.options.data.directions[0],
-      address: 'Viet nam',
-      city: '1',
-      district: '3',
-      ward: '4',
+      address: undefined,
+      city: {},
+      district: {},
+      ward: {},
       toilet: this.dataSelect[1],
       bedroom: this.dataSelect[2],
       bathroom: this.dataSelect[3],
-      description: 'hehehe',
-      youtube: 'ah uh',
+      description: undefined,
+      youtube: undefined,
       images: ['flag'],
       utils: [{ id: 1 }, { id: 2 }],
       contactName: this.props.auth.user.name,
       contactEmail: this.props.auth.user.email,
-      contactPhone: this.props.auth.user.phone || '0919954554'
+      contactPhone: this.props.auth.user.phone
     };
   }
 
@@ -357,6 +331,7 @@ class PostRealty extends React.Component {
 
   render() {
     const options = this.props.options.data;
+    const city = this.props.city.data;
     const { state, props } = this;
 
     return (
@@ -364,7 +339,7 @@ class PostRealty extends React.Component {
         <Header 
           title={headerStrings.postRealty} 
           onLeftPress={() => {
-            Picker.toggle();
+            Picker.hide();
             props.navigation.goBack();
           }} 
         />
@@ -373,7 +348,7 @@ class PostRealty extends React.Component {
             activeOpacity={1}
             onPress={() => {
               this.setState({ overlay: false });
-              Picker.toggle();
+              Picker.hide();
             }}
             style={styles.overlay}
           />
@@ -402,7 +377,7 @@ class PostRealty extends React.Component {
                 this.titleDom = ref;
               }}
               placeholder={strings.name}
-              style={[styles.lineLeft, { marginRight: 0 }]}
+              style={[styles.lineLeft, { marginRight: 0, flex: 1 }]}
               value={state.title}
               onChangeText={val => this.setState({ title: val })}
               returnKeyType="next"
@@ -473,7 +448,6 @@ class PostRealty extends React.Component {
               autoCorrect={false}
               clearButtonMode="always"
             />
-            <View style={styles.icon} />
           </TouchableOpacity>
 
 
@@ -591,36 +565,80 @@ class PostRealty extends React.Component {
           <TouchableOpacity
             style={styles.line}
             onPress={() => {
-              Picker.init({
-                pickerData: this.state.dataCity.map(item => item.name),
-                selectedValue: [this.state.city.name],
-                onPickerConfirm: data => {
-                  console.log(data);
-                },
-                onPickerCancel: data => {
-                  console.log(data);
-                },
-                onPickerSelect: data => {
-                  this.setState({ city: data });
+              this._showPicker({
+                pickerData: city.city.map(item => item.name),
+                title: strings.selectCity,
+                value: this.state.city.name,
+                confirmCallBack: data => {
+                  const _city = city.city.find(item => item.name === data[0]);
+                  this.setState({ city: _city });
                 }
               });
-              Picker.show();
             }}
           >
             <Text style={styles.lineLeft}>
               <Text style={styles.require}>* </Text>
               {strings.city}
             </Text>
-            <Text style={styles.lineRight}>{state.city}</Text>
+            <Text style={styles.lineRight}>{state.city.name}</Text>
+            <Ionicons name="ios-arrow-forward-outline" color="gray" style={styles.icon} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.line}
+            onPress={() => {
+              if(!this.state.city.id) return;
+              this._showPicker({
+                pickerData: city.district.filter(item => item.city_id === this.state.city.id).map(item => item.name),
+                title: strings.selectDistrict,
+                value: this.state.district.name,
+                confirmCallBack: data => {
+                  const _district = city.district.find(item => item.name === data[0]);
+                  this.setState({ district: _district });
+                }
+              });
+            }}
+          >
+            <Text style={styles.lineLeft}>
+              <Text style={styles.require}>* </Text>
+              {strings.district}
+            </Text>
+            <Text style={styles.lineRight}>{state.district.name}</Text>
+            <Ionicons name="ios-arrow-forward-outline" color="gray" style={styles.icon} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.line}
+            onPress={() => {
+              if(!this.state.district.id) return;
+              this._showPicker({
+                pickerData: city.ward.filter(item => item.district_id === this.state.district.id).map(item => item.name),
+                title: strings.selectWard,
+                value: this.state.ward.name,
+                confirmCallBack: data => {
+                  const _ward = city.ward.find(item => item.name === data[0]);
+                  this.setState({ ward: _ward });
+                }
+              });
+            }}
+          >
+            <Text style={styles.lineLeft}>
+              {strings.ward}
+            </Text>
+            <Text style={styles.lineRight}>{state.ward.name}</Text>
             <Ionicons name="ios-arrow-forward-outline" color="gray" style={styles.icon} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.line} onPress={() => this.addressDom.focus()}>
-            <Text style={styles.lineLeft}>{strings.address}</Text>
+            <Text style={styles.lineLeft}>
+              <Text style={styles.require}>* </Text>
+              {strings.address}
+            </Text>
             <TextInput
               ref={ref => {
                 this.addressDom = ref;
               }}
+              placeholder="_"
               style={[styles.lineRight, styles.input]}
               value={state.address}
               onChangeText={val => this.setState({ address: val })}
@@ -637,6 +655,7 @@ class PostRealty extends React.Component {
               ref={ref => {
                 this.youtubeDom = ref;
               }}
+              placeholder="_"
               style={[styles.lineRight, styles.input]}
               value={state.youtube}
               onChangeText={val => this.setState({ youtube: val })}
@@ -710,7 +729,7 @@ class PostRealty extends React.Component {
             <View style={styles.images}>
               <FlatList
                 data={state.images}
-                keyExtractor={() => `${Math.random()}`}
+                keyExtractor={item => item.path}
                 renderItem={this._renderItemImages}
                 numColumns={3}
               />
@@ -855,13 +874,13 @@ export const styles = StyleSheet.create({
     fontSize: responsiveFontSize(_dims.defaultFontTitle)
   },
   lineRight: {
-    flex: 6.5,
+    flex: 1,
+    textAlign: 'right',
     paddingRight: 10
   },
   lineLeft: {
     color: 'gray',
     marginRight: 10,
-    flex: 3,
     alignItems: 'center',
     justifyContent: 'center'
   },

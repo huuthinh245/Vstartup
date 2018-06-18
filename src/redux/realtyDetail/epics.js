@@ -1,8 +1,9 @@
 import 'rxjs';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { combineEpics } from 'redux-observable';
-import { realtyApi, handleError } from '../../utils/api';
+import { StackActions, NavigationActions } from 'react-navigation';
 
+import { realtyApi, handleError } from '../../utils/api';
 import {
   GET_REALTY_DETAIL,
   GET_REALTY_DETAIL_SUCCESS,
@@ -19,6 +20,7 @@ import {
 } from './actions';
 import { _alert } from '../../utils/alert';
 import alertStrings from '../../localization/alert';
+import * as routes from '../../routes/routes';
 
 const getRealtyDetail = actions$ =>
   actions$.ofType(GET_REALTY_DETAIL).switchMap(async action => {
@@ -53,7 +55,7 @@ const unlikeRealty = actions$ =>
     }
   });
 
-const postRealty = actions$ =>
+const postRealty = (actions$, store) =>
   actions$.ofType(POST_REALTY).switchMap(async action => {
     const resp = await RNFetchBlob.fetch(
       'POST',
@@ -68,6 +70,22 @@ const postRealty = actions$ =>
       const { status } = resp.info();
       const value = resp.json();
       if (status === 200) {
+        _alert(alertStrings.success, alertStrings.postRealtySuccess, [
+          {
+            text: alertStrings.viewRealtyDetail,
+            onPress: () =>
+              store.dispatch(
+                NavigationActions.navigate({
+                  routeName: routes.realtyDetail,
+                  params: { data: value, onBack: () => store.dispatch(StackActions.popToTop()) }
+                })
+              )
+          },
+          {
+            text: alertStrings.back,
+            onPress: () => store.dispatch(NavigationActions.back({ key: null }))
+          }
+        ]);
         return { type: POST_REALTY_SUCCESS, payload: value };
       }
       _alert(`${alertStrings.error} ${value.code}`, value.message);

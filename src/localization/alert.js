@@ -18,6 +18,9 @@ const strings = new LocalizedStrings({
     confirmDelete: 'Are you sure to delete ?',
     ok: 'OK',
     cancel: 'Cancel',
+    back: 'Back',
+    viewRealtyDetail: 'View realty detail',
+    postRealtySuccess: 'Congratulations, your realty has been posted !',
 
     invalidField: 'Invalid data',
     emailInvalid: 'Email invalid',
@@ -50,6 +53,9 @@ const strings = new LocalizedStrings({
     confirmDelete: 'Bạn chắc chắn muốn xoá ?',
     ok: 'OK',
     cancel: 'Huỷ',
+    back: 'Quay lại',
+    postRealtySuccess: 'Xin chúc mừng, tin bất động sản của bạn đã được đăng thành công !',
+    viewRealtyDetail: 'Xem tin bất động sản',
 
     invalidField: 'Dữ liệu lỗi',
     emailInvalid: 'Email không đúng định dạng',

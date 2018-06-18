@@ -18,7 +18,7 @@ import FastImage from 'react-native-fast-image';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import call from 'react-native-phone-call';
 import { connect } from 'react-redux';
-import YouTube from 'react-native-youtube';
+import { YouTubeStandaloneIOS, YouTubeStandaloneAndroid } from 'react-native-youtube';
 import ActionSheet from 'react-native-actionsheet';
 
 import PlaceHolder from '../components/flatlistHelpers/PlaceHolder_Detail';
@@ -28,7 +28,7 @@ import {
   _dims,
   responsiveFontSize,
   responsiveWidth,
-  pluralNoun
+  _ios,
 } from '../utils/constants';
 import SliderEntry from '../components/SliderEntry';
 import strings from '../localization/realtyDetail';
@@ -403,11 +403,24 @@ class RealtyDetail extends Component {
       );
     }
     return (
-      <YouTube
-        apiKey="AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis"
-        videoId="KVZ-P-ZI6W4"
-        style={styles.youtube}
-      />
+      <TouchableOpacity
+        onPress={() => {
+          _ios ?
+          YouTubeStandaloneIOS.playVideo('KVZ-P-ZI6W4')
+          .then(() => console.log('Standalone Player Exited'))
+          .catch(errorMessage => console.error(errorMessage))
+         :
+        YouTubeStandaloneAndroid.playVideo({
+          apiKey: 'AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis',     // Your YouTube Developer API Key
+          videoId: 'KVZ-P-ZI6W4',     // YouTube video ID
+          autoplay: true,             // Autoplay the video
+        })
+          .then(() => console.log('Standalone Player Exited'))
+          .catch(errorMessage => console.error(errorMessage))
+      }}
+      >
+        <Text>{section.content}</Text>
+      </TouchableOpacity>
     );
   };
 
@@ -422,7 +435,14 @@ class RealtyDetail extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header
-          onLeftPress={() => this.props.navigation.goBack()}
+          onLeftPress={() => {
+            const onBack = this.props.navigation.getParam('onBack');
+            if(onBack) {
+              onBack();
+            }else {
+              this.props.navigation.goBack();
+            }
+          }}
           title={params.data.title}
           right={
             realty && this.props.auth.user.id === realty.author_id ? (
