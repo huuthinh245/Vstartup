@@ -537,7 +537,7 @@ class PostRealty extends React.Component {
               autoCorrect={false}
               clearButtonMode="always"
             />
-            <Text style={{ color: 'gray' }}>m2</Text>
+            <Text style={{ color: 'gray' }}>m²</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

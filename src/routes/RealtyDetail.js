@@ -18,7 +18,7 @@ import FastImage from 'react-native-fast-image';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import call from 'react-native-phone-call';
 import { connect } from 'react-redux';
-import { YouTubeStandaloneIOS, YouTubeStandaloneAndroid } from 'react-native-youtube';
+import YouTube, { YouTubeStandaloneAndroid } from 'react-native-youtube';
 import ActionSheet from 'react-native-actionsheet';
 
 import PlaceHolder from '../components/flatlistHelpers/PlaceHolder_Detail';
@@ -75,16 +75,15 @@ class RealtyDetail extends Component {
     }
   };
 
-  _share = () => {
+  _share = item => {
     Share.share(
       {
-        message: "BAM: we're helping your business with awesome React Native apps",
-        url: 'http://bam.tech',
-        title: 'Wow, did you see that?'
+        message: `url: ${item.url}`,
+        url: item.url
       },
       {
         // Android only:
-        dialogTitle: 'Share BAM goodness',
+        dialogTitle: 'Share url',
         // iOS only:
         excludedActivityTypes: ['com.apple.UIKit.activity.PostToTwitter']
       }
@@ -153,15 +152,6 @@ class RealtyDetail extends Component {
     ];
     return (
       <View style={{ flex: 1 }}>
-        {this.state.fabVisible && (
-          <TouchableOpacity
-            onPress={() => this.scroll.scrollToEnd({ animated: true })}
-            style={[styles.fab, !this.state.fabVisible && { display: 'none' }]}
-          >
-            <Ionicons name="ios-person" style={styles.fabIcon} />
-            <Text style={styles.fabText}>{strings.contactAgency}</Text>
-          </TouchableOpacity>
-        )}
         <View style={{ height: _dims.defaultPadding }} />
         <Carousel
           style={{ marginTop: _dims.defaultPadding }}
@@ -199,7 +189,7 @@ class RealtyDetail extends Component {
               onPress={() => this._likeRealty(realty)}
             />
             <FeatherIcons
-              onPress={this._share}
+              onPress={() => this._share(realty)}
               name="share-2"
               style={styles.socialButton}
               color={_colors.mainColor}
@@ -402,25 +392,30 @@ class RealtyDetail extends Component {
         </TouchableOpacity>
       );
     }
+    if(_ios) {
+      return (
+        <YouTube
+          videoId="KVZ-P-ZI6W4"
+          style={styles.youtube}
+        />
+      );
+    } 
     return (
-      <TouchableOpacity
-        onPress={() => {
-          _ios ?
-          YouTubeStandaloneIOS.playVideo('KVZ-P-ZI6W4')
-          .then(() => console.log('Standalone Player Exited'))
-          .catch(errorMessage => console.error(errorMessage))
-         :
-        YouTubeStandaloneAndroid.playVideo({
-          apiKey: 'AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis',     // Your YouTube Developer API Key
-          videoId: 'KVZ-P-ZI6W4',     // YouTube video ID
-          autoplay: true,             // Autoplay the video
-        })
-          .then(() => console.log('Standalone Player Exited'))
-          .catch(errorMessage => console.error(errorMessage))
-      }}
-      >
-        <Text>{section.content}</Text>
-      </TouchableOpacity>
+      <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
+        <Text>Link: </Text>
+        <TouchableOpacity
+          onPress={() => {
+            YouTubeStandaloneAndroid.playVideo({
+              apiKey: 'AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis', 
+              videoId: 'KVZ-P-ZI6W4',
+              autoplay: true,
+            })
+            .catch(errorMessage => _alert('Youtube error', errorMessage));
+        }}
+        >
+          <Text style={styles.youtubeLink}>{section.content}</Text>
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -457,12 +452,20 @@ class RealtyDetail extends Component {
             ) : null
           }
         />
+        {this.state.fabVisible && (
+          <TouchableOpacity
+            onPress={() => this.scroll.scrollToEnd({ animated: true })}
+            style={[styles.fab, !this.state.fabVisible && { display: 'none' }]}
+          >
+            <Ionicons name="ios-person" style={styles.fabIcon} />
+            <Text style={styles.fabText}>{strings.contactAgency}</Text>
+          </TouchableOpacity>
+        )}
         <KeyboardAwareScrollView
           ref={scroll => {
             this.scroll = scroll;
           }}
           onScroll={event => {
-            return;
             const { height } = event.nativeEvent.contentSize;
             const offsetY = event.nativeEvent.contentOffset.y;
             if (_dims.screenHeight + offsetY >= height - _dims.defaultPadding * 4) {
@@ -720,5 +723,10 @@ export const styles = StyleSheet.create({
     alignSelf: 'stretch',
     height: (_dims.screenWidth - _dims.defaultPadding * 2) * 0.75,
     marginTop: 5
+  },
+  youtubeLink: {
+    color: _colors.mainColor,
+    paddingHorizontal: 10,
+    textDecorationLine: 'underline',
   }
 });

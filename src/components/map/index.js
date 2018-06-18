@@ -3,11 +3,12 @@ import { View, Text, StyleSheet, Dimensions, Animated, Image } from 'react-nativ
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { connect } from 'react-redux';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATITUDE = 10.8941563;
-const LONGITUDE = 106.7690843;
+const LATITUDE = 10.763555;
+const LONGITUDE = 106.604342;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const CARD_HEIGHT = height / 3.5;
@@ -147,7 +148,8 @@ const renderColor = type => {
   }
   return '#E91E63';
 };
-export default class Map extends React.Component {
+
+class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -156,8 +158,7 @@ export default class Map extends React.Component {
     };
   }
   componentDidMount() {
-    const { listRealtyData } = this.props;
-    console.log('this.props', this.props);
+    const listRealtyData = this.props.mapRealty.data;
     const { animation, currentMarkerIndex } = this.state;
     animation.addListener(({ value }) => {
       const index = Math.floor(value / CARD_WIDTH + 0.3);
@@ -180,7 +181,7 @@ export default class Map extends React.Component {
   }
   render() {
     const { animation, currentMarkerIndex } = this.state;
-    const { listRealtyData } = this.props;
+    const listRealtyData = this.props.mapRealty.data;
     const listRealtyDataLength = listRealtyData.length;
     return (
       <View style={styles.main}>
@@ -245,7 +246,7 @@ export default class Map extends React.Component {
           style={styles.scrollView}
           contentContainerStyle={styles.endPadding}
         >
-          {listRealtyData.map((marker, index) => {
+          {this.props.searchRealty.data.map((marker, index) => {
             const iconStyle = [
               styles.cardPlaceIcon,
               marker.type ? { color: renderColor(marker.type) } : { color: '#2196F3' }
@@ -258,7 +259,7 @@ export default class Map extends React.Component {
                 <SimpleLineIcons name="share" style={styles.cardSharingIcon} />
                 <Icon name="md-pin" style={iconStyle} />
                 <Text style={styles.cardIndex}>
-                  {`${index + 1}/${listRealtyDataLength} - ${listRealtyDataLength} hình`}
+                  {`${index + 1}/${this.props.searchRealty.data} - ${listRealtyDataLength} hình`}
                 </Text>
                 <Text style={styles.cardTitle} numberOfLines={1}>
                   {marker.title}
@@ -277,3 +278,7 @@ export default class Map extends React.Component {
     );
   }
 }
+
+export default connect(state => ({ mapRealty: state.mapRealty, searchRealty: state.searchRealty }))(
+  Map
+);
