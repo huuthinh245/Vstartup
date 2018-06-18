@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Dimensions, Animated, Image } from 'react-nativ
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { connect } from 'react-redux';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -13,6 +12,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const CARD_HEIGHT = height / 3.5;
 const CARD_WIDTH = width - 20;
+
 const styles = StyleSheet.create({
   main: {
     flex: 1
@@ -158,14 +158,14 @@ class Map extends React.Component {
     };
   }
   componentDidMount() {
-    const listRealtyData = this.props.mapRealty.data;
+    const { mapRealtyData } = this.props;
     const { animation, currentMarkerIndex } = this.state;
     animation.addListener(({ value }) => {
       const index = Math.floor(value / CARD_WIDTH + 0.3);
       this.setState({ currentMarkerIndex: index });
       setTimeout(() => {
         if (currentMarkerIndex !== index) {
-          const { coordinate } = listRealtyData[index];
+          const { coordinate } = mapRealtyData[index];
           this.map.animateToRegion(
             {
               latitude: coordinate.lat,
@@ -181,8 +181,9 @@ class Map extends React.Component {
   }
   render() {
     const { animation, currentMarkerIndex } = this.state;
-    const listRealtyData = this.props.mapRealty.data;
-    const listRealtyDataLength = listRealtyData.length;
+    const { mapRealtyData, searchRealtyData } = this.props;
+    const mapRealtyDataLength = mapRealtyData.length;
+
     return (
       <View style={styles.main}>
         <MapView
@@ -197,7 +198,7 @@ class Map extends React.Component {
             longitudeDelta: LONGITUDE_DELTA
           }}
         >
-          {listRealtyData.map((marker, index) => {
+          {mapRealtyData.map((marker, index) => {
             const priceStyle = currentMarkerIndex === index ? styles.priceHighlight : styles.price;
             const bubbleStyle = [
               currentMarkerIndex === index ? styles.bubbleHighlight : styles.bubble,
@@ -246,7 +247,7 @@ class Map extends React.Component {
           style={styles.scrollView}
           contentContainerStyle={styles.endPadding}
         >
-          {this.props.searchRealty.data.map((marker, index) => {
+          {searchRealtyData.map((marker, index) => {
             const iconStyle = [
               styles.cardPlaceIcon,
               marker.type ? { color: renderColor(marker.type) } : { color: '#2196F3' }
@@ -259,7 +260,7 @@ class Map extends React.Component {
                 <SimpleLineIcons name="share" style={styles.cardSharingIcon} />
                 <Icon name="md-pin" style={iconStyle} />
                 <Text style={styles.cardIndex}>
-                  {`${index + 1}/${this.props.searchRealty.data} - ${listRealtyDataLength} hình`}
+                  {`${index + 1}/${mapRealtyDataLength} - ${mapRealtyDataLength} hình`}
                 </Text>
                 <Text style={styles.cardTitle} numberOfLines={1}>
                   {marker.title}
@@ -279,6 +280,8 @@ class Map extends React.Component {
   }
 }
 
-export default connect(state => ({ mapRealty: state.mapRealty, searchRealty: state.searchRealty }))(
-  Map
-);
+export default Map;
+
+// export default connect(state => ({ mapRealty: state.mapRealty, searchRealty: state.searchRealty }))(
+//   Map
+// );

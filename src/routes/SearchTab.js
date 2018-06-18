@@ -38,6 +38,8 @@ class SearchTab extends React.Component {
   };
 
   render() {
+    const mapRealtyData = this.props.mapRealty.data;
+    const searchRealtyData = this.props.searchRealty.data;
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header
@@ -67,16 +69,18 @@ class SearchTab extends React.Component {
           editText={!this.state.editing ? 'Edit' : 'Done'}
         />
         <View style={{ flex: 1 }}>
-          <FlipView
-            style={{ flex: 1 }}
-            front={<Map {...this.props} />}
-            back={<SearchBack {...this.props} />}
-            isFlipped={this.state.isFlipped}
-            flipAxis="y"
-            flipEasing={Easing.out(Easing.ease)}
-            flipDuration={500}
-            perspective={1000}
-          />
+          {!isEmpty(mapRealtyData) && !isEmpty(searchRealtyData) ? (
+            <FlipView
+              style={{ flex: 1 }}
+              front={<Map mapRealtyData={mapRealtyData} searchRealtyData={searchRealtyData} />}
+              back={<SearchBack {...this.props} />}
+              isFlipped={this.state.isFlipped}
+              flipAxis="y"
+              flipEasing={Easing.out(Easing.ease)}
+              flipDuration={500}
+              perspective={1000}
+            />
+          ) : null}
         </View>
       </View>
     );
