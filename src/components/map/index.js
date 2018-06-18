@@ -281,7 +281,3 @@ class Map extends React.Component {
 }
 
 export default Map;
-
-// export default connect(state => ({ mapRealty: state.mapRealty, searchRealty: state.searchRealty }))(
-//   Map
-// );
