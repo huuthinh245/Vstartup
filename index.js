@@ -1,4 +1,4 @@
-import { AppRegistry, AsyncStorage } from 'react-native';
+import { AppRegistry } from 'react-native';
 import Permissions from 'react-native-permissions';
 
 import App from './src/app';

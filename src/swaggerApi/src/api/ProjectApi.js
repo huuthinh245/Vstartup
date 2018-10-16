@@ -60,6 +60,7 @@
      * @param {Number} opts.page 
      * @param {String} opts.keyword 
      * @param {Number} opts.type 
+     * @param {Number} opts.agencyId 
      * @param {module:api/ProjectApi~listProjectCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/ProjectList>}
      */
@@ -74,6 +75,7 @@
         'page': opts['page'],
         'keyword': opts['keyword'],
         'type': opts['type'],
+        'agency_id': opts['agencyId'],
       };
       var collectionQueryParams = {
       };

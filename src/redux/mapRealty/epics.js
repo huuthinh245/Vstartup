@@ -17,7 +17,7 @@ import { realtyApi, handleError } from '../../utils/api';
 const getMapRealtyEpic = actions$ =>
   actions$.ofType(GET_MAP_REALTY).switchMap(async action => {
     try {
-      const resp = await realtyApi.listRealty(action.payload);
+      const resp = await realtyApi.mapRealty(action.payload);
       return {
         type: GET_MAP_REALTY_SUCCESS,
         payload: resp.body
@@ -31,7 +31,7 @@ const getMapRealtyEpic = actions$ =>
 const refreshMapRealtyEpic = actions$ =>
   actions$.ofType(REFRESH_MAP_REALTY).switchMap(async action => {
     try {
-      const resp = await realtyApi.listRealty(action.payload);
+      const resp = await realtyApi.mapRealty(action.payload);
       return {
         type: REFRESH_MAP_REALTY_SUCCESS,
         payload: resp.body
@@ -45,7 +45,7 @@ const refreshMapRealtyEpic = actions$ =>
 const loadMoreMapRealtyEpic = actions$ =>
   actions$.ofType(LOAD_MORE_MAP_REALTY).switchMap(async action => {
     try {
-      const resp = await realtyApi.listRealty(action.payload);
+      const resp = await realtyApi.mapRealty(action.payload);
       return {
         type: LOAD_MORE_MAP_REALTY_SUCCESS,
         payload: resp.body

@@ -233,10 +233,17 @@ var apiInstance = new RemsApi.RealtyApi();
 
 var opts = { 
   'page': 56, // Number | 
-  'keyword': 56, // Number | 
   'method': 56, // Number | 
+  'lat': 8.14, // Number | 
+  'lng': 8.14, // Number | 
   'type': 56, // Number | 
-  'authorId': 56 // Number | 
+  'bathroom': 56, // Number | 
+  'bedroom': 56, // Number | 
+  'area': "area_example", // String | 
+  'price': "price_example", // String | 
+  'utils': "utils_example", // String | 
+  'authorId': 56, // Number | 
+  'userId': 56 // Number | 
 };
 
 var callback = function(error, data, response) {
@@ -254,10 +261,17 @@ apiInstance.listRealty(opts, callback);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **page** | **Number**|  | [optional] 
- **keyword** | **Number**|  | [optional] 
  **method** | **Number**|  | [optional] 
+ **lat** | **Number**|  | [optional] 
+ **lng** | **Number**|  | [optional] 
  **type** | **Number**|  | [optional] 
+ **bathroom** | **Number**|  | [optional] 
+ **bedroom** | **Number**|  | [optional] 
+ **area** | **String**|  | [optional] 
+ **price** | **String**|  | [optional] 
+ **utils** | **String**|  | [optional] 
  **authorId** | **Number**|  | [optional] 
+ **userId** | **Number**|  | [optional] 
 
 ### Return type
 
@@ -285,12 +299,16 @@ var RemsApi = require('rems_api');
 var apiInstance = new RemsApi.RealtyApi();
 
 var opts = { 
-  'page': 56, // Number | 
+  'method': 56, // Number | 
   'lat': 8.14, // Number | 
   'lng': 8.14, // Number | 
-  'price': 8.14, // Number | 
   'type': 56, // Number | 
-  'method': "method_example" // String | 
+  'bathroom': 56, // Number | 
+  'bedroom': 56, // Number | 
+  'area': "area_example", // String | 
+  'price': "price_example", // String | 
+  'utils': "utils_example", // String | 
+  'authorId': 56 // Number | 
 };
 
 var callback = function(error, data, response) {
@@ -307,12 +325,16 @@ apiInstance.mapRealty(opts, callback);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **Number**|  | [optional] 
+ **method** | **Number**|  | [optional] 
  **lat** | **Number**|  | [optional] 
  **lng** | **Number**|  | [optional] 
- **price** | **Number**|  | [optional] 
  **type** | **Number**|  | [optional] 
- **method** | **String**|  | [optional] 
+ **bathroom** | **Number**|  | [optional] 
+ **bedroom** | **Number**|  | [optional] 
+ **area** | **String**|  | [optional] 
+ **price** | **String**|  | [optional] 
+ **utils** | **String**|  | [optional] 
+ **authorId** | **Number**|  | [optional] 
 
 ### Return type
 
@@ -432,7 +454,7 @@ Name | Type | Description  | Notes
 
 <a name="saveKeyword"></a>
 # **saveKeyword**
-> RealtyKeyword saveKeyword(address, lat, lng)
+> RealtyKeyword saveKeyword(address, lat, lng, opts)
 
 
 
@@ -455,6 +477,9 @@ var lat = 8.14; // Number |
 
 var lng = 8.14; // Number | 
 
+var opts = { 
+  'filter': "filter_example" // String | 
+};
 
 var callback = function(error, data, response) {
   if (error) {
@@ -463,7 +488,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-apiInstance.saveKeyword(address, lat, lng, callback);
+apiInstance.saveKeyword(address, lat, lng, opts, callback);
 ```
 
 ### Parameters
@@ -473,6 +498,7 @@ Name | Type | Description  | Notes
  **address** | **String**|  | 
  **lat** | **Number**|  | 
  **lng** | **Number**|  | 
+ **filter** | **String**|  | [optional] 
 
 ### Return type
 
@@ -585,7 +611,7 @@ No authorization required
 
 <a name="viewRealty"></a>
 # **viewRealty**
-> Realty viewRealty(id)
+> Realty viewRealty(id, opts)
 
 
 
@@ -597,6 +623,9 @@ var apiInstance = new RemsApi.RealtyApi();
 
 var id = 56; // Number | 
 
+var opts = { 
+  'userId': 56 // Number | 
+};
 
 var callback = function(error, data, response) {
   if (error) {
@@ -605,7 +634,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-apiInstance.viewRealty(id, callback);
+apiInstance.viewRealty(id, opts, callback);
 ```
 
 ### Parameters
@@ -613,6 +642,7 @@ apiInstance.viewRealty(id, callback);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **Number**|  | 
+ **userId** | **Number**|  | [optional] 
 
 ### Return type
 

@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **title** | **String** |  | 
 **code** | **String** |  | [optional] 
 **projectId** | **Number** |  | [optional] 
+**project** | [**RealtyProject**](RealtyProject.md) |  | [optional] 
 **excerpt** | **String** |  | [optional] 
 **body** | **String** |  | [optional] 
 **thumb** | **String** |  | [optional] 
@@ -16,14 +17,15 @@ Name | Type | Description | Notes
 **featured** | **Number** |  | [optional] 
 **startDate** | **Number** |  | [optional] 
 **endDate** | **Number** |  | [optional] 
-**method** | **String** |  | 
+**method** | [**Method**](Method.md) |  | 
 **typeId** | **Number** |  | 
+**realtyType** | [**RealtyType**](RealtyType.md) |  | [optional] 
 **area** | **Number** |  | [optional] 
 **areaBuild** | **Number** |  | [optional] 
 **toilet** | **Number** |  | [optional] 
 **bedroom** | **Number** |  | [optional] 
 **bathroom** | **Number** |  | [optional] 
-**direction** | **String** |  | [optional] 
+**direction** | [**Direction**](Direction.md) |  | [optional] 
 **floor** | **Number** |  | [optional] 
 **road** | **Number** |  | [optional] 
 **front** | **Number** |  | [optional] 
@@ -31,7 +33,7 @@ Name | Type | Description | Notes
 **width** | **Number** |  | [optional] 
 **rearHatch** | **Boolean** |  | [optional] 
 **price** | **Number** |  | [optional] 
-**priceUnit** | **Number** |  | [optional] 
+**priceUnit** | [**PriceUnit**](PriceUnit.md) |  | [optional] 
 **address** | **String** |  | 
 **wardId** | **Number** |  | [optional] 
 **districtId** | **Number** |  | [optional] 

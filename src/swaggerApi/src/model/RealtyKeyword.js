@@ -52,6 +52,7 @@
 
 
 
+
   };
 
   /**
@@ -77,6 +78,9 @@
       if (data.hasOwnProperty('thumb_map')) {
         obj['thumb_map'] = ApiClient.convertToType(data['thumb_map'], 'String');
       }
+      if (data.hasOwnProperty('filter')) {
+        obj['filter'] = ApiClient.convertToType(data['filter'], 'String');
+      }
       if (data.hasOwnProperty('coordinate')) {
         obj['coordinate'] = Coordinate.constructFromObject(data['coordinate']);
       }
@@ -100,6 +104,10 @@
    * @member {String} thumb_map
    */
   exports.prototype['thumb_map'] = undefined;
+  /**
+   * @member {String} filter
+   */
+  exports.prototype['filter'] = undefined;
   /**
    * @member {module:model/Coordinate} coordinate
    */

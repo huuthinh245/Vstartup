@@ -23,7 +23,8 @@ var apiInstance = new RemsApi.ProjectApi();
 var opts = { 
   'page': 56, // Number | 
   'keyword': "keyword_example", // String | 
-  'type': 56 // Number | 
+  'type': 56, // Number | 
+  'agencyId': 56 // Number | 
 };
 
 var callback = function(error, data, response) {
@@ -43,6 +44,7 @@ Name | Type | Description  | Notes
  **page** | **Number**|  | [optional] 
  **keyword** | **String**|  | [optional] 
  **type** | **Number**|  | [optional] 
+ **agencyId** | **Number**|  | [optional] 
 
 ### Return type
 

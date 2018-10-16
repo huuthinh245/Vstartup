@@ -4,41 +4,52 @@ import { Provider, connect } from 'react-redux';
 import React from 'react';
 import { createEpicMiddleware } from 'redux-observable';
 import DropdownAlert from 'react-native-dropdownalert';
+import {
+  reduxifyNavigator,
+  createReactNavigationReduxMiddleware,
+  createNavigationReducer
+} from 'react-navigation-redux-helpers';
 
 import epics from './redux/epics';
 import { AppNavigator } from './navigators/Root';
-import { addListener, middleware } from './utils/navigationRedux';
 import { reducers } from './redux/reducer';
 import emitter from './emitter';
 import { _ios, _colors } from './utils/constants';
 import { _setupGoogleSignin } from './components/authorization/login/google';
 
-class App extends React.Component {
-  render() {
-    return (
-      <AppNavigator
-        navigation={{
-          dispatch: this.props.dispatch,
-          state: this.props.nav,
-          addListener
-        }}
-      />
-    );
-  }
-}
+// class App extends React.Component {
+//   render() {
+//     return (
+//       <AppNavigator
+//         navigation={{
+//           dispatch: this.props.dispatch,
+//           state: this.props.nav,
+//           addListener
+//         }}
+//       />
+//     );
+//   }
+// }
 
-const mapStateToProps = state => ({
-  nav: state.nav
-});
+const navMiddleware = createReactNavigationReduxMiddleware(
+  'root',
+  state => state.nav
+);
 
 const epicMiddleware = createEpicMiddleware(epics);
-const AppWithNavigationState = connect(mapStateToProps)(App);
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const enhancers = [applyMiddleware(middleware, epicMiddleware)];
+const enhancers = [applyMiddleware(epicMiddleware, navMiddleware)];
 
 export const store = createStore(reducers, {}, composeEnhancers(...enhancers));
+
+const App = reduxifyNavigator(AppNavigator, 'root');
+
+const mapStateToProps = state => ({
+  state: state.nav
+});
+const AppWithNavigationState = connect(mapStateToProps)(App);
 
 class Root extends React.Component {
   componentDidMount() {

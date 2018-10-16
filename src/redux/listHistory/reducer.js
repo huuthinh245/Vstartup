@@ -13,7 +13,10 @@ import {
   DELETE_HISTORY_FAILURE,
   LOAD_MORE_LIST_HISTORY,
   LOAD_MORE_LIST_HISTORY_SUCCESS,
-  LOAD_MORE_LIST_HISTORY_FAILURE
+  LOAD_MORE_LIST_HISTORY_FAILURE,
+  ADD_HISTORY,
+  ADD_HISTORY_SUCCESS,
+  ADD_HISTORY_FAILURE
 } from './actions';
 
 const initial = {
@@ -21,6 +24,7 @@ const initial = {
   loadMore: false,
   refreshing: false,
   deleting: false,
+  adding: false,
   data: [],
   error: null
 };
@@ -31,7 +35,11 @@ export const listHistoryReducer = handleActions(
       return Object.assign({}, state, { fetching: true });
     },
     [GET_LIST_HISTORY_SUCCESS]: (state, { payload }) => {
-      return Object.assign({}, state, { data: payload, fetching: false, error: null });
+      return Object.assign({}, state, {
+        data: payload,
+        fetching: false,
+        error: null
+      });
     },
     [GET_LIST_HISTORY_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { fetching: false, error: payload });
@@ -57,7 +65,11 @@ export const listHistoryReducer = handleActions(
       return Object.assign({}, state, { refreshing: true });
     },
     [REFRESH_LIST_HISTORY_SUCCESS]: (state, { payload }) => {
-      return Object.assign({}, state, { data: payload, refreshing: false, error: null });
+      return Object.assign({}, state, {
+        data: payload,
+        refreshing: false,
+        error: null
+      });
     },
     [REFRESH_LIST_HISTORY_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { refreshing: false, error: payload });
@@ -72,10 +84,24 @@ export const listHistoryReducer = handleActions(
           arr = _.reject(arr, obj => obj.id === item.id);
         }
       });
-      return Object.assign({}, state, { deleting: false, data: arr, error: null });
+      return Object.assign({}, state, {
+        deleting: false,
+        data: arr,
+        error: null
+      });
     },
     [DELETE_HISTORY_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { deleting: false, error: payload });
+    },
+    [ADD_HISTORY]: state => {
+      return Object.assign({}, state, { adding: true });
+    },
+    [ADD_HISTORY_SUCCESS]: (state, { payload }) => {
+      console.log(payload);
+      return state;
+    },
+    [ADD_HISTORY_FAILURE]: (state, { payload }) => {
+      return Object.assign({}, state, { adding: false, error: payload });
     }
   },
   initial

@@ -14,5 +14,6 @@ Name | Type | Description | Notes
 **district** | [**District**](District.md) |  | [optional] 
 **city** | [**City**](City.md) |  | [optional] 
 **isFavorite** | **Number** |  | [optional] 
+**method** | **String** |  | [optional] 
 
 

@@ -16,12 +16,12 @@
 (function(factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/Agency', 'model/City', 'model/Contact', 'model/Coordinate', 'model/Direction', 'model/District', 'model/Feedback', 'model/GenericError', 'model/GenericSuscess', 'model/ListCity', 'model/ListOption', 'model/Login', 'model/LoginView', 'model/Method', 'model/PriceUnit', 'model/Project', 'model/ProjectList', 'model/ProjectType', 'model/Realty', 'model/RealtyKeyword', 'model/RealtyList', 'model/RealtyMap', 'model/RealtyType', 'model/Setting', 'model/User', 'model/UserRegister', 'model/UserSocial', 'model/Utility', 'model/Ward', 'api/AgencyApi', 'api/AuthApi', 'api/ContactApi', 'api/FeedbackApi', 'api/ListApi', 'api/ProjectApi', 'api/RealtyApi', 'api/SettingApi', 'api/UserApi'], factory);
+    define(['ApiClient', 'model/Agency', 'model/City', 'model/Contact', 'model/Coordinate', 'model/Direction', 'model/District', 'model/Feedback', 'model/GenericError', 'model/GenericSuscess', 'model/ListCity', 'model/ListOption', 'model/Login', 'model/LoginView', 'model/Method', 'model/PriceUnit', 'model/Project', 'model/ProjectList', 'model/ProjectType', 'model/Realty', 'model/RealtyKeyword', 'model/RealtyList', 'model/RealtyMap', 'model/RealtyProject', 'model/RealtyType', 'model/Setting', 'model/User', 'model/UserRegister', 'model/UserSocial', 'model/Utility', 'model/Ward', 'api/AgencyApi', 'api/AuthApi', 'api/ContactApi', 'api/FeedbackApi', 'api/ListApi', 'api/ProjectApi', 'api/RealtyApi', 'api/SettingApi', 'api/UserApi'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('./ApiClient'), require('./model/Agency'), require('./model/City'), require('./model/Contact'), require('./model/Coordinate'), require('./model/Direction'), require('./model/District'), require('./model/Feedback'), require('./model/GenericError'), require('./model/GenericSuscess'), require('./model/ListCity'), require('./model/ListOption'), require('./model/Login'), require('./model/LoginView'), require('./model/Method'), require('./model/PriceUnit'), require('./model/Project'), require('./model/ProjectList'), require('./model/ProjectType'), require('./model/Realty'), require('./model/RealtyKeyword'), require('./model/RealtyList'), require('./model/RealtyMap'), require('./model/RealtyType'), require('./model/Setting'), require('./model/User'), require('./model/UserRegister'), require('./model/UserSocial'), require('./model/Utility'), require('./model/Ward'), require('./api/AgencyApi'), require('./api/AuthApi'), require('./api/ContactApi'), require('./api/FeedbackApi'), require('./api/ListApi'), require('./api/ProjectApi'), require('./api/RealtyApi'), require('./api/SettingApi'), require('./api/UserApi'));
+    module.exports = factory(require('./ApiClient'), require('./model/Agency'), require('./model/City'), require('./model/Contact'), require('./model/Coordinate'), require('./model/Direction'), require('./model/District'), require('./model/Feedback'), require('./model/GenericError'), require('./model/GenericSuscess'), require('./model/ListCity'), require('./model/ListOption'), require('./model/Login'), require('./model/LoginView'), require('./model/Method'), require('./model/PriceUnit'), require('./model/Project'), require('./model/ProjectList'), require('./model/ProjectType'), require('./model/Realty'), require('./model/RealtyKeyword'), require('./model/RealtyList'), require('./model/RealtyMap'), require('./model/RealtyProject'), require('./model/RealtyType'), require('./model/Setting'), require('./model/User'), require('./model/UserRegister'), require('./model/UserSocial'), require('./model/Utility'), require('./model/Ward'), require('./api/AgencyApi'), require('./api/AuthApi'), require('./api/ContactApi'), require('./api/FeedbackApi'), require('./api/ListApi'), require('./api/ProjectApi'), require('./api/RealtyApi'), require('./api/SettingApi'), require('./api/UserApi'));
   }
-}(function(ApiClient, Agency, City, Contact, Coordinate, Direction, District, Feedback, GenericError, GenericSuscess, ListCity, ListOption, Login, LoginView, Method, PriceUnit, Project, ProjectList, ProjectType, Realty, RealtyKeyword, RealtyList, RealtyMap, RealtyType, Setting, User, UserRegister, UserSocial, Utility, Ward, AgencyApi, AuthApi, ContactApi, FeedbackApi, ListApi, ProjectApi, RealtyApi, SettingApi, UserApi) {
+}(function(ApiClient, Agency, City, Contact, Coordinate, Direction, District, Feedback, GenericError, GenericSuscess, ListCity, ListOption, Login, LoginView, Method, PriceUnit, Project, ProjectList, ProjectType, Realty, RealtyKeyword, RealtyList, RealtyMap, RealtyProject, RealtyType, Setting, User, UserRegister, UserSocial, Utility, Ward, AgencyApi, AuthApi, ContactApi, FeedbackApi, ListApi, ProjectApi, RealtyApi, SettingApi, UserApi) {
   'use strict';
 
   /**
@@ -171,6 +171,11 @@
      * @property {module:model/RealtyMap}
      */
     RealtyMap: RealtyMap,
+    /**
+     * The RealtyProject model constructor.
+     * @property {module:model/RealtyProject}
+     */
+    RealtyProject: RealtyProject,
     /**
      * The RealtyType model constructor.
      * @property {module:model/RealtyType}

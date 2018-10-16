@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Image, StatusBar, AsyncStorage, Text } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import { getOr } from 'lodash/fp';
 
 import * as routes from './routes';
 import { _dims } from '../utils/constants';
@@ -16,7 +17,7 @@ import { loginAction, getMeAction, SET_TOKEN } from '../redux/auth/actions';
 import strings from '../localization/authorization';
 import { ApiClient } from '../swaggerApi/src';
 
-const bg = require('../assets/images/bg.jpg');
+const bg = require('../assets/images/Loading.png');
 
 class SplashScreen extends React.Component {
   async componentDidMount() {
@@ -42,7 +43,9 @@ class SplashScreen extends React.Component {
     } else {
       const resetAction = StackActions.reset({
         index: 0,
-        actions: [NavigationActions.navigate({ routeName: routes.mainWithModal })]
+        actions: [
+          NavigationActions.navigate({ routeName: routes.mainWithModal })
+        ]
       });
       const interval = setInterval(() => {
         const { city } = this.props.city.data;
@@ -70,7 +73,14 @@ class SplashScreen extends React.Component {
             resizeMode: 'stretch'
           }}
         />
-        <Text style={{ color: '#fff', alignSelf: 'center', position: 'absolute', bottom: 50 }}>
+        <Text
+          style={{
+            color: '#fff',
+            alignSelf: 'center',
+            position: 'absolute',
+            bottom: 50
+          }}
+        >
           {strings.loadingData}
         </Text>
       </View>
@@ -78,6 +88,10 @@ class SplashScreen extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ auth: state.auth, options: state.options, city: state.city });
+const mapStateToProps = state => ({
+  auth: state.auth,
+  options: state.options,
+  city: state.city
+});
 
 export default connect(mapStateToProps)(SplashScreen);

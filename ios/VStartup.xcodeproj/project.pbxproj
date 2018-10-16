@@ -276,6 +276,13 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		890352702175557000D6018E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8903526C2175557000D6018E /* RCTYouTube.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8BDB9BC91B4289AE00EF9FEF;
+			remoteInfo = RCTYouTube;
+		};
 		8905675920C00FCA00D23625 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3BE2453CE137479EA474C4EC /* RNRate.xcodeproj */;
@@ -381,13 +388,6 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNPopoverMenu;
 		};
-		897B45BF20CA2AB700FDC58A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 897B45BB20CA2AB700FDC58A /* RCTYouTube.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8BDB9BC91B4289AE00EF9FEF;
-			remoteInfo = RCTYouTube;
-		};
 		897E15F420CFE4D90078EADD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 897E15EF20CFE4D90078EADD /* ART.xcodeproj */;
@@ -483,8 +483,8 @@
 		7D9B25A076704F27B82207B0 /* RCTFBSDK.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTFBSDK.xcodeproj; path = "../node_modules/react-native-fbsdk/ios/RCTFBSDK.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		85603F81F5DB401A9D30F8EA /* RNPopoverMenu.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNPopoverMenu.xcodeproj; path = "../node_modules/react-native-popover-menu/ios/RNPopoverMenu.xcodeproj"; sourceTree = "<group>"; };
+		8903526C2175557000D6018E /* RCTYouTube.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTYouTube.xcodeproj; path = "../node_modules/react-native-youtube/RCTYouTube.xcodeproj"; sourceTree = "<group>"; };
 		895A8C5F20B4391300428355 /* YTPlayerView-iframe-player.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "YTPlayerView-iframe-player.html"; path = "../node_modules/react-native-youtube/assets/YTPlayerView-iframe-player.html"; sourceTree = "<group>"; };
-		897B45BB20CA2AB700FDC58A /* RCTYouTube.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTYouTube.xcodeproj; path = "../node_modules/react-native-youtube/RCTYouTube.xcodeproj"; sourceTree = "<group>"; };
 		897E15EF20CFE4D90078EADD /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		89C2075A20AD9A9100FA05D0 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		89C2075C20AD9A9900FA05D0 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -730,8 +730,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8903526C2175557000D6018E /* RCTYouTube.xcodeproj */,
 				897E15EF20CFE4D90078EADD /* ART.xcodeproj */,
-				897B45BB20CA2AB700FDC58A /* RCTYouTube.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -792,6 +792,14 @@
 				00E356EE1AD99517003FC87E /* VStartupTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* VStartup-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* VStartup-tvOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8903526D2175557000D6018E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				890352712175557000D6018E /* libRCTYouTube.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -861,14 +869,6 @@
 			isa = PBXGroup;
 			children = (
 				897795C620BE817700AF39A6 /* libRNPopoverMenu.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		897B45BC20CA2AB700FDC58A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				897B45C020CA2AB700FDC58A /* libRCTYouTube.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1130,8 +1130,8 @@
 					ProjectRef = 139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */;
 				},
 				{
-					ProductGroup = 897B45BC20CA2AB700FDC58A /* Products */;
-					ProjectRef = 897B45BB20CA2AB700FDC58A /* RCTYouTube.xcodeproj */;
+					ProductGroup = 8903526D2175557000D6018E /* Products */;
+					ProjectRef = 8903526C2175557000D6018E /* RCTYouTube.xcodeproj */;
 				},
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
@@ -1373,6 +1373,13 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		890352712175557000D6018E /* libRCTYouTube.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTYouTube.a;
+			remoteRef = 890352702175557000D6018E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		8905675A20C00FCA00D23625 /* libRNRate.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1476,13 +1483,6 @@
 			fileType = archive.ar;
 			path = libRNPopoverMenu.a;
 			remoteRef = 897795C520BE817700AF39A6 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		897B45C020CA2AB700FDC58A /* libRCTYouTube.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTYouTube.a;
-			remoteRef = 897B45BF20CA2AB700FDC58A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		897E15F520CFE4D90078EADD /* libART.a */ = {

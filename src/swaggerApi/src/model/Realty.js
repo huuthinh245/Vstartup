@@ -16,18 +16,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/City', 'model/Coordinate', 'model/District', 'model/Utility', 'model/Ward'], factory);
+    define(['ApiClient', 'model/City', 'model/Coordinate', 'model/Direction', 'model/District', 'model/Method', 'model/PriceUnit', 'model/RealtyProject', 'model/RealtyType', 'model/Utility', 'model/Ward'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('./City'), require('./Coordinate'), require('./District'), require('./Utility'), require('./Ward'));
+    module.exports = factory(require('../ApiClient'), require('./City'), require('./Coordinate'), require('./Direction'), require('./District'), require('./Method'), require('./PriceUnit'), require('./RealtyProject'), require('./RealtyType'), require('./Utility'), require('./Ward'));
   } else {
     // Browser globals (root is window)
     if (!root.RemsApi) {
       root.RemsApi = {};
     }
-    root.RemsApi.Realty = factory(root.RemsApi.ApiClient, root.RemsApi.City, root.RemsApi.Coordinate, root.RemsApi.District, root.RemsApi.Utility, root.RemsApi.Ward);
+    root.RemsApi.Realty = factory(root.RemsApi.ApiClient, root.RemsApi.City, root.RemsApi.Coordinate, root.RemsApi.Direction, root.RemsApi.District, root.RemsApi.Method, root.RemsApi.PriceUnit, root.RemsApi.RealtyProject, root.RemsApi.RealtyType, root.RemsApi.Utility, root.RemsApi.Ward);
   }
-}(this, function(ApiClient, City, Coordinate, District, Utility, Ward) {
+}(this, function(ApiClient, City, Coordinate, Direction, District, Method, PriceUnit, RealtyProject, RealtyType, Utility, Ward) {
   'use strict';
 
 
@@ -45,7 +45,7 @@
    * @class
    * @param authorId {Number} 
    * @param title {String} 
-   * @param method {String} 
+   * @param method {module:model/Method} 
    * @param typeId {Number} 
    * @param address {String} 
    */
@@ -65,8 +65,10 @@
 
 
 
+
     _this['method'] = method;
     _this['type_id'] = typeId;
+
 
 
 
@@ -127,6 +129,9 @@
       if (data.hasOwnProperty('project_id')) {
         obj['project_id'] = ApiClient.convertToType(data['project_id'], 'Number');
       }
+      if (data.hasOwnProperty('project')) {
+        obj['project'] = RealtyProject.constructFromObject(data['project']);
+      }
       if (data.hasOwnProperty('excerpt')) {
         obj['excerpt'] = ApiClient.convertToType(data['excerpt'], 'String');
       }
@@ -152,10 +157,13 @@
         obj['end_date'] = ApiClient.convertToType(data['end_date'], 'Number');
       }
       if (data.hasOwnProperty('method')) {
-        obj['method'] = ApiClient.convertToType(data['method'], 'String');
+        obj['method'] = Method.constructFromObject(data['method']);
       }
       if (data.hasOwnProperty('type_id')) {
         obj['type_id'] = ApiClient.convertToType(data['type_id'], 'Number');
+      }
+      if (data.hasOwnProperty('realty_type')) {
+        obj['realty_type'] = RealtyType.constructFromObject(data['realty_type']);
       }
       if (data.hasOwnProperty('area')) {
         obj['area'] = ApiClient.convertToType(data['area'], 'Number');
@@ -173,7 +181,7 @@
         obj['bathroom'] = ApiClient.convertToType(data['bathroom'], 'Number');
       }
       if (data.hasOwnProperty('direction')) {
-        obj['direction'] = ApiClient.convertToType(data['direction'], 'String');
+        obj['direction'] = Direction.constructFromObject(data['direction']);
       }
       if (data.hasOwnProperty('floor')) {
         obj['floor'] = ApiClient.convertToType(data['floor'], 'Number');
@@ -197,7 +205,7 @@
         obj['price'] = ApiClient.convertToType(data['price'], 'Number');
       }
       if (data.hasOwnProperty('price_unit')) {
-        obj['price_unit'] = ApiClient.convertToType(data['price_unit'], 'Number');
+        obj['price_unit'] = PriceUnit.constructFromObject(data['price_unit']);
       }
       if (data.hasOwnProperty('address')) {
         obj['address'] = ApiClient.convertToType(data['address'], 'String');
@@ -278,6 +286,10 @@
    */
   exports.prototype['project_id'] = undefined;
   /**
+   * @member {module:model/RealtyProject} project
+   */
+  exports.prototype['project'] = undefined;
+  /**
    * @member {String} excerpt
    */
   exports.prototype['excerpt'] = undefined;
@@ -310,13 +322,17 @@
    */
   exports.prototype['end_date'] = undefined;
   /**
-   * @member {String} method
+   * @member {module:model/Method} method
    */
   exports.prototype['method'] = undefined;
   /**
    * @member {Number} type_id
    */
   exports.prototype['type_id'] = undefined;
+  /**
+   * @member {module:model/RealtyType} realty_type
+   */
+  exports.prototype['realty_type'] = undefined;
   /**
    * @member {Number} area
    */
@@ -338,7 +354,7 @@
    */
   exports.prototype['bathroom'] = undefined;
   /**
-   * @member {String} direction
+   * @member {module:model/Direction} direction
    */
   exports.prototype['direction'] = undefined;
   /**
@@ -370,7 +386,7 @@
    */
   exports.prototype['price'] = undefined;
   /**
-   * @member {Number} price_unit
+   * @member {module:model/PriceUnit} price_unit
    */
   exports.prototype['price_unit'] = undefined;
   /**

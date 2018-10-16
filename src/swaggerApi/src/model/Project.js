@@ -74,6 +74,7 @@
 
 
 
+
   };
 
   /**
@@ -167,6 +168,9 @@
       }
       if (data.hasOwnProperty('link_share')) {
         obj['link_share'] = ApiClient.convertToType(data['link_share'], 'String');
+      }
+      if (data.hasOwnProperty('investor')) {
+        obj['investor'] = ApiClient.convertToType(data['investor'], 'String');
       }
     }
     return obj;
@@ -280,6 +284,10 @@
    * @member {String} link_share
    */
   exports.prototype['link_share'] = undefined;
+  /**
+   * @member {String} investor
+   */
+  exports.prototype['investor'] = undefined;
 
 
 

@@ -16,18 +16,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/Coordinate'], factory);
+    define(['ApiClient', 'model/City', 'model/Coordinate', 'model/District', 'model/Ward'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('./Coordinate'));
+    module.exports = factory(require('../ApiClient'), require('./City'), require('./Coordinate'), require('./District'), require('./Ward'));
   } else {
     // Browser globals (root is window)
     if (!root.RemsApi) {
       root.RemsApi = {};
     }
-    root.RemsApi.RealtyMap = factory(root.RemsApi.ApiClient, root.RemsApi.Coordinate);
+    root.RemsApi.RealtyMap = factory(root.RemsApi.ApiClient, root.RemsApi.City, root.RemsApi.Coordinate, root.RemsApi.District, root.RemsApi.Ward);
   }
-}(this, function(ApiClient, Coordinate) {
+}(this, function(ApiClient, City, Coordinate, District, Ward) {
   'use strict';
 
 
@@ -46,6 +46,13 @@
    */
   var exports = function() {
     var _this = this;
+
+
+
+
+
+
+
 
 
 
@@ -78,8 +85,29 @@
       if (data.hasOwnProperty('coordinate')) {
         obj['coordinate'] = Coordinate.constructFromObject(data['coordinate']);
       }
+      if (data.hasOwnProperty('area')) {
+        obj['area'] = ApiClient.convertToType(data['area'], 'Number');
+      }
+      if (data.hasOwnProperty('thumb')) {
+        obj['thumb'] = ApiClient.convertToType(data['thumb'], 'String');
+      }
+      if (data.hasOwnProperty('address')) {
+        obj['address'] = ApiClient.convertToType(data['address'], 'String');
+      }
+      if (data.hasOwnProperty('ward')) {
+        obj['ward'] = Ward.constructFromObject(data['ward']);
+      }
+      if (data.hasOwnProperty('district')) {
+        obj['district'] = District.constructFromObject(data['district']);
+      }
+      if (data.hasOwnProperty('city')) {
+        obj['city'] = City.constructFromObject(data['city']);
+      }
       if (data.hasOwnProperty('is_favorite')) {
         obj['is_favorite'] = ApiClient.convertToType(data['is_favorite'], 'Number');
+      }
+      if (data.hasOwnProperty('method')) {
+        obj['method'] = ApiClient.convertToType(data['method'], 'String');
       }
       if (data.hasOwnProperty('group')) {
         obj['group'] = ApiClient.convertToType(data['group'], ['Number']);
@@ -105,9 +133,37 @@
    */
   exports.prototype['coordinate'] = undefined;
   /**
+   * @member {Number} area
+   */
+  exports.prototype['area'] = undefined;
+  /**
+   * @member {String} thumb
+   */
+  exports.prototype['thumb'] = undefined;
+  /**
+   * @member {String} address
+   */
+  exports.prototype['address'] = undefined;
+  /**
+   * @member {module:model/Ward} ward
+   */
+  exports.prototype['ward'] = undefined;
+  /**
+   * @member {module:model/District} district
+   */
+  exports.prototype['district'] = undefined;
+  /**
+   * @member {module:model/City} city
+   */
+  exports.prototype['city'] = undefined;
+  /**
    * @member {Number} is_favorite
    */
   exports.prototype['is_favorite'] = undefined;
+  /**
+   * @member {String} method
+   */
+  exports.prototype['method'] = undefined;
   /**
    * @member {Array.<Number>} group
    */

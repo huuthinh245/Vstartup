@@ -8,7 +8,8 @@ import {
   findNodeHandle,
   Share,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  Animated
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -28,7 +29,7 @@ import {
   _dims,
   responsiveFontSize,
   responsiveWidth,
-  _ios,
+  _ios
 } from '../utils/constants';
 import SliderEntry from '../components/SliderEntry';
 import strings from '../localization/realtyDetail';
@@ -48,12 +49,11 @@ class RealtyDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      slider1ActiveSlide: 1,
-      fabVisible: true,
       name: this.props.auth.user.name,
       email: this.props.auth.user.email,
       phone: this.props.auth.user.phone
     };
+    this.fabBottom = new Animated.Value(1);
   }
 
   componentDidMount() {
@@ -114,7 +114,8 @@ class RealtyDetail extends Component {
       });
       this.phone.focus();
     } else {
-      callback = () => _alert(alertStrings.success, alertStrings.postContactSuccess);
+      callback = () =>
+        _alert(alertStrings.success, alertStrings.postContactSuccess);
       const obj = {
         body: {
           name: this.state.name,
@@ -170,7 +171,6 @@ class RealtyDetail extends Component {
             friction: 4,
             tension: 40
           }}
-          firstItem={this.state.slider1ActiveSlide}
           inactiveSlideScale={0.94}
           inactiveSlideOpacity={0.7}
           inactiveSlideShift={_dims.defaultPadding * 2}
@@ -183,7 +183,7 @@ class RealtyDetail extends Component {
               {realty.title}
             </Text>
             <Ionicons
-              name={`ios-heart${realty.is_favorite ? '-outline' : ''}`}
+              name={`ios-heart${!realty.is_favorite ? '-outline' : ''}`}
               style={styles.socialButton}
               color="tomato"
               onPress={() => this._likeRealty(realty)}
@@ -198,23 +198,35 @@ class RealtyDetail extends Component {
           <Text style={styles.colorGray}>{realty.address}</Text>
           <View style={styles.infoWrapper}>
             <View style={styles.info}>
-              <Text style={[styles.infoText, styles.fontBold]}>{realty.bedroom}</Text>
-              <Text style={[styles.infoText, styles.color4]}>{strings.bedroom}</Text>
+              <Text style={[styles.infoText, styles.fontBold]}>
+                {realty.bedroom}
+              </Text>
+              <Text style={[styles.infoText, styles.color4]}>
+                {strings.bedroom}
+              </Text>
             </View>
             <View style={styles.info}>
-              <Text style={[styles.infoText, styles.fontBold]}>{realty.bathroom}</Text>
-              <Text style={[styles.infoText, styles.color4]}>{strings.bathroom}</Text>
+              <Text style={[styles.infoText, styles.fontBold]}>
+                {realty.bathroom}
+              </Text>
+              <Text style={[styles.infoText, styles.color4]}>
+                {strings.bathroom}
+              </Text>
             </View>
             <View style={[styles.info, styles.noBorderRight]}>
               <Text style={[styles.infoText, styles.fontBold]}>
                 {realty.area}
                 <Text style={[styles.infoText, styles.fontNormal]}> m²</Text>
               </Text>
-              <Text style={[styles.infoText, styles.color4]}>{strings.area}</Text>
+              <Text style={[styles.infoText, styles.color4]}>
+                {strings.area}
+              </Text>
             </View>
           </View>
           <View style={styles.priceWrapper}>
-            <Text style={[styles.priceMethod, styles.color4]}>{realty.method.name}</Text>
+            <Text style={[styles.priceMethod, styles.color4]}>
+              {realty.method.name}
+            </Text>
             <Text style={styles.price}>
               {realty.price} {realty.price_unit.name}
             </Text>
@@ -227,7 +239,7 @@ class RealtyDetail extends Component {
             touchableComponent={TouchableOpacity}
             renderHeader={this._renderHeader}
             renderContent={this._renderContent}
-            initiallyActiveSection={0}
+            initiallyActiveSection={-1}
           />
         </View>
         <Text style={styles.contact}>{strings.contactAgency}</Text>
@@ -260,9 +272,6 @@ class RealtyDetail extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               clearButtonMode="always"
-              onFocus={event => {
-                this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
-              }}
             />
           </View>
           <View style={styles.line}>
@@ -280,9 +289,6 @@ class RealtyDetail extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               clearButtonMode="always"
-              onFocus={event => {
-                this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
-              }}
             />
           </View>
           <View style={styles.line}>
@@ -300,9 +306,6 @@ class RealtyDetail extends Component {
               keyboardType="phone-pad"
               autoCorrect={false}
               clearButtonMode="always"
-              onFocus={event => {
-                this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
-              }}
             />
           </View>
         </View>
@@ -329,7 +332,9 @@ class RealtyDetail extends Component {
     const size = responsiveFontSize(_dims.defaultFontSize + plus);
     return (
       <View style={styles.header}>
-        <Text style={[styles.headerText, isActive && { fontWeight: 'bold' }]}>{section.title}</Text>
+        <Text style={[styles.headerText, isActive && { fontWeight: 'bold' }]}>
+          {section.title}
+        </Text>
         <Ionicons
           style={[
             styles.headerIcon,
@@ -352,7 +357,9 @@ class RealtyDetail extends Component {
           {section.content ? (
             <Text style={styles.colorGray}>{section.content}</Text>
           ) : (
-            <Text style={[styles.colorGray, { textAlign: 'center' }]}>{_content}</Text>
+            <Text style={[styles.colorGray, { textAlign: 'center' }]}>
+              {_content}
+            </Text>
           )}
         </View>
       );
@@ -361,7 +368,9 @@ class RealtyDetail extends Component {
       if (section.content.length === 0) {
         return (
           <View style={styles.content}>
-            <Text style={[styles.colorGray, { textAlign: 'center' }]}>{_content}</Text>
+            <Text style={[styles.colorGray, { textAlign: 'center' }]}>
+              {_content}
+            </Text>
           </View>
         );
       }
@@ -370,10 +379,14 @@ class RealtyDetail extends Component {
           <FlatList
             data={section.content}
             renderItem={({ item }) => (
-              <Text style={{ paddingVertical: _dims.defaultPadding * 2 }}>{item.name}</Text>
+              <Text style={{ paddingVertical: _dims.defaultPadding * 2 }}>
+                {item.name}
+              </Text>
             )}
             keyExtractor={() => `${Math.random()}`}
-            ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'silver' }} />}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: 1, backgroundColor: 'silver' }} />
+            )}
           />
         </View>
       );
@@ -392,28 +405,21 @@ class RealtyDetail extends Component {
         </TouchableOpacity>
       );
     }
-    if(_ios) {
-      return (
-        <YouTube
-          videoId="KVZ-P-ZI6W4"
-          style={styles.youtube}
-        />
-      );
-    } 
+    if (_ios) {
+      return <YouTube videoId="KVZ-P-ZI6W4" style={styles.youtube} />;
+    }
     return (
       <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
-        <Text>Link: </Text>
         <TouchableOpacity
           onPress={() => {
             YouTubeStandaloneAndroid.playVideo({
-              apiKey: 'AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis', 
+              apiKey: 'AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis',
               videoId: 'KVZ-P-ZI6W4',
-              autoplay: true,
-            })
-            .catch(errorMessage => _alert('Youtube error', errorMessage));
-        }}
+              autoplay: true
+            }).catch(errorMessage => _alert('Youtube error', errorMessage));
+          }}
         >
-          <Text style={styles.youtubeLink}>{section.content}</Text>
+          <Text style={styles.youtubeLink}>Play video</Text>
         </TouchableOpacity>
       </View>
     );
@@ -423,25 +429,39 @@ class RealtyDetail extends Component {
     this.text = ref;
   };
 
+  _onScroll = event => {
+    const { height } = event.nativeEvent.contentSize;
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const toValue =
+      _dims.screenHeight + offsetY >= height - _dims.defaultPadding * 4 ? 0 : 1;
+    Animated.timing(this.fabBottom, {
+      toValue,
+      duration: 50
+    }).start();
+  };
+
   render() {
     const { params } = this.props.navigation.state;
     const realty = this.props.realtyDetail.data[params.data.id];
-
+    const bottom = this.fabBottom.interpolate({
+      inputRange: [0, 1],
+      outputRange: [-responsiveWidth(15), 0]
+    });
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header
           onLeftPress={() => {
             const onBack = this.props.navigation.getParam('onBack');
-            if(onBack) {
+            if (onBack) {
               onBack();
-            }else {
+            } else {
               this.props.navigation.goBack();
             }
           }}
           title={params.data.title}
           right={
             realty && this.props.auth.user.id === realty.author_id ? (
-              <TouchableOpacity onPress={() => this.actionSheetRealty.show()} >
+              <TouchableOpacity onPress={() => this.actionSheetRealty.show()}>
                 <Ionicons
                   name="md-more"
                   size={30}
@@ -452,35 +472,31 @@ class RealtyDetail extends Component {
             ) : null
           }
         />
-        {this.state.fabVisible && (
+        <Animated.View style={[styles.fabWrapper, { bottom }]}>
           <TouchableOpacity
             onPress={() => this.scroll.scrollToEnd({ animated: true })}
-            style={[styles.fab, !this.state.fabVisible && { display: 'none' }]}
+            style={styles.fab}
           >
             <Ionicons name="ios-person" style={styles.fabIcon} />
             <Text style={styles.fabText}>{strings.contactAgency}</Text>
           </TouchableOpacity>
-        )}
+        </Animated.View>
         <KeyboardAwareScrollView
-          ref={scroll => {
-            this.scroll = scroll;
+          ref={ref => {
+            this.scroll = ref;
           }}
-          onScroll={event => {
-            const { height } = event.nativeEvent.contentSize;
-            const offsetY = event.nativeEvent.contentOffset.y;
-            if (_dims.screenHeight + offsetY >= height - _dims.defaultPadding * 4) {
-              this.setState({ fabVisible: false });
-            } else {
-              this.setState({ fabVisible: true });
-            }
-          }}
+          onScroll={this._onScroll}
         >
-          { 
-            this.props.realtyDetail.fetching ? <PlaceHolder /> : this._renderLoadDone(realty)
-          }
+          {this.props.realtyDetail.fetching ? (
+            <PlaceHolder />
+          ) : (
+            this._renderLoadDone(realty)
+          )}
         </KeyboardAwareScrollView>
         <ActionSheet
-          ref={o => { this.actionSheetRealty = o; }}
+          ref={o => {
+            this.actionSheetRealty = o;
+          }}
           options={[strings.hideRealty, strings.editRealty, strings.cancel]}
           cancelButtonIndex={2}
           onPress={index => {
@@ -521,13 +537,13 @@ export const styles = StyleSheet.create({
   color4: {
     color: '#444'
   },
-  fab: {
+  fabWrapper: {
     position: 'absolute',
+    width: _dims.screenWidth,
+    zIndex: Number.MAX_SAFE_INTEGER
+  },
+  fab: {
     flexDirection: 'row',
-    bottom: 0,
-    right: 0,
-    left: 0,
-    zIndex: Number.MAX_SAFE_INTEGER,
     height: responsiveWidth(15),
     alignItems: 'center',
     justifyContent: 'center',
@@ -701,7 +717,8 @@ export const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: 'transparent',
-    flex: 1
+    flex: 1,
+    marginLeft: 7
   },
   submit: {
     padding: 20,
@@ -727,6 +744,6 @@ export const styles = StyleSheet.create({
   youtubeLink: {
     color: _colors.mainColor,
     paddingHorizontal: 10,
-    textDecorationLine: 'underline',
+    textDecorationLine: 'underline'
   }
 });

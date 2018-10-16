@@ -177,6 +177,7 @@ Class | Method | HTTP request | Description
  - [RemsApi.RealtyKeyword](docs/RealtyKeyword.md)
  - [RemsApi.RealtyList](docs/RealtyList.md)
  - [RemsApi.RealtyMap](docs/RealtyMap.md)
+ - [RemsApi.RealtyProject](docs/RealtyProject.md)
  - [RemsApi.RealtyType](docs/RealtyType.md)
  - [RemsApi.Setting](docs/Setting.md)
  - [RemsApi.User](docs/User.md)

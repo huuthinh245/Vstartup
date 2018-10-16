@@ -4,6 +4,10 @@ export const GET_LIST_HISTORY = 'GET_LIST_HISTORY';
 export const GET_LIST_HISTORY_SUCCESS = 'GET_LIST_HISTORY_SUCCESS';
 export const GET_LIST_HISTORY_FAILURE = 'GET_LIST_HISTORY_FAILURE';
 
+export const ADD_HISTORY = 'ADD_HISTORY';
+export const ADD_HISTORY_SUCCESS = 'ADD_HISTORY_SUCCESS';
+export const ADD_HISTORY_FAILURE = 'ADD_HISTORY_FAILURE';
+
 export const LOAD_MORE_LIST_HISTORY = 'LOAD_MORE_LIST_HISTORY';
 export const LOAD_MORE_LIST_HISTORY_SUCCESS = 'LOAD_MORE_LIST_HISTORY_SUCCESS';
 export const LOAD_MORE_LIST_HISTORY_FAILURE = 'LOAD_MORE_LIST_HISTORY_FAILURE';
@@ -35,4 +39,10 @@ export const deleteHistoryAction = payload =>
   store.dispatch({
     type: DELETE_HISTORY,
     payload
+  });
+
+export const addHistoryAction = (lat, lng, address) =>
+  store.dispatch({
+    type: ADD_HISTORY,
+    payload: { lat, lng, address }
   });

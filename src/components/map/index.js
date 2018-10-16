@@ -1,17 +1,27 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, Animated, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Animated,
+  Image,
+  TouchableOpacity
+} from 'react-native';
+
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Carousel from 'react-native-snap-carousel';
+import { _dims, responsiveFontSize } from '../../utils/constants';
+import { getMapRealtyAction } from '../../redux/mapRealty/actions';
+import emitter from '../../emitter';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATITUDE = 10.763555;
-const LONGITUDE = 106.604342;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const CARD_HEIGHT = height / 3.5;
-const CARD_WIDTH = width - 20;
+
+const borderRadius = 5;
 
 const styles = StyleSheet.create({
   main: {
@@ -26,108 +36,66 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0
   },
-  endPadding: {
-    paddingRight: width - CARD_WIDTH
-  },
-  card: {
-    backgroundColor: '#FFF',
-    marginHorizontal: 10,
-    height: CARD_HEIGHT,
-    width: CARD_WIDTH
-  },
-  cardImage: {
-    width: '100%',
-    height: '100%',
-    alignSelf: 'center'
-  },
-  cardIndex: {
+  carousel: {
     position: 'absolute',
-    top: 6,
-    left: 10,
-    fontSize: 14,
-    color: '#FFFFFF',
+    height: (_dims.screenHeight - 100) / 3,
+    width: _dims.screenWidth,
+    zIndex: 10000
+  },
+  slider: {
+    width: _dims.screenWidth * 0.8,
+    height: (_dims.screenHeight - 100) / 3,
+    borderRadius,
+    backgroundColor: '#fff'
+  },
+  slider1: {
+    overflow: 'hidden' // for custom animations
+  },
+  sliderContentContainer: {
+    paddingVertical: 10 // for custom animation
+  },
+  sliderImage: {
+    width: _dims.screenWidth * 0.8,
+    height: (_dims.screenHeight - 100) / 3,
+    borderRadius,
+    position: 'absolute'
+  },
+  overlay: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    width: '100%'
+  },
+  top: {
+    top: 0,
+    borderTopLeftRadius: borderRadius,
+    borderTopRightRadius: borderRadius,
+    alignItems: 'flex-end'
+  },
+  bottom: {
+    bottom: 0,
+    padding: 10,
+    borderBottomLeftRadius: borderRadius,
+    borderBottomRightRadius: borderRadius,
+    justifyContent: 'space-around'
+  },
+  row: {
+    flexDirection: 'row'
+  },
+  touch: {
+    padding: 10,
+    marginRight: 10
+  },
+  text: {
+    marginLeft: 24,
+    color: '#fff'
+  },
+  title: {
+    fontSize: responsiveFontSize(_dims.defaultFontInput),
+    color: '#fff',
     fontWeight: 'bold'
   },
-  cardLikeIcon: {
-    position: 'absolute',
-    top: 6,
-    right: 40,
-    fontSize: 20,
-    color: '#FFFFFF'
-  },
-  cardSharingIcon: {
-    position: 'absolute',
-    top: 6,
-    right: 10,
-    fontSize: 20,
-    color: '#FFFFFF'
-  },
-  cardPlaceIcon: {
-    position: 'absolute',
-    bottom: 50,
-    left: 10,
-    fontSize: 20
-  },
-  cardTitle: {
-    position: 'absolute',
-    bottom: 50,
-    left: 30,
-    fontSize: 14,
-    color: '#FFFFFF',
-    fontWeight: 'bold'
-  },
-  cardPrice: {
-    position: 'absolute',
-    bottom: 30,
-    left: 30,
-    fontSize: 14,
-    color: '#FFFFFF',
-    fontWeight: 'bold'
-  },
-  cardAddress: {
-    position: 'absolute',
-    bottom: 10,
-    left: 30,
-    fontSize: 14,
-    color: '#FFFFFF',
-    fontWeight: '400'
-  },
-  tooltip: {
-    alignSelf: 'flex-start'
-  },
-  bubble: {
-    flex: 0,
-    flexDirection: 'row',
-    alignSelf: 'flex-start',
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-    borderRadius: 4,
-    borderWidth: 1,
-    marginBottom: -4,
-    opacity: 0.8
-  },
-  bubbleHighlight: {
-    flex: 0,
-    flexDirection: 'row',
-    alignSelf: 'flex-start',
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-    borderRadius: 4,
-    borderWidth: 2,
-    marginBottom: -6,
-    opacity: 1
-  },
-  price: {
-    color: '#000000',
-    fontSize: 12,
-    opacity: 0.8
-  },
-  priceHighlight: {
-    color: '#000000',
-    fontSize: 14,
-    opacity: 1
+  marginBottom: {
+    marginBottom: 5
   },
   icon: {
     fontSize: 24,
@@ -141,48 +109,142 @@ const styles = StyleSheet.create({
   }
 });
 const renderColor = type => {
-  if (type === 'blue') {
+  console.log(type);
+  if (type === 'rent') {
     return '#2196F3';
-  } else if (type === 'orange') {
+  } else if (type === 'buy') {
     return '#FF9800';
   }
   return '#E91E63';
+};
+
+const calculateDistanceFromCoordinate = (fromCoords, toCoords) => {
+  const deg2rad = deg => {
+    return deg * (Math.PI / 180);
+  };
+
+  const R = 6371; // Radius of the earth in km
+  const dLat = deg2rad(toCoords.latitude - fromCoords.latitude); // deg2rad below
+  const dLon = deg2rad(toCoords.longitude - fromCoords.longitude);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(fromCoords.latitude)) *
+      Math.cos(deg2rad(toCoords.latitude)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 };
 
 class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentMarkerIndex: 0,
-      animation: new Animated.Value(0)
+      currentMarkerSelectedId: 0
     };
+    this.currentCoords = {
+      latitude: this.props.init[0],
+      longitude: this.props.init[1]
+    };
+    this.carouselBottom = new Animated.Value(0);
   }
+
   componentDidMount() {
-    const { mapRealtyData } = this.props;
-    const { animation, currentMarkerIndex } = this.state;
-    animation.addListener(({ value }) => {
-      const index = Math.floor(value / CARD_WIDTH + 0.3);
-      this.setState({ currentMarkerIndex: index });
-      setTimeout(() => {
-        if (currentMarkerIndex !== index) {
-          const { coordinate } = mapRealtyData[index];
-          this.map.animateToRegion(
-            {
-              latitude: coordinate.lat,
-              longitude: coordinate.lng,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA
-            },
-            200
-          );
-        }
-      }, 10);
-    });
+    emitter.addListener('mapFly', coords =>
+      this.map.animateToCoordinate(coords)
+    );
   }
+
+  _toggleCarousel = toValue => {
+    Animated.timing(this.carouselBottom, {
+      toValue,
+      duration: 250
+    }).start();
+  };
+
+  _onMapPress = event => {
+    if (!this.state.currentMarkerSelectedId) {
+      return;
+    }
+    this.setState({ currentMarkerSelectedId: null });
+    this._toggleCarousel(0);
+  };
+
+  _onMarkerPress = event => {
+    const { id } = event.nativeEvent;
+    if (this.state.currentMarkerSelectedId === id) {
+      return;
+    }
+    this.setState({ currentMarkerSelectedId: id });
+    const index = this.props.data.findIndex(i => `${i.id}` === id);
+    this.slider.snapToItem(index, false);
+    this._toggleCarousel(1);
+  };
+
+  _renderCarouselItem = ({ item, index }) => {
+    return (
+      <TouchableOpacity style={styles.slider} key={item.id}>
+        <Image
+          source={{
+            uri: item.thumb
+          }}
+          style={styles.sliderImage}
+        />
+        <View style={[styles.overlay, styles.top]}>
+          <TouchableOpacity style={styles.touch}>
+            <Icon
+              name={item.is_favorite ? 'ios-heart' : 'ios-heart-outline'}
+              size={24}
+              color="tomato"
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.overlay, styles.bottom]}>
+          <View style={styles.row}>
+            <Icon
+              name="ios-pin"
+              size={24}
+              color={item.method === 'buy' ? 'tomato' : '#9c27b0'}
+              style={styles.icon}
+            />
+            <Text numberOfLines={1} style={styles.title}>
+              {item.title}
+            </Text>
+          </View>
+          <Text numberOfLines={1} style={[styles.text, styles.marginBottom]}>
+            {`${item.price} ${item.price_unit}`}
+          </Text>
+          <Text numberOfLines={1} style={styles.text}>
+            {item.address}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  _onRegionChangeComplete = coords => {
+    const distance = calculateDistanceFromCoordinate(
+      this.currentCoords,
+      coords
+    );
+    this.currentCoords = coords;
+
+    if (distance >= 2) {
+      const _option = Object.assign({}, this.props.options, {
+        lat: coords.latitude,
+        lng: coords.longitude
+      });
+      getMapRealtyAction(_option);
+    }
+  };
+
   render() {
-    const { animation, currentMarkerIndex } = this.state;
-    const { mapRealtyData, searchRealtyData } = this.props;
-    const mapRealtyDataLength = mapRealtyData.length;
+    const { currentMarkerSelectedId } = this.state;
+    const { data, init } = this.props;
+    // const bottom = this.carouselBottom.interpolate({
+    //   inputRange: [0, 1],
+    //   outputRange: [-(_dims.screenHeight - 100) / 3, 20]
+    // });
 
     return (
       <View style={styles.main}>
@@ -192,89 +254,61 @@ class Map extends React.Component {
           }}
           style={styles.map}
           initialRegion={{
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
+            latitude: init[0],
+            longitude: init[1],
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA
           }}
+          onMarkerPress={this._onMarkerPress}
+          onPress={this._onMapPress}
+          onRegionChangeComplete={this._onRegionChangeComplete}
         >
-          {mapRealtyData.map((marker, index) => {
-            const priceStyle = currentMarkerIndex === index ? styles.priceHighlight : styles.price;
-            const bubbleStyle = [
-              currentMarkerIndex === index ? styles.bubbleHighlight : styles.bubble,
-              marker.type ? { borderColor: renderColor(marker.type) } : { borderColor: '#2196F3' }
-            ];
+          {data.map(marker => {
             const iconStyle = [
-              currentMarkerIndex === index ? styles.iconHighlight : styles.icon,
-              marker.type ? { color: renderColor(marker.type) } : { color: '#2196F3' }
+              parseInt(currentMarkerSelectedId, 10) === marker.id
+                ? styles.iconHighlight
+                : styles.icon,
+              { color: renderColor(marker.method) }
             ];
             return (
               <Marker
                 key={marker.id}
+                identifier={`${marker.id}`}
                 coordinate={{
                   latitude: marker.coordinate.lat,
                   longitude: marker.coordinate.lng
                 }}
-                onPress={() => console.log('index', index)}
               >
-                <View style={styles.tooltip}>
-                  <View style={bubbleStyle}>
-                    <Text style={priceStyle}>{`${marker.price} ${marker.price_unit}`}</Text>
-                  </View>
-                  <Icon name="md-pin" style={iconStyle} />
-                </View>
+                <Icon name="md-pin" style={iconStyle} />
               </Marker>
             );
           })}
         </MapView>
-        <Animated.ScrollView
-          horizontal
-          scrollEventThrottle={1}
-          showsHorizontalScrollIndicator={false}
-          snapToInterval={CARD_WIDTH}
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: {
-                  contentOffset: {
-                    x: animation
-                  }
-                }
-              }
-            ],
-            { useNativeDriver: true }
-          )}
-          style={styles.scrollView}
-          contentContainerStyle={styles.endPadding}
-        >
-          {searchRealtyData.map((marker, index) => {
-            const iconStyle = [
-              styles.cardPlaceIcon,
-              marker.type ? { color: renderColor(marker.type) } : { color: '#2196F3' }
-            ];
-
-            return (
-              <View style={styles.card} key={marker.id}>
-                <Image source={{ uri: marker.thumb }} style={styles.cardImage} resizeMode="cover" />
-                <SimpleLineIcons name="heart" style={styles.cardLikeIcon} />
-                <SimpleLineIcons name="share" style={styles.cardSharingIcon} />
-                <Icon name="md-pin" style={iconStyle} />
-                <Text style={styles.cardIndex}>
-                  {`${index + 1}/${mapRealtyDataLength} - ${mapRealtyDataLength} hình`}
-                </Text>
-                <Text style={styles.cardTitle} numberOfLines={1}>
-                  {marker.title}
-                </Text>
-                <Text style={styles.cardPrice} numberOfLines={1}>
-                  {`${marker.price} ${marker.price_unit}`}
-                </Text>
-                <Text style={styles.cardAddress} numberOfLines={1}>
-                  {marker.address}
-                </Text>
-              </View>
-            );
-          })}
-        </Animated.ScrollView>
+        <Animated.View style={[styles.carousel, { bottom: 10 }]}>
+          <Carousel
+            ref={c => {
+              this.slider = c;
+            }}
+            inactiveSlideScale={0.8}
+            inactiveSlideOpacity={0.7}
+            containerCustomStyle={styles.slider1}
+            contentContainerCustomStyle={styles.sliderContentContainer}
+            data={data}
+            renderItem={this._renderCarouselItem}
+            sliderWidth={_dims.screenWidth}
+            itemWidth={_dims.screenWidth * 0.75}
+            inactiveSlideShift={_dims.defaultPadding * 2}
+            activeAnimationOptions={{
+              friction: 4,
+              tension: 40
+            }}
+            onSnapToItem={index =>
+              this.setState({
+                currentMarkerSelectedId: `${data[index].id}`
+              })
+            }
+          />
+        </Animated.View>
       </View>
     );
   }

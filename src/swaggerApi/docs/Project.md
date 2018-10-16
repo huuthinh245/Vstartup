@@ -30,5 +30,6 @@ Name | Type | Description | Notes
 **utility** | [**Utility**](Utility.md) |  | [optional] 
 **agency** | [**[User]**](User.md) |  | [optional] 
 **linkShare** | **String** |  | [optional] 
+**investor** | **String** |  | [optional] 
 
 

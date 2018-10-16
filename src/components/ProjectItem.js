@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, PixelRatio } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  PixelRatio
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import strings from '../localization/projectDetail';
@@ -10,15 +16,14 @@ export default class ProjectItem extends React.Component {
     const { item } = this.props;
     return (
       <TouchableOpacity style={styles.item} onPress={this.props.onPress}>
-        <View style={styles.itemImage}>
-          <FastImage
-            source={{
-              uri: item.thumb,
-              priority: FastImage.priority.high
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-        </View>
+        <FastImage
+          style={styles.itemImage}
+          source={{
+            uri: item.thumb,
+            priority: FastImage.priority.high
+          }}
+          resizeMode={FastImage.resizeMode.cover}
+        />
         <View style={styles.itemInfo}>
           <Text numberOfLines={2} style={styles.itemName}>
             {item.title}

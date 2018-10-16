@@ -3,18 +3,23 @@ import { View, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import FlipView from 'react-native-flip-view-next';
 import RNGooglePlaces from 'react-native-google-places';
-import { isEmpty } from 'lodash';
 
-import Overlay from '../components/common/Overlay';
+import emitter from '../emitter';
 import Header from '../navigators/headers/SearchTab';
 import SearchBack from '../components/tabs/SearchBack';
-import { PlaceHolder } from '../components/flatlistHelpers';
-import { getMapRealtyAction } from '../redux/mapRealty/actions';
+import {
+  getMapRealtyAction,
+  refreshMapRealtyAction
+} from '../redux/mapRealty/actions';
 import { getSearchRealtyAction } from '../redux/searchRealty/actions';
+import { addHistoryAction } from '../redux/listHistory/actions';
 import * as routes from './routes';
 import Map from '../components/map';
 
 json = obj => JSON.stringify(obj);
+
+const DEFAULT_LAT = 10.762622;
+const DEFAULT_LON = 106.660172;
 
 class SearchTab extends React.Component {
   constructor(props) {
@@ -22,71 +27,127 @@ class SearchTab extends React.Component {
     this.state = {
       isFlipped: false,
       options: {
-        lat: undefined,
-        lng: undefined
+        lat: DEFAULT_LAT,
+        lng: DEFAULT_LON,
+        address: undefined
       }
     };
+    this._watchPosition();
   }
 
-  componentDidMount() {
-    getMapRealtyAction();
-    getSearchRealtyAction();
-  }
+  _watchPosition = () => {
+    const onWatchSuccess = ({ coords }) => {
+      const { options } = this.state;
+      options.lat = coords.latitude;
+      options.lng = coords.longitude;
+
+      this.setState({ options });
+      getMapRealtyAction(options);
+      getSearchRealtyAction(options);
+    };
+
+    const onWatchError = error => {
+      const { options } = this.state;
+
+      getMapRealtyAction(options);
+      getSearchRealtyAction(options);
+    };
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 20000,
+      maximumAge: 1000,
+      distanceFilter: 100
+    };
+
+    navigator.geolocation.getCurrentPosition(
+      onWatchSuccess,
+      onWatchError,
+      options
+    );
+  };
 
   _flip = () => {
     this.setState({ isFlipped: !this.state.isFlipped });
   };
 
+  _onAutoComplete = async () => {
+    const val = await RNGooglePlaces.openAutocompleteModal();
+    if (
+      val.latitude !== this.state.options.lat &&
+      val.longitude !== this.state.options.lng
+    ) {
+      const options = Object.assign({}, this.state.options, {
+        lat: val.latitude,
+        lng: val.longitude,
+        address: val.address
+      });
+      this.setState({ options });
+      getSearchRealtyAction(options);
+      getMapRealtyAction(options);
+      addHistoryAction(val.latitude, val.longitude, val.address);
+      emitter.emit('mapFly', {
+        latitude: val.latitude,
+        longitude: val.longitude
+      });
+    }
+  };
+
+  _onFilterPress = () => {
+    this.props.navigation.navigate(routes.filterScreen, {
+      onDone: options => {
+        this.setState({ options });
+        getSearchRealtyAction(options);
+        refreshMapRealtyAction(options);
+      },
+      options: this.state.options
+    });
+  };
+
   render() {
-    const mapRealtyData = this.props.mapRealty.data;
-    const searchRealtyData = this.props.searchRealty.data;
+    const { searchRealty, mapRealty, navigation } = this.props;
+
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header
           flipIcon={!this.state.isFlipped ? 'md-list' : 'md-pin'}
           onFlipPress={this._flip}
-          title={this.state.searchAddress}
-          onTitlePress={async () => {
-            const val = await RNGooglePlaces.openPlacePickerModal();
-            if (
-              val.latitude !== this.state.options.lat &&
-              val.longitude !== this.state.options.lng
-            ) {
-              const options = Object.assign({}, this.state.options, {
-                lat: val.latitude,
-                lng: val.longitude
-              });
-              this.setState({ options }, () => getSearchRealtyAction(this.state.options));
-            }
-          }}
-          onFilterPress={() =>
-            this.props.navigation.navigate(routes.filterScreen, {
-              onDone: options =>
-                this.setState({ options }, () => getSearchRealtyAction(this.state.options)),
-              options: this.state.options
-            })
-          }
+          title={this.state.options.address}
+          onTitlePress={this._onAutoComplete}
+          onFilterPress={this._onFilterPress}
           editText={!this.state.editing ? 'Edit' : 'Done'}
         />
         <View style={{ flex: 1 }}>
-          {!isEmpty(mapRealtyData) && !isEmpty(searchRealtyData) ? (
-            <FlipView
-              style={{ flex: 1 }}
-              front={<Map mapRealtyData={mapRealtyData} searchRealtyData={searchRealtyData} />}
-              back={<SearchBack {...this.props} />}
-              isFlipped={this.state.isFlipped}
-              flipAxis="y"
-              flipEasing={Easing.out(Easing.ease)}
-              flipDuration={500}
-              perspective={1000}
-            />
-          ) : null}
+          <FlipView
+            style={{ flex: 1 }}
+            front={
+              <Map
+                {...mapRealty}
+                init={[DEFAULT_LAT, DEFAULT_LON]}
+                options={this.state.options}
+                navigation={navigation}
+              />
+            }
+            back={
+              <SearchBack
+                navigation={navigation}
+                {...searchRealty}
+                options={this.state.options}
+              />
+            }
+            isFlipped={this.state.isFlipped}
+            flipAxis="y"
+            flipEasing={Easing.out(Easing.ease)}
+            flipDuration={500}
+            perspective={1000}
+          />
         </View>
       </View>
     );
   }
 }
 
-export default connect(state => ({ mapRealty: state.mapRealty, searchRealty: state.searchRealty }))(
-  SearchTab
-);
+export default connect(state => ({
+  mapRealty: state.mapRealty,
+  searchRealty: state.searchRealty
+}))(SearchTab);

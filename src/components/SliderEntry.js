@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, Text, PixelRatio } from 'react-native';
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  PixelRatio
+} from 'react-native';
 import PropTypes from 'prop-types';
 import { ParallaxImage } from 'react-native-snap-carousel';
 
@@ -16,7 +23,7 @@ export default class SliderEntry extends Component {
   get image() {
     const { data, parallax, parallaxProps, even } = this.props;
 
-    return parallax ? (
+    return !parallax ? (
       <ParallaxImage
         source={{ uri: data }}
         containerStyle={styles.imageContainer}
@@ -27,7 +34,7 @@ export default class SliderEntry extends Component {
         {...parallaxProps}
       />
     ) : (
-      <Image source={{ uri: illustration }} style={styles.image} />
+      <Image source={{ uri: data }} style={styles.image} />
     );
   }
 
@@ -40,12 +47,9 @@ export default class SliderEntry extends Component {
       <TouchableOpacity
         activeOpacity={1}
         style={styles.slideInnerContainer}
-        onPress={() => {
-          alert(`You've clicked '${title}'`);
-        }}
+        onPress={() => {}}
       >
         <View style={styles.shadow} />
-        <Text style={styles.count}>1/12</Text>
         <View style={styles.imageContainer}>{this.image}</View>
       </TouchableOpacity>
     );

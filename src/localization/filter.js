@@ -16,7 +16,9 @@ const strings = new LocalizedStrings({
     billion: 'billion',
     square: 'm²',
     moreThanFive: 'More than 5',
-    pleaseSelect: '--- Select ---'
+    pleaseSelect: '--- Select ---',
+    clear: 'Clear filters',
+    cancel: 'Cancel filters'
   },
   vni: {
     filter: 'Lọc',
@@ -32,7 +34,9 @@ const strings = new LocalizedStrings({
     billion: 'tỷ',
     square: 'm²',
     moreThanFive: 'Nhiều hơn 5',
-    pleaseSelect: '--- Lựa chọn ---'
+    pleaseSelect: '--- Lựa chọn ---',
+    clear: 'Chọn lại',
+    cancel: 'Bỏ bộ lọc'
   }
 });
 

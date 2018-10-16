@@ -13,42 +13,23 @@
  *
  */
 
-(function (root, factory) {
+(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define([
-      'ApiClient',
-      'model/GenericError',
-      'model/GenericSuscess',
-      'model/LoginView',
-      'model/User',
-      'model/UserRegister'
-    ], factory);
+    define(['ApiClient', 'model/GenericError', 'model/GenericSuscess', 'model/LoginView', 'model/User', 'model/UserRegister'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(
-      require('../ApiClient'),
-      require('../model/GenericError'),
-      require('../model/GenericSuscess'),
-      require('../model/LoginView'),
-      require('../model/User'),
-      require('../model/UserRegister')
-    );
+    module.exports = factory(require('../ApiClient'), require('../model/GenericError'), require('../model/GenericSuscess'), require('../model/LoginView'), require('../model/User'), require('../model/UserRegister'));
   } else {
     // Browser globals (root is window)
     if (!root.RemsApi) {
       root.RemsApi = {};
     }
-    root.RemsApi.UserApi = factory(
-      root.RemsApi.ApiClient,
-      root.RemsApi.GenericError,
-      root.RemsApi.GenericSuscess,
-      root.RemsApi.LoginView,
-      root.RemsApi.User,
-      root.RemsApi.UserRegister
-    );
+    root.RemsApi.UserApi = factory(root.RemsApi.ApiClient, root.RemsApi.GenericError, root.RemsApi.GenericSuscess, root.RemsApi.LoginView, root.RemsApi.User, root.RemsApi.UserRegister);
   }
-}(this, (ApiClient, GenericError, GenericSuscess, LoginView, User, UserRegister) => {
+}(this, function(ApiClient, GenericError, GenericSuscess, LoginView, User, UserRegister) {
+  'use strict';
+
   /**
    * User service.
    * @module api/UserApi
@@ -56,14 +37,15 @@
    */
 
   /**
-   * Constructs a new UserApi.
+   * Constructs a new UserApi. 
    * @alias module:api/UserApi
    * @class
    * @param {module:ApiClient} [apiClient] Optional API client implementation to use,
    * default to {@link module:ApiClient#instance} if unspecified.
    */
-  const exports = function (apiClient) {
+  var exports = function(apiClient) {
     this.apiClient = apiClient || ApiClient.instance;
+
 
     /**
      * Callback function to receive the result of the forgot operation.
@@ -74,47 +56,42 @@
      */
 
     /**
-     * @param {String} email
+     * @param {String} email 
      * @param {module:api/UserApi~forgotCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/GenericSuscess}
      */
-    this.forgot = function (email, callback) {
-      const postBody = null;
+    this.forgot = function(email, callback) {
+      var postBody = null;
 
       // verify the required parameter 'email' is set
       if (email === undefined || email === null) {
         throw new Error("Missing the required parameter 'email' when calling forgot");
       }
 
-      const pathParams = {};
-      const queryParams = {};
-      const collectionQueryParams = {};
-      const headerParams = {};
-      const formParams = {
-        email
+
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+        'email': email
       };
 
-      const authNames = [];
-      const contentTypes = ['application/x-www-form-urlencoded'];
-      const accepts = ['application/json'];
-      const returnType = GenericSuscess;
+      var authNames = [];
+      var contentTypes = ['application/x-www-form-urlencoded'];
+      var accepts = ['application/json'];
+      var returnType = GenericSuscess;
 
       return this.apiClient.callApi(
-        '/user/forgot',
-        'POST',
-        pathParams,
-        queryParams,
-        collectionQueryParams,
-        headerParams,
-        formParams,
-        postBody,
-        authNames,
-        contentTypes,
-        accepts,
-        returnType,
-        callback
+        '/user/forgot', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
       );
-    };
+    }
 
     /**
      * Callback function to receive the result of the getUser operation.
@@ -125,47 +102,42 @@
      */
 
     /**
-     * @param {Number} id
+     * @param {Number} id 
      * @param {module:api/UserApi~getUserCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/User}
      */
-    this.getUser = function (id, callback) {
-      const postBody = null;
+    this.getUser = function(id, callback) {
+      var postBody = null;
 
       // verify the required parameter 'id' is set
       if (id === undefined || id === null) {
         throw new Error("Missing the required parameter 'id' when calling getUser");
       }
 
-      const pathParams = {
-        id
-      };
-      const queryParams = {};
-      const collectionQueryParams = {};
-      const headerParams = {};
-      const formParams = {};
 
-      const authNames = [];
-      const contentTypes = ['application/json'];
-      const accepts = ['application/json'];
-      const returnType = User;
+      var pathParams = {
+        'id': id
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = User;
 
       return this.apiClient.callApi(
-        '/user/{id}',
-        'GET',
-        pathParams,
-        queryParams,
-        collectionQueryParams,
-        headerParams,
-        formParams,
-        postBody,
-        authNames,
-        contentTypes,
-        accepts,
-        returnType,
-        callback
+        '/user/{id}', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
       );
-    };
+    }
 
     /**
      * Callback function to receive the result of the me operation.
@@ -179,36 +151,32 @@
      * @param {module:api/UserApi~meCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/User}
      */
-    this.me = function (callback) {
-      const postBody = null;
+    this.me = function(callback) {
+      var postBody = null;
 
-      const pathParams = {};
-      const queryParams = {};
-      const collectionQueryParams = {};
-      const headerParams = {};
-      const formParams = {};
 
-      const authNames = ['Bearer'];
-      const contentTypes = ['application/json'];
-      const accepts = ['application/json'];
-      const returnType = User;
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = ['Bearer'];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = User;
 
       return this.apiClient.callApi(
-        '/user/me',
-        'GET',
-        pathParams,
-        queryParams,
-        collectionQueryParams,
-        headerParams,
-        formParams,
-        postBody,
-        authNames,
-        contentTypes,
-        accepts,
-        returnType,
-        callback
+        '/user/me', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
       );
-    };
+    }
 
     /**
      * Callback function to receive the result of the updatePassword operation.
@@ -219,19 +187,17 @@
      */
 
     /**
-     * @param {String} currentPassword
-     * @param {String} newPassword
+     * @param {String} currentPassword 
+     * @param {String} newPassword 
      * @param {module:api/UserApi~updatePasswordCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/GenericSuscess}
      */
-    this.updatePassword = function (currentPassword, newPassword, callback) {
-      const postBody = null;
+    this.updatePassword = function(currentPassword, newPassword, callback) {
+      var postBody = null;
 
       // verify the required parameter 'currentPassword' is set
       if (currentPassword === undefined || currentPassword === null) {
-        throw new Error(
-          "Missing the required parameter 'currentPassword' when calling updatePassword"
-        );
+        throw new Error("Missing the required parameter 'currentPassword' when calling updatePassword");
       }
 
       // verify the required parameter 'newPassword' is set
@@ -239,36 +205,31 @@
         throw new Error("Missing the required parameter 'newPassword' when calling updatePassword");
       }
 
-      const pathParams = {};
-      const queryParams = {};
-      const collectionQueryParams = {};
-      const headerParams = {};
-      const formParams = {
-        current_password: currentPassword,
-        new_password: newPassword
+
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+        'current_password': currentPassword,
+        'new_password': newPassword
       };
 
-      const authNames = ['Bearer'];
-      const contentTypes = ['application/x-www-form-urlencoded'];
-      const accepts = ['application/json'];
-      const returnType = GenericSuscess;
+      var authNames = ['Bearer'];
+      var contentTypes = ['application/x-www-form-urlencoded'];
+      var accepts = ['application/json'];
+      var returnType = GenericSuscess;
 
       return this.apiClient.callApi(
-        '/user/update-password',
-        'POST',
-        pathParams,
-        queryParams,
-        collectionQueryParams,
-        headerParams,
-        formParams,
-        postBody,
-        authNames,
-        contentTypes,
-        accepts,
-        returnType,
-        callback
+        '/user/update-password', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
       );
-    };
+    }
 
     /**
      * Callback function to receive the result of the updateUser operation.
@@ -280,41 +241,37 @@
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {module:model/UserRegister} opts.body
+     * @param {module:model/UserRegister} opts.body 
      * @param {module:api/UserApi~updateUserCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/LoginView}
      */
-    this.updateUser = function (opts, callback) {
+    this.updateUser = function(opts, callback) {
       opts = opts || {};
-      const postBody = opts.body;
+      var postBody = opts['body'];
 
-      const pathParams = {};
-      const queryParams = {};
-      const collectionQueryParams = {};
-      const headerParams = {};
-      const formParams = {};
 
-      const authNames = ['Bearer'];
-      const contentTypes = ['application/json'];
-      const accepts = ['application/json'];
-      const returnType = LoginView;
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = ['Bearer'];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = LoginView;
 
       return this.apiClient.callApi(
-        '/user/me',
-        'POST',
-        pathParams,
-        queryParams,
-        collectionQueryParams,
-        headerParams,
-        formParams,
-        postBody,
-        authNames,
-        contentTypes,
-        accepts,
-        returnType,
-        callback
+        '/user/me', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
       );
-    };
+    }
 
     /**
      * Callback function to receive the result of the uploadAvatar operation.
@@ -330,42 +287,34 @@
      * @param {module:api/UserApi~uploadAvatarCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/User}
      */
-    this.uploadAvatar = function (opts, callback) {
+    this.uploadAvatar = function(opts, callback) {
       opts = opts || {};
-      const postBody = null;
+      var postBody = null;
 
-      console.log(opts);
 
-      const pathParams = {};
-      const queryParams = {};
-      const collectionQueryParams = {};
-      const headerParams = {};
-      const formParams = {
-        file: opts.file
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+        'file': opts['file']
       };
 
-      console.log(formParams);
-      const authNames = ['Bearer'];
-      const contentTypes = ['multipart/form-data'];
-      const accepts = ['application/json'];
-      const returnType = User;
+      var authNames = ['Bearer'];
+      var contentTypes = ['multipart/form-data'];
+      var accepts = ['application/json'];
+      var returnType = User;
 
       return this.apiClient.callApi(
-        '/user/avatar',
-        'POST',
-        pathParams,
-        queryParams,
-        collectionQueryParams,
-        headerParams,
-        formParams,
-        postBody,
-        authNames,
-        contentTypes,
-        accepts,
-        returnType,
-        callback
+        '/user/avatar', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
       );
-    };
+    }
   };
 
   return exports;

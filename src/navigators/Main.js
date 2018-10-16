@@ -1,6 +1,9 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
+import {
+  createBottomTabNavigator,
+  createStackNavigator
+} from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // import { transitionConfig } from './configs';
@@ -93,7 +96,7 @@ const tabsOptions = {
     activeTintColor: 'tomato',
     inactiveTintColor: 'gray'
   },
-  initialRouteName: 'FavoriteTab',
+  initialRouteName: 'SearchTab',
   lazy: false,
   animationEnabled: true,
   swipeEnabled: true

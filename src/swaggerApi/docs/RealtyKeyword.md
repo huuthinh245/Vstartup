@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **createdAt** | **String** |  | [optional] 
 **address** | **String** |  | [optional] 
 **thumbMap** | **String** |  | [optional] 
+**filter** | **String** |  | [optional] 
 **coordinate** | [**Coordinate**](Coordinate.md) |  | [optional] 
 
 

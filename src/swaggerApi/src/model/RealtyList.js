@@ -58,6 +58,7 @@
 
 
 
+
   };
 
   /**
@@ -103,6 +104,9 @@
       }
       if (data.hasOwnProperty('is_favorite')) {
         obj['is_favorite'] = ApiClient.convertToType(data['is_favorite'], 'Number');
+      }
+      if (data.hasOwnProperty('method')) {
+        obj['method'] = ApiClient.convertToType(data['method'], 'String');
       }
     }
     return obj;
@@ -152,6 +156,10 @@
    * @member {Number} is_favorite
    */
   exports.prototype['is_favorite'] = undefined;
+  /**
+   * @member {String} method
+   */
+  exports.prototype['method'] = undefined;
 
 
 

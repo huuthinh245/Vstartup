@@ -13,8 +13,14 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
 import ModalDropdown from 'react-native-modal-dropdown';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { _dims, _colors, responsiveFontSize, responsiveWidth } from '../utils/constants';
+import {
+  _dims,
+  _colors,
+  responsiveFontSize,
+  responsiveWidth
+} from '../utils/constants';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import strings from '../localization/filter';
@@ -34,15 +40,30 @@ class Filter extends React.Component {
     const { options } = this.props.navigation.state.params;
     this.state = {
       scrollEnabled: true,
+      method: options.method || this.props.options.data.methods[0].id,
       utils: options.utils || [],
-      priceRange: options.price && JSON.parse(`[${options.price}]`) || [0, 20],
-      areaRange: options.area && JSON.parse(`[${options.area}]`) || [0, 1000],
+      priceRange: (options.price && JSON.parse(`[${options.price}]`)) || [
+        0,
+        20
+      ],
+      areaRange: (options.area && JSON.parse(`[${options.area}]`)) || [0, 1000],
       toilet: options.toilet || 0,
       bedroom: options.bedroom || 0,
       bathroom: options.bathroom || 0,
       realtyType: options.type || 0
     };
   }
+
+  initOptions = {
+    method: this.props.options.data.methods[0].id,
+    utils: [],
+    priceRange: [0, 20],
+    areaRange: [0, 1000],
+    toilet: 0,
+    bedroom: 0,
+    bathroom: 0,
+    realtyType: 0
+  };
 
   _renderDropdownItem = (option, index, isSelected) => {
     return (
@@ -92,9 +113,28 @@ class Filter extends React.Component {
   _disableScroll = () => this.setState({ scrollEnabled: false });
   _enableScroll = () => this.setState({ scrollEnabled: true });
 
+  _clear = () => {
+    const opts = Object.assign({}, this.state, this.initOptions);
+    this.setState(opts);
+  };
+
+  _cancel = () => {
+    const { options } = this.props.navigation.state.params;
+    const opts = {
+      lat: options.lat,
+      lng: options.lng
+    };
+    this.props.navigation.state.params.onDone(opts);
+    this.props.navigation.goBack();
+  };
+
   _onSave = () => {
     const opts = this.state;
-    const result = Object.assign({}, this.props.navigation.state.params.options);
+    const result = Object.assign(
+      {},
+      this.props.navigation.state.params.options
+    );
+    Object.assign(result, { method: this.state.method });
     Object.assign(result, { price: opts.priceRange.toString() });
     Object.assign(result, { area: opts.areaRange.toString() });
     if (opts.bedroom !== 0) {
@@ -107,18 +147,36 @@ class Filter extends React.Component {
       Object.assign(result, { toilet: opts.toilet });
     }
     if (opts.utils.length > 0) {
-      Object.assign(result, { utils: opts.utils.map(item => item.id).toString() });
+      Object.assign(result, {
+        utils: opts.utils.map(item => item.id).toString()
+      });
     }
     if (opts.realtyType !== 0) {
       Object.assign(result, { type: `${opts.realtyType}` });
     }
-    if (JSON.stringify(this.props.navigation.state.params.options) !== JSON.stringify(result)) {
+    if (
+      JSON.stringify(this.props.navigation.state.params.options) !==
+      JSON.stringify(result)
+    ) {
       this.props.navigation.state.params.onDone(result);
     }
     this.props.navigation.goBack();
   };
 
+  _setMethod = index => {
+    const { method } = this.state;
+    const { methods } = this.props.options.data;
+    if (methods[index].id !== method) {
+      this.setState({ method: methods[index].id });
+    }
+  };
+
   render() {
+    const { method } = this.state;
+    const { methods } = this.props.options.data;
+    const highlight = {
+      color: '#3bcce1'
+    };
     return (
       <View style={styles.wrapper}>
         <Header
@@ -126,12 +184,64 @@ class Filter extends React.Component {
           title={headerStrings.filterScreen}
           right={
             <TouchableOpacity onPress={this._onSave}>
-              <Text style={{ color: _colors.mainColor }}>{headerStrings.save}</Text>
+              <Text style={{ color: _colors.mainColor }}>
+                {headerStrings.save}
+              </Text>
             </TouchableOpacity>
           }
         />
         <ScrollView scrollEnabled={this.state.scrollEnabled}>
           <View style={styles.innerWrapper}>
+            <View style={styles.radios}>
+              <TouchableOpacity
+                onPress={this._setMethod.bind(this, 0)}
+                style={styles.radio}
+              >
+                <Ionicons
+                  name={
+                    method === methods[0].id
+                      ? 'ios-radio-button-on'
+                      : 'ios-radio-button-off'
+                  }
+                  style={[
+                    styles.radioIcon,
+                    method === methods[0].id && highlight
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.radioText,
+                    method === methods[0].id && highlight
+                  ]}
+                >
+                  {methods[0].name}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={this._setMethod.bind(this, 1)}
+                style={styles.radio}
+              >
+                <Ionicons
+                  name={
+                    method === methods[1].id
+                      ? 'ios-radio-button-on'
+                      : 'ios-radio-button-off'
+                  }
+                  style={[
+                    styles.radioIcon,
+                    method === methods[1].id && highlight
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.radioText,
+                    method === methods[1].id && highlight
+                  ]}
+                >
+                  {methods[1].name}
+                </Text>
+              </TouchableOpacity>
+            </View>
             <Text style={styles.title}>{strings.price}</Text>
             <View style={styles.sliderWrapper}>
               <MultiSlider
@@ -160,7 +270,12 @@ class Filter extends React.Component {
               </View>
             </View>
 
-            <View style={[styles.sliderWrapper, { marginTop: _dims.defaultPadding }]}>
+            <View
+              style={[
+                styles.sliderWrapper,
+                { marginTop: _dims.defaultPadding }
+              ]}
+            >
               <Text style={styles.title}>{strings.area}</Text>
               <MultiSlider
                 sliderLength={_dims.screenWidth - _dims.defaultPadding * 4}
@@ -201,16 +316,25 @@ class Filter extends React.Component {
                       height: dataSelect.length * 50
                     }
                   ]}
-                  dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
+                  dropdownTextStyle={{
+                    fontSize: responsiveFontSize(_dims.defaultFontSize)
+                  }}
                   options={dataSelect.map(item => item.value)}
                   defaultIndex={this.state.toilet}
                   onSelect={index => this.setState({ toilet: index })}
                 >
-                  <Text style={styles.value}>{dataSelect[this.state.toilet].value}</Text>
+                  <Text style={styles.value}>
+                    {dataSelect[this.state.toilet].value}
+                  </Text>
                 </ModalDropdown>
               </View>
 
-              <View style={[styles.part, { marginHorizontal: _dims.defaultPadding }]}>
+              <View
+                style={[
+                  styles.part,
+                  { marginHorizontal: _dims.defaultPadding }
+                ]}
+              >
                 <Text style={styles.label}>{strings.bathroom}</Text>
                 <ModalDropdown
                   renderRow={this._renderDropdownItem}
@@ -221,12 +345,16 @@ class Filter extends React.Component {
                       height: dataSelect.length * 50
                     }
                   ]}
-                  dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
+                  dropdownTextStyle={{
+                    fontSize: responsiveFontSize(_dims.defaultFontSize)
+                  }}
                   options={dataSelect.map(item => item.value)}
                   defaultIndex={this.state.bathroom}
                   onSelect={index => this.setState({ bathroom: index })}
                 >
-                  <Text style={styles.value}>{dataSelect[this.state.bathroom].value}</Text>
+                  <Text style={styles.value}>
+                    {dataSelect[this.state.bathroom].value}
+                  </Text>
                 </ModalDropdown>
               </View>
               <View style={styles.part}>
@@ -240,19 +368,26 @@ class Filter extends React.Component {
                       height: dataSelect.length * 50
                     }
                   ]}
-                  dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
+                  dropdownTextStyle={{
+                    fontSize: responsiveFontSize(_dims.defaultFontSize)
+                  }}
                   options={dataSelect.map(item => item.value)}
                   defaultIndex={this.state.bedroom}
                   onSelect={index => this.setState({ bedroom: index })}
                 >
-                  <Text style={styles.value}>{dataSelect[this.state.bedroom].value}</Text>
+                  <Text style={styles.value}>
+                    {dataSelect[this.state.bedroom].value}
+                  </Text>
                 </ModalDropdown>
               </View>
             </View>
             <Text
               style={[
                 styles.title,
-                { marginBottom: _dims.defaultPadding, marginTop: _dims.defaultPadding }
+                {
+                  marginBottom: _dims.defaultPadding,
+                  marginTop: _dims.defaultPadding
+                }
               ]}
             >
               {strings.utils}
@@ -287,20 +422,36 @@ class Filter extends React.Component {
                     { width: '80%', height: dataSelect.length * 50 }
                   ]}
                   adjustFrame={style => {
-                    style.left -= responsiveWidth(10) - _dims.defaultPadding * 1.5;
+                    style.left -=
+                      responsiveWidth(10) - _dims.defaultPadding * 1.5;
                     return style;
                   }}
-                  dropdownTextStyle={{ fontSize: responsiveFontSize(_dims.defaultFontSize) }}
-                  options={this.props.options.data.realtyTypes.map(item => item.name)}
+                  dropdownTextStyle={{
+                    fontSize: responsiveFontSize(_dims.defaultFontSize)
+                  }}
+                  options={this.props.options.data.realtyTypes.map(
+                    item => item.name
+                  )}
                   defaultIndex={this.state.realtyType}
                   onSelect={index => this.setState({ realtyType: index })}
                 >
                   <Text style={[styles.value, { flex: 1 }]}>
-                    {this.props.options.data.realtyTypes[this.state.realtyType].name}
+                    {
+                      this.props.options.data.realtyTypes[this.state.realtyType]
+                        .name
+                    }
                   </Text>
                 </ModalDropdown>
               </View>
             </View>
+          </View>
+          <View style={styles.buttons}>
+            <TouchableOpacity style={styles.button} onPress={this._clear}>
+              <Text style={styles.buttonTex}>{strings.clear}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={this._cancel}>
+              <Text style={styles.buttonTex}>{strings.cancel}</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
@@ -327,6 +478,28 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     textAlign: 'left',
     marginRight: _dims.defaultPadding
+  },
+  radios: {
+    paddingVertical: 10,
+    justifyContent: 'space-around',
+    flexDirection: 'row'
+  },
+  radio: {
+    flex: 1,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  radioIcon: {
+    marginRight: 7,
+    fontSize: responsiveFontSize(_dims.defaultFontInput + 8),
+    color: 'gray'
+  },
+  radioText: {
+    fontSize: responsiveFontSize(_dims.defaultFontInput + 4),
+    fontWeight: '500',
+    color: 'gray'
   },
   sliderWrapper: {
     alignSelf: 'center'
@@ -466,5 +639,25 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(192,192,192,0.4)',
     borderWidth: 1,
     borderRadius: 3
+  },
+  buttons: {
+    flexDirection: 'row',
+    marginVertical: 20,
+    justifyContent: 'space-around',
+    alignItems: 'center'
+  },
+  button: {
+    paddingVertical: 10,
+    flex: 1,
+    marginHorizontal: 10,
+    backgroundColor: '#3bcce1',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5
+  },
+  buttonTex: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: responsiveFontSize(_dims.defaultFontInput + 2)
   }
 });

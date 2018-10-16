@@ -13,7 +13,10 @@ import {
   DELETE_HISTORY_FAILURE,
   LOAD_MORE_LIST_HISTORY,
   LOAD_MORE_LIST_HISTORY_SUCCESS,
-  LOAD_MORE_LIST_HISTORY_FAILURE
+  LOAD_MORE_LIST_HISTORY_FAILURE,
+  ADD_HISTORY,
+  ADD_HISTORY_FAILURE,
+  ADD_HISTORY_SUCCESS
 } from './actions';
 import { realtyApi, handleError } from '../../utils/api';
 
@@ -62,9 +65,22 @@ const deleteHistoryEpic = actions$ =>
     }
   });
 
+const addHistoryEpic = actions$ =>
+  actions$.ofType(ADD_HISTORY).switchMap(async action => {
+    try {
+      const { lat, lng, address } = action.payload;
+      const resp = await realtyApi.saveKeyword(lat, lng, address);
+      return { type: ADD_HISTORY_SUCCESS, payload: resp.body };
+    } catch (error) {
+      handleError(error, true);
+      return { type: ADD_HISTORY_FAILURE, payload: error };
+    }
+  });
+
 export const listHistoryEpic = combineEpics(
   getListHistoryEpic,
   refreshListHistoryEpic,
   deleteHistoryEpic,
-  loadMoreListHistoryEpic
+  loadMoreListHistoryEpic,
+  addHistoryEpic
 );

@@ -13,21 +13,53 @@
  *
  */
 
-(function(root, factory) {
+(function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/GenericError', 'model/GenericSuscess', 'model/Realty', 'model/RealtyKeyword', 'model/RealtyList', 'model/RealtyMap'], factory);
+    define([
+      'ApiClient',
+      'model/GenericError',
+      'model/GenericSuscess',
+      'model/Realty',
+      'model/RealtyKeyword',
+      'model/RealtyList',
+      'model/RealtyMap'
+    ], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('../model/GenericError'), require('../model/GenericSuscess'), require('../model/Realty'), require('../model/RealtyKeyword'), require('../model/RealtyList'), require('../model/RealtyMap'));
+    module.exports = factory(
+      require('../ApiClient'),
+      require('../model/GenericError'),
+      require('../model/GenericSuscess'),
+      require('../model/Realty'),
+      require('../model/RealtyKeyword'),
+      require('../model/RealtyList'),
+      require('../model/RealtyMap')
+    );
   } else {
     // Browser globals (root is window)
     if (!root.RemsApi) {
       root.RemsApi = {};
     }
-    root.RemsApi.RealtyApi = factory(root.RemsApi.ApiClient, root.RemsApi.GenericError, root.RemsApi.GenericSuscess, root.RemsApi.Realty, root.RemsApi.RealtyKeyword, root.RemsApi.RealtyList, root.RemsApi.RealtyMap);
+    root.RemsApi.RealtyApi = factory(
+      root.RemsApi.ApiClient,
+      root.RemsApi.GenericError,
+      root.RemsApi.GenericSuscess,
+      root.RemsApi.Realty,
+      root.RemsApi.RealtyKeyword,
+      root.RemsApi.RealtyList,
+      root.RemsApi.RealtyMap
+    );
   }
-}(this, function(ApiClient, GenericError, GenericSuscess, Realty, RealtyKeyword, RealtyList, RealtyMap) {
+}(this, function(
+  ApiClient,
+  GenericError,
+  GenericSuscess,
+  Realty,
+  RealtyKeyword,
+  RealtyList,
+  RealtyMap
+) {
   'use strict';
 
   /**
@@ -37,7 +69,7 @@
    */
 
   /**
-   * Constructs a new RealtyApi. 
+   * Constructs a new RealtyApi.
    * @alias module:api/RealtyApi
    * @class
    * @param {module:ApiClient} [apiClient] Optional API client implementation to use,
@@ -45,7 +77,6 @@
    */
   var exports = function(apiClient) {
     this.apiClient = apiClient || ApiClient.instance;
-
 
     /**
      * Callback function to receive the result of the deleteFavorite operation.
@@ -56,7 +87,7 @@
      */
 
     /**
-     * @param {Number} realtyId 
+     * @param {Number} realtyId
      * @param {module:api/RealtyApi~deleteFavoriteCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/GenericSuscess}
      */
@@ -65,21 +96,18 @@
 
       // verify the required parameter 'realtyId' is set
       if (realtyId === undefined || realtyId === null) {
-        throw new Error("Missing the required parameter 'realtyId' when calling deleteFavorite");
+        throw new Error(
+          "Missing the required parameter 'realtyId' when calling deleteFavorite"
+        );
       }
 
-
       var pathParams = {
-        'realty_id': realtyId
+        realty_id: realtyId
       };
-      var queryParams = {
-      };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
-      var formParams = {
-      };
+      var queryParams = {};
+      var collectionQueryParams = {};
+      var headerParams = {};
+      var formParams = {};
 
       var authNames = ['Bearer'];
       var contentTypes = ['application/json'];
@@ -87,11 +115,21 @@
       var returnType = GenericSuscess;
 
       return this.apiClient.callApi(
-        '/realty/favorite/{realty_id}', 'DELETE',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty/favorite/{realty_id}',
+        'DELETE',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
 
     /**
      * Callback function to receive the result of the deleteKeyword operation.
@@ -102,7 +140,7 @@
      */
 
     /**
-     * @param {String} ids 
+     * @param {String} ids
      * @param {module:api/RealtyApi~deleteKeywordCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/GenericSuscess}
      */
@@ -111,20 +149,17 @@
 
       // verify the required parameter 'ids' is set
       if (ids === undefined || ids === null) {
-        throw new Error("Missing the required parameter 'ids' when calling deleteKeyword");
+        throw new Error(
+          "Missing the required parameter 'ids' when calling deleteKeyword"
+        );
       }
 
-
-      var pathParams = {
-      };
-      var queryParams = {
-      };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
+      var pathParams = {};
+      var queryParams = {};
+      var collectionQueryParams = {};
+      var headerParams = {};
       var formParams = {
-        'ids': ids
+        ids: ids
       };
 
       var authNames = ['Bearer'];
@@ -133,11 +168,21 @@
       var returnType = GenericSuscess;
 
       return this.apiClient.callApi(
-        '/realty/keyword', 'DELETE',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty/keyword',
+        'DELETE',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
 
     /**
      * Callback function to receive the result of the listFavorite operation.
@@ -149,8 +194,8 @@
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Number} opts.page 
-     * @param {module:model/String} opts.sort 
+     * @param {Number} opts.page
+     * @param {module:model/String} opts.sort
      * @param {module:api/RealtyApi~listFavoriteCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/RealtyList>}
      */
@@ -158,19 +203,14 @@
       opts = opts || {};
       var postBody = null;
 
-
-      var pathParams = {
-      };
+      var pathParams = {};
       var queryParams = {
-        'page': opts['page'],
-        'sort': opts['sort'],
+        page: opts['page'],
+        sort: opts['sort']
       };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
-      var formParams = {
-      };
+      var collectionQueryParams = {};
+      var headerParams = {};
+      var formParams = {};
 
       var authNames = ['Bearer'];
       var contentTypes = ['application/json'];
@@ -178,11 +218,21 @@
       var returnType = [RealtyList];
 
       return this.apiClient.callApi(
-        '/realty/favorite', 'GET',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty/favorite',
+        'GET',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
 
     /**
      * Callback function to receive the result of the listKeyword operation.
@@ -199,17 +249,11 @@
     this.listKeyword = function(callback) {
       var postBody = null;
 
-
-      var pathParams = {
-      };
-      var queryParams = {
-      };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
-      var formParams = {
-      };
+      var pathParams = {};
+      var queryParams = {};
+      var collectionQueryParams = {};
+      var headerParams = {};
+      var formParams = {};
 
       var authNames = ['Bearer'];
       var contentTypes = ['application/json'];
@@ -217,11 +261,21 @@
       var returnType = [RealtyKeyword];
 
       return this.apiClient.callApi(
-        '/realty/keyword', 'GET',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty/keyword',
+        'GET',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
 
     /**
      * Callback function to receive the result of the listRealty operation.
@@ -233,11 +287,18 @@
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Number} opts.page 
-     * @param {Number} opts.keyword 
-     * @param {Number} opts.method 
-     * @param {Number} opts.type 
-     * @param {Number} opts.authorId 
+     * @param {Number} opts.page
+     * @param {Number} opts.method
+     * @param {Number} opts.lat
+     * @param {Number} opts.lng
+     * @param {Number} opts.type
+     * @param {Number} opts.bathroom
+     * @param {Number} opts.bedroom
+     * @param {String} opts.area
+     * @param {String} opts.price
+     * @param {String} opts.utils
+     * @param {Number} opts.authorId
+     * @param {Number} opts.userId
      * @param {module:api/RealtyApi~listRealtyCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/RealtyList>}
      */
@@ -245,22 +306,24 @@
       opts = opts || {};
       var postBody = null;
 
-
-      var pathParams = {
-      };
+      var pathParams = {};
       var queryParams = {
-        'page': opts['page'],
-        'keyword': opts['keyword'],
-        'method': opts['method'],
-        'type': opts['type'],
-        'author_id': opts['authorId'],
+        page: opts['page'],
+        method: opts['method'],
+        lat: opts['lat'],
+        lng: opts['lng'],
+        type: opts['type'],
+        bathroom: opts['bathroom'],
+        bedroom: opts['bedroom'],
+        area: opts['area'],
+        price: opts['price'],
+        utils: opts['utils'],
+        author_id: opts['authorId'],
+        user_id: opts['userId']
       };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
-      var formParams = {
-      };
+      var collectionQueryParams = {};
+      var headerParams = {};
+      var formParams = {};
 
       var authNames = [];
       var contentTypes = ['application/json'];
@@ -268,11 +331,21 @@
       var returnType = [RealtyList];
 
       return this.apiClient.callApi(
-        '/realty', 'GET',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty',
+        'GET',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
 
     /**
      * Callback function to receive the result of the mapRealty operation.
@@ -284,12 +357,16 @@
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {Number} opts.page 
-     * @param {Number} opts.lat 
-     * @param {Number} opts.lng 
-     * @param {Number} opts.price 
-     * @param {Number} opts.type 
-     * @param {String} opts.method 
+     * @param {Number} opts.method
+     * @param {Number} opts.lat
+     * @param {Number} opts.lng
+     * @param {Number} opts.type
+     * @param {Number} opts.bathroom
+     * @param {Number} opts.bedroom
+     * @param {String} opts.area
+     * @param {String} opts.price
+     * @param {String} opts.utils
+     * @param {Number} opts.authorId
      * @param {module:api/RealtyApi~mapRealtyCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/RealtyMap>}
      */
@@ -297,23 +374,24 @@
       opts = opts || {};
       var postBody = null;
 
+      console.log(opts);
 
-      var pathParams = {
-      };
+      var pathParams = {};
       var queryParams = {
-        'page': opts['page'],
-        'lat': opts['lat'],
-        'lng': opts['lng'],
-        'price': opts['price'],
-        'type': opts['type'],
-        'method': opts['method'],
+        method: opts['method'],
+        lat: opts['lat'],
+        lng: opts['lng'],
+        type: opts['type'],
+        bathroom: opts['bathroom'],
+        bedroom: opts['bedroom'],
+        area: opts['area'],
+        price: opts['price'],
+        utils: opts['utils'],
+        author_id: opts['authorId']
       };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
-      var formParams = {
-      };
+      var collectionQueryParams = {};
+      var headerParams = {};
+      var formParams = {};
 
       var authNames = [];
       var contentTypes = ['application/json'];
@@ -321,11 +399,21 @@
       var returnType = [RealtyMap];
 
       return this.apiClient.callApi(
-        '/realty/map', 'GET',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty/map',
+        'GET',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
 
     /**
      * Callback function to receive the result of the postFavorite operation.
@@ -336,7 +424,7 @@
      */
 
     /**
-     * @param {Number} realtyId 
+     * @param {Number} realtyId
      * @param {module:api/RealtyApi~postFavoriteCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/RealtyList}
      */
@@ -345,20 +433,17 @@
 
       // verify the required parameter 'realtyId' is set
       if (realtyId === undefined || realtyId === null) {
-        throw new Error("Missing the required parameter 'realtyId' when calling postFavorite");
+        throw new Error(
+          "Missing the required parameter 'realtyId' when calling postFavorite"
+        );
       }
 
-
-      var pathParams = {
-      };
-      var queryParams = {
-      };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
+      var pathParams = {};
+      var queryParams = {};
+      var collectionQueryParams = {};
+      var headerParams = {};
       var formParams = {
-        'realty_id': realtyId
+        realty_id: realtyId
       };
 
       var authNames = ['Bearer'];
@@ -367,11 +452,21 @@
       var returnType = RealtyList;
 
       return this.apiClient.callApi(
-        '/realty/favorite', 'POST',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty/favorite',
+        'POST',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
 
     /**
      * Callback function to receive the result of the postRealty operation.
@@ -383,7 +478,7 @@
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {module:model/Realty} opts.body 
+     * @param {module:model/Realty} opts.body
      * @param {module:api/RealtyApi~postRealtyCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/Realty}
      */
@@ -391,17 +486,11 @@
       opts = opts || {};
       var postBody = opts['body'];
 
-
-      var pathParams = {
-      };
-      var queryParams = {
-      };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
-      var formParams = {
-      };
+      var pathParams = {};
+      var queryParams = {};
+      var collectionQueryParams = {};
+      var headerParams = {};
+      var formParams = {};
 
       var authNames = ['Bearer'];
       var contentTypes = ['application/json'];
@@ -409,11 +498,21 @@
       var returnType = Realty;
 
       return this.apiClient.callApi(
-        '/realty', 'POST',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty',
+        'POST',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
 
     /**
      * Callback function to receive the result of the saveKeyword operation.
@@ -424,43 +523,48 @@
      */
 
     /**
-     * @param {String} address 
-     * @param {Number} lat 
-     * @param {Number} lng 
+     * @param {String} address
+     * @param {Number} lat
+     * @param {Number} lng
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.filter
      * @param {module:api/RealtyApi~saveKeywordCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/RealtyKeyword}
      */
-    this.saveKeyword = function(address, lat, lng, callback) {
+    this.saveKeyword = function(address, lat, lng, opts, callback) {
+      opts = opts || {};
       var postBody = null;
 
       // verify the required parameter 'address' is set
       if (address === undefined || address === null) {
-        throw new Error("Missing the required parameter 'address' when calling saveKeyword");
+        throw new Error(
+          "Missing the required parameter 'address' when calling saveKeyword"
+        );
       }
 
       // verify the required parameter 'lat' is set
       if (lat === undefined || lat === null) {
-        throw new Error("Missing the required parameter 'lat' when calling saveKeyword");
+        throw new Error(
+          "Missing the required parameter 'lat' when calling saveKeyword"
+        );
       }
 
       // verify the required parameter 'lng' is set
       if (lng === undefined || lng === null) {
-        throw new Error("Missing the required parameter 'lng' when calling saveKeyword");
+        throw new Error(
+          "Missing the required parameter 'lng' when calling saveKeyword"
+        );
       }
 
-
-      var pathParams = {
-      };
-      var queryParams = {
-      };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
+      var pathParams = {};
+      var queryParams = {};
+      var collectionQueryParams = {};
+      var headerParams = {};
       var formParams = {
-        'address': address,
-        'lat': lat,
-        'lng': lng
+        address: address,
+        lat: lat,
+        lng: lng,
+        filter: opts['filter']
       };
 
       var authNames = ['Bearer'];
@@ -469,11 +573,21 @@
       var returnType = RealtyKeyword;
 
       return this.apiClient.callApi(
-        '/realty/keyword', 'POST',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty/keyword',
+        'POST',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
 
     /**
      * Callback function to receive the result of the uploadImages operation.
@@ -485,7 +599,7 @@
 
     /**
      * @param {Object} opts Optional parameters
-     * @param {File} opts.images 
+     * @param {File} opts.images
      * @param {module:api/RealtyApi~uploadImagesCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/GenericSuscess}
      */
@@ -493,17 +607,12 @@
       opts = opts || {};
       var postBody = null;
 
-
-      var pathParams = {
-      };
-      var queryParams = {
-      };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
+      var pathParams = {};
+      var queryParams = {};
+      var collectionQueryParams = {};
+      var headerParams = {};
       var formParams = {
-        'images': opts['images']
+        images: opts['images']
       };
 
       var authNames = ['Bearer'];
@@ -512,11 +621,21 @@
       var returnType = GenericSuscess;
 
       return this.apiClient.callApi(
-        '/realty/upload', 'POST',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty/upload',
+        'POST',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
 
     /**
      * Callback function to receive the result of the viewMapRealty operation.
@@ -527,7 +646,7 @@
      */
 
     /**
-     * @param {String} ids 
+     * @param {String} ids
      * @param {module:api/RealtyApi~viewMapRealtyCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/RealtyMap>}
      */
@@ -536,21 +655,18 @@
 
       // verify the required parameter 'ids' is set
       if (ids === undefined || ids === null) {
-        throw new Error("Missing the required parameter 'ids' when calling viewMapRealty");
+        throw new Error(
+          "Missing the required parameter 'ids' when calling viewMapRealty"
+        );
       }
 
-
-      var pathParams = {
-      };
+      var pathParams = {};
       var queryParams = {
-        'ids': ids,
+        ids: ids
       };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
-      var formParams = {
-      };
+      var collectionQueryParams = {};
+      var headerParams = {};
+      var formParams = {};
 
       var authNames = [];
       var contentTypes = ['application/json'];
@@ -558,11 +674,21 @@
       var returnType = [RealtyMap];
 
       return this.apiClient.callApi(
-        '/realty/mapView', 'GET',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty/mapView',
+        'GET',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
 
     /**
      * Callback function to receive the result of the viewRealty operation.
@@ -573,30 +699,32 @@
      */
 
     /**
-     * @param {Number} id 
+     * @param {Number} id
+     * @param {Object} opts Optional parameters
+     * @param {Number} opts.userId
      * @param {module:api/RealtyApi~viewRealtyCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/Realty}
      */
-    this.viewRealty = function(id, callback) {
+    this.viewRealty = function(id, opts, callback) {
+      opts = opts || {};
       var postBody = null;
 
       // verify the required parameter 'id' is set
       if (id === undefined || id === null) {
-        throw new Error("Missing the required parameter 'id' when calling viewRealty");
+        throw new Error(
+          "Missing the required parameter 'id' when calling viewRealty"
+        );
       }
 
-
       var pathParams = {
-        'id': id
+        id: id
       };
       var queryParams = {
+        user_id: opts['userId']
       };
-      var collectionQueryParams = {
-      };
-      var headerParams = {
-      };
-      var formParams = {
-      };
+      var collectionQueryParams = {};
+      var headerParams = {};
+      var formParams = {};
 
       var authNames = [];
       var contentTypes = ['application/json'];
@@ -604,11 +732,21 @@
       var returnType = Realty;
 
       return this.apiClient.callApi(
-        '/realty/{id}', 'GET',
-        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+        '/realty/{id}',
+        'GET',
+        pathParams,
+        queryParams,
+        collectionQueryParams,
+        headerParams,
+        formParams,
+        postBody,
+        authNames,
+        contentTypes,
+        accepts,
+        returnType,
+        callback
       );
-    }
+    };
   };
 
   return exports;
