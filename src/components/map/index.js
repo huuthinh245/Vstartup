@@ -5,13 +5,19 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
-  Image,
   TouchableOpacity
 } from 'react-native';
-
+import Awesome from 'react-native-vector-icons/FontAwesome';
+import FastImage from 'react-native-fast-image';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Carousel from 'react-native-snap-carousel';
+
+import * as routes from '../../routes/routes';
+import {
+  likeRealtyAction,
+  unlikeRealtyAction
+} from '../../redux/realtyDetail/actions';
 import { _dims, responsiveFontSize } from '../../utils/constants';
 import { getMapRealtyAction } from '../../redux/mapRealty/actions';
 import emitter from '../../emitter';
@@ -22,6 +28,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const borderRadius = 5;
+const types = ['hybrid', 'mutedStandard', 'satellite', 'standard'];
 
 const styles = StyleSheet.create({
   main: {
@@ -41,6 +48,18 @@ const styles = StyleSheet.create({
     height: (_dims.screenHeight - 100) / 3,
     width: _dims.screenWidth,
     zIndex: 10000
+  },
+  pointer: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    zIndex: 10000,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.8)'
   },
   slider: {
     width: _dims.screenWidth * 0.8,
@@ -69,7 +88,13 @@ const styles = StyleSheet.create({
     top: 0,
     borderTopLeftRadius: borderRadius,
     borderTopRightRadius: borderRadius,
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end'
+  },
+  heart: {
+    position: 'absolute',
+    top: 10,
+    right: 10
   },
   bottom: {
     bottom: 0,
@@ -86,13 +111,14 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   text: {
-    marginLeft: 24,
+    marginLeft: 18,
     color: '#fff'
   },
   title: {
     fontSize: responsiveFontSize(_dims.defaultFontInput),
     color: '#fff',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginLeft: 5
   },
   marginBottom: {
     marginBottom: 5
@@ -100,7 +126,10 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 24,
     alignSelf: 'center',
-    opacity: 0.8
+    opacity: 0.8,
+    width: 34,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   iconHighlight: {
     fontSize: 32,
@@ -109,13 +138,10 @@ const styles = StyleSheet.create({
   }
 });
 const renderColor = type => {
-  console.log(type);
   if (type === 'rent') {
     return '#2196F3';
-  } else if (type === 'buy') {
-    return '#FF9800';
   }
-  return '#E91E63';
+  return '#FF9800';
 };
 
 const calculateDistanceFromCoordinate = (fromCoords, toCoords) => {
@@ -140,7 +166,8 @@ class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentMarkerSelectedId: 0
+      currentMarkerSelectedId: 0,
+      mapType: 0
     };
     this.currentCoords = {
       latitude: this.props.init[0],
@@ -170,6 +197,18 @@ class Map extends React.Component {
     this._toggleCarousel(0);
   };
 
+  _likeRealty = async realty => {
+    if (!this.props.auth.id) {
+      this.props.navigation.navigate(routes.login, { modal: true });
+      return;
+    }
+    if (realty.is_favorite) {
+      unlikeRealtyAction(realty);
+    } else {
+      likeRealtyAction(realty);
+    }
+  };
+
   _onMarkerPress = event => {
     const { id } = event.nativeEvent;
     if (this.state.currentMarkerSelectedId === id) {
@@ -181,32 +220,36 @@ class Map extends React.Component {
     this._toggleCarousel(1);
   };
 
-  _renderCarouselItem = ({ item, index }) => {
+  _goToDetail = item => {
+    this.props.navigation.navigate(routes.realtyDetail, { data: item });
+  };
+  _renderCarouselItem = ({ item }) => {
     return (
-      <TouchableOpacity style={styles.slider} key={item.id}>
-        <Image
+      <TouchableOpacity
+        onPress={() => this._goToDetail(item)}
+        style={styles.slider}
+        key={item.id}
+      >
+        <FastImage
+          style={styles.sliderImage}
           source={{
             uri: item.thumb
           }}
-          style={styles.sliderImage}
+          resizeMode={FastImage.resizeMode.cover}
         />
-        <View style={[styles.overlay, styles.top]}>
-          <TouchableOpacity style={styles.touch}>
-            <Icon
-              name={item.is_favorite ? 'ios-heart' : 'ios-heart-outline'}
-              size={24}
-              color="tomato"
-            />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={() => this._likeRealty(item)}
+          style={styles.heart}
+        >
+          <Icon
+            name={item.is_favorite ? 'ios-heart' : 'ios-heart-outline'}
+            size={24}
+            color="tomato"
+          />
+        </TouchableOpacity>
         <View style={[styles.overlay, styles.bottom]}>
           <View style={styles.row}>
-            <Icon
-              name="ios-pin"
-              size={24}
-              color={item.method === 'buy' ? 'tomato' : '#9c27b0'}
-              style={styles.icon}
-            />
+            <Icon name="ios-pin" size={24} color={renderColor(item.method)} />
             <Text numberOfLines={1} style={styles.title}>
               {item.title}
             </Text>
@@ -238,13 +281,33 @@ class Map extends React.Component {
     }
   };
 
+  _onChangeMapView = () => {
+    this.setState({ mapType: (this.state.mapType + 1) % types.length });
+  };
+
+  _requestRecenter = () => {
+    const onSuccess = location => {
+      this.map.animateToCoordinate(location.coords);
+    };
+    const onError = error => {
+      alert(error.message);
+    };
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+  };
+
   render() {
     const { currentMarkerSelectedId } = this.state;
     const { data, init } = this.props;
-    // const bottom = this.carouselBottom.interpolate({
-    //   inputRange: [0, 1],
-    //   outputRange: [-(_dims.screenHeight - 100) / 3, 20]
-    // });
+    const bottom = this.carouselBottom.interpolate({
+      inputRange: [0, 1],
+      outputRange: [-(_dims.screenHeight - 100) / 3, 20]
+    });
+
+    const { mapType } = this.state;
+    const pointBackground =
+      [0, 2].indexOf(mapType) > -1 ? 'rgba(255,255,255,0.8)' : '#333';
+
+    const pointColor = [0, 2].indexOf(mapType) > -1 ? 'rgb(0,122,255)' : '#fff';
 
     return (
       <View style={styles.main}>
@@ -259,6 +322,9 @@ class Map extends React.Component {
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA
           }}
+          showsUserLocation
+          loadingEnabled
+          mapType={types[this.state.mapType]}
           onMarkerPress={this._onMarkerPress}
           onPress={this._onMapPress}
           onRegionChangeComplete={this._onRegionChangeComplete}
@@ -284,6 +350,22 @@ class Map extends React.Component {
             );
           })}
         </MapView>
+        <TouchableOpacity
+          onPress={this._onChangeMapView}
+          style={[styles.pointer, { backgroundColor: pointBackground }]}
+        >
+          <Awesome name="hand-pointer-o" color={pointColor} size={24} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={this._requestRecenter}
+          style={[
+            styles.pointer,
+            { top: 70, backgroundColor: pointBackground }
+          ]}
+        >
+          <Icon name="ios-locate-outline" color={pointColor} size={24} />
+        </TouchableOpacity>
         <Animated.View style={[styles.carousel, { bottom: 10 }]}>
           <Carousel
             ref={c => {

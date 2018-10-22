@@ -1,9 +1,20 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, PixelRatio } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  PixelRatio
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import PropsTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
-import { _dims, _colors, responsiveFontSize, responsiveHeight } from '../utils/constants';
+import {
+  _dims,
+  _colors,
+  responsiveFontSize,
+  responsiveHeight
+} from '../utils/constants';
 
 export default class RealtyItem extends React.Component {
   static propsType = {
@@ -17,7 +28,7 @@ export default class RealtyItem extends React.Component {
   };
 
   render() {
-    const { data } = this.props;
+    const { data, onLikeRealty } = this.props;
     return (
       <TouchableOpacity
         style={[styles.wrapper, this.props.containerStyle]}
@@ -32,10 +43,12 @@ export default class RealtyItem extends React.Component {
           }}
           resizeMode={FastImage.resizeMode.cover}
         />
-        <Ionicons
-          style={styles.favoriteButton}
-          name={`ios-heart${!data.is_favorite ? '-outline' : ''}`}
-        />
+        <TouchableOpacity onPress={onLikeRealty}>
+          <Ionicons
+            style={styles.favoriteButton}
+            name={`ios-heart${!data.is_favorite ? '-outline' : ''}`}
+          />
+        </TouchableOpacity>
         <View style={styles.infoWrapper}>
           <Text numberOfLines={1} style={[styles.text, styles.title]}>
             {data.title}
@@ -45,7 +58,10 @@ export default class RealtyItem extends React.Component {
           </Text>
           <View style={{ flexDirection: 'row' }}>
             {this.props.showPin && (
-              <Ionicons style={[styles.pin, { color: this.props.showPin.color }]} name="md-pin" />
+              <Ionicons
+                style={[styles.pin, { color: this.props.showPin.color }]}
+                name="md-pin"
+              />
             )}
             <Text numberOfLines={1} style={[styles.text, styles.address]}>
               {data.address}

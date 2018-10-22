@@ -472,15 +472,18 @@ class RealtyDetail extends Component {
             ) : null
           }
         />
-        <Animated.View style={[styles.fabWrapper, { bottom }]}>
-          <TouchableOpacity
-            onPress={() => this.scroll.scrollToEnd({ animated: true })}
-            style={styles.fab}
-          >
-            <Ionicons name="ios-person" style={styles.fabIcon} />
-            <Text style={styles.fabText}>{strings.contactAgency}</Text>
-          </TouchableOpacity>
-        </Animated.View>
+        {!this.props.realtyDetail.fetching && realty && realty.id ? (
+          <Animated.View style={[styles.fabWrapper, { bottom }]}>
+            <TouchableOpacity
+              onPress={() => this.scroll.scrollToEnd({ animated: true })}
+              style={styles.fab}
+            >
+              <Ionicons name="ios-person" style={styles.fabIcon} />
+              <Text style={styles.fabText}>{strings.contactAgency}</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        ) : null}
+
         <KeyboardAwareScrollView
           ref={ref => {
             this.scroll = ref;

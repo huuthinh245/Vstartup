@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { View, TextInput, Text, findNodeHandle, TouchableOpacity } from 'react-native';
+import {
+  View,
+  TextInput,
+  Text,
+  findNodeHandle,
+  TouchableOpacity
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
@@ -86,7 +92,7 @@ class AgencyRegister extends Component {
         error: alertStrings.phoneEmpty
       });
       this.phone.focus();
-    } else if (!this.state.address.lat) {
+    } else if (!this.state.address.latitude) {
       emitter.emit('alert', {
         type: 'warn',
         title: alertStrings.invalidField,
@@ -109,7 +115,12 @@ class AgencyRegister extends Component {
         }}
       >
         {this.props.auth.fetching && <Spin />}
-        <View style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}>
+        <View
+          style={[
+            styles.hoishiWrapper,
+            { marginHorizontal: _dims.defaultPadding * 2 }
+          ]}
+        >
           <Ionicons name="ios-contact" style={styles.hoishiIcon} />
           <TextInput
             ref={name => {
@@ -128,7 +139,12 @@ class AgencyRegister extends Component {
           />
         </View>
 
-        <View style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}>
+        <View
+          style={[
+            styles.hoishiWrapper,
+            { marginHorizontal: _dims.defaultPadding * 2 }
+          ]}
+        >
           <Ionicons name="ios-mail" style={styles.hoishiIcon} />
           <TextInput
             ref={email => {
@@ -148,7 +164,12 @@ class AgencyRegister extends Component {
           />
         </View>
 
-        <View style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}>
+        <View
+          style={[
+            styles.hoishiWrapper,
+            { marginHorizontal: _dims.defaultPadding * 2 }
+          ]}
+        >
           <Ionicons name="ios-lock" style={styles.hoishiIcon} />
           <TextInput
             ref={password => {
@@ -168,7 +189,12 @@ class AgencyRegister extends Component {
           />
         </View>
 
-        <View style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}>
+        <View
+          style={[
+            styles.hoishiWrapper,
+            { marginHorizontal: _dims.defaultPadding * 2 }
+          ]}
+        >
           <Ionicons name="ios-lock" style={styles.hoishiIcon} />
           <TextInput
             ref={rePassword => {
@@ -188,7 +214,12 @@ class AgencyRegister extends Component {
           />
         </View>
 
-        <View style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}>
+        <View
+          style={[
+            styles.hoishiWrapper,
+            { marginHorizontal: _dims.defaultPadding * 2 }
+          ]}
+        >
           <Ionicons name="ios-call" style={styles.hoishiIcon} />
           <TextInput
             style={styles.hoishiInput}
@@ -207,13 +238,21 @@ class AgencyRegister extends Component {
 
         <TouchableOpacity
           onPress={async () => {
-            const val = await RNGooglePlaces.openPlacePickerModal();
+            const val = await RNGooglePlaces.openAutocompleteModal();
             this.setState({ address: val });
           }}
-          style={[styles.hoishiWrapper, { marginHorizontal: _dims.defaultPadding * 2 }]}
+          style={[
+            styles.hoishiWrapper,
+            { marginHorizontal: _dims.defaultPadding * 2 }
+          ]}
         >
           <Ionicons name="md-pin" style={styles.hoishiIcon} />
-          <Text style={[styles.hoishiInput, !_address && { color: 'silver', padding: 10 }]}>
+          <Text
+            style={[
+              styles.hoishiInput,
+              !_address && { color: 'silver', padding: 10 }
+            ]}
+          >
             {_address || strings.address}
           </Text>
         </TouchableOpacity>

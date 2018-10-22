@@ -18,11 +18,11 @@ const getAgencyRealtyEpic = actions$ =>
   actions$.ofType(GET_AGENCY_REALTY).switchMap(async action => {
     try {
       const opts = Object.assign({}, action.payload);
-      if (action.payload.author_id === 0) delete opts.author_id;
+      if (action.payload.authorId === 0) delete opts.authorId;
       const resp = await realtyApi.listRealty(opts);
       return {
         type: GET_AGENCY_REALTY_SUCCESS,
-        payload: { author: action.payload.author_id, data: resp.body }
+        payload: { author: action.payload.authorId, data: resp.body }
       };
     } catch (error) {
       handleError(error, true);
@@ -34,11 +34,11 @@ const refreshAgencyRealtyEpic = actions$ =>
   actions$.ofType(REFRESH_AGENCY_REALTY).switchMap(async action => {
     try {
       const opts = Object.assign({}, action.payload);
-      if (action.payload.author_id === 0) delete opts.author_id;
+      if (action.payload.authorId === 0) delete opts.authorId;
       const resp = await realtyApi.listRealty(opts);
       return {
         type: REFRESH_AGENCY_REALTY_SUCCESS,
-        payload: { author: action.payload.author_id, data: resp.body }
+        payload: { author: action.payload.authorId, data: resp.body }
       };
     } catch (error) {
       handleError(error, true);
@@ -50,11 +50,11 @@ const loadMoreAgencyRealtyEpic = actions$ =>
   actions$.ofType(LOAD_MORE_AGENCY_REALTY).switchMap(async action => {
     try {
       const opts = Object.assign({}, action.payload);
-      if (action.payload.author_id === 0) delete opts.author_id;
+      if (action.payload.authorId === 0) delete opts.authorId;
       const resp = await realtyApi.listRealty(opts);
       return {
         type: LOAD_MORE_AGENCY_REALTY_SUCCESS,
-        payload: { author: action.payload.author_id, data: resp.body }
+        payload: { author: action.payload.authorId, data: resp.body }
       };
     } catch (error) {
       handleError(error);

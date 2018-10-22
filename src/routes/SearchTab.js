@@ -29,10 +29,24 @@ class SearchTab extends React.Component {
       options: {
         lat: DEFAULT_LAT,
         lng: DEFAULT_LON,
-        address: undefined
+        address: undefined,
+        userId: this.props.auth.id
       }
     };
     this._watchPosition();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { id } = nextProps.auth;
+    const { options } = this.state;
+    if (id !== this.props.auth.id) {
+      if (id) {
+        options.userId = id;
+      } else {
+        delete options.userId;
+      }
+      this.setState({ options });
+    }
   }
 
   _watchPosition = () => {
@@ -85,7 +99,9 @@ class SearchTab extends React.Component {
       this.setState({ options });
       getSearchRealtyAction(options);
       getMapRealtyAction(options);
-      addHistoryAction(val.latitude, val.longitude, val.address);
+      addHistoryAction(val.address, val.latitude, val.longitude, {
+        filter: JSON.stringify(this.state.options)
+      });
       emitter.emit('mapFly', {
         latitude: val.latitude,
         longitude: val.longitude
@@ -105,7 +121,7 @@ class SearchTab extends React.Component {
   };
 
   render() {
-    const { searchRealty, mapRealty, navigation } = this.props;
+    const { searchRealty, mapRealty, navigation, auth } = this.props;
 
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -126,6 +142,7 @@ class SearchTab extends React.Component {
                 init={[DEFAULT_LAT, DEFAULT_LON]}
                 options={this.state.options}
                 navigation={navigation}
+                auth={auth}
               />
             }
             back={
@@ -133,6 +150,7 @@ class SearchTab extends React.Component {
                 navigation={navigation}
                 {...searchRealty}
                 options={this.state.options}
+                auth={auth}
               />
             }
             isFlipped={this.state.isFlipped}
@@ -149,5 +167,6 @@ class SearchTab extends React.Component {
 
 export default connect(state => ({
   mapRealty: state.mapRealty,
-  searchRealty: state.searchRealty
+  searchRealty: state.searchRealty,
+  auth: state.auth.user
 }))(SearchTab);

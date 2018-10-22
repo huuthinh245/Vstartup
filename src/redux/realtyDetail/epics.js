@@ -40,18 +40,29 @@ const likeRealty = actions$ =>
       return { type: LIKE_REALTY_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
-      return { type: LIKE_REALTY_FAILURE, payload: { realty: action.payload, error } };
+      return {
+        type: LIKE_REALTY_FAILURE,
+        payload: { realty: action.payload, error }
+      };
     }
   });
 
 const unlikeRealty = actions$ =>
   actions$.ofType(UNLIKE_REALTY).switchMap(async action => {
     try {
-      const resp = await realtyApi.postFavorite(action.payload.id);
-      return { type: UNLIKE_REALTY_SUCCESS, payload: resp.body };
+      const resp = await realtyApi.deleteFavorite(action.payload.id);
+      return {
+        type: UNLIKE_REALTY_SUCCESS,
+        payload: Object.assign({}, action.payload, {
+          is_favorite: !action.payload.is_favorite
+        })
+      };
     } catch (error) {
       handleError(error, true);
-      return { type: UNLIKE_REALTY_FAILURE, payload: { realty: action.payload, error } };
+      return {
+        type: UNLIKE_REALTY_FAILURE,
+        payload: { realty: action.payload, error }
+      };
     }
   });
 
@@ -77,7 +88,10 @@ const postRealty = (actions$, store) =>
               store.dispatch(
                 NavigationActions.navigate({
                   routeName: routes.realtyDetail,
-                  params: { data: value, onBack: () => store.dispatch(StackActions.popToTop()) }
+                  params: {
+                    data: value,
+                    onBack: () => store.dispatch(StackActions.popToTop())
+                  }
                 })
               )
           },
@@ -96,4 +110,9 @@ const postRealty = (actions$, store) =>
     }
   });
 
-export const realtyDetailEpic = combineEpics(getRealtyDetail, likeRealty, unlikeRealty, postRealty);
+export const realtyDetailEpic = combineEpics(
+  getRealtyDetail,
+  likeRealty,
+  unlikeRealty,
+  postRealty
+);

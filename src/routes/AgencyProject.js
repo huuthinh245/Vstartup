@@ -31,21 +31,31 @@ class AgencyProject extends React.Component {
 
   componentDidMount() {
     const { user } = this.props.navigation.state.params;
-    getAgencyProjectAction({ author_id: user.id });
+    getAgencyProjectAction({ agencyId: user.id });
   }
 
   _onLoadMore = () => {
-    if (this.props.agencyProject.loadMore || this.onEndReachedCalledDuringMomentum) return;
+    if (
+      this.props.agencyProject.loadMore ||
+      this.onEndReachedCalledDuringMomentum
+    ) {
+      return;
+    }
     const { user } = this.props.navigation.state.params;
     const len = this.props.agencyProject.data[user.id].length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
-    loadMoreAgencyProjectAction({ author_id: user.id, page });
+    loadMoreAgencyProjectAction({ agencyId: user.id, page });
   };
 
   _onRefresh = () => {
-    if (this.props.agencyProject.fetching || this.props.agencyProject.refreshing) return;
+    if (
+      this.props.agencyProject.fetching ||
+      this.props.agencyProject.refreshing
+    ) {
+      return;
+    }
     const { user } = this.props.navigation.state.params;
-    refreshAgencyProjectAction({ author_id: user.id });
+    refreshAgencyProjectAction({ agencyId: user.id });
   };
 
   _renderItem = ({ item }) => {
@@ -78,13 +88,21 @@ class AgencyProject extends React.Component {
         ) : (
           <View style={{ flex: 1 }}>
             <FlatList
-              data={this.props.agencyProject.data[this.props.navigation.state.params.user.id]}
+              data={
+                this.props.agencyProject.data[
+                  this.props.navigation.state.params.user.id
+                ]
+              }
               renderItem={this._renderItem}
               keyExtractor={item => `${item.id}`}
               ItemSeparatorComponent={() => <View style={styles.separator} />}
               ListEmptyComponent={this._renderEmpty}
-              ListHeaderComponent={() => <View style={{ height: _dims.defaultPadding }} />}
-              ListFooterComponent={() => <View style={{ height: _dims.defaultPadding }} />}
+              ListHeaderComponent={() => (
+                <View style={{ height: _dims.defaultPadding }} />
+              )}
+              ListFooterComponent={() => (
+                <View style={{ height: _dims.defaultPadding }} />
+              )}
               onEndReached={this._onLoadMore}
               onEndReachedThreshold={0.1}
               onMomentumScrollBegin={() => {
@@ -93,7 +111,9 @@ class AgencyProject extends React.Component {
               refreshing={this.props.agencyProject.refreshing}
               onRefresh={this._onRefresh}
             />
-            {this.props.agencyProject.loadMore && <ActivityIndicator animating style={indicator} />}
+            {this.props.agencyProject.loadMore && (
+              <ActivityIndicator animating style={indicator} />
+            )}
           </View>
         )}
       </View>
@@ -101,4 +121,6 @@ class AgencyProject extends React.Component {
   }
 }
 
-export default connect(state => ({ agencyProject: state.agencyProject }))(AgencyProject);
+export default connect(state => ({ agencyProject: state.agencyProject }))(
+  AgencyProject
+);

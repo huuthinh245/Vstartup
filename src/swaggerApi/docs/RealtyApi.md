@@ -308,7 +308,8 @@ var opts = {
   'area': "area_example", // String | 
   'price': "price_example", // String | 
   'utils': "utils_example", // String | 
-  'authorId': 56 // Number | 
+  'authorId': 56, // Number | 
+  'userId': 56 // Number | 
 };
 
 var callback = function(error, data, response) {
@@ -335,6 +336,7 @@ Name | Type | Description  | Notes
  **price** | **String**|  | [optional] 
  **utils** | **String**|  | [optional] 
  **authorId** | **Number**|  | [optional] 
+ **userId** | **Number**|  | [optional] 
 
 ### Return type
 

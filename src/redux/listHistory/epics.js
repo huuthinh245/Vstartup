@@ -68,8 +68,8 @@ const deleteHistoryEpic = actions$ =>
 const addHistoryEpic = actions$ =>
   actions$.ofType(ADD_HISTORY).switchMap(async action => {
     try {
-      const { lat, lng, address } = action.payload;
-      const resp = await realtyApi.saveKeyword(lat, lng, address);
+      const { lat, lng, address, opts } = action.payload;
+      const resp = await realtyApi.saveKeyword(address, lat, lng, opts);
       return { type: ADD_HISTORY_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);

@@ -41,8 +41,8 @@ export const deleteHistoryAction = payload =>
     payload
   });
 
-export const addHistoryAction = (lat, lng, address) =>
+export const addHistoryAction = (address, lat, lng, opts) =>
   store.dispatch({
     type: ADD_HISTORY,
-    payload: { lat, lng, address }
+    payload: { address, lat, lng, opts }
   });

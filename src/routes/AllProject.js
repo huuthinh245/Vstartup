@@ -35,7 +35,7 @@ class ListProject extends React.Component {
     this.onEndReachedCalledDuringMomentum = true;
   }
   componentDidMount() {
-    getAgencyProjectAction({ author_id: 0 });
+    getAgencyProjectAction();
   }
 
   _onLoadMore = () => {
@@ -46,13 +46,13 @@ class ListProject extends React.Component {
 
     const len = agencyProject.data[0].length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
-    loadMoreAgencyProjectAction({ author_id: 0, page });
+    loadMoreAgencyProjectAction({ page });
     this.onEndReachedCalledDuringMomentum = true;
   };
 
   _onRefresh = () => {
     if (this.props.agencyProject.refreshing) return;
-    refreshAgencyProjectAction({ author_id: 0 });
+    refreshAgencyProjectAction();
   };
 
   _renderItem = ({ item }) => {
@@ -61,11 +61,16 @@ class ListProject extends React.Component {
         item={item}
         onPress={() => {
           // callback if there is a component invoke this component to get projectId
-          if (this.props.navigation.state.params && this.props.navigation.state.params.callback) {
+          if (
+            this.props.navigation.state.params &&
+            this.props.navigation.state.params.callback
+          ) {
             this.props.navigation.state.params.callback(item);
             this.props.navigation.goBack();
           } else {
-            this.props.navigation.navigate(routes.projectDetail, { data: item });
+            this.props.navigation.navigate(routes.projectDetail, {
+              data: item
+            });
           }
         }}
       />
@@ -95,8 +100,12 @@ class ListProject extends React.Component {
               data={this.props.agencyProject.data[0]}
               renderItem={this._renderItem}
               keyExtractor={item => `${item.id}`}
-              ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
-              ListFooterComponent={() => <View style={{ height: _dims.defaultPadding }} />}
+              ListHeaderComponent={() => (
+                <Separator height={_dims.defaultPadding} />
+              )}
+              ListFooterComponent={() => (
+                <View style={{ height: _dims.defaultPadding }} />
+              )}
               ItemSeparatorComponent={() => <View style={separator} />}
               onMomentumScrollBegin={() => {
                 this.onEndReachedCalledDuringMomentum = false;
@@ -106,7 +115,9 @@ class ListProject extends React.Component {
               onRefresh={this._onRefresh}
               onEndReached={this._onLoadMore}
             />
-            {this.props.agencyProject.loadMore && <ActivityIndicator style={indicator} animating />}
+            {this.props.agencyProject.loadMore && (
+              <ActivityIndicator style={indicator} animating />
+            )}
           </View>
         )}
       </View>

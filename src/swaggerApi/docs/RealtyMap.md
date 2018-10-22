@@ -4,6 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **Number** |  | [optional] 
+**title** | **String** |  | [optional] 
 **price** | **Number** |  | [optional] 
 **priceUnit** | **String** |  | [optional] 
 **coordinate** | [**Coordinate**](Coordinate.md) |  | [optional] 

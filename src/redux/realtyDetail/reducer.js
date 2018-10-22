@@ -18,7 +18,7 @@ import {
 const initial = {
   postRealty: false,
   fetching: false,
-  postingFavorite: false,
+  postingFavorite: undefined,
   data: {},
   error: null
 };
@@ -45,10 +45,13 @@ export const realtyDetailReducer = handleActions(
       if (realty) {
         Object.assign(realty, { is_favorite: !is_favorite });
       }
-      return Object.assign({}, state, { postingFavorite: true });
+      return Object.assign({}, state, { postingFavorite: id });
     },
     [LIKE_REALTY_SUCCESS]: state => {
-      return Object.assign({}, state, { postingFavorite: false, error: null });
+      return Object.assign({}, state, {
+        postingFavorite: undefined,
+        error: null
+      });
     },
     [LIKE_REALTY_FAILURE]: (state, { payload }) => {
       const { id, is_favorite } = payload.realty;
@@ -56,7 +59,10 @@ export const realtyDetailReducer = handleActions(
       if (realty) {
         Object.assign(realty, { is_favorite: !is_favorite });
       }
-      return Object.assign({}, state, { postingFavorite: false, error: payload.error });
+      return Object.assign({}, state, {
+        postingFavorite: undefined,
+        error: payload.error
+      });
     },
     [UNLIKE_REALTY]: (state, { payload }) => {
       const { id, is_favorite } = payload;
@@ -64,10 +70,13 @@ export const realtyDetailReducer = handleActions(
       if (realty) {
         Object.assign(realty, { is_favorite: !is_favorite });
       }
-      return Object.assign({}, state, { postingFavorite: true });
+      return Object.assign({}, state, { postingFavorite: id });
     },
     [UNLIKE_REALTY_SUCCESS]: state => {
-      return Object.assign({}, state, { postingFavorite: false, error: null });
+      return Object.assign({}, state, {
+        postingFavorite: undefined,
+        error: null
+      });
     },
     [UNLIKE_REALTY_FAILURE]: (state, { payload }) => {
       const { id, is_favorite } = payload.realty;
@@ -75,7 +84,10 @@ export const realtyDetailReducer = handleActions(
       if (realty) {
         Object.assign(realty, { is_favorite: !is_favorite });
       }
-      return Object.assign({}, state, { postingFavorite: false, error: payload.error });
+      return Object.assign({}, state, {
+        postingFavorite: undefined,
+        error: payload.error
+      });
     },
     [POST_REALTY]: state => {
       return Object.assign({}, state, { postRealty: true });

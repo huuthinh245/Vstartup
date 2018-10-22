@@ -60,6 +60,7 @@
 
 
 
+
   };
 
   /**
@@ -75,6 +76,9 @@
 
       if (data.hasOwnProperty('id')) {
         obj['id'] = ApiClient.convertToType(data['id'], 'Number');
+      }
+      if (data.hasOwnProperty('title')) {
+        obj['title'] = ApiClient.convertToType(data['title'], 'String');
       }
       if (data.hasOwnProperty('price')) {
         obj['price'] = ApiClient.convertToType(data['price'], 'Number');
@@ -120,6 +124,10 @@
    * @member {Number} id
    */
   exports.prototype['id'] = undefined;
+  /**
+   * @member {String} title
+   */
+  exports.prototype['title'] = undefined;
   /**
    * @member {Number} price
    */

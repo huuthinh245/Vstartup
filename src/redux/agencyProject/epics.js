@@ -18,11 +18,11 @@ const getAgencyProjectEpic = actions$ =>
   actions$.ofType(GET_AGENCY_PROJECT).switchMap(async action => {
     try {
       const opts = Object.assign({}, action.payload);
-      if (action.payload.author_id === 0) delete opts.author_id;
+      if (action.payload.agencyId === 0) delete opts.agencyId;
       const resp = await projectApi.listProject(opts);
       return {
         type: GET_AGENCY_PROJECT_SUCCESS,
-        payload: { author: action.payload.author_id, data: resp.body }
+        payload: { author: action.payload.agencyId, data: resp.body }
       };
     } catch (error) {
       handleError(error, true);
@@ -34,11 +34,11 @@ const refreshAgencyProjectEpic = actions$ =>
   actions$.ofType(REFRESH_AGENCY_PROJECT).switchMap(async action => {
     try {
       const opts = Object.assign({}, action.payload);
-      if (action.payload.author_id === 0) delete opts.author_id;
+      if (action.payload.agencyId === 0) delete opts.agencyId;
       const resp = await projectApi.listProject(opts);
       return {
         type: REFRESH_AGENCY_PROJECT_SUCCESS,
-        payload: { author: action.payload.author_id, data: resp.body }
+        payload: { author: action.payload.agencyId, data: resp.body }
       };
     } catch (error) {
       handleError(error, true);
@@ -50,11 +50,11 @@ const loadMoreAgencyProjectEpic = actions$ =>
   actions$.ofType(LOAD_MORE_AGENCY_PROJECT).switchMap(async action => {
     try {
       const opts = Object.assign({}, action.payload);
-      if (action.payload.author_id === 0) delete opts.author_id;
+      if (action.payload.agencyId === 0) delete opts.agencyId;
       const resp = await projectApi.listProject(opts);
       return {
         type: LOAD_MORE_AGENCY_PROJECT_SUCCESS,
-        payload: { author: action.payload.author_id, data: resp.body }
+        payload: { author: action.payload.agencyId, data: resp.body }
       };
     } catch (error) {
       handleError(error);

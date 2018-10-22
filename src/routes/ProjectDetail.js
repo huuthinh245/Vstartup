@@ -5,10 +5,12 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
-  findNodeHandle,
   Share,
-  StyleSheet
+  StyleSheet,
+  ActivityIndicator,
+  Animated
 } from 'react-native';
+
 import Carousel from 'react-native-snap-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeatherIcons from 'react-native-vector-icons/Feather';
@@ -17,29 +19,36 @@ import FastImage from 'react-native-fast-image';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import call from 'react-native-phone-call';
 import { connect } from 'react-redux';
-import Spinner from 'react-native-spinkit';
-import YouTube from 'react-native-youtube';
-
+import YouTube, { YouTubeStandaloneAndroid } from 'react-native-youtube';
 import * as routes from './routes';
-import { _colors, _dims, responsiveFontSize, pluralNoun, responsiveWidth } from '../utils/constants';
+import PlaceHolder from '../components/flatlistHelpers/PlaceHolder_Detail';
+
+import {
+  _colors,
+  _dims,
+  responsiveFontSize,
+  responsiveWidth,
+  _ios
+} from '../utils/constants';
 import SliderEntry from '../components/SliderEntry';
 import strings from '../localization/projectDetail';
+import alertStrings from '../localization/alert';
 import Header from '../navigators/headers/CommonHeader';
 import { _alert } from '../utils/alert';
-import {
-  getProjectDetailAction,
-} from '../redux/projectDetail/actions';
+import emitter from '../emitter';
+import { getProjectDetailAction } from '../redux/projectDetail/actions';
+import { PHONE_REGEX, EMAIL_REGEX } from '../utils/validation';
+import { postContactAction } from '../redux/contact/actions';
 
 class ProjectDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      slider1ActiveSlide: 1,
-      fabVisible: true,
-      name: '',
-      email: '',
-      phone: ''
+      name: this.props.auth.user.name,
+      email: this.props.auth.user.email,
+      phone: this.props.auth.user.phone
     };
+    this.fabBottom = new Animated.Value(1);
   }
 
   componentDidMount() {
@@ -47,20 +56,58 @@ class ProjectDetail extends Component {
     getProjectDetailAction({ id });
   }
 
-  _share = () => {
+  _share = item => {
     Share.share(
       {
-        message: "BAM: we're helping your business with awesome React Native apps",
-        url: 'http://bam.tech',
-        title: 'Wow, did you see that?'
+        message: `url: ${item.url}`,
+        url: item.url
       },
       {
         // Android only:
-        dialogTitle: 'Share BAM goodness',
+        dialogTitle: 'Share url',
         // iOS only:
         excludedActivityTypes: ['com.apple.UIKit.activity.PostToTwitter']
       }
     );
+  };
+
+  _sendContact = () => {
+    if (this.props.listContact.sending) return;
+    if (!this.state.name) {
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.nameEmpty
+      });
+      this.name.focus();
+    } else if (!EMAIL_REGEX.test(this.state.email)) {
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.emailInvalid
+      });
+      this.email.focus();
+    } else if (!PHONE_REGEX.test(this.state.phone)) {
+      emitter.emit('alert', {
+        type: 'warn',
+        title: alertStrings.invalidField,
+        error: alertStrings.phoneInvalid
+      });
+      this.phone.focus();
+    } else {
+      callback = () =>
+        _alert(alertStrings.success, alertStrings.postContactSuccess);
+      const obj = {
+        body: {
+          name: this.state.name,
+          email: this.state.email,
+          phone: this.state.phone
+        },
+        callback
+      };
+
+      postContactAction(obj);
+    }
   };
 
   _renderLoadDone = project => {
@@ -77,8 +124,14 @@ class ProjectDetail extends Component {
         content: project.utility
       },
       {
+        title: strings.investors,
+        content: project.agency
+      },
+      {
         title: strings.location,
-        content: project.thumb_map
+        content:
+          project.thumb_map ||
+          'https://maps.googleapis.com/maps/api/staticmap?center=10.754996,106.682837&zoom=13&size=600x400&maptype=roadmap&markers=color:red%7Clabel:C%7C10.754996,106.682837&key=AIzaSyBPP-acR0edXyx8N46WTt3nKIsbvv1r7V8'
       },
       {
         title: strings.video,
@@ -87,15 +140,6 @@ class ProjectDetail extends Component {
     ];
     return (
       <View style={{ flex: 1 }}>
-        {this.state.fabVisible && (
-          <TouchableOpacity
-            onPress={() => this.scroll.scrollToEnd({ animated: true })}
-            style={[styles.fab, !this.state.fabVisible && { display: 'none' }]}
-          >
-            <Ionicons name="ios-person" style={styles.fabIcon} />
-            <Text style={styles.fabText}>{strings.contactAgency}</Text>
-          </TouchableOpacity>
-        )}
         <View style={{ height: _dims.defaultPadding }} />
         <Carousel
           style={{ marginTop: _dims.defaultPadding }}
@@ -114,7 +158,6 @@ class ProjectDetail extends Component {
             friction: 4,
             tension: 40
           }}
-          firstItem={this.state.slider1ActiveSlide}
           inactiveSlideScale={0.94}
           inactiveSlideOpacity={0.7}
           inactiveSlideShift={_dims.defaultPadding * 2}
@@ -123,11 +166,11 @@ class ProjectDetail extends Component {
         />
         <View style={{ paddingHorizontal: _dims.defaultPadding }}>
           <View style={styles.titleWrapper}>
-            <Text style={styles.title} numberOfLines={1}>
+            <Text style={styles.title} numberOfLines={3}>
               {project.title}
             </Text>
             <FeatherIcons
-              onPress={this._share}
+              onPress={() => this._share(project)}
               name="share-2"
               style={styles.socialButton}
               color={_colors.mainColor}
@@ -136,15 +179,27 @@ class ProjectDetail extends Component {
           <Text style={styles.colorGray}>{project.address}</Text>
           <View style={styles.infoWrapper}>
             <View style={styles.info}>
-              <Text style={[styles.infoText, styles.fontBold]}>{project.bedroom}</Text>
+              <Text style={[styles.infoText, styles.fontBold]}>
+                {project.block}
+              </Text>
               <Text style={[styles.infoText, styles.color4]}>
-                {pluralNoun(project.bedroom, strings.bedroom)}
+                {strings.block}
               </Text>
             </View>
             <View style={styles.info}>
-              <Text style={[styles.infoText, styles.fontBold]}>{project.bathroom}</Text>
+              <Text style={[styles.infoText, styles.fontBold]}>
+                {project.floor}
+              </Text>
               <Text style={[styles.infoText, styles.color4]}>
-                {pluralNoun(project.bathroom, strings.bathroom)}
+                {strings.floor}
+              </Text>
+            </View>
+            <View style={styles.info}>
+              <Text style={[styles.infoText, styles.fontBold]}>
+                {project.apartment}
+              </Text>
+              <Text style={[styles.infoText, styles.color4]}>
+                {strings.apartment}
               </Text>
             </View>
             <View style={[styles.info, styles.noBorderRight]}>
@@ -152,14 +207,16 @@ class ProjectDetail extends Component {
                 {project.area}
                 <Text style={[styles.infoText, styles.fontNormal]}> m²</Text>
               </Text>
-              <Text style={[styles.infoText, styles.color4]}>{strings.area}</Text>
+              <Text style={[styles.infoText, styles.color4]}>
+                {strings.area}
+              </Text>
             </View>
           </View>
           <View style={styles.priceWrapper}>
-            <Text style={[styles.priceMethod, styles.color4]}>{project.method}</Text>
-            <Text style={styles.price}>
-              {project.price} {project.price_unit}
+            <Text style={[styles.priceMethod, styles.color4]}>
+              {project.type.name}
             </Text>
+            <Text style={styles.price}>{project.price}</Text>
           </View>
         </View>
         <View style={{ paddingHorizontal: _dims.defaultPadding }}>
@@ -169,28 +226,29 @@ class ProjectDetail extends Component {
             touchableComponent={TouchableOpacity}
             renderHeader={this._renderHeader}
             renderContent={this._renderContent}
-            initiallyActiveSection={0}
+            initiallyActiveSection={-1}
           />
         </View>
-        <Text style={styles.contact}>{strings.contactAgency}</Text>
-        <View style={styles.userContact}>
-          <Text style={styles.userNameContact}>{project.contact_name}</Text>
-          <TouchableOpacity
-            onPress={async () => {
-              try {
-                await call({
-                  number: project.contact_phone,
-                  prompt: true
-                });
-              } catch (e) {
-                _alert(e.message);
-              }
-            }}
-            style={styles.callWrapper}
-          >
-            <Ionicons name="ios-call" style={styles.call} />
-          </TouchableOpacity>
-        </View>
+        {project.contact_phone && (
+          <View>
+            <Text style={styles.contact}>{strings.contactAgency}</Text>
+            <View style={styles.userContact}>
+              <Text style={styles.userNameContact}>{project.contact_name}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  call({
+                    number: project.contact_phone,
+                    prompt: true
+                  }).catch(err => _alert(alertStrings.error, err.message));
+                }}
+                style={styles.callWrapper}
+              >
+                <Ionicons name="ios-call" style={styles.call} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
         <View style={styles.form}>
           <View style={styles.line}>
             <Ionicons name="ios-person" style={styles.lineIcon} />
@@ -200,14 +258,12 @@ class ProjectDetail extends Component {
               }}
               style={styles.input}
               placeholder={strings.name}
+              value={this.state.name}
               onChangeText={name => this.setState({ name })}
               returnKeyType="next"
               autoCapitalize="none"
               autoCorrect={false}
               clearButtonMode="always"
-              onFocus={event => {
-                this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
-              }}
             />
           </View>
           <View style={styles.line}>
@@ -218,15 +274,13 @@ class ProjectDetail extends Component {
               }}
               style={styles.input}
               placeholder={strings.email}
+              value={this.state.email}
               onChangeText={email => this.setState({ email })}
               returnKeyType="next"
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
               clearButtonMode="always"
-              onFocus={event => {
-                this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
-              }}
             />
           </View>
           <View style={styles.line}>
@@ -236,24 +290,23 @@ class ProjectDetail extends Component {
                 this.phone = phone;
               }}
               style={styles.input}
-              placeholder={strings.name}
+              placeholder={strings.phone}
+              value={this.state.phone}
               onChangeText={phone => this.setState({ phone })}
               returnKeyType="go"
               autoCapitalize="none"
               keyboardType="phone-pad"
               autoCorrect={false}
               clearButtonMode="always"
-              onFocus={event => {
-                this.scroll.scrollToFocusedInput(findNodeHandle(event.target));
-              }}
             />
           </View>
         </View>
-        <TouchableOpacity
-          style={styles.submit}
-          onPress={() => this.scroll.scrollToEnd({ animated: true })}
-        >
-          <Text style={styles.submitText}>{strings.submit}</Text>
+        <TouchableOpacity style={styles.submit} onPress={this._sendContact}>
+          {this.props.listContact.sending ? (
+            <ActivityIndicator animating color="#fff" />
+          ) : (
+            <Text style={styles.submitText}>{strings.submit}</Text>
+          )}
         </TouchableOpacity>
       </View>
     );
@@ -269,9 +322,12 @@ class ProjectDetail extends Component {
   _renderHeader = (section, index, isActive) => {
     const plus = isActive ? 6 : 2;
     const size = responsiveFontSize(_dims.defaultFontSize + plus);
+    if (index === 1 && section.content.length === 0) return null;
     return (
       <View style={styles.header}>
-        <Text style={[styles.headerText, isActive && { fontWeight: 'bold' }]}>{section.title}</Text>
+        <Text style={[styles.headerText, isActive && { fontWeight: 'bold' }]}>
+          {section.title}
+        </Text>
         <Ionicons
           style={[
             styles.headerIcon,
@@ -294,33 +350,64 @@ class ProjectDetail extends Component {
           {section.content ? (
             <Text style={styles.colorGray}>{section.content}</Text>
           ) : (
-            <Text style={[styles.colorGray, { textAlign: 'center' }]}>{_content}</Text>
+            <Text style={[styles.colorGray, { textAlign: 'center' }]}>
+              {_content}
+            </Text>
           )}
         </View>
       );
     }
     if (i === 1) {
-      if (section.content.length === 0) {
-        return (
-          <View style={styles.content}>
-            <Text style={[styles.colorGray, { textAlign: 'center' }]}>{_content}</Text>
-          </View>
-        );
-      }
+      if (section.content.length === 0) return null;
       return (
         <View style={styles.content}>
           <FlatList
             data={section.content}
             renderItem={({ item }) => (
-              <Text style={{ paddingVertical: _dims.defaultPadding * 2 }}>{item.name}</Text>
+              <Text style={{ paddingVertical: _dims.defaultPadding * 2 }}>
+                {item.name}
+              </Text>
             )}
             keyExtractor={() => `${Math.random()}`}
-            ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'silver' }} />}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: 1, backgroundColor: 'silver' }} />
+            )}
           />
         </View>
       );
     }
     if (i === 2) {
+      return (
+        <FlatList
+          horizontal
+          keyExtractor={item => `${item.id}`}
+          data={section.content}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate(routes.agencyDetail, {
+                  data: item
+                })
+              }
+            >
+              <FastImage
+                style={{
+                  width: _dims.screenWidth * 0.75,
+                  height: _dims.screenWidth * 0.4
+                }}
+                source={{
+                  uri: item.avatar,
+                  priority: FastImage.priority.high
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
+            </TouchableOpacity>
+          )}
+          ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+        />
+      );
+    }
+    if (i === 3) {
       return (
         <TouchableOpacity style={styles.content}>
           <FastImage
@@ -334,12 +421,23 @@ class ProjectDetail extends Component {
         </TouchableOpacity>
       );
     }
+    if (_ios) {
+      return <YouTube videoId="KVZ-P-ZI6W4" style={styles.youtube} />;
+    }
     return (
-      <YouTube
-        apiKey="AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis"
-        videoId="KVZ-P-ZI6W4"
-        style={styles.youtube}
-      />
+      <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
+        <TouchableOpacity
+          onPress={() => {
+            YouTubeStandaloneAndroid.playVideo({
+              apiKey: 'AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis',
+              videoId: 'KVZ-P-ZI6W4',
+              autoplay: true
+            }).catch(errorMessage => _alert('Youtube error', errorMessage));
+          }}
+        >
+          <Text style={styles.youtubeLink}>Play video</Text>
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -347,36 +445,69 @@ class ProjectDetail extends Component {
     this.text = ref;
   };
 
+  _onScroll = event => {
+    const { height } = event.nativeEvent.contentSize;
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const toValue =
+      _dims.screenHeight + offsetY >= height - _dims.defaultPadding * 4 ? 0 : 1;
+    Animated.timing(this.fabBottom, {
+      toValue,
+      duration: 50
+    }).start();
+  };
+
   render() {
     const { params } = this.props.navigation.state;
     const project = this.props.projectDetail.data[params.data.id];
-
+    const bottom = this.fabBottom.interpolate({
+      inputRange: [0, 1],
+      outputRange: [-responsiveWidth(15), 0]
+    });
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        <Header onLeftPress={() => this.props.navigation.goBack()} title={params.data.title} />
-        <KeyboardAwareScrollView
-          ref={scroll => {
-            this.scroll = scroll;
-          }}
-          onScroll={event => {
-            return;
-            const { height } = event.nativeEvent.contentSize;
-            const offsetY = event.nativeEvent.contentOffset.y;
-            if (_dims.screenHeight + offsetY >= height - _dims.defaultPadding * 4) {
-              this.setState({ fabVisible: false });
+        <Header
+          onLeftPress={() => {
+            const onBack = this.props.navigation.getParam('onBack');
+            if (onBack) {
+              onBack();
             } else {
-              this.setState({ fabVisible: true });
+              this.props.navigation.goBack();
             }
           }}
+          title={params.data.title}
+          right={
+            project && this.props.auth.user.id === project.author_id ? (
+              <TouchableOpacity onPress={() => this.actionSheetProject.show()}>
+                <Ionicons
+                  name="md-more"
+                  size={30}
+                  color={_colors.mainColor}
+                  style={{ padding: 10 }}
+                />
+              </TouchableOpacity>
+            ) : null
+          }
+        />
+        {!this.props.projectDetail.fetching && project && project.id ? (
+          <Animated.View style={[styles.fabWrapper, { bottom }]}>
+            <TouchableOpacity
+              onPress={() => this.scroll.scrollToEnd({ animated: true })}
+              style={styles.fab}
+            >
+              <Ionicons name="ios-person" style={styles.fabIcon} />
+              <Text style={styles.fabText}>{strings.contactAgency}</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        ) : null}
+
+        <KeyboardAwareScrollView
+          ref={ref => {
+            this.scroll = ref;
+          }}
+          onScroll={this._onScroll}
         >
           {this.props.projectDetail.fetching ? (
-            <Spinner
-              isVisible
-              type="Circle"
-              color="orange"
-              size={_dims.indicator}
-              style={{ alignSelf: 'center', marginTop: 10 }}
-            />
+            <PlaceHolder />
           ) : (
             this._renderLoadDone(project)
           )}
@@ -386,9 +517,11 @@ class ProjectDetail extends Component {
   }
 }
 
-export default connect(state => ({ projectDetail: state.projectDetail, auth: state.auth }))(
-  ProjectDetail
-);
+export default connect(state => ({
+  projectDetail: state.projectDetail,
+  auth: state.auth,
+  listContact: state.listContact
+}))(ProjectDetail);
 
 const buttonColor = '#f1f9ff';
 const priceColor = '#ff9240';
@@ -409,13 +542,13 @@ export const styles = StyleSheet.create({
   color4: {
     color: '#444'
   },
-  fab: {
+  fabWrapper: {
     position: 'absolute',
+    width: _dims.screenWidth,
+    zIndex: Number.MAX_SAFE_INTEGER
+  },
+  fab: {
     flexDirection: 'row',
-    bottom: 0,
-    right: 0,
-    left: 0,
-    zIndex: Number.MAX_SAFE_INTEGER,
     height: responsiveWidth(15),
     alignItems: 'center',
     justifyContent: 'center',
@@ -589,7 +722,8 @@ export const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: 'transparent',
-    flex: 1
+    flex: 1,
+    marginLeft: 7
   },
   submit: {
     padding: 20,
@@ -611,5 +745,10 @@ export const styles = StyleSheet.create({
     alignSelf: 'stretch',
     height: (_dims.screenWidth - _dims.defaultPadding * 2) * 0.75,
     marginTop: 5
+  },
+  youtubeLink: {
+    color: _colors.mainColor,
+    paddingHorizontal: 10,
+    textDecorationLine: 'underline'
   }
 });

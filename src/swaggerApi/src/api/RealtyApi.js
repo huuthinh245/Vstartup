@@ -367,14 +367,13 @@
      * @param {String} opts.price
      * @param {String} opts.utils
      * @param {Number} opts.authorId
+     * @param {Number} opts.userId
      * @param {module:api/RealtyApi~mapRealtyCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/RealtyMap>}
      */
     this.mapRealty = function(opts, callback) {
       opts = opts || {};
       var postBody = null;
-
-      console.log(opts);
 
       var pathParams = {};
       var queryParams = {
@@ -387,7 +386,8 @@
         area: opts['area'],
         price: opts['price'],
         utils: opts['utils'],
-        author_id: opts['authorId']
+        author_id: opts['authorId'],
+        user_id: opts['userId']
       };
       var collectionQueryParams = {};
       var headerParams = {};

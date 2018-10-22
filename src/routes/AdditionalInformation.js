@@ -1,10 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import RNGooglePlaces from 'react-native-google-places';
 
-import { responsiveFontSize, _dims, responsiveHeight, _colors } from '../utils/constants';
+import {
+  responsiveFontSize,
+  _dims,
+  responsiveHeight,
+  _colors
+} from '../utils/constants';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import alertStrings from '../localization/alert';
@@ -68,7 +79,9 @@ class AdditionalInformation extends React.Component {
           title={headerStrings.additionalInformation}
           right={
             <TouchableOpacity onPress={this._validate}>
-              <Text style={{ color: _colors.mainColor }}>{headerStrings.save}</Text>
+              <Text style={{ color: _colors.mainColor }}>
+                {headerStrings.save}
+              </Text>
             </TouchableOpacity>
           }
         />
@@ -110,13 +123,15 @@ class AdditionalInformation extends React.Component {
           </View>
           <TouchableOpacity
             onPress={async () => {
-              const val = await RNGooglePlaces.openPlacePickerModal();
+              const val = await RNGooglePlaces.openAutocompleteModal();
               this.setState({ address: val });
             }}
             style={styles.hoishiWrapper}
           >
             <Ionicons style={styles.hoishiIcon} name="md-pin" />
-            <Text style={[styles.hoishiInput, _address ? {} : { color: 'silver' }]}>
+            <Text
+              style={[styles.hoishiInput, _address ? {} : { color: 'silver' }]}
+            >
               {_address || strings.address}
             </Text>
           </TouchableOpacity>

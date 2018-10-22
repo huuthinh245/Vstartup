@@ -67,7 +67,7 @@ class AuthDetail extends React.Component {
   componentDidMount() {
     const { data } = this.props;
     if (data.role_id === 3) {
-      getAgencyRealtyAction({ author_id: data.id });
+      getAgencyRealtyAction({ authorId: data.id });
     }
   }
 
@@ -225,14 +225,14 @@ class AuthDetail extends React.Component {
     }
     const len = agencyRealty.data[data.id].length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
-    loadMoreAgencyRealtyAction({ author_id: data.id, page });
+    loadMoreAgencyRealtyAction({ authorId: data.id, page });
   };
 
   _onRefresh = () => {
     if (this.props.agencyRealty.refreshing || this.props.data.role_id !== 3) {
       return;
     }
-    refreshAgencyRealtyAction({ author_id: this.props.data.id });
+    refreshAgencyRealtyAction({ authorId: this.props.data.id });
   };
 
   _renderItem = ({ item }) => {

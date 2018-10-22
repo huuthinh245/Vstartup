@@ -26,49 +26,42 @@ const indicator = {
 class SearchBack extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      options: {}
-    };
     this.onEndReachedCalledDuringMomentum = true;
   }
 
   _likeRealty = async realty => {
-    if (!this.props.auth.user.id) {
+    if (!this.props.auth.id) {
       this.props.navigation.navigate(routes.login, { modal: true });
       return;
     }
-    if (!this.props.agencyDetail.postingFavorite) {
-      if (realty.is_favorite) {
-        unlikeRealtyAction(realty);
-      } else {
-        likeRealtyAction(realty);
-      }
+    if (realty.is_favorite) {
+      unlikeRealtyAction(realty);
+    } else {
+      likeRealtyAction(realty);
     }
   };
 
   _onLoadMore = () => {
-    const { data, loadMore } = this.props;
+    const { data, loadMore, options } = this.props;
     if (loadMore || this.onEndReachedCalledDuringMomentum) return;
     const len = data.length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
-    this.setState(
-      { options: Object.assign(this.state.options, { page }) },
-      () => loadMoreSearchRealtyAction(this.state.options)
-    );
+
+    loadMoreSearchRealtyAction(Object.assign(options, { page }));
 
     this.onEndReachedCalledDuringMomentum = true;
   };
 
   _onRefresh = () => {
     if (this.props.refreshing) return;
-    refreshSearchRealtyAction(this.state.options);
+    refreshSearchRealtyAction(this.props.options);
   };
 
   _renderItem = ({ item }) => {
     return (
       <RealtyItem
         data={item}
-        showPin={item.id % 2 === 0 && { color: 'gold' }}
+        showPin
         onPress={() =>
           this.props.navigation.navigate(routes.realtyDetail, { data: item })
         }
@@ -96,7 +89,9 @@ class SearchBack extends React.Component {
           ListFooterComponent={
             <View style={{ height: _dims.defaultPadding }} />
           }
-          ListEmptyComponent={<Empty title={errorStrings.emptyListSearch} />}
+          ListEmptyComponent={
+            !fetching && <Empty title={errorStrings.emptyListSearch} />
+          }
           ItemSeparatorComponent={() => (
             <Separator height={_dims.defaultPadding} />
           )}
