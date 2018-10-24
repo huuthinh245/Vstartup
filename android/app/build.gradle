@@ -18,15 +18,15 @@ def enableProguardInReleaseBuilds = false
 
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.dfm.vstartup"
-        minSdkVersion 19
-        targetSdkVersion 27
-        versionCode 3
-        versionName "1.0.2"
+        applicationId rootProject.ext.applicationId
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -74,36 +74,39 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-picker')
-    compile(project(':react-native-google-places')){
+    api project(':react-native-google-signin')
+    api project(':react-native-picker')
+    api(project(':react-native-google-places')){
         exclude group: 'com.google.android.gms', module: 'play-services-base'
         exclude group: 'com.google.android.gms', module: 'play-services-places'
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
-    compile project(':react-native-rate')
-    compile project(':react-native-popover-menu')
-    compile project(':react-native-youtube')
-    compile project(':react-native-image-crop-picker')
-    compile project(':react-native-spinkit')
-    compile project(':react-native-fetch-blob')
-    compile project(':react-native-fast-image')
-    compile(project(':react-native-google-signin')) {
+    api project(':react-native-popover-menu')
+    api project(':react-native-youtube')
+    api project(':react-native-image-crop-picker')
+    api project(':react-native-spinkit')
+    api project(':react-native-fetch-blob')
+    api project(':react-native-fast-image')
+    api(project(':react-native-google-signin')) {
         exclude group: "com.google.android.gms" // very important
     }
-    compile 'com.google.android.gms:play-services-auth:15.0.0'
-    compile 'com.google.android.gms:play-services-base:15.0.0'
-    compile 'com.google.android.gms:play-services-places:15.0.0'
-    compile 'com.google.android.gms:play-services-location:15.0.0'
-    implementation project(':react-native-maps')
-    compile project(':react-native-share')
-    compile project(':react-native-fbsdk')
-    compile project(':react-native-localization')
-    compile project(':react-native-restart')
-    compile project(':react-native-vector-icons')
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:27.1.0'
-    compile 'com.facebook.react:react-native:+'
-    compile 'com.android.support:multidex:1.0.0'
+
+    api 'com.google.android.gms:play-services-auth:15.0.0'
+
+    api 'com.google.android.gms:play-services-base:15.0.0'
+    api 'com.google.android.gms:play-services-maps:15.0.0'
+    api "com.google.android.gms:play-services-places:15.0.0"
+    api "com.google.android.gms:play-services-location:15.0.0"
+    api project(':react-native-maps')
+    api project(':react-native-share')
+    api project(':react-native-fbsdk')
+    api project(':react-native-localization')
+    api project(':react-native-restart')
+    api project(':react-native-vector-icons')
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    api 'com.facebook.react:react-native:+'
+    api 'com.android.support:multidex:1.0.0'
 }
 
 

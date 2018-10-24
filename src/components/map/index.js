@@ -12,6 +12,9 @@ import FastImage from 'react-native-fast-image';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Carousel from 'react-native-snap-carousel';
+import Modal from 'react-native-modalbox';
+import Swiper from 'react-native-swiper';
+import emitter from '../../emitter';
 
 import * as routes from '../../routes/routes';
 import {
@@ -20,7 +23,6 @@ import {
 } from '../../redux/realtyDetail/actions';
 import { _dims, responsiveFontSize } from '../../utils/constants';
 import { getMapRealtyAction } from '../../redux/mapRealty/actions';
-import emitter from '../../emitter';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -63,6 +65,7 @@ const styles = StyleSheet.create({
   },
   slider: {
     width: _dims.screenWidth * 0.8,
+    alignSelf: 'center',
     height: (_dims.screenHeight - 100) / 3,
     borderRadius,
     backgroundColor: '#fff'
@@ -135,6 +138,15 @@ const styles = StyleSheet.create({
     fontSize: 32,
     alignSelf: 'center',
     opacity: 1
+  },
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute'
+  },
+  modalContents: {
+    height: (_dims.screenHeight - 100) / 3,
+    backgroundColor: 'rgba(0,0,0,0.4)'
   }
 });
 const renderColor = type => {
@@ -177,9 +189,11 @@ class Map extends React.Component {
   }
 
   componentDidMount() {
-    emitter.addListener('mapFly', coords =>
-      this.map.animateToCoordinate(coords)
-    );
+    emitter.addListener('mapFly', coords => {
+      this.map.animateToCoordinate(coords);
+      this._toggleCarousel(0);
+      this.setState({ currentMarkerSelectedId: -1 });
+    });
   }
 
   _toggleCarousel = toValue => {
@@ -216,14 +230,16 @@ class Map extends React.Component {
     }
     this.setState({ currentMarkerSelectedId: id });
     const index = this.props.data.findIndex(i => `${i.id}` === id);
-    this.slider.snapToItem(index, false);
+    this.slider.scrollBy(index, true);
+    // this.slider.snapToItem(index, false);
     this._toggleCarousel(1);
   };
 
   _goToDetail = item => {
     this.props.navigation.navigate(routes.realtyDetail, { data: item });
   };
-  _renderCarouselItem = ({ item }) => {
+
+  _renderCarouselItem = item => {
     return (
       <TouchableOpacity
         onPress={() => this._goToDetail(item)}
@@ -300,7 +316,7 @@ class Map extends React.Component {
     const { data, init } = this.props;
     const bottom = this.carouselBottom.interpolate({
       inputRange: [0, 1],
-      outputRange: [-(_dims.screenHeight - 100) / 3, 20]
+      outputRange: [-(_dims.screenHeight - 100) / 3, 0]
     });
 
     const { mapType } = this.state;
@@ -366,30 +382,19 @@ class Map extends React.Component {
         >
           <Icon name="ios-locate-outline" color={pointColor} size={24} />
         </TouchableOpacity>
-        <Animated.View style={[styles.carousel, { bottom: 10 }]}>
-          <Carousel
-            ref={c => {
-              this.slider = c;
+        <Animated.View style={[styles.modal, { bottom }]}>
+          <Swiper
+            ref={ref => {
+              this.slider = ref;
             }}
-            inactiveSlideScale={0.8}
-            inactiveSlideOpacity={0.7}
-            containerCustomStyle={styles.slider1}
-            contentContainerCustomStyle={styles.sliderContentContainer}
-            data={data}
-            renderItem={this._renderCarouselItem}
-            sliderWidth={_dims.screenWidth}
-            itemWidth={_dims.screenWidth * 0.75}
-            inactiveSlideShift={_dims.defaultPadding * 2}
-            activeAnimationOptions={{
-              friction: 4,
-              tension: 40
-            }}
-            onSnapToItem={index =>
-              this.setState({
-                currentMarkerSelectedId: `${data[index].id}`
-              })
-            }
-          />
+            containerStyle={styles.modalContents}
+            // loop={false}
+            showsButtons
+            showsPagination={false}
+            showsHorizontalScrollIndicator={false}
+          >
+            {data.map(item => this._renderCarouselItem(item))}
+          </Swiper>
         </Animated.View>
       </View>
     );

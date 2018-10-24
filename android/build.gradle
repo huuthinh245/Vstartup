@@ -5,7 +5,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.4'
         classpath 'com.google.gms:google-services:3.0.0'
     }
 }
@@ -23,10 +23,14 @@ allprojects {
 }
 
 ext {
+    applicationId       = 'com.dfm.vstartup'
     compileSdkVersion   = 27
     targetSdkVersion    = 27
+    minSdkVersion       = 21
+    versionCode         = 4
+    versionName         = "1.0.4"
     buildToolsVersion   = "27.0.3"
     supportLibVersion   = "27.1.0"
-    googlePlayServicesVersion = "15.0.0"
+    googlePlayServicesVersion = "10.0.1"
     androidMapsUtilsVersion = "0.5+"
 }

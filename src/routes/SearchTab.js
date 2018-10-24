@@ -12,7 +12,11 @@ import {
   refreshMapRealtyAction
 } from '../redux/mapRealty/actions';
 import { getSearchRealtyAction } from '../redux/searchRealty/actions';
-import { addHistoryAction } from '../redux/listHistory/actions';
+import {
+  addHistoryAction,
+  deleteHistoryAction
+} from '../redux/listHistory/actions';
+
 import * as routes from './routes';
 import Map from '../components/map';
 
@@ -20,6 +24,13 @@ json = obj => JSON.stringify(obj);
 
 const DEFAULT_LAT = 10.762622;
 const DEFAULT_LON = 106.660172;
+
+const options = {
+  enableHighAccuracy: true,
+  timeout: 20000,
+  maximumAge: 1000,
+  distanceFilter: 100
+};
 
 class SearchTab extends React.Component {
   constructor(props) {
@@ -34,6 +45,10 @@ class SearchTab extends React.Component {
       }
     };
     this._watchPosition();
+  }
+
+  componentDidMount() {
+    emitter.addListener('flip', () => this.setState({ isFlipped: false }));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -67,16 +82,33 @@ class SearchTab extends React.Component {
       getSearchRealtyAction(options);
     };
 
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 20000,
-      maximumAge: 1000,
-      distanceFilter: 100
-    };
-
     navigator.geolocation.getCurrentPosition(
       onWatchSuccess,
       onWatchError,
+      options
+    );
+  };
+
+  _clearText = async () => {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        const { options } = this.state;
+        options.lat = coords.latitude;
+        options.lng = coords.longitude;
+        options.address = '';
+        this.setState({ options });
+        emitter.emit('mapFly', {
+          latitude: coords.latitude,
+          longitude: coords.longitude
+        });
+      },
+      () => {
+        const { options } = this.state;
+        options.lat = DEFAULT_LAT;
+        options.lng = DEFAULT_LON;
+        options.address = '';
+        this.setState({ options });
+      },
       options
     );
   };
@@ -99,9 +131,6 @@ class SearchTab extends React.Component {
       this.setState({ options });
       getSearchRealtyAction(options);
       getMapRealtyAction(options);
-      addHistoryAction(val.address, val.latitude, val.longitude, {
-        filter: JSON.stringify(this.state.options)
-      });
       emitter.emit('mapFly', {
         latitude: val.latitude,
         longitude: val.longitude
@@ -120,8 +149,35 @@ class SearchTab extends React.Component {
     });
   };
 
+  _saveKeyword = () => {
+    if (!this.state.options.address || !this.state.options.lat) {
+      return;
+    }
+    const bookmarked = this.props.history.data.some(
+      item =>
+        item.coordinate.lat === this.state.options.lat &&
+        item.coordinate.lng === this.state.options.lng
+    );
+    if (!bookmarked) {
+      const options = Object.assign({}, this.state.options);
+      delete options.lat;
+      delete options.lng;
+      delete options.address;
+      delete options.userId;
+
+      addHistoryAction(
+        this.state.options.address,
+        this.state.options.lat,
+        this.state.options.lng,
+        { filter: JSON.stringify(options) }
+      );
+    } else {
+      this.props.navigation.navigate('HistoryTab');
+    }
+  };
+
   render() {
-    const { searchRealty, mapRealty, navigation, auth } = this.props;
+    const { searchRealty, mapRealty, navigation, auth, history } = this.props;
 
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -132,6 +188,14 @@ class SearchTab extends React.Component {
           onTitlePress={this._onAutoComplete}
           onFilterPress={this._onFilterPress}
           editText={!this.state.editing ? 'Edit' : 'Done'}
+          bookmarkAddress={this._saveKeyword}
+          adding={history.adding}
+          bookmarked={history.data.some(
+            item =>
+              item.coordinate.lat === this.state.options.lat &&
+              item.coordinate.lng === this.state.options.lng
+          )}
+          clearAddress={this._clearText}
         />
         <View style={{ flex: 1 }}>
           <FlipView
@@ -168,5 +232,6 @@ class SearchTab extends React.Component {
 export default connect(state => ({
   mapRealty: state.mapRealty,
   searchRealty: state.searchRealty,
-  auth: state.auth.user
+  auth: state.auth.user,
+  history: state.listHistory
 }))(SearchTab);

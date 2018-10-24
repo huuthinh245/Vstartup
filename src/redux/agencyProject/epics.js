@@ -1,6 +1,6 @@
 import 'rxjs';
 import { combineEpics } from 'redux-observable';
-
+import { getOr } from 'lodash/fp';
 import {
   GET_AGENCY_PROJECT,
   GET_AGENCY_PROJECT_SUCCESS,
@@ -18,11 +18,13 @@ const getAgencyProjectEpic = actions$ =>
   actions$.ofType(GET_AGENCY_PROJECT).switchMap(async action => {
     try {
       const opts = Object.assign({}, action.payload);
-      if (action.payload.agencyId === 0) delete opts.agencyId;
+      const agencyId = getOr(0, 'agencyId', action.payload);
+
+      if (agencyId === 0) delete opts.agencyId;
       const resp = await projectApi.listProject(opts);
       return {
         type: GET_AGENCY_PROJECT_SUCCESS,
-        payload: { author: action.payload.agencyId, data: resp.body }
+        payload: { author: agencyId, data: resp.body }
       };
     } catch (error) {
       handleError(error, true);
@@ -34,11 +36,13 @@ const refreshAgencyProjectEpic = actions$ =>
   actions$.ofType(REFRESH_AGENCY_PROJECT).switchMap(async action => {
     try {
       const opts = Object.assign({}, action.payload);
-      if (action.payload.agencyId === 0) delete opts.agencyId;
+      const agencyId = getOr(0, 'agencyId', action.payload);
+
+      if (agencyId === 0) delete opts.agencyId;
       const resp = await projectApi.listProject(opts);
       return {
         type: REFRESH_AGENCY_PROJECT_SUCCESS,
-        payload: { author: action.payload.agencyId, data: resp.body }
+        payload: { author: agencyId, data: resp.body }
       };
     } catch (error) {
       handleError(error, true);
@@ -50,11 +54,13 @@ const loadMoreAgencyProjectEpic = actions$ =>
   actions$.ofType(LOAD_MORE_AGENCY_PROJECT).switchMap(async action => {
     try {
       const opts = Object.assign({}, action.payload);
-      if (action.payload.agencyId === 0) delete opts.agencyId;
+      const agencyId = getOr(0, 'agencyId', action.payload);
+
+      if (agencyId === 0) delete opts.agencyId;
       const resp = await projectApi.listProject(opts);
       return {
         type: LOAD_MORE_AGENCY_PROJECT_SUCCESS,
-        payload: { author: action.payload.agencyId, data: resp.body }
+        payload: { author: agencyId, data: resp.body }
       };
     } catch (error) {
       handleError(error);

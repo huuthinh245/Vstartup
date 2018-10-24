@@ -61,6 +61,9 @@ class AgencyProject extends React.Component {
   _renderItem = ({ item }) => {
     return (
       <ProjectItem
+        isMine={
+          this.props.auth.id === this.props.navigation.state.params.user.id
+        }
         item={item}
         onPress={() => {
           this.props.navigation.navigate(routes.projectDetail, { data: item });
@@ -121,6 +124,7 @@ class AgencyProject extends React.Component {
   }
 }
 
-export default connect(state => ({ agencyProject: state.agencyProject }))(
-  AgencyProject
-);
+export default connect(state => ({
+  agencyProject: state.agencyProject,
+  auth: state.auth.user
+}))(AgencyProject);

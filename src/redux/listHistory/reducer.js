@@ -97,8 +97,8 @@ export const listHistoryReducer = handleActions(
       return Object.assign({}, state, { adding: true });
     },
     [ADD_HISTORY_SUCCESS]: (state, { payload }) => {
-      console.log(payload);
-      return state;
+      state.data.unshift(payload);
+      return Object.assign({}, state, { adding: false });
     },
     [ADD_HISTORY_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { adding: false, error: payload });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { styles } from './styles';
@@ -9,7 +9,11 @@ export default class Header extends React.Component {
   _renderContent = () => {
     return (
       <View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity activeOpacity={0.8} style={styles.left} onPress={this.props.onFlipPress}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.left}
+          onPress={this.props.onFlipPress}
+        >
           <Ionicons name={this.props.flipIcon} style={styles.icon} />
         </TouchableOpacity>
         <TouchableOpacity
@@ -26,6 +30,28 @@ export default class Header extends React.Component {
           <Text style={styles.searchBarInput}>
             {this.props.title || headerStrings.searchCityPlaceholder}
           </Text>
+          {this.props.title && (
+            <Ionicons
+              size={18}
+              color="gray"
+              name="ios-close-circle"
+              style={{ alignSelf: 'center', marginLeft: 10 }}
+              onPress={this.props.clearAddress}
+            />
+          )}
+          {this.props.adding ? (
+            <ActivityIndicator />
+          ) : (
+            <Ionicons
+              size={18}
+              color={this.props.bookmarked ? 'rgb(0,122,255)' : 'gray'}
+              name={
+                this.props.bookmarked ? 'ios-bookmark' : 'ios-bookmark-outline'
+              }
+              style={{ alignSelf: 'center', marginLeft: 10 }}
+              onPress={this.props.bookmarkAddress}
+            />
+          )}
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}

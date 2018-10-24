@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux';
+
 import FastImage from 'react-native-fast-image';
 import {
   responsiveFontSize,
@@ -10,10 +12,11 @@ import {
 } from '../utils/constants';
 import strings from '../localization/filter';
 
-export default class HistoryItem extends React.Component {
+class HistoryItem extends React.Component {
   render() {
-    const { data } = this.props;
-    console.log(JSON.parse(data.filter));
+    const { data, options } = this.props;
+    const filter = JSON.parse(data.filter);
+
     return (
       <View style={styles.main}>
         <TouchableOpacity
@@ -49,15 +52,64 @@ export default class HistoryItem extends React.Component {
             <Text style={styles.title} numberOfLines={2}>
               {data.address}
             </Text>
-            <Text numberOfLines={3} style={{ color: 'gray' }}>
-              {strings.filter}: {data.filter}
-            </Text>
+            {filter.method && (
+              <Text style={styles.gray}>
+                - Phương thức:{' '}
+                {options.methods.find(item => item.id === filter.method).name}
+              </Text>
+            )}
+            {filter.price && (
+              <Text style={styles.gray}>
+                - Giá: {filter.price.split(',').map(Number)[0]} -{' '}
+                {filter.price.split(',').map(Number)[1]}{' '}
+                {options.priceUnits[1].name}
+              </Text>
+            )}
+            {filter.area && (
+              <Text style={styles.gray}>
+                - Diện tích: {filter.area.split(',').map(Number)[0]} -{' '}
+                {filter.area.split(',').map(Number)[1]} m²
+              </Text>
+            )}
+            {filter.toilet && (
+              <Text style={styles.gray}>- Số WC: {filter.toilet}</Text>
+            )}
+            {filter.bedroom && (
+              <Text style={styles.gray}>- Số phòng ngủ: {filter.bedroom}</Text>
+            )}
+            {filter.bathroom && (
+              <Text style={styles.gray}>- Số phòng tắm: {filter.bathroom}</Text>
+            )}
+            {filter.type && (
+              <Text style={styles.gray}>
+                - Loại dự án:{' '}
+                {
+                  options.realtyTypes.find(
+                    item => `${item.id}` === `${filter.type}`
+                  ).name
+                }
+              </Text>
+            )}
+            {filter.utils &&
+              filter.utils.length > 0 && (
+                <Text style={styles.gray}>
+                  - Tiện ích:
+                  {`${filter.utils
+                    .split(',')
+                    .map(Number)
+                    .map(
+                      item => options.utils.find(i => i.id === item).name
+                    )}, `}
+                </Text>
+              )}
           </View>
         </TouchableOpacity>
       </View>
     );
   }
 }
+
+export default connect(state => ({ options: state.options.data }))(HistoryItem);
 
 const styles = StyleSheet.create({
   main: {
@@ -110,7 +162,8 @@ const styles = StyleSheet.create({
   image: {
     height: responsiveHeight(18),
     width: responsiveHeight(18),
-    borderRadius: 10
+    borderRadius: 10,
+    margin: 10
   },
   title: {
     fontWeight: 'bold',
@@ -122,5 +175,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10
+  },
+  gray: {
+    color: 'gray'
   }
 });

@@ -13,7 +13,7 @@
  *
  */
 
-(function (root, factory) {
+(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define([
@@ -51,7 +51,7 @@
       root.RemsApi.RealtyMap
     );
   }
-}(this, function(
+})(this, function(
   ApiClient,
   GenericError,
   GenericSuscess,
@@ -161,6 +161,8 @@
       var formParams = {
         ids: ids
       };
+
+      console.log(ids, formParams);
 
       var authNames = ['Bearer'];
       var contentTypes = ['application/x-www-form-urlencoded'];
@@ -750,4 +752,4 @@
   };
 
   return exports;
-}));
+});

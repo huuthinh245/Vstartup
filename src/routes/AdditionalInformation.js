@@ -57,7 +57,13 @@ class AdditionalInformation extends React.Component {
         error: alertStrings.addressEmpty
       });
     } else {
-      const opts = {};
+      const opts = {
+        body: {
+          name: this.state.name,
+          phone: this.state.phone,
+          address: this.state.address.address
+        }
+      };
       const callback = () =>
         _alert(alertStrings.success, alertStrings.updateInfoSuccess, [
           {
@@ -65,7 +71,7 @@ class AdditionalInformation extends React.Component {
             onPress: () => this.props.navigation.goBack()
           }
         ]);
-      Object.assign(opts, this.state, { callback });
+      Object.assign(opts, { callback });
       updateInfoAction(opts);
     }
   };

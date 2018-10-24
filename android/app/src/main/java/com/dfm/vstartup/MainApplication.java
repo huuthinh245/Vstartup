@@ -3,12 +3,11 @@ package com.dfm.vstartup;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.beefe.picker.PickerViewPackage;
 import com.arttitude360.reactnative.rngoogleplaces.RNGooglePlacesPackage;
-import com.RNRate.RNRatePackage;
 import ui.popovermenu.RNPopoverMenuPackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
-import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -47,9 +46,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new PickerViewPackage(),
+            new RNGoogleSigninPackage(),
+          new PickerViewPackage(),
           new RNGooglePlacesPackage(),
-          new RNRatePackage(),
           new RNPopoverMenuPackage(),
           new ReactNativeYouTube(),
           new VectorIconsPackage(),

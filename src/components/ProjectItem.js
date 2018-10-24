@@ -13,7 +13,8 @@ import { _colors, _dims, responsiveFontSize } from '../utils/constants';
 
 export default class ProjectItem extends React.Component {
   render() {
-    const { item } = this.props;
+    const { item, isMine } = this.props;
+    console.log(item);
     return (
       <TouchableOpacity style={styles.item} onPress={this.props.onPress}>
         <FastImage
@@ -34,9 +35,11 @@ export default class ProjectItem extends React.Component {
           <Text numberOfLines={1} style={styles.itemAddress}>
             {item.address}
           </Text>
-          <Text numberOfLines={1} style={styles.itemCommission}>
-            {`${strings.commission}: ${item.commission}`}
-          </Text>
+          {isMine && (
+            <Text numberOfLines={1} style={styles.itemCommission}>
+              {`${strings.commission}: ${item.commission}`}
+            </Text>
+          )}
         </View>
       </TouchableOpacity>
     );

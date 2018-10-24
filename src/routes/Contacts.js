@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, FlatList, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator
+} from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
@@ -9,7 +15,7 @@ import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import errorStrings from '../localization/error';
 import alertStrings from '../localization/alert';
-import { _dims, _colors } from '../utils/constants';
+import { _dims, _colors, LIMIT_SERVICES } from '../utils/constants';
 import emitter from '../emitter';
 import * as routes from '../routes/routes';
 import HistoryItem from '../components/HistoryItem';
@@ -30,7 +36,6 @@ const indicator = {
   zIndex: 100
 };
 
-
 class ListContact extends React.Component {
   constructor(props) {
     super(props);
@@ -38,6 +43,7 @@ class ListContact extends React.Component {
       edit: false,
       selected: []
     };
+    this.onEndReachedCalledDuringMomentum = true;
   }
   componentDidMount() {
     getListContactAction();
@@ -55,7 +61,9 @@ class ListContact extends React.Component {
         data={item}
         selected={!_.some(this.state.selected, { id: item.id })}
         edit={this.state.edit}
-        onPress={() => this.props.navigation.navigate(routes.realtyDetail, { data: item })}
+        onPress={() =>
+          this.props.navigation.navigate(routes.realtyDetail, { data: item })
+        }
         onLongPress={() => this.setState({ edit: true, selected: [] })}
         onSelect={() => {
           if (!_.some(copy, { id: item.id })) {
@@ -86,7 +94,9 @@ class ListContact extends React.Component {
                 {
                   text: alertStrings.ok,
                   onPress: () => {
-                    const ids = this.state.selected.map(item => item.id).toString();
+                    const ids = this.state.selected
+                      .map(item => item.id)
+                      .toString();
                     const callback = () => {
                       this.setState({ edit: false });
                       emitter.emit('alert', {
@@ -119,13 +129,17 @@ class ListContact extends React.Component {
   };
 
   _onLoadMore = () => {
-    if (this.props.listContact.loadMore || this.onEndReachedCalledDuringMomentum) return;
+    if (
+      this.props.listContact.loadMore ||
+      this.onEndReachedCalledDuringMomentum
+    ) {
+      return;
+    }
     const len = this.props.listContact.data.length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
     loadMoreListContactAction({ page });
     this.onEndReachedCalledDuringMomentum = true;
   };
-
 
   render = () => {
     const { listContact } = this.props;
@@ -142,10 +156,18 @@ class ListContact extends React.Component {
               data={listContact.data}
               renderItem={this._renderItem}
               keyExtractor={item => `${item.id}`}
-              ListHeaderComponent={() => <Separator height={_dims.defaultPadding} />}
-              ListFooterComponent={() => <View style={{ height: _dims.defaultPadding }} />}
-              ItemSeparatorComponent={() => <Separator height={_dims.defaultPadding} />}
-              ListEmptyComponent={() => <Empty title={errorStrings.emptyListContact} />}
+              ListHeaderComponent={() => (
+                <Separator height={_dims.defaultPadding} />
+              )}
+              ListFooterComponent={() => (
+                <View style={{ height: _dims.defaultPadding }} />
+              )}
+              ItemSeparatorComponent={() => (
+                <Separator height={_dims.defaultPadding} />
+              )}
+              ListEmptyComponent={() => (
+                <Empty title={errorStrings.emptyListContact} />
+              )}
               onMomentumScrollBegin={() => {
                 this.onEndReachedCalledDuringMomentum = false;
               }}
@@ -154,7 +176,9 @@ class ListContact extends React.Component {
               onEndReachedThreshold={0.1}
               onEndReached={this._onLoadMore}
             />
-            {listContact.loadMore && <ActivityIndicator animating style={indicator} />}
+            {listContact.loadMore && (
+              <ActivityIndicator animating style={indicator} />
+            )}
           </View>
         )}
       </View>
