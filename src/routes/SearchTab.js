@@ -35,6 +35,7 @@ const options = {
 class SearchTab extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isFlipped: false,
       options: {
@@ -49,6 +50,19 @@ class SearchTab extends React.Component {
 
   componentDidMount() {
     emitter.addListener('flip', () => this.setState({ isFlipped: false }));
+    emitter.addListener('mapFly', obj => {
+      const opts = this.state.options;
+      const options = Object.assign(
+        {
+          lat: opts.lat,
+          lng: opts.lng,
+          address: opts.address,
+          userId: opts.userId
+        },
+        obj
+      );
+      this.setState({ options });
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -98,8 +112,8 @@ class SearchTab extends React.Component {
         options.address = '';
         this.setState({ options });
         emitter.emit('mapFly', {
-          latitude: coords.latitude,
-          longitude: coords.longitude
+          lat: coords.latitude,
+          lng: coords.longitude
         });
       },
       () => {
@@ -132,8 +146,8 @@ class SearchTab extends React.Component {
       getSearchRealtyAction(options);
       getMapRealtyAction(options);
       emitter.emit('mapFly', {
-        latitude: val.latitude,
-        longitude: val.longitude
+        lat: val.latitude,
+        lng: val.longitude
       });
     }
   };
@@ -178,7 +192,6 @@ class SearchTab extends React.Component {
 
   render() {
     const { searchRealty, mapRealty, navigation, auth, history } = this.props;
-
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header

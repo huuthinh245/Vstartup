@@ -105,10 +105,17 @@ class ListHistory extends React.Component {
         edit={this.state.edit}
         onPress={() => {
           this.props.navigation.navigate('SearchTab', { data: item });
-          emitter.emit('mapFly', {
-            latitude: item.coordinate.lat,
-            longitude: item.coordinate.lng
-          });
+          emitter.emit(
+            'mapFly',
+            Object.assign(
+              {
+                lat: item.coordinate.lat,
+                lng: item.coordinate.lng,
+                address: item.address
+              },
+              JSON.parse(item.filter)
+            )
+          );
           emitter.emit('flip');
         }}
         onLongPress={() => this.setState({ edit: true, selected: [] })}

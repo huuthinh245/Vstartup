@@ -58,7 +58,12 @@ class RealtyDetail extends Component {
 
   componentDidMount() {
     const { id } = this.props.navigation.state.params.data;
-    getRealtyDetailAction({ id });
+    const userId = this.props.auth.user.id;
+    const opts = {};
+    if (userId) {
+      opts.userId = userId;
+    }
+    getRealtyDetailAction(id, opts);
   }
 
   _likeRealty = async realty => {
@@ -460,16 +465,17 @@ class RealtyDetail extends Component {
           }}
           title={params.data.title}
           right={
-            realty && this.props.auth.user.id === realty.author_id ? (
-              <TouchableOpacity onPress={() => this.actionSheetRealty.show()}>
-                <Ionicons
-                  name="md-more"
-                  size={30}
-                  color={_colors.mainColor}
-                  style={{ padding: 10 }}
-                />
-              </TouchableOpacity>
-            ) : null
+            realty && this.props.auth.user.id === realty.author_id
+              ? // <TouchableOpacity onPress={() => this.actionSheetRealty.show()}>
+                //   <Ionicons
+                //     name="md-more"
+                //     size={30}
+                //     color={_colors.mainColor}
+                //     style={{ padding: 10 }}
+                //   />
+                // </TouchableOpacity>
+                null
+              : null
           }
         />
         {!this.props.realtyDetail.fetching && realty && realty.id ? (

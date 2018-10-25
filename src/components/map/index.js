@@ -189,8 +189,11 @@ class Map extends React.Component {
   }
 
   componentDidMount() {
-    emitter.addListener('mapFly', coords => {
-      this.map.animateToCoordinate(coords);
+    emitter.addListener('mapFly', obj => {
+      this.map.animateToCoordinate({
+        latitude: obj.lat,
+        longitude: obj.lng
+      });
       this._toggleCarousel(0);
       this.setState({ currentMarkerSelectedId: -1 });
     });
@@ -387,11 +390,17 @@ class Map extends React.Component {
             ref={ref => {
               this.slider = ref;
             }}
+            key={data.length}
             containerStyle={styles.modalContents}
-            // loop={false}
-            showsButtons
+            loop={false}
+            showsButtons={false}
             showsPagination={false}
             showsHorizontalScrollIndicator={false}
+            onIndexChanged={
+              index =>
+                this.setState({ currentMarkerSelectedId: `${data[index].id}` })
+              // </Animated.View>this.setState({ currentMarkerSelectedId: data[index].id })
+            }
           >
             {data.map(item => this._renderCarouselItem(item))}
           </Swiper>

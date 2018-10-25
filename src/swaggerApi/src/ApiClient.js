@@ -13,7 +13,7 @@
  *
  */
 
-(function(root, factory) {
+(function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define(['superagent', 'querystring'], factory);
@@ -27,7 +27,7 @@
     }
     root.RemsApi.ApiClient = factory(root.superagent, root.querystring);
   }
-})(this, function(superagent, querystring) {
+}(this, function(superagent, querystring) {
   'use strict';
 
   /**
@@ -521,7 +521,6 @@
     //     callback(error, data, response);
     //   }
     // });
-    console.log(request);
     return request;
   };
 
@@ -624,4 +623,4 @@
   exports.instance = new exports();
 
   return exports;
-});
+}));

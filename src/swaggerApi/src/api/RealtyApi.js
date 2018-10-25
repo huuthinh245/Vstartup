@@ -162,8 +162,6 @@
         ids: ids
       };
 
-      console.log(ids, formParams);
-
       var authNames = ['Bearer'];
       var contentTypes = ['application/x-www-form-urlencoded'];
       var accepts = ['application/json'];

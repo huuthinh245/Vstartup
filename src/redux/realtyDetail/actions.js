@@ -16,10 +16,10 @@ export const POST_REALTY = 'POST_REALTY';
 export const POST_REALTY_SUCCESS = 'POST_REALTY_SUCCESS';
 export const POST_REALTY_FAILURE = 'POST_REALTY_FAILURE';
 
-export const getRealtyDetailAction = payload =>
+export const getRealtyDetailAction = (id, opts) =>
   store.dispatch({
     type: GET_REALTY_DETAIL,
-    payload
+    payload: { id, opts }
   });
 
 export const likeRealtyAction = payload =>

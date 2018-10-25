@@ -38,10 +38,18 @@ class Filter extends React.Component {
   constructor(props) {
     super(props);
     const { options } = this.props.navigation.state.params;
+    const utilsId = options.utils ? options.utils.split(',').map(Number) : [];
+    const utils = utilsId.map(id => {
+      const item = this.props.options.data.utils.find(i => i.id === id);
+      if (item) {
+        return item;
+      }
+    });
+
     this.state = {
       scrollEnabled: true,
       method: options.method || this.props.options.data.methods[0].id,
-      utils: options.utils || [],
+      utils,
       priceRange: (options.price && JSON.parse(`[${options.price}]`)) || [
         0,
         20
@@ -320,8 +328,10 @@ class Filter extends React.Component {
                     fontSize: responsiveFontSize(_dims.defaultFontSize)
                   }}
                   options={dataSelect.map(item => item.value)}
-                  defaultIndex={this.state.toilet}
-                  onSelect={index => this.setState({ toilet: index })}
+                  defaultIndex={parseInt(this.state.toilet, 10)}
+                  onSelect={index =>
+                    this.setState({ toilet: parseInt(index, 10) })
+                  }
                 >
                   <Text style={styles.value}>
                     {dataSelect[this.state.toilet].value}
@@ -349,8 +359,10 @@ class Filter extends React.Component {
                     fontSize: responsiveFontSize(_dims.defaultFontSize)
                   }}
                   options={dataSelect.map(item => item.value)}
-                  defaultIndex={this.state.bathroom}
-                  onSelect={index => this.setState({ bathroom: index })}
+                  defaultIndex={parseInt(this.state.bathroom, 10)}
+                  onSelect={index =>
+                    this.setState({ bathroom: parseInt(index, 10) })
+                  }
                 >
                   <Text style={styles.value}>
                     {dataSelect[this.state.bathroom].value}
@@ -372,8 +384,10 @@ class Filter extends React.Component {
                     fontSize: responsiveFontSize(_dims.defaultFontSize)
                   }}
                   options={dataSelect.map(item => item.value)}
-                  defaultIndex={this.state.bedroom}
-                  onSelect={index => this.setState({ bedroom: index })}
+                  defaultIndex={parseInt(this.state.bedroom, 10)}
+                  onSelect={index =>
+                    this.setState({ bedroom: parseInt(index, 10) })
+                  }
                 >
                   <Text style={styles.value}>
                     {dataSelect[this.state.bedroom].value}
@@ -432,8 +446,10 @@ class Filter extends React.Component {
                   options={this.props.options.data.realtyTypes.map(
                     item => item.name
                   )}
-                  defaultIndex={this.state.realtyType}
-                  onSelect={index => this.setState({ realtyType: index })}
+                  defaultIndex={parseInt(this.state.realtyType, 10)}
+                  onSelect={index =>
+                    this.setState({ realtyType: parseInt(index, 10) })
+                  }
                 >
                   <Text style={[styles.value, { flex: 1 }]}>
                     {

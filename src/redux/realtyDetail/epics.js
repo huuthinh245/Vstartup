@@ -25,7 +25,10 @@ import * as routes from '../../routes/routes';
 const getRealtyDetail = actions$ =>
   actions$.ofType(GET_REALTY_DETAIL).switchMap(async action => {
     try {
-      const resp = await realtyApi.viewRealty(action.payload.id);
+      const resp = await realtyApi.viewRealty(
+        action.payload.id,
+        action.payload.opts
+      );
       return { type: GET_REALTY_DETAIL_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
