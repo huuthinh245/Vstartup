@@ -57,7 +57,6 @@ public class MainApplication extends Application implements ReactApplication {
           new ReactNativeLocalizationPackage(),
           new MapsPackage(),
           new OpenSettingsPakage(),
-          new RNGoogleSigninPackage(),
           new RNSpinkitPackage(),
           new FastImageViewPackage(),
           new PickerPackage(),

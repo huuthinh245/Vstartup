@@ -91,12 +91,11 @@ dependencies {
         exclude group: "com.google.android.gms" // very important
     }
 
-    api 'com.google.android.gms:play-services-auth:15.0.0'
-
-    api 'com.google.android.gms:play-services-base:15.0.0'
-    api 'com.google.android.gms:play-services-maps:15.0.0'
-    api "com.google.android.gms:play-services-places:15.0.0"
-    api "com.google.android.gms:play-services-location:15.0.0"
+    api 'com.google.android.gms:play-services-auth:16.0.0'
+    api 'com.google.android.gms:play-services-base:16.0.0'
+    api 'com.google.android.gms:play-services-maps:16.0.0'
+    api "com.google.android.gms:play-services-places:16.0.0"
+    api "com.google.android.gms:play-services-location:16.0.0"
     api project(':react-native-maps')
     api project(':react-native-share')
     api project(':react-native-fbsdk')
@@ -117,7 +116,7 @@ task copyDownloadableDepsToLibs(type: Copy) {
 
 
 apply plugin: 'com.google.gms.google-services'
-
+com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         def requested = details.requested
