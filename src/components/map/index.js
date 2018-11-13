@@ -30,7 +30,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const borderRadius = 5;
-const types = ['hybrid', 'mutedStandard', 'satellite', 'standard'];
+const types = ['hybrid', 'terrain', 'satellite', 'standard'];
 
 const styles = StyleSheet.create({
   main: {
@@ -325,7 +325,6 @@ class Map extends React.Component {
       [0, 2].indexOf(mapType) > -1 ? 'rgba(255,255,255,0.8)' : '#333';
 
     const pointColor = [0, 2].indexOf(mapType) > -1 ? 'rgb(0,122,255)' : '#fff';
-
     return (
       <View style={styles.main}>
         <MapView

@@ -146,19 +146,15 @@ class Filter extends React.Component {
     Object.assign(result, { method: this.state.method });
     Object.assign(result, { price: opts.priceRange.toString() });
     Object.assign(result, { area: opts.areaRange.toString() });
-    if (opts.bedroom !== 0) {
-      Object.assign(result, { bedroom: opts.bedroom });
-    }
-    if (opts.bathroom !== 0) {
-      Object.assign(result, { bathroom: opts.bathroom });
-    }
-    if (opts.toilet !== 0) {
-      Object.assign(result, { toilet: opts.toilet });
-    }
+    Object.assign(result, { bedroom: opts.bedroom });
+    Object.assign(result, { bathroom: opts.bathroom });
+    Object.assign(result, { toilet: opts.toilet });
     if (opts.utils.length > 0) {
       Object.assign(result, {
         utils: opts.utils.map(item => item.id).toString()
       });
+    }else {
+      delete result.utils;
     }
     if (
       JSON.stringify(this.props.navigation.state.params.options) !==
