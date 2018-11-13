@@ -4,7 +4,9 @@ import {
   FlatList,
   TouchableOpacity,
   Text,
-  ActivityIndicator
+  ActivityIndicator,
+  Image,
+  StyleSheet
 } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -15,7 +17,13 @@ import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import errorStrings from '../localization/error';
 import alertStrings from '../localization/alert';
-import { _dims, _colors, LIMIT_SERVICES } from '../utils/constants';
+import {
+  _dims,
+  _colors,
+  LIMIT_SERVICES,
+  responsiveFontSize,
+  _ios
+} from '../utils/constants';
 import emitter from '../emitter';
 import * as routes from '../routes/routes';
 import HistoryItem from '../components/HistoryItem';
@@ -55,26 +63,33 @@ class ListContact extends React.Component {
   };
 
   _renderItem = ({ item }) => {
-    const copy = _.map(this.state.selected, _.clone);
     return (
-      <HistoryItem
-        data={item}
-        selected={!_.some(this.state.selected, { id: item.id })}
-        edit={this.state.edit}
-        onPress={() =>
-          this.props.navigation.navigate(routes.realtyDetail, { data: item })
-        }
-        onLongPress={() => this.setState({ edit: true, selected: [] })}
-        onSelect={() => {
-          if (!_.some(copy, { id: item.id })) {
-            copy.push(item);
-            this.setState({ selected: copy });
-          } else {
-            const newData = _.reject(copy, obj => obj.id === item.id);
-            this.setState({ selected: newData });
-          }
-        }}
-      />
+      <View style={styles.main}>
+        <View style={styles.content}>
+          <Text style={styles.title}>
+            Dự án: <Text style={styles.bold}>Chung cư Bella - Hà Đông</Text>
+          </Text>
+          <Text style={styles.line}>
+            Tên người liên hệ: <Text style={styles.bold}>{item.name}</Text>
+          </Text>
+          <Text style={styles.line}>
+            Email: <Text style={styles.bold}>{item.email}</Text>
+          </Text>
+          <Text style={styles.line}>
+            Phone: <Text style={styles.bold}>{item.phone}</Text>
+          </Text>
+          {item.subject && (
+            <Text style={styles.line}>
+              Tiêu đề: <Text style={styles.bold}>{item.subject}</Text>
+            </Text>
+          )}
+          {item.subject && (
+            <Text style={styles.line}>
+              Nội dung: <Text style={styles.bold}>{item.message}</Text>
+            </Text>
+          )}
+        </View>
+      </View>
     );
   };
 
@@ -152,19 +167,10 @@ class ListContact extends React.Component {
         ) : (
           <View style={{ flex: 1 }}>
             <FlatList
-              style={{ flex: 1, marginHorizontal: _dims.defaultPadding }}
+              contentContainerStyle={{ paddingVertical: 10 }}
               data={listContact.data}
               renderItem={this._renderItem}
               keyExtractor={item => `${item.id}`}
-              ListHeaderComponent={() => (
-                <Separator height={_dims.defaultPadding} />
-              )}
-              ListFooterComponent={() => (
-                <View style={{ height: _dims.defaultPadding }} />
-              )}
-              ItemSeparatorComponent={() => (
-                <Separator height={_dims.defaultPadding} />
-              )}
               ListEmptyComponent={() => (
                 <Empty title={errorStrings.emptyListContact} />
               )}
@@ -189,3 +195,34 @@ class ListContact extends React.Component {
 export default connect(state => ({
   listContact: state.listContact
 }))(ListContact);
+
+const styles = StyleSheet.create({
+  main: {
+    borderRadius: 7,
+    elevation: 3,
+    shadowColor: '#888',
+    shadowOpacity: 0.4,
+    shadowRadius: 7,
+    overflow: !_ios ? 'hidden' : 'visible'
+  },
+  content: {
+    flex: 1,
+    borderRadius: 7,
+    backgroundColor: '#fff',
+    padding: 10,
+    marginHorizontal: 10,
+    marginVertical: 5
+  },
+  title: {
+    fontSize: responsiveFontSize(_dims.defaultFontInput),
+    color: '#333'
+  },
+  bold: {
+    fontWeight: 'bold',
+    color: '#000'
+  },
+  line: {
+    color: '#333',
+    marginTop: 5
+  }
+});

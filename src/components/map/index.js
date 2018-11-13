@@ -145,8 +145,7 @@ const styles = StyleSheet.create({
     position: 'absolute'
   },
   modalContents: {
-    height: (_dims.screenHeight - 100) / 3,
-    backgroundColor: 'rgba(0,0,0,0.4)'
+    height: (_dims.screenHeight - 100) / 3
   }
 });
 const renderColor = type => {
@@ -233,8 +232,8 @@ class Map extends React.Component {
     }
     this.setState({ currentMarkerSelectedId: id });
     const index = this.props.data.findIndex(i => `${i.id}` === id);
-    this.slider.scrollBy(index, true);
-    // this.slider.snapToItem(index, false);
+    // this.slider.scrollBy(index, true);
+    this._carousel.snapToItem(index, true);
     this._toggleCarousel(1);
   };
 
@@ -242,7 +241,7 @@ class Map extends React.Component {
     this.props.navigation.navigate(routes.realtyDetail, { data: item });
   };
 
-  _renderCarouselItem = item => {
+  _renderCarouselItem = ({ item }) => {
     return (
       <TouchableOpacity
         onPress={() => this._goToDetail(item)}
@@ -386,24 +385,37 @@ class Map extends React.Component {
           <Icon name="ios-locate-outline" color={pointColor} size={24} />
         </TouchableOpacity>
         <Animated.View style={[styles.modal, { bottom }]}>
-          <Swiper
+          {/* <Swiper
             ref={ref => {
               this.slider = ref;
             }}
-            key={data.length}
             containerStyle={styles.modalContents}
             loop={false}
             showsButtons={false}
             showsPagination={false}
             showsHorizontalScrollIndicator={false}
-            onIndexChanged={
-              index =>
-                this.setState({ currentMarkerSelectedId: `${data[index].id}` })
-              // </Animated.View>this.setState({ currentMarkerSelectedId: data[index].id })
-            }
+            onIndexChanged={index => {
+              console.log(index);
+              const obj = data[index % data.length];
+              if (obj) {
+                this.setState({ currentMarkerSelectedId: `${obj.id}` });
+              }
+            }}
           >
             {data.map(item => this._renderCarouselItem(item))}
-          </Swiper>
+          </Swiper> */}
+          <Carousel
+            ref={c => {
+              this._carousel = c;
+            }}
+            data={data}
+            renderItem={this._renderCarouselItem}
+            sliderWidth={_dims.screenWidth}
+            itemWidth={_dims.screenWidth * 0.8}
+            onSnapToItem={i =>
+              this.setState({ currentMarkerSelectedId: data[i].id })
+            }
+          />
         </Animated.View>
       </View>
     );

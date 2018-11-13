@@ -1,10 +1,16 @@
 import { StyleSheet } from 'react-native';
-import { _colors, _dims, _ios, responsiveFontSize } from '../../utils/constants';
+import {
+  _colors,
+  _dims,
+  _ios,
+  responsiveFontSize,
+  isIphoneX
+} from '../../utils/constants';
 
 export const styles = StyleSheet.create({
   wrapper: {
-    height: _dims.navBarHeight,
-    paddingTop: _ios ? 20 : 0,
+    height: isIphoneX ? 88 : 64,
+    paddingTop: isIphoneX ? 32 : _ios ? 20 : 0,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
@@ -14,15 +20,7 @@ export const styles = StyleSheet.create({
     borderColor: 'silver',
     borderBottomWidth: 1
   },
-  suggestHeader: {
-    height: _dims.navBarHeight,
-    paddingTop: _ios ? 20 : 0,
-    justifyContent: 'center',
-    borderWidth: 0
-  },
   searchBarInputContainer: {
-    backgroundColor: '#fff',
-    height: 32,
     paddingLeft: 10,
     paddingRight: 10,
     marginLeft: 4,
@@ -40,11 +38,8 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     fontSize: 15,
     flex: 1,
-    color: 'gray'
-  },
-  suggestInput: {
-    margin: 0,
-    padding: 0
+    color: 'gray',
+    padding: 7
   },
   searchBarInputClear: {
     paddingHorizontal: 5,

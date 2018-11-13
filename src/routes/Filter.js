@@ -46,6 +46,8 @@ class Filter extends React.Component {
       }
     });
 
+    console.log(options);
+
     this.state = {
       scrollEnabled: true,
       method: options.method || this.props.options.data.methods[0].id,

@@ -3,13 +3,16 @@ import JSON from 'circular-json';
 
 export const { width, height } = Dimensions.get('window');
 
+export const isIphoneX = Platform.OS === 'ios' && (height > 800 || width > 800);
+
 export const responsiveWidth = widthPercent =>
-  PixelRatio.roundToNearestPixel(width * widthPercent / 100);
+  PixelRatio.roundToNearestPixel((width * widthPercent) / 100);
 
 export const responsiveHeight = heightPercent =>
-  PixelRatio.roundToNearestPixel(height * heightPercent / 100);
+  PixelRatio.roundToNearestPixel((height * heightPercent) / 100);
 
-export const responsiveFontSize = fontSize => fontSize * PixelRatio.getFontScale();
+export const responsiveFontSize = fontSize =>
+  fontSize * PixelRatio.getFontScale();
 
 export const _colors = {
   viewBG: '#eee',
