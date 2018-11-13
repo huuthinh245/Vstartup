@@ -59,7 +59,8 @@ public class MainApplication extends Application implements ReactApplication {
           new RNSpinkitPackage(),
           new FastImageViewPackage(),
           new PickerPackage(),
-          new RNFetchBlobPackage()
+          new RNFetchBlobPackage(),
+              new RNGoogleSigninPackage()
       );
     }
 
