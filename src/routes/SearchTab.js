@@ -155,7 +155,6 @@ class SearchTab extends React.Component {
   _onFilterPress = () => {
     this.props.navigation.navigate(routes.filterScreen, {
       onDone: options => {
-        console.log(options);
         this.setState({ options });
         getSearchRealtyAction(options);
         refreshMapRealtyAction(options);

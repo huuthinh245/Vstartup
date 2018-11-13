@@ -90,18 +90,15 @@ class HistoryItem extends React.Component {
                 }
               </Text>
             )}
-            {filter.utils &&
-              filter.utils.length > 0 && (
-                <Text style={styles.gray}>
-                  - Tiện ích:
-                  {`${filter.utils
-                    .split(',')
-                    .map(Number)
-                    .map(
-                      item => options.utils.find(i => i.id === item).name
-                    )}, `}
-                </Text>
-              )}
+            {filter.utils && filter.utils.length > 0 && (
+              <Text style={styles.gray}>
+                - Tiện ích:
+                {`${filter.utils
+                  .split(',')
+                  .map(Number)
+                  .map(item => options.utils.find(i => i.id === item).name)}, `}
+              </Text>
+            )}
           </View>
         </TouchableOpacity>
       </View>
