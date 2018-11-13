@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   map: {
-    flex: 1
+    ...StyleSheet.absoluteFillObject
   },
   scrollView: {
     position: 'absolute',
@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
     opacity: 1
   },
   modal: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute'
@@ -233,7 +234,7 @@ class Map extends React.Component {
     }
     this.setState({ currentMarkerSelectedId: id });
     const index = this.props.data.findIndex(i => `${i.id}` === id);
-    this.slider.scrollBy(index, true);
+    // this.slider.scrollBy(index, true);
     // this.slider.snapToItem(index, false);
     this._toggleCarousel(1);
   };
@@ -321,7 +322,6 @@ class Map extends React.Component {
       inputRange: [0, 1],
       outputRange: [-(_dims.screenHeight - 100) / 3, 0]
     });
-
     const { mapType } = this.state;
     const pointBackground =
       [0, 2].indexOf(mapType) > -1 ? 'rgba(255,255,255,0.8)' : '#333';
@@ -386,7 +386,7 @@ class Map extends React.Component {
           <Icon name="ios-locate-outline" color={pointColor} size={24} />
         </TouchableOpacity>
         <Animated.View style={[styles.modal, { bottom }]}>
-          <Swiper
+          {/* <Swiper
             ref={ref => {
               this.slider = ref;
             }}
@@ -403,7 +403,7 @@ class Map extends React.Component {
             }
           >
             {data.map(item => this._renderCarouselItem(item))}
-          </Swiper>
+          </Swiper> */}
         </Animated.View>
       </View>
     );

@@ -142,6 +142,7 @@ class Filter extends React.Component {
       {},
       this.props.navigation.state.params.options
     );
+    Object.assign(result, { type: `${opts.realtyType}` });
     Object.assign(result, { method: this.state.method });
     Object.assign(result, { price: opts.priceRange.toString() });
     Object.assign(result, { area: opts.areaRange.toString() });
@@ -158,9 +159,6 @@ class Filter extends React.Component {
       Object.assign(result, {
         utils: opts.utils.map(item => item.id).toString()
       });
-    }
-    if (opts.realtyType !== 0) {
-      Object.assign(result, { type: `${opts.realtyType}` });
     }
     if (
       JSON.stringify(this.props.navigation.state.params.options) !==

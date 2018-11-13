@@ -27,7 +27,7 @@ const DEFAULT_LON = 106.660172;
 
 const options = {
   enableHighAccuracy: true,
-  timeout: 20000,
+  // timeout: 20000,
   maximumAge: 1000,
   distanceFilter: 100
 };
@@ -155,6 +155,7 @@ class SearchTab extends React.Component {
   _onFilterPress = () => {
     this.props.navigation.navigate(routes.filterScreen, {
       onDone: options => {
+        console.log(options);
         this.setState({ options });
         getSearchRealtyAction(options);
         refreshMapRealtyAction(options);
