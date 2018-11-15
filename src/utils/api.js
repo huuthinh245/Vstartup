@@ -6,7 +6,7 @@ import alertStrings from '../localization/alert';
 
 export const handleError = (error, callback) => {
   if (!error.response && callback !== false) {
-    _alert(alertStrings.deviceOffline, error.message, [
+    _alert(alertStrings.deviceOffline, '', [
       {
         text: alertStrings.restart,
         onPress: () => RNRestart.Restart()
@@ -16,7 +16,10 @@ export const handleError = (error, callback) => {
       }
     ]);
   } else if (callback === true) {
-    _alert(`${alertStrings.error} ${error.response.status}`, error.response.body.message);
+    _alert(
+      `${alertStrings.error} ${error.response.status}`,
+      error.response.body.message
+    );
   } else if (callback) {
     callback();
   }
@@ -48,4 +51,12 @@ const projectApi = new API.ProjectApi();
 const realtyApi = new API.RealtyApi();
 const userApi = new API.UserApi();
 
-export { agencyApi, authApi, contactApi, listApi, projectApi, realtyApi, userApi };
+export {
+  agencyApi,
+  authApi,
+  contactApi,
+  listApi,
+  projectApi,
+  realtyApi,
+  userApi
+};
