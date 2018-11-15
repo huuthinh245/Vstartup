@@ -21,7 +21,7 @@ import {
   likeRealtyAction,
   unlikeRealtyAction
 } from '../../redux/realtyDetail/actions';
-import { _dims, responsiveFontSize } from '../../utils/constants';
+import { _dims, responsiveFontSize, _ios } from '../../utils/constants';
 import { getMapRealtyAction } from '../../redux/mapRealty/actions';
 
 const { width, height } = Dimensions.get('window');
@@ -30,7 +30,12 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const borderRadius = 5;
-const types = ['hybrid', 'terrain', 'satellite', 'standard'];
+const types = [
+  'hybrid',
+  _ios ? 'mutedStandard' : 'terrain',
+  'satellite',
+  'standard'
+];
 
 const styles = StyleSheet.create({
   main: {
