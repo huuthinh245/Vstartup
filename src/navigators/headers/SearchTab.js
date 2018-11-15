@@ -30,15 +30,17 @@ export default class Header extends React.Component {
           <Text style={styles.searchBarInput}>
             {this.props.title || headerStrings.searchCityPlaceholder}
           </Text>
-          {this.props.title && (
-            <Ionicons
-              size={18}
-              color="gray"
-              name="ios-close-circle"
-              style={{ alignSelf: 'center', marginLeft: 10 }}
-              onPress={this.props.clearAddress}
-            />
-          )}
+          {
+            this.props.title ?
+              <Ionicons
+                size={18}
+                color="gray"
+                name="ios-close-circle"
+                style={{ alignSelf: 'center', marginLeft: 10 }}
+                onPress={this.props.clearAddress}
+              />
+              : null
+          }
           {this.props.adding ? (
             <ActivityIndicator />
           ) : (
@@ -46,12 +48,12 @@ export default class Header extends React.Component {
               size={18}
               color={this.props.bookmarked ? 'rgb(0,122,255)' : 'gray'}
               name={
-                this.props.bookmarked ? 'ios-bookmark' : 'ios-bookmark-outline'
-              }
+                  this.props.bookmarked ? 'ios-bookmark' : 'ios-bookmark-outline'
+                }
               style={{ alignSelf: 'center', marginLeft: 10 }}
               onPress={this.props.bookmarkAddress}
             />
-          )}
+            )}
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}

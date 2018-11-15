@@ -269,7 +269,7 @@ class AuthDetail extends React.Component {
     form.push({
       name: 'file',
       type: image.mime,
-      filename: image.filename,
+      filename: 'abc.jpg',
       data: RNFetchBlob.wrap(image.path)
     });
 

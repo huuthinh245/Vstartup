@@ -83,7 +83,6 @@ class SearchTab extends React.Component {
       const { options } = this.state;
       options.lat = coords.latitude;
       options.lng = coords.longitude;
-
       this.setState({ options });
       getMapRealtyAction(options);
       getSearchRealtyAction(options);
@@ -131,34 +130,45 @@ class SearchTab extends React.Component {
     this.setState({ isFlipped: !this.state.isFlipped });
   };
 
-  _onAutoComplete = async () => {
-    const val = await RNGooglePlaces.openAutocompleteModal();
-    if (
-      val.latitude !== this.state.options.lat &&
-      val.longitude !== this.state.options.lng
-    ) {
-      const options = Object.assign({}, this.state.options, {
-        lat: val.latitude,
-        lng: val.longitude,
-        address: val.address
-      });
-      this.setState({ options });
-      getSearchRealtyAction(options);
-      getMapRealtyAction(options);
-      emitter.emit('mapFly', {
-        lat: val.latitude,
-        lng: val.longitude
-      });
-    }
+  _onAutoComplete = () => {
+    RNGooglePlaces.openAutocompleteModal()
+      .then(val => {
+        if (
+          val.latitude !== this.state.options.lat &&
+          val.longitude !== this.state.options.lng
+        ) {
+          const options = Object.assign({}, this.state.options, {
+            lat: val.latitude,
+            lng: val.longitude,
+            address: val.address
+          });
+          this.setState({ options });
+          getSearchRealtyAction(options);
+          getMapRealtyAction(options);
+          emitter.emit('mapFly', {
+            lat: val.latitude,
+            lng: val.longitude
+          });
+        }
+      })
+      .catch(error => console.log(error.message));
   };
-
+  
+  convertRealtyTypes = (info) => {
+    const { realtyTypes } = this.props;
+    const data = Object.assign({}, info);
+    if (data.type) {
+      Object.assign(data, { type: realtyTypes[parseInt(data.type, 0)].id });
+    }
+    return data;
+  }
   _onFilterPress = () => {
     this.props.navigation.navigate(routes.filterScreen, {
       onDone: options => {
-        console.log(options);
+        const data = this.convertRealtyTypes(options);
         this.setState({ options });
-        getSearchRealtyAction(options);
-        refreshMapRealtyAction(options);
+        getSearchRealtyAction(data);
+        refreshMapRealtyAction(data);
       },
       options: this.state.options
     });
@@ -218,7 +228,7 @@ class SearchTab extends React.Component {
               <Map
                 {...mapRealty}
                 init={[DEFAULT_LAT, DEFAULT_LON]}
-                options={this.state.options}
+                options={this.convertRealtyTypes(this.state.options)}
                 navigation={navigation}
                 auth={auth}
               />
@@ -247,5 +257,6 @@ export default connect(state => ({
   mapRealty: state.mapRealty,
   searchRealty: state.searchRealty,
   auth: state.auth.user,
-  history: state.listHistory
+  history: state.listHistory,
+  realtyTypes: state.options.data.realtyTypes
 }))(SearchTab);

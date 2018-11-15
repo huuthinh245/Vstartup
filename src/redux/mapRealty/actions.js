@@ -18,12 +18,12 @@ export const getMapRealtyAction = payload =>
     payload
   });
 
-export const refreshMapRealtyAction = payload =>
+export const refreshMapRealtyAction = payload => {
   store.dispatch({
     type: REFRESH_MAP_REALTY,
     payload
   });
-
+}
 export const loadMoreMapRealtyAction = payload =>
   store.dispatch({
     type: LOAD_MORE_MAP_REALTY,

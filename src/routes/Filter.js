@@ -179,6 +179,7 @@ class Filter extends React.Component {
     const highlight = {
       color: '#3bcce1'
     };
+
     return (
       <View style={styles.wrapper}>
         <Header
@@ -441,8 +442,9 @@ class Filter extends React.Component {
                     item => item.name
                   )}
                   defaultIndex={parseInt(this.state.realtyType, 10)}
-                  onSelect={index =>
-                    this.setState({ realtyType: parseInt(index, 10) })
+                  onSelect={(index) => {
+                    this.setState({ realtyType: parseInt(index, 10) });
+                  }
                   }
                 >
                   <Text style={[styles.value, { flex: 1 }]}>

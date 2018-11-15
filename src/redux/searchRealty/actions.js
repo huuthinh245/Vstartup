@@ -18,7 +18,7 @@ export const getSearchRealtyAction = payload =>
     payload
   });
 
-export const refreshSearchRealtyAction = payload =>
+export const refreshSearchRealtyAction = payload => 
   store.dispatch({
     type: REFRESH_SEARCH_REALTY,
     payload

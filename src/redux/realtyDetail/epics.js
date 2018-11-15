@@ -75,8 +75,8 @@ const postRealty = (actions$, store) =>
       'POST',
       'https://rems.dfm-engineering.com/api/v1/realty',
       {
+        Authorization: `Bearer ${action.payload.token}}`,
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${action.payload.token}}`
       },
       action.payload.data
     );

@@ -78,17 +78,16 @@ export const listHistoryReducer = handleActions(
       return Object.assign({}, state, { deleting: true });
     },
     [DELETE_HISTORY_SUCCESS]: (state, { payload }) => {
-      let arr = state.data;
-      state.data.forEach(item => {
-        if (_.some(payload, { id: item.id })) {
-          arr = _.reject(arr, obj => obj.id === item.id);
-        }
+      const arr = state.data;
+      payload.ids.forEach(item => {
+        _.remove(arr, value => value.id === item);
       });
-      return Object.assign({}, state, {
+      return {
+        ...state,
         deleting: false,
-        data: arr,
-        error: null
-      });
+        error: null,
+        data: arr
+      };
     },
     [DELETE_HISTORY_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { deleting: false, error: payload });

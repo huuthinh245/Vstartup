@@ -43,7 +43,8 @@ class AgencyRegister extends Component {
             password: this.state.password,
             phone: this.state.phone,
             lat: this.state.address.latitude,
-            lng: this.state.address.longitude
+            lng: this.state.address.longitude,
+            role_id: 3
           }
         };
         const callback = () => registerAction(opts);

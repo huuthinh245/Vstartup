@@ -64,9 +64,9 @@ class PostRealty extends React.Component {
       city: {},
       district: {},
       ward: {},
-      toilet: this.dataSelect[1],
-      bedroom: this.dataSelect[2],
-      bathroom: this.dataSelect[3],
+      toilet: this.dataSelect[0],
+      bedroom: this.dataSelect[0],
+      bathroom: this.dataSelect[0],
       description: undefined,
       youtube: undefined,
       images: ['flag'],
@@ -137,10 +137,7 @@ class PostRealty extends React.Component {
     const __removeImage = () => {
       const copy = _.map(this.state.images, _.clone);
       const newData = _.reject(copy, obj => {
-        if (_ios) {
-          return obj.path === item.path;
-        }
-        return obj.uri === item.uri;
+        return obj.path === item.path;
       });
       this.setState({ images: newData });
     };
@@ -149,7 +146,7 @@ class PostRealty extends React.Component {
         <Image
           style={styles.img}
           resizeMode="cover"
-          source={{ uri: _ios ? item.path : item.uri }}
+          source={{ uri: item.path }}
         />
         <Ionicons onPress={() => __removeImage()} name="ios-close-circle" style={styles.close} />
       </TouchableOpacity>
@@ -227,7 +224,7 @@ class PostRealty extends React.Component {
     if (!this.state.project.id) return { title: errorStrings.ownedProjectEmpty };
     if (!this.state.price) { return { title: errorStrings.priceEmpty, callback: () => this.priceDom.focus() }; }
     if (!this.state.width) { return { title: errorStrings.widthEmpty, callback: () => this.widthDom.focus() }; }
-    if (!this.state.length) { return { title: errorStrings.lengthEmpty, callback: () => this.lengthDom.focus() }; }
+    if (!this.state.length) { return { title: errorStrings.heightEmpty, callback: () => this.lengthDom.focus() }; }
     if (!this.state.area) { return { title: errorStrings.areaEmpty, callback: () => this.areaDom.focus() }; }
     if (!this.state.city) return { title: errorStrings.cityEmpty };
     if (!this.state.district) return { title: errorStrings.districtEmpty };
@@ -254,6 +251,7 @@ class PostRealty extends React.Component {
   };
 
   _onSubmit = () => {
+    const { state } = this;
     const err = this._generateError();
     if (err) {
       emitter.emit('alert', {
@@ -266,7 +264,6 @@ class PostRealty extends React.Component {
       }
     } else {
       const form = [];
-      const { state } = this;
 
       form.push({ name: 'contact_email', data: state.contactEmail });
       form.push({ name: 'contact_phone', data: `${state.contactPhone}` });
@@ -288,9 +285,9 @@ class PostRealty extends React.Component {
       form.push({ name: 'body', data: state.description });
       form.push({ name: 'youtube', data: state.youtube });
       form.push({ name: 'address', data: state.address });
-      form.push({ name: 'city', data: state.city });
-      form.push({ name: 'district', data: state.district });
-      form.push({ name: 'ward', data: state.ward });
+      form.push({ name: 'city', data: `${state.city.id}` });
+      form.push({ name: 'district', data: `${state.district.id}` });
+      form.push({ name: 'ward', data: `${state.ward.id}` });
       form.push({
         name: 'coordinate',
         data: JSON.stringify({
@@ -304,7 +301,7 @@ class PostRealty extends React.Component {
           form.push({
             name: 'files[]',
             type: item.mime,
-            filename: item.filename,
+            filename: 'abc.jpg',
             data: RNFetchBlob.wrap(this.state.images[index].path)
           });
         }

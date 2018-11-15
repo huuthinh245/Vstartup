@@ -42,7 +42,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'mrdung.dev@gmail.com',
+      email: 'agency02@gmail.com',
       password: '123admin',
       googleUser: null
     };

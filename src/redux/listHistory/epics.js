@@ -56,7 +56,7 @@ const loadMoreListHistoryEpic = actions$ =>
 const deleteHistoryEpic = actions$ =>
   actions$.ofType(DELETE_HISTORY).switchMap(async action => {
     try {
-      const resp = await realtyApi.deleteKeyword(action.payload);
+      const resp = await realtyApi.deleteKeyword(action.payload.ids);
       action.payload.callback();
       return { type: DELETE_HISTORY_SUCCESS, payload: resp.body };
     } catch (error) {

@@ -338,8 +338,9 @@ class Map extends React.Component {
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA
           }}
-          showsUserLocation
+          // showsUserLocation
           loadingEnabled
+          zoomControlEnabled
           mapType={types[this.state.mapType]}
           onMarkerPress={this._onMarkerPress}
           onPress={this._onMapPress}

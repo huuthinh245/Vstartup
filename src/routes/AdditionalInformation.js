@@ -41,7 +41,7 @@ class AdditionalInformation extends React.Component {
       emitter.emit('alert', {
         type: 'warn',
         title: alertStrings.invalidField,
-        error: alertStrings.nameInvalid
+        error: alertStrings.nameEmpty
       });
       this.name.focus();
     } else if (!PHONE_REGEX.test(this.state.phone)) {
@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
   hoishiInput: {
     flex: 1,
     paddingVertical: 10,
-    paddingLeft: _dims.defaultPadding
+    paddingLeft: _dims.defaultPadding,
+    color: 'black'
   }
 });

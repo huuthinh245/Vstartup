@@ -29,13 +29,13 @@ export default class MenuTab extends React.Component {
             <MaterialIcons style={styles.icon} name="people" />
             <Text style={styles.text}>{strings.agency}</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[styles.line, styles.noBorderBottom]}
             onPress={() => this.props.navigation.navigate(routes.listInvestor)}
           >
             <MaterialIcons style={styles.icon} name="attach-money" />
             <Text style={styles.text}>{strings.investor}</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             style={[styles.line, { marginTop: _dims.defaultPadding }]}
