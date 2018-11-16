@@ -122,7 +122,7 @@ class Login extends Component {
           <Overlay visible={this.props.auth.fetching} />
           <Image style={styles.bg} resizeMode="cover" source={background} />
           <View style={styles.logoContainer}>
-            <Image resizeMode="cover" source={logo} style={styles.logo} />
+            {/* <Image resizeMode="cover" source={logo} style={styles.logo} /> */}
           </View>
           <View style={styles.inputWrapper}>
             <TextInput
