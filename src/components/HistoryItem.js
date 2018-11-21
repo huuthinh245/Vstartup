@@ -13,10 +13,25 @@ import {
 import strings from '../localization/filter';
 
 class HistoryItem extends React.Component {
+  renderType = () => {
+    const { data, options } = this.props;
+    const filter = JSON.parse(data.filter);
+    const type = filter.type && options.realtyTypes.find(
+      item => `${item.id}` === `${filter.type}`
+    );
+    if(type) {
+      return (
+        <Text style={styles.gray}>
+        - Loại dự án:{' '}
+          {type.name}
+        </Text>
+      );
+    }
+    return null;
+  }
   render() {
     const { data, options } = this.props;
     const filter = JSON.parse(data.filter);
-
     return (
       <View style={styles.main}>
         <TouchableOpacity
@@ -24,21 +39,23 @@ class HistoryItem extends React.Component {
           onLongPress={!this.props.edit ? this.props.onLongPress : null}
           style={styles.wrapper}
         >
-          {this.props.edit && (
-            <View style={styles.overlay}>
-              {this.props.selected ? (
-                <View style={[styles.check, styles.unchecked]} />
-              ) : (
-                <View style={[styles.check, styles.checked]}>
-                  <Ionicons
-                    name="ios-checkmark"
-                    color="#fff"
-                    size={responsiveFontSize(_dims.defaultFontTitle + 6)}
-                  />
-                </View>
-              )}
-            </View>
-          )}
+          {
+            this.props.edit && (
+              <View style={styles.overlay}>
+                {this.props.selected ? (
+                  <View style={[styles.check, styles.unchecked]} />
+                ) : (
+                  <View style={[styles.check, styles.checked]}>
+                    <Ionicons
+                      name="ios-checkmark"
+                      color="#fff"
+                      size={responsiveFontSize(_dims.defaultFontTitle + 6)}
+                    />
+                  </View>
+                  )}
+              </View>
+            )
+          }
 
           <FastImage
             style={styles.image}
@@ -52,45 +69,59 @@ class HistoryItem extends React.Component {
             <Text style={styles.title} numberOfLines={2}>
               {data.address}
             </Text>
-            {filter.method && (
-              <Text style={styles.gray}>
-                - Phương thức:{' '}
-                {options.methods.find(item => item.id === filter.method).name}
-              </Text>
-            )}
-            {filter.price && (
-              <Text style={styles.gray}>
-                - Giá: {filter.price.split(',').map(Number)[0]} -{' '}
-                {filter.price.split(',').map(Number)[1]}{' '}
-                {options.priceUnits[1].name}
-              </Text>
-            )}
-            {filter.area && (
-              <Text style={styles.gray}>
-                - Diện tích: {filter.area.split(',').map(Number)[0]} -{' '}
-                {filter.area.split(',').map(Number)[1]} m²
-              </Text>
-            )}
-            {filter.toilet && (
-              <Text style={styles.gray}>- Số WC: {filter.toilet}</Text>
-            )}
-            {filter.bedroom && (
+            {
+              filter.method ? (
+                <Text style={styles.gray}>
+                  - Phương thức:{' '}
+                  {options.methods.find(item => item.id === filter.method).name}
+                </Text>
+              )
+                :
+                null
+            }
+            {
+              filter.price ? (
+                <Text style={styles.gray}>
+                  - Giá: {filter.price.split(',').map(Number)[0]} -{' '}
+                  {filter.price.split(',').map(Number)[1]}{' '}
+                  {options.priceUnits[1].name}
+                </Text>
+              )
+                :
+                null
+            }
+            {
+              filter.area ? (
+                <Text style={styles.gray}>
+                  - Diện tích: {filter.area.split(',').map(Number)[0]} -{' '}
+                  {filter.area.split(',').map(Number)[1]} m²
+                </Text>
+              )
+                :
+                null
+            }
+            {
+              filter.toilet ? (
+                <Text style={styles.gray}>- Số WC: {filter.toilet}</Text>
+              )
+                :
+                null
+            }
+            {filter.bedroom ? (
               <Text style={styles.gray}>- Số phòng ngủ: {filter.bedroom}</Text>
-            )}
-            {filter.bathroom && (
-              <Text style={styles.gray}>- Số phòng tắm: {filter.bathroom}</Text>
-            )}
-            {filter.type && (
-              <Text style={styles.gray}>
-                - Loại dự án:{' '}
-                {
-                  options.realtyTypes.find(
-                    item => `${item.id}` === `${filter.type}`
-                  ).name
-                }
-              </Text>
-            )}
-            {filter.utils && filter.utils.length > 0 && (
+            )
+              :
+              null
+            }
+            {
+              filter.bathroom ? (
+                <Text style={styles.gray}>- Số phòng tắm: {filter.bathroom}</Text>
+              )
+                :
+                null
+            }
+            {this.renderType()}
+            {filter.utils && filter.utils.length > 0 ? (
               <Text style={styles.gray}>
                 - Tiện ích:
                 {`${filter.utils
@@ -98,7 +129,9 @@ class HistoryItem extends React.Component {
                   .map(Number)
                   .map(item => options.utils.find(i => i.id === item).name)}, `}
               </Text>
-            )}
+            )
+              : null
+            }
           </View>
         </TouchableOpacity>
       </View>
@@ -106,7 +139,7 @@ class HistoryItem extends React.Component {
   }
 }
 
-export default connect(state => ({ options: state.options.data }))(HistoryItem);
+export default HistoryItem;
 
 const styles = StyleSheet.create({
   main: {

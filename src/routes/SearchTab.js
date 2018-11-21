@@ -194,7 +194,7 @@ class SearchTab extends React.Component {
         this.state.options.address,
         this.state.options.lat,
         this.state.options.lng,
-        { filter: JSON.stringify(options) }
+        { filter: JSON.stringify(this.convertRealtyTypes(options)) }
       );
     } else {
       this.props.navigation.navigate('HistoryTab');

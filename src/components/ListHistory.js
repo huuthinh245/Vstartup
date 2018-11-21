@@ -49,6 +49,14 @@ class ListHistory extends React.Component {
     getListHistoryAction();
   }
 
+  convertRealtyTypesToIndex = (info) => {
+    const data = Object.assign({}, JSON.parse(info));
+    if (data.type) {
+      Object.assign(data, { type: data.type - 1 });
+    }
+    return data;
+  }
+
   _renderHeader = () => {
     return this.state.edit ? (
       <Header
@@ -98,9 +106,11 @@ class ListHistory extends React.Component {
 
   _renderItem = ({ item }) => {
     const copy = _.map(this.state.selected, _.clone);
+    const { options } = this.props;
     return (
       <HistoryItem
         data={item}
+        options={options}
         selected={!_.some(this.state.selected, { id: item.id })}
         edit={this.state.edit}
         onPress={() => {
@@ -113,7 +123,7 @@ class ListHistory extends React.Component {
                 lng: item.coordinate.lng,
                 address: item.address
               },
-              JSON.parse(item.filter)
+              this.convertRealtyTypesToIndex(item.filter)
             )
           );
           emitter.emit('flip');
@@ -155,7 +165,6 @@ class ListHistory extends React.Component {
 
   render = () => {
     const { listHistory } = this.props;
-
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         {this._renderHeader()}
@@ -200,5 +209,6 @@ class ListHistory extends React.Component {
 }
 
 export default connect(state => ({
-  listHistory: state.listHistory
+  listHistory: state.listHistory,
+  options: state.options.data
 }))(ListHistory);

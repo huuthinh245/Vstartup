@@ -18,6 +18,7 @@ import {
   ADD_HISTORY_SUCCESS,
   ADD_HISTORY_FAILURE
 } from './actions';
+import { LOGOUT_SUCCESS } from '../auth/actions';
 
 const initial = {
   fetching: false,
@@ -101,6 +102,9 @@ export const listHistoryReducer = handleActions(
     },
     [ADD_HISTORY_FAILURE]: (state, { payload }) => {
       return Object.assign({}, state, { adding: false, error: payload });
+    },
+    [LOGOUT_SUCCESS]: (state) => {
+      return Object.assign({}, state, initial);
     }
   },
   initial
