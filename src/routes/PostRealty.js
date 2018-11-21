@@ -70,7 +70,7 @@ class PostRealty extends React.Component {
       description: undefined,
       youtube: undefined,
       images: ['flag'],
-      utils: [{ id: 1 }, { id: 2 }],
+      utils: [],
       contactName: this.props.auth.user.name,
       contactEmail: this.props.auth.user.email,
       contactPhone: this.props.auth.user.phone
@@ -751,6 +751,7 @@ class PostRealty extends React.Component {
               ref={ref => {
                 this.description = ref;
               }}
+              onChangeText={description => this.setState({ description })}
               value={state.description}
               multiline
               placeholder={strings.description}
