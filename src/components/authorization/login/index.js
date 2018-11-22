@@ -227,7 +227,7 @@ export const styles = StyleSheet.create({
   input: {
     fontSize: responsiveFontSize(_dims.defaultFontInput),
     borderRadius: responsiveFontSize(_dims.defaultFontInput) / 2 + 13,
-    color: '#000',
+    color: 'black',
     backgroundColor: '#eee',
     padding: 10,
     paddingHorizontal: 15,
@@ -288,6 +288,7 @@ export const styles = StyleSheet.create({
   hoishiInput: {
     flex: 1,
     paddingVertical: 10,
-    paddingLeft: _dims.defaultPadding
+    paddingLeft: _dims.defaultPadding,
+    color: 'black'
   }
 });

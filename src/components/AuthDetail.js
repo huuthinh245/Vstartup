@@ -748,7 +748,8 @@ export const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: 'transparent',
-    flex: 1
+    flex: 1,
+    color: 'black'
   },
   submit: {
     padding: 10,

@@ -108,4 +108,4 @@ class SearchBack extends React.Component {
     );
   }
 }
-export default connect()(SearchBack);
+export default SearchBack;

@@ -421,24 +421,26 @@ class ProjectDetail extends Component {
         </TouchableOpacity>
       );
     }
-    if (_ios) {
-      return <YouTube videoId="KVZ-P-ZI6W4" style={styles.youtube} />;
+    if(section.content && _ios) {
+      return <YouTube videoId={section.content} style={styles.youtube} />;
+    }else if(section.content) {
+      return (
+        <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
+          <TouchableOpacity
+            onPress={() => {
+              YouTubeStandaloneAndroid.playVideo({
+                apiKey: 'AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis',
+                videoId: section.content,
+                autoplay: true
+              }).catch(errorMessage => _alert('Youtube error', errorMessage));
+            }}
+          >
+            <Text style={styles.youtubeLink}>Play video</Text>
+          </TouchableOpacity>
+        </View>
+      );
     }
-    return (
-      <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
-        <TouchableOpacity
-          onPress={() => {
-            YouTubeStandaloneAndroid.playVideo({
-              apiKey: 'AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis',
-              videoId: 'KVZ-P-ZI6W4',
-              autoplay: true
-            }).catch(errorMessage => _alert('Youtube error', errorMessage));
-          }}
-        >
-          <Text style={styles.youtubeLink}>Play video</Text>
-        </TouchableOpacity>
-      </View>
-    );
+    return null;
   };
 
   _handleTextRef = ref => {
@@ -463,6 +465,7 @@ class ProjectDetail extends Component {
       inputRange: [0, 1],
       outputRange: [-responsiveWidth(15), 0]
     });
+    // console.log(project);
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header
@@ -723,7 +726,8 @@ export const styles = StyleSheet.create({
   input: {
     backgroundColor: 'transparent',
     flex: 1,
-    marginLeft: 7
+    marginLeft: 7,
+    color: 'black'
   },
   submit: {
     padding: 20,

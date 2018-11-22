@@ -37,7 +37,7 @@ export default class ProjectItem extends React.Component {
           </Text>
           {isMine && (
             <Text numberOfLines={1} style={styles.itemCommission}>
-              {`${strings.commission}: ${item.commission}`}
+              {`${strings.commission}: ${item.commission}%`}
             </Text>
           )}
         </View>

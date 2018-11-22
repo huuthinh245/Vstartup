@@ -12,7 +12,6 @@ const customTextInputProps = {
   placeholderTextColor: 'silver',
   style: {
     padding: 10,
-    backgroundColor: 'white',
     fontSize: responsiveFontSize(_dims.defaultFontInput),
     color: 'black'
   }

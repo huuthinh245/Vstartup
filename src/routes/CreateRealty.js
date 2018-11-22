@@ -151,7 +151,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: _dims.defaultPadding
   },
   input: {
-    marginBottom: _dims.defaultPadding
+    marginBottom: _dims.defaultPadding,
+    color: 'black'
   },
   title: {
     marginLeft: _dims.defaultPadding,

@@ -1,11 +1,12 @@
 import { handleActions } from 'redux-actions';
-
+import _ from 'lodash';
 import {
   LIKE_REALTY,
   LIKE_REALTY_FAILURE,
   UNLIKE_REALTY,
   UNLIKE_REALTY_FAILURE,
-  LIKE_REALTY_SUCCESS
+  LIKE_REALTY_SUCCESS,
+  UNLIKE_REALTY_SUCCESS
 } from '../realtyDetail/actions';
 
 import {
@@ -78,6 +79,14 @@ export const listFavoriteReducer = handleActions(
         state.data.push(payload);
       }
       return Object.assign({}, state);
+    },
+    [UNLIKE_REALTY_SUCCESS]: (state, { payload }) => {
+      const arr = state.data;
+      _.remove(arr, value => value.id === payload.id);
+      return {
+        ...state,
+        data: arr
+      };
     }
   },
   initial

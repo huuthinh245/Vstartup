@@ -991,7 +991,8 @@ export const styles = StyleSheet.create({
   },
   formLineInput: {
     backgroundColor: 'transparent',
-    flex: 1
+    flex: 1,
+    color: 'black'
   },
   submit: {
     backgroundColor: '#3bcce1',

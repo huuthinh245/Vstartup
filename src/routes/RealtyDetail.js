@@ -355,6 +355,7 @@ class RealtyDetail extends Component {
   };
 
   _renderContent = (section, i, isActive, sections) => {
+    console.log('sections', section);
     const _content = '---------------------';
     if (i === 0) {
       return (
@@ -410,26 +411,28 @@ class RealtyDetail extends Component {
         </TouchableOpacity>
       );
     }
-    if (_ios) {
-      return <YouTube videoId="KVZ-P-ZI6W4" style={styles.youtube} />;
+    console.log(section);
+    if(section.content && _ios) {
+      return <YouTube videoId={section.content} style={styles.youtube} />;
+    }else if(section.content) {
+      return (
+        <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
+          <TouchableOpacity
+            onPress={() => {
+              YouTubeStandaloneAndroid.playVideo({
+                apiKey: 'AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis',
+                videoId: section.content,
+                autoplay: true
+              }).catch(errorMessage => _alert('Youtube error', errorMessage));
+            }}
+          >
+            <Text style={styles.youtubeLink}>Play video</Text>
+          </TouchableOpacity>
+        </View>
+      );
     }
-    return (
-      <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
-        <TouchableOpacity
-          onPress={() => {
-            YouTubeStandaloneAndroid.playVideo({
-              apiKey: 'AIzaSyCigMlG2q9yWMg1sV2vwfCjZr_jmXSQJis',
-              videoId: 'KVZ-P-ZI6W4',
-              autoplay: true
-            }).catch(errorMessage => _alert('Youtube error', errorMessage));
-          }}
-        >
-          <Text style={styles.youtubeLink}>Play video</Text>
-        </TouchableOpacity>
-      </View>
-    );
+    return null;
   };
-
   _handleTextRef = ref => {
     this.text = ref;
   };
@@ -727,7 +730,8 @@ export const styles = StyleSheet.create({
   input: {
     backgroundColor: 'transparent',
     flex: 1,
-    marginLeft: 7
+    marginLeft: 7,
+    color: 'black'
   },
   submit: {
     padding: 20,
