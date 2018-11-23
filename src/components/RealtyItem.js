@@ -47,6 +47,8 @@ export default class RealtyItem extends React.Component {
           <Ionicons
             style={styles.favoriteButton}
             name={`ios-heart${!data.is_favorite ? '-outline' : ''}`}
+            color="tomato"
+            size={24}
           />
         </TouchableOpacity>
         <View style={styles.infoWrapper}>
@@ -106,11 +108,9 @@ export const styles = StyleSheet.create({
     left: 0
   },
   favoriteButton: {
-    position: 'absolute',
-    top: _dims.defaultPadding,
-    right: _dims.defaultPadding,
-    fontSize: 24,
-    color: 'tomato'
+    alignSelf: 'flex-end',
+    marginTop: _dims.defaultPadding,
+    marginRight: _dims.defaultPadding,
   },
   touch: {
     height: responsiveHeight(10)

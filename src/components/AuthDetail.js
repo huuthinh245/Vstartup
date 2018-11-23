@@ -588,7 +588,8 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: responsiveFontSize(_dims.defaultFontTitle),
     fontWeight: 'bold',
-    marginBottom: 5
+    marginBottom: 5,
+    color: 'black'
   },
   cameraWrapper: {
     position: 'absolute',

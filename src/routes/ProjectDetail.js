@@ -574,7 +574,8 @@ export const styles = StyleSheet.create({
   title: {
     flex: 1,
     fontWeight: 'bold',
-    fontSize: responsiveFontSize(_dims.defaultFontTitle + 2)
+    fontSize: responsiveFontSize(_dims.defaultFontTitle + 2),
+    color: 'black'
   },
   colorGray: {
     color: '#777'
@@ -594,10 +595,11 @@ export const styles = StyleSheet.create({
     borderRightWidth: 2,
     borderColor: _colors.mainColor,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   infoText: {
-    fontSize: responsiveFontSize(_dims.defaultFontSubTitle)
+    fontSize: responsiveFontSize(_dims.defaultFontSubTitle),
+    color: 'black'
   },
   noBorderRight: {
     borderRightWidth: 0

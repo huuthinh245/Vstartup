@@ -198,7 +198,8 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: responsiveFontSize(_dims.defaultFontTitle),
-    marginBottom: _dims.defaultPadding
+    marginBottom: _dims.defaultPadding,
+    color: 'black'
   },
   infoWrapper: {
     marginLeft: _dims.defaultPadding,
@@ -207,6 +208,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10
   },
   gray: {
-    color: 'gray'
+    color: 'black'
   }
 });

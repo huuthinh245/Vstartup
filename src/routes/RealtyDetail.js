@@ -355,7 +355,6 @@ class RealtyDetail extends Component {
   };
 
   _renderContent = (section, i, isActive, sections) => {
-    console.log('sections', section);
     const _content = '---------------------';
     if (i === 0) {
       return (
@@ -411,7 +410,6 @@ class RealtyDetail extends Component {
         </TouchableOpacity>
       );
     }
-    console.log(section);
     if(section.content && _ios) {
       return <YouTube videoId={section.content} style={styles.youtube} />;
     }else if(section.content) {
@@ -578,7 +576,8 @@ export const styles = StyleSheet.create({
   title: {
     flex: 1,
     fontWeight: 'bold',
-    fontSize: responsiveFontSize(_dims.defaultFontTitle + 2)
+    fontSize: responsiveFontSize(_dims.defaultFontTitle + 2),
+    color: 'black'
   },
   colorGray: {
     color: '#777'

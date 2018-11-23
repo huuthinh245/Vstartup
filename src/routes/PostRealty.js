@@ -264,7 +264,8 @@ class PostRealty extends React.Component {
       }
     } else {
       const form = [];
-
+      const link = state.youtube;
+      const splitLink = link ? link.split('?v=') : [];
       form.push({ name: 'contact_email', data: state.contactEmail });
       form.push({ name: 'contact_phone', data: `${state.contactPhone}` });
       form.push({ name: 'contact_name', data: state.contactName });
@@ -283,11 +284,13 @@ class PostRealty extends React.Component {
       form.push({ name: 'bathroom', data: `${state.bathroom.id}` });
       form.push({ name: 'utility', data: state.utils.map(item => item.id).toString() });
       form.push({ name: 'body', data: state.description });
-      form.push({ name: 'youtube', data: state.youtube });
+      if(splitLink.length >= 2) {
+        form.push({ name: 'video', data: splitLink[1] });
+      }
       form.push({ name: 'address', data: state.address });
-      form.push({ name: 'city', data: `${state.city.id}` });
-      form.push({ name: 'district', data: `${state.district.id}` });
-      form.push({ name: 'ward', data: `${state.ward.id}` });
+      form.push({ name: 'city_id', data: `${state.city.id}` });
+      form.push({ name: 'district_id', data: `${state.district.id}` });
+      form.push({ name: 'ward_id', data: `${state.ward.id}` });
       form.push({
         name: 'coordinate',
         data: JSON.stringify({
