@@ -54,7 +54,7 @@ class SearchBack extends React.Component {
 
   _onRefresh = () => {
     if (this.props.refreshing) return;
-    refreshSearchRealtyAction(this.props.options);
+    refreshSearchRealtyAction(Object.assign(this.props.options, { page: 1 }));
   };
 
   _renderItem = ({ item }) => {
