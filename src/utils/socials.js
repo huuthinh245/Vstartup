@@ -10,8 +10,8 @@ export const maps = {
 };
 
 export const googleSignin = {
-  ios_client_id: '516840190140-phpsd9jt47ghvr3mksploufod99cj7ro.apps.googleusercontent.com',
+  ios_client_id: '829797175522-bcid7vsl5vntqcg8sqktu1isa6nr9786.apps.googleusercontent.com',
   ios_url_scheme: 'com.googleusercontent.apps.516840190140-phpsd9jt47ghvr3mksploufod99cj7ro',
-  web_client_id: '516840190140-c110k9ro6uko894jjiljv011hflgin8q.apps.googleusercontent.com',
+  web_client_id: '829797175522-9ptsts2vbkflosr1r3d7kio0893pfpr4.apps.googleusercontent.com',
   android_client_id: '516840190140-c110k9ro6uko894jjiljv011hflgin8q.apps.googleusercontent.com'
 };

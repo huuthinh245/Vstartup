@@ -44,6 +44,7 @@ class AgencyRegister extends Component {
             phone: this.state.phone,
             lat: this.state.address.latitude,
             lng: this.state.address.longitude,
+            address: this.state.address.address,
             role_id: 3
           }
         };
@@ -240,6 +241,7 @@ class AgencyRegister extends Component {
         <TouchableOpacity
           onPress={async () => {
             const val = await RNGooglePlaces.openAutocompleteModal();
+            console.log(val);
             this.setState({ address: val });
           }}
           style={[

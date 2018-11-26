@@ -54,6 +54,7 @@ class ListContact extends React.Component {
     this.onEndReachedCalledDuringMomentum = true;
   }
   componentDidMount() {
+    console.log(this.props);
     getListContactAction();
   }
 

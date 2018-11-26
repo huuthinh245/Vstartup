@@ -10,15 +10,17 @@ export const _setupGoogleSignin = async callback => {
     await GoogleSignin.configure({
       iosClientId: googleSignin.ios_client_id,
       webClientId: googleSignin.web_client_id,
+      
       offlineAccess: false
     });
 
     const user = await GoogleSignin.currentUserAsync();
+    console.log(user);
     if (callback) {
       callback(user);
     }
   } catch (err) {
-    console.log(err);
+    console.log('aaa', err);
     // _alert(alertStrings.error, `${err.code}: ${err.message}`);
   }
 };
@@ -26,9 +28,11 @@ export const _setupGoogleSignin = async callback => {
 export const _signInGoogle = callback => {
   GoogleSignin.signIn()
     .then(user => {
+      console.log(user);
       callback(user);
     })
     .catch(err => {
+      console.log('err', err);
       // user cancel
       if (err.code !== -5) {
         _alert(alertStrings.error, `${err.code}: ${err.message}`);

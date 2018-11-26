@@ -46,7 +46,12 @@ const deleteContact = actions$ =>
 const getListContact = actions$ =>
   actions$.ofType(GET_LIST_CONTACT).switchMap(async action => {
     try {
-      const resp = await contactApi.listContact(action.payload);
+      const a = {
+        keyword: '214',
+        page: 1
+      };
+      const resp = await contactApi.listContact(a);
+      console.log(resp);
       return { type: GET_LIST_CONTACT_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);

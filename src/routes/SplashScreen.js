@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Image, StatusBar, AsyncStorage, Text } from 'react-native';
+import { View, Image, StatusBar, AsyncStorage, Text, StyleSheet } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { getOr } from 'lodash/fp';
 
 import * as routes from './routes';
-import { _dims } from '../utils/constants';
+import { _dims, responsiveWidth } from '../utils/constants';
 import Overlay from '../components/common/Overlay';
 import {
   getListCityAction,
@@ -18,6 +18,7 @@ import strings from '../localization/authorization';
 import { ApiClient } from '../swaggerApi/src';
 
 const bg = require('../assets/images/Loading.png');
+const logo = require('../assets/images/logo.png');
 
 class SplashScreen extends React.Component {
   async componentDidMount() {
@@ -62,16 +63,17 @@ class SplashScreen extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.wrapper}>
         <StatusBar hidden />
         <Overlay visible />
         <Image
           source={bg}
-          style={{
-            width: _dims.screenWidth,
-            height: _dims.screenHeight,
-            resizeMode: 'stretch'
-          }}
+          style={styles.background}
+        />
+        <Image 
+          resizeMode="cover" 
+          source={logo} 
+          style={styles.logo} 
         />
         <Text
           style={{
@@ -92,6 +94,26 @@ const mapStateToProps = state => ({
   auth: state.auth,
   options: state.options,
   city: state.city
+});
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  background: {
+    ...StyleSheet.absoluteFillObject,
+    width: _dims.screenWidth,
+    height: _dims.screenHeight,
+    resizeMode: 'stretch',
+  },
+  logo: {
+    width: responsiveWidth(30),
+    height: responsiveWidth(30),
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
 });
 
 export default connect(mapStateToProps)(SplashScreen);

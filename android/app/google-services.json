@@ -15,19 +15,31 @@
       },
       "oauth_client": [
         {
-          "client_id": "829797175522-9ptsts2vbkflosr1r3d7kio0893pfpr4.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "829797175522-too478omo5cfp60ub9qpdaqpljaf0l60.apps.googleusercontent.com",
+          "client_id": "829797175522-qfugm2v4bg0ksp4gr64b4r1b1ef1ppps.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dfm.vstartup",
-            "certificate_hash": "278bc2eb0771b892009011a88a95aa43842d2f1d"
+            "certificate_hash": "9d122d28a71bae80319d392f74e62ada13af60cd"
           }
         },
         {
-          "client_id": "829797175522-bulca8kv7nir8ae79t0opi7qeerfiv87.apps.googleusercontent.com",
+          "client_id": "829797175522-4ms24vnav39cflm4f15o010erj5vb9b3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dfm.vstartup",
+            "certificate_hash": "4026efa33edb0bb354e800f9814089f5ebdd66f3"
+          }
+        },
+        {
+          "client_id": "829797175522-3f1q4v054bjd8940md03ujomctd390nt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dfm.vstartup",
+            "certificate_hash": "1ca026ce9910bed4730b2c68ef09c67c2722f677"
+          }
+        },
+        {
+          "client_id": "829797175522-9ptsts2vbkflosr1r3d7kio0893pfpr4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

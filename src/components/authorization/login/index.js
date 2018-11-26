@@ -5,7 +5,6 @@ import {
   Text,
   TextInput,
   Image,
-  KeyboardAvoidingView,
   StyleSheet
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -30,9 +29,6 @@ import headerStrings from '../../../localization/header';
 import { loginAction, socialAction } from '../../../redux/auth/actions';
 import emitter from '../../../emitter';
 
-import { authApi } from '../../../utils/api';
-import ApiClient from '../../../swaggerApi/src/ApiClient';
-
 const logo = require('../../../assets/images/logo.png');
 const background = require('../../../assets/images/Loading.png');
 const facebook = require('../../../assets/socials/facebook.png');
@@ -42,8 +38,8 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'agency02@gmail.com',
-      password: '123admin',
+      email: '',
+      password: '',
       googleUser: null
     };
   }
@@ -122,7 +118,7 @@ class Login extends Component {
           <Overlay visible={this.props.auth.fetching} />
           <Image style={styles.bg} resizeMode="cover" source={background} />
           <View style={styles.logoContainer}>
-            {/* <Image resizeMode="cover" source={logo} style={styles.logo} /> */}
+            <Image resizeMode="cover" source={logo} style={styles.logo} />
           </View>
           <View style={styles.inputWrapper}>
             <TextInput

@@ -32,7 +32,7 @@ class CustomerRegister extends Component {
             name: this.state.name,
             email: this.state.email,
             password: this.state.password,
-            role_id: 4
+            role_id: 4,
           }
         };
         const callback = () => registerAction(opts);
