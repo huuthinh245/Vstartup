@@ -10,12 +10,11 @@ export const _setupGoogleSignin = async callback => {
     await GoogleSignin.configure({
       iosClientId: googleSignin.ios_client_id,
       webClientId: googleSignin.web_client_id,
-      
+
       offlineAccess: false
     });
 
     const user = await GoogleSignin.currentUserAsync();
-    console.log(user);
     if (callback) {
       callback(user);
     }
@@ -41,11 +40,11 @@ export const _signInGoogle = callback => {
     .done();
 };
 
-export const _signOutGoogle = callback => {
+export const _signOutGoogle = () => {
   GoogleSignin.revokeAccess()
     .then(() => GoogleSignin.signOut())
     .then(() => {
-      callback();
+      // callback();
     })
     .done();
 };

@@ -96,6 +96,9 @@ class RealtyDetail extends Component {
   };
 
   _sendContact = () => {
+    const { params } = this.props.navigation.state;
+    const { realtyDetail, auth } = this.props;
+    const realty = realtyDetail.data[params.data.id];
     if (this.props.listContact.sending) return;
     if (!this.state.name) {
       emitter.emit('alert', {
@@ -125,7 +128,10 @@ class RealtyDetail extends Component {
         body: {
           name: this.state.name,
           email: this.state.email,
-          phone: this.state.phone
+          phone: this.state.phone,
+          realty_id: realty.id,
+          to_user_id: realty.author_id,
+          user_id: auth.user ? auth.user.id : ''
         },
         callback
       };
@@ -410,9 +416,9 @@ class RealtyDetail extends Component {
         </TouchableOpacity>
       );
     }
-    if(section.content && _ios) {
+    if (section.content && _ios) {
       return <YouTube videoId={section.content} style={styles.youtube} />;
-    }else if(section.content) {
+    } else if (section.content) {
       return (
         <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
           <TouchableOpacity

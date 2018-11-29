@@ -150,16 +150,26 @@ class Login extends Component {
           </View>
 
           <TouchableOpacity onPress={this._signIn} style={styles.inputWrapper}>
-            <Text style={[styles.input, styles.requestButtonText, { color: _colors.mainColor }]}>
+            <Text
+              style={[
+                styles.input,
+                styles.requestButtonText,
+                { color: _colors.mainColor }
+              ]}
+            >
               {strings.login}
             </Text>
           </TouchableOpacity>
 
           <View style={styles.controlWrapper}>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate(routes.forgot)}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate(routes.forgot)}
+            >
               <Text style={styles.controlText}>{strings.forgot}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate(routes.register)}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate(routes.register)}
+            >
               <Text style={styles.controlText}>{strings.register}</Text>
             </TouchableOpacity>
           </View>

@@ -442,6 +442,8 @@ class AuthDetail extends React.Component {
   };
 
   _sendContact = () => {
+    const { user } = this.props.auth;
+    const { data } = this.props;
     if (this.props.listContact.sending) return;
     if (!this.state.name) {
       emitter.emit('alert', {
@@ -471,7 +473,9 @@ class AuthDetail extends React.Component {
         body: {
           name: this.state.name,
           email: this.state.email,
-          phone: this.state.phone
+          phone: this.state.phone,
+          user_id: user ? user.id : '',
+          to_user_id: data.id
         },
         callback
       };
@@ -494,21 +498,18 @@ class AuthDetail extends React.Component {
             <Progress.Pie indeterminate size={50} />
           </View>
         )}
-        {data.id === user.id &&
-          data.role_id === 3 && (
-            <TouchableOpacity
-              style={styles.fab}
-              onPress={() =>
-                this.props.navigation.navigate(routes.createRealty)
-              }
-            >
-              <Ionicons
-                name="ios-add-circle"
-                color="#65b6fb"
-                size={responsiveFontSize(_dims.defaultFontSize * 4)}
-              />
-            </TouchableOpacity>
-          )}
+        {data.id === user.id && data.role_id === 3 && (
+          <TouchableOpacity
+            style={styles.fab}
+            onPress={() => this.props.navigation.navigate(routes.createRealty)}
+          >
+            <Ionicons
+              name="ios-add-circle"
+              color="#65b6fb"
+              size={responsiveFontSize(_dims.defaultFontSize * 4)}
+            />
+          </TouchableOpacity>
+        )}
 
         <FlatList
           style={{

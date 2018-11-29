@@ -16,7 +16,7 @@ class HistoryItem extends React.Component {
   renderType = () => {
     const { data, options } = this.props;
     const filter = JSON.parse(data.filter);
-    const type = filter.type && options.realtyTypes.find(
+    const type = filter && filter.type && options.realtyTypes.find(
       item => `${item.id}` === `${filter.type}`
     );
     if(type) {
@@ -70,7 +70,7 @@ class HistoryItem extends React.Component {
               {data.address}
             </Text>
             {
-              filter.method ? (
+              filter && filter.method ? (
                 <Text style={styles.gray}>
                   - Phương thức:{' '}
                   {options.methods.find(item => item.id === filter.method).name}
@@ -80,7 +80,7 @@ class HistoryItem extends React.Component {
                 null
             }
             {
-              filter.price ? (
+              filter && filter.price ? (
                 <Text style={styles.gray}>
                   - Giá: {filter.price.split(',').map(Number)[0]} -{' '}
                   {filter.price.split(',').map(Number)[1]}{' '}
@@ -91,7 +91,7 @@ class HistoryItem extends React.Component {
                 null
             }
             {
-              filter.area ? (
+              filter && filter.area ? (
                 <Text style={styles.gray}>
                   - Diện tích: {filter.area.split(',').map(Number)[0]} -{' '}
                   {filter.area.split(',').map(Number)[1]} m²
@@ -101,27 +101,28 @@ class HistoryItem extends React.Component {
                 null
             }
             {
-              filter.toilet ? (
+              filter && filter.toilet ? (
                 <Text style={styles.gray}>- Số WC: {filter.toilet}</Text>
               )
                 :
                 null
             }
-            {filter.bedroom ? (
-              <Text style={styles.gray}>- Số phòng ngủ: {filter.bedroom}</Text>
+            {
+              filter && filter.bedroom ? (
+                <Text style={styles.gray}>- Số phòng ngủ: {filter.bedroom}</Text>
             )
               :
               null
             }
             {
-              filter.bathroom ? (
+              filter && filter.bathroom ? (
                 <Text style={styles.gray}>- Số phòng tắm: {filter.bathroom}</Text>
               )
                 :
                 null
             }
             {this.renderType()}
-            {filter.utils && filter.utils.length > 0 ? (
+            {filter && filter.utils && filter.utils.length > 0 ? (
               <Text style={styles.gray}>
                 - Tiện ích:
                 {`${filter.utils

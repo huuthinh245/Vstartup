@@ -72,6 +72,9 @@ class ProjectDetail extends Component {
   };
 
   _sendContact = () => {
+    const { params } = this.props.navigation.state;
+    const { projectDetail, auth } = this.props;
+    const project = projectDetail.data[params.data.id];
     if (this.props.listContact.sending) return;
     if (!this.state.name) {
       emitter.emit('alert', {
@@ -101,7 +104,10 @@ class ProjectDetail extends Component {
         body: {
           name: this.state.name,
           email: this.state.email,
-          phone: this.state.phone
+          phone: this.state.phone,
+          project_id: project.id,
+          to_user_id: project.author_id,
+          user_id: auth.user ? auth.user.id : ''
         },
         callback
       };
@@ -421,9 +427,9 @@ class ProjectDetail extends Component {
         </TouchableOpacity>
       );
     }
-    if(section.content && _ios) {
+    if (section.content && _ios) {
       return <YouTube videoId={section.content} style={styles.youtube} />;
-    }else if(section.content) {
+    } else if (section.content) {
       return (
         <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
           <TouchableOpacity
@@ -595,7 +601,7 @@ export const styles = StyleSheet.create({
     borderRightWidth: 2,
     borderColor: _colors.mainColor,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   infoText: {
     fontSize: responsiveFontSize(_dims.defaultFontSubTitle),

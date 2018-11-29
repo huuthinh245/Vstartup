@@ -144,9 +144,11 @@ const registerEpic = actions$ =>
 const socialEpic = actions$ =>
   actions$.ofType(SOCIAL).switchMap(async action => {
     try {
+      console.log(action.payload);
       const resp = await authApi.registerSocial(action.payload);
       ApiClient.instance.authentications.Bearer.apiKeyPrefix = 'Bearer';
       ApiClient.instance.authentications.Bearer.apiKey = resp.body.token;
+      console.log(resp);
       AsyncStorage.setItem('token', resp.body.token);
       return { type: SOCIAL_SUCCESS, payload: resp.body };
     } catch (error) {

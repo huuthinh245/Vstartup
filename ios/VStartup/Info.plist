@@ -35,14 +35,14 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.516840190140-phpsd9jt47ghvr3mksploufod99cj7ro</string>
+				<string>com.googleusercontent.apps.829797175522-bcid7vsl5vntqcg8sqktu1isa6nr9786</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>111</string>
 	<key>CLIENT_ID</key>
-	<string>516840190140-phpsd9jt47ghvr3mksploufod99cj7ro.apps.googleusercontent.com</string>
+	<string>829797175522-bcid7vsl5vntqcg8sqktu1isa6nr9786.apps.googleusercontent.com</string>
 	<key>FacebookAppID</key>
 	<string>446582652460169</string>
 	<key>FacebookDisplayName</key>
@@ -58,6 +58,8 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>localhost</key>
@@ -106,7 +108,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.516840190140-phpsd9jt47ghvr3mksploufod99cj7ro</string>
+	<string>com.googleusercontent.apps.829797175522-bcid7vsl5vntqcg8sqktu1isa6nr9786</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

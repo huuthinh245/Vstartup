@@ -17,7 +17,7 @@ _responseInfoCallback = (error, result) => {
 
 export const _requestFB = async callback => {
   LoginManager.logOut();
-  LoginManager.logInWithPublishPermissions(['publish_actions'])
+  LoginManager.logInWithReadPermissions(['public_profile', 'email'])
     .then((result, error) => {
       if (error) {
         _alert(alertStrings.error, `(code = ${error.code}), ${error.message}`, [
@@ -41,10 +41,13 @@ export const _requestFB = async callback => {
             },
             (error, result) => {
               if (error) {
-                _alert(alertStrings.error, `(code = ${error.code}), ${error.message}`, [
-                  { text: alertStrings.ok }
-                ]);
+                _alert(
+                  alertStrings.error,
+                  `(code = ${error.code}), ${error.message}`,
+                  [{ text: alertStrings.ok }]
+                );
               } else {
+                console.log(result);
                 const opts = Object.assign(
                   {},
                   {
