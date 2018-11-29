@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import Overlay from '../components/common/Overlay';
-import { Separator, Empty, PlaceHolder } from '../components/flatlistHelpers';
+import { Empty, PlaceHolder } from '../components/flatlistHelpers';
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import errorStrings from '../localization/error';
@@ -25,8 +25,6 @@ import {
   _ios
 } from '../utils/constants';
 import emitter from '../emitter';
-import * as routes from '../routes/routes';
-import HistoryItem from '../components/HistoryItem';
 import {
   getListContactAction,
   refreshListContactAction,
@@ -49,18 +47,19 @@ class ListContact extends React.Component {
     super(props);
     this.state = {
       edit: false,
-      selected: []
+      selected: [],
+      page: 1
     };
     this.onEndReachedCalledDuringMomentum = true;
   }
   componentDidMount() {
-    console.log(this.props);
-    getListContactAction();
+    getListContactAction({ page: this.state.page });
   }
 
   _onRefresh = () => {
     if (this.props.listContact.refreshing) return;
-    refreshListContactAction();
+    refreshListContactAction({ page: 1 });
+    this.setState({ page: 1 });
   };
 
   _renderItem = ({ item }) => {
@@ -154,6 +153,7 @@ class ListContact extends React.Component {
     const len = this.props.listContact.data.length;
     const page = Math.round(len / LIMIT_SERVICES) + 1;
     loadMoreListContactAction({ page });
+    this.setState({ page });
     this.onEndReachedCalledDuringMomentum = true;
   };
 

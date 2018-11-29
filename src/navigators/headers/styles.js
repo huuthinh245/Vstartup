@@ -39,7 +39,7 @@ export const styles = StyleSheet.create({
     fontSize: 15,
     flex: 1,
     color: 'gray',
-    padding: 7
+    margin: 7
   },
   searchBarInputClear: {
     paddingHorizontal: 5,

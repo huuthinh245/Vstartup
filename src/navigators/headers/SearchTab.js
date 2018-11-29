@@ -22,38 +22,41 @@ export default class Header extends React.Component {
           onPress={this.props.onTitlePress}
         >
           <Ionicons
-            size={18}
+            size={20}
             color="gray"
             name="ios-search"
-            style={{ alignSelf: 'center', marginRight: 5 }}
+            style={{ alignSelf: 'center', marginRight: 2 }}
           />
           <Text style={styles.searchBarInput}>
             {this.props.title || headerStrings.searchCityPlaceholder}
           </Text>
-          {
-            this.props.title ?
-              <Ionicons
-                size={18}
-                color="gray"
-                name="ios-close-circle"
-                style={{ alignSelf: 'center', marginLeft: 10 }}
-                onPress={this.props.clearAddress}
-              />
-              : null
-          }
+          {this.props.title ? (
+            <Ionicons
+              size={24}
+              color="gray"
+              name="ios-close-circle"
+              style={{
+                alignSelf: 'center',
+                marginLeft: 10,
+                width: 24,
+                height: 24
+              }}
+              onPress={this.props.clearAddress}
+            />
+          ) : null}
           {this.props.adding ? (
             <ActivityIndicator />
           ) : (
             <Ionicons
-              size={18}
+              size={24}
               color={this.props.bookmarked ? 'rgb(0,122,255)' : 'gray'}
               name={
-                  this.props.bookmarked ? 'ios-bookmark' : 'ios-bookmark-outline'
-                }
-              style={{ alignSelf: 'center', marginLeft: 10 }}
+                this.props.bookmarked ? 'ios-bookmark' : 'ios-bookmark-outline'
+              }
+              style={{ alignSelf: 'center', marginLeft: 7 }}
               onPress={this.props.bookmarkAddress}
             />
-            )}
+          )}
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
