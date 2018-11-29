@@ -47,7 +47,6 @@ const getListContact = actions$ =>
   actions$.ofType(GET_LIST_CONTACT).switchMap(async action => {
     try {
       const a = {
-        keyword: '214',
         page: 1
       };
       const resp = await contactApi.listContact(a);

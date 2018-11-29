@@ -15,7 +15,6 @@ export const _setupGoogleSignin = async callback => {
     });
 
     const user = await GoogleSignin.currentUserAsync();
-    console.log(user);
     if (callback) {
       callback(user);
     }

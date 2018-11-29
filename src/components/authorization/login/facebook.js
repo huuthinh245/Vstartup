@@ -17,7 +17,7 @@ _responseInfoCallback = (error, result) => {
 
 export const _requestFB = async callback => {
   LoginManager.logOut();
-  LoginManager.logInWithPublishPermissions(['publish_actions'])
+  LoginManager.logInWithReadPermissions(['public_profile', 'email', 'user_location'])
     .then((result, error) => {
       if (error) {
         _alert(alertStrings.error, `(code = ${error.code}), ${error.message}`, [
@@ -27,6 +27,7 @@ export const _requestFB = async callback => {
         console.log('isCanceled');
       } else {
         AccessToken.getCurrentAccessToken().then(data => {
+          console.log(data);
           const infoRequest = new GraphRequest(
             '/me',
             {
@@ -45,6 +46,7 @@ export const _requestFB = async callback => {
                   { text: alertStrings.ok }
                 ]);
               } else {
+                console.log(result);
                 const opts = Object.assign(
                   {},
                   {
