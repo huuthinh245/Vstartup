@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Easing } from 'react-native';
+import { View, Easing, Text } from 'react-native';
 import { connect } from 'react-redux';
 import FlipView from 'react-native-flip-view-next';
 import RNGooglePlaces from 'react-native-google-places';
@@ -153,15 +153,15 @@ class SearchTab extends React.Component {
       })
       .catch(error => console.log(error.message));
   };
-  
-  convertRealtyTypes = (info) => {
+
+  convertRealtyTypes = info => {
     const { realtyTypes } = this.props;
     const data = Object.assign({}, info);
     if (data.type) {
       Object.assign(data, { type: realtyTypes[parseInt(data.type, 0)].id });
     }
     return data;
-  }
+  };
   _onFilterPress = () => {
     this.props.navigation.navigate(routes.filterScreen, {
       onDone: options => {

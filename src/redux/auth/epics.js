@@ -171,12 +171,17 @@ const updateInfoEpic = actions$ =>
 
 const updatePasswordEpic = actions$ =>
   actions$.ofType(UPDATE_PASSWORD).switchMap(async action => {
+    const { currentPassword, newPassword, callback } = action.payload;
     try {
-      const resp = await userApi.updatePassword(action.payload);
+      const resp = await userApi.updatePassword(
+        currentPassword,
+        newPassword,
+        callback
+      );
       action.payload.callback();
       return { type: UPDATE_PASSWORD_SUCCESS, payload: resp.body };
     } catch (error) {
-      handleError(error, true);
+      // handleError(error, true);
       return { type: UPDATE_PASSWORD_FAILURE, payload: error };
     }
   });

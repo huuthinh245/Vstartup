@@ -386,7 +386,7 @@ class AuthDetail extends React.Component {
                     this.emailDom = email;
                   }}
                   style={styles.input}
-                  placeholder={strings.email}
+                  placeholder="email"
                   value={this.state.email}
                   onChangeText={email => this.setState({ email })}
                   returnKeyType="next"
@@ -751,7 +751,8 @@ export const styles = StyleSheet.create({
   input: {
     backgroundColor: 'transparent',
     flex: 1,
-    color: 'black'
+    color: 'black',
+    marginLeft: 10
   },
   submit: {
     padding: 10,

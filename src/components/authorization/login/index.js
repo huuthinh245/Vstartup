@@ -140,7 +140,7 @@ class Login extends Component {
                 this.password = password;
               }}
               value={this.state.password}
-              placeholder={strings.password}
+              placeholder={strings.passwordLogin}
               secureTextEntry
               onChangeText={password => this.setState({ password })}
               style={styles.input}

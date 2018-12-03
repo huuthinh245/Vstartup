@@ -12,8 +12,6 @@ import FastImage from 'react-native-fast-image';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Carousel from 'react-native-snap-carousel';
-import Modal from 'react-native-modalbox';
-import Swiper from 'react-native-swiper';
 import emitter from '../../emitter';
 
 import * as routes from '../../routes/routes';
@@ -141,6 +139,13 @@ const styles = StyleSheet.create({
   },
   iconHighlight: {
     fontSize: 32,
+    marginTop: 10,
+    alignSelf: 'center',
+    opacity: 1
+  },
+  iconHighlight2: {
+    fontSize: 24,
+    marginTop: 10,
     alignSelf: 'center',
     opacity: 1
   },
@@ -358,6 +363,14 @@ class Map extends React.Component {
                 : styles.icon,
               { color: renderColor(marker.method) }
             ];
+            // const iconStyle2 = [
+            //   { color: renderColor(marker.method) },
+            //   { color: 'mediumpurple' },
+            //   { margin: 0 },
+            //   { padding: 0 },
+            //   { transform: [{ rotate: '90deg' }, { translateX: -20 }] },
+            //   styles.iconHighlight2
+            // ];
             return (
               <Marker
                 key={marker.id}
@@ -367,6 +380,17 @@ class Map extends React.Component {
                   longitude: marker.coordinate.lng
                 }}
               >
+                {/* <View
+                  style={{ backgroundColor: 'mediumpurple', borderRadius: 8 }}
+                >
+                  <Text style={{ marginHorizontal: 5, marginVertical: 2 }}>
+                    1.400 K
+                  </Text>
+                </View>
+                <View style={{ justifyContent: 'center' }}>
+                  <Icon name="ios-play" style={iconStyle2} />
+                </View> */}
+
                 <Icon name="md-pin" style={iconStyle} />
               </Marker>
             );

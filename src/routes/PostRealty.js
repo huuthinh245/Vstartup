@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import React from 'react';
 import {
   View,
@@ -321,8 +322,6 @@ class PostRealty extends React.Component {
       }
     } else {
       const form = [];
-      const link = state.youtube;
-      const splitLink = link ? link.split('?v=') : [];
       form.push({ name: 'contact_email', data: state.contactEmail });
       form.push({ name: 'contact_phone', data: `${state.contactPhone}` });
       form.push({ name: 'contact_name', data: state.contactName });
@@ -343,21 +342,23 @@ class PostRealty extends React.Component {
         name: 'utility',
         data: state.utils.map(item => item.id).toString()
       });
-      form.push({ name: 'body', data: state.description });
-      if (splitLink.length >= 2) {
-        form.push({ name: 'video', data: splitLink[1] });
+      if (state.description) {
+        form.push({ name: 'body', data: state.description });
+      }
+      if (state.youtube) {
+        form.push({ name: 'video', data: state.youtube });
       }
       form.push({ name: 'address', data: state.address });
       form.push({ name: 'city_id', data: `${state.city.id}` });
       form.push({ name: 'district_id', data: `${state.district.id}` });
       form.push({ name: 'ward_id', data: `${state.ward.id}` });
-      form.push({
-        name: 'coordinate',
-        data: JSON.stringify({
-          lat: `${state.address.latitude}`,
-          lng: `${state.address.longitude}`
-        })
-      });
+      // form.push({
+      //   name: 'coordinate',
+      //   data: JSON.stringify({
+      //     lat: `${state.address.latitude}`,
+      //     lng: `${state.address.longitude}`
+      //   })
+      // });
 
       state.images.forEach((item, index) => {
         if (item !== 'flag') {
@@ -699,7 +700,13 @@ class PostRealty extends React.Component {
                     _district = city.district.find(
                       item => item.name === data[0]
                     );
+                  } else {
+                    const list_district = city.district.filter(
+                      item => item.city_id === this.state.city.id
+                    );
+                    _district = list_district[0];
                   }
+                  console.log(_district);
                   this.setState({ district: _district });
                 }
               });
@@ -731,6 +738,11 @@ class PostRealty extends React.Component {
                   let _ward = city.ward[0];
                   if (data[0] !== '<null>') {
                     _ward = city.ward.find(item => item.name === data[0]);
+                  } else {
+                    const list_city = city.ward.filter(
+                      item => item.district_id === this.state.district.id
+                    );
+                    _ward = list_city[0];
                   }
                   this.setState({ ward: _ward });
                 }
