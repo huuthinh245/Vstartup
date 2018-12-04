@@ -74,6 +74,7 @@ android {
 }
 
 dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
     api project(':react-native-google-signin')
     api project(':react-native-picker')
     api(project(':react-native-google-places')){
@@ -102,7 +103,6 @@ dependencies {
     api project(':react-native-localization')
     api project(':react-native-restart')
     api project(':react-native-vector-icons')
-    api fileTree(include: ['*.jar'], dir: 'libs')
     api "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     api 'com.facebook.react:react-native:+'
     api 'com.android.support:multidex:1.0.0'
