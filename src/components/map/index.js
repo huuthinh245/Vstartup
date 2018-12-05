@@ -21,6 +21,7 @@ import {
 } from '../../redux/realtyDetail/actions';
 import { _dims, responsiveFontSize, _ios } from '../../utils/constants';
 import { getMapRealtyAction } from '../../redux/mapRealty/actions';
+import TabFilter from '../../components/TabFilter';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   },
   pointer: {
     position: 'absolute',
-    top: 15,
+    top: responsiveFontSize(50),
     right: 15,
     zIndex: 10000,
     width: 40,
@@ -144,10 +145,9 @@ const styles = StyleSheet.create({
     opacity: 1
   },
   iconHighlight2: {
-    fontSize: 24,
-    marginTop: 10,
-    alignSelf: 'center',
-    opacity: 1
+    fontSize: 20,
+    opacity: 1,
+    width: 18
   },
   modal: {
     justifyContent: 'center',
@@ -156,6 +156,20 @@ const styles = StyleSheet.create({
   },
   modalContents: {
     height: (_dims.screenHeight - 100) / 3
+  },
+  textMarker: {
+    marginHorizontal: 5,
+    marginVertical: 2,
+    color: '#fff'
+  },
+  iconStyle2: {
+    color: 'mediumpurple',
+    margin: 0,
+    padding: 0,
+    transform: [{ rotate: '90deg' }, { translateX: -5 }],
+    fontSize: 20,
+    opacity: 1,
+    width: 18
   }
 });
 const renderColor = type => {
@@ -337,6 +351,7 @@ class Map extends React.Component {
     const pointColor = [0, 2].indexOf(mapType) > -1 ? 'rgb(0,122,255)' : '#fff';
     return (
       <View style={styles.main}>
+        <TabFilter options={this.props.options} />
         <MapView
           ref={map => {
             this.map = map;
@@ -357,19 +372,11 @@ class Map extends React.Component {
           onRegionChangeComplete={this._onRegionChangeComplete}
         >
           {data.map(marker => {
-            const iconStyle = [
-              parseInt(currentMarkerSelectedId, 10) === marker.id
-                ? styles.iconHighlight
-                : styles.icon,
-              { color: renderColor(marker.method) }
-            ];
-            // const iconStyle2 = [
-            //   { color: renderColor(marker.method) },
-            //   { color: 'mediumpurple' },
-            //   { margin: 0 },
-            //   { padding: 0 },
-            //   { transform: [{ rotate: '90deg' }, { translateX: -20 }] },
-            //   styles.iconHighlight2
+            // const iconStyle = [
+            //   parseInt(currentMarkerSelectedId, 10) === marker.id
+            //     ? styles.iconHighlight
+            //     : styles.icon,
+            //   { color: renderColor(marker.method) }
             // ];
             return (
               <Marker
@@ -380,18 +387,26 @@ class Map extends React.Component {
                   longitude: marker.coordinate.lng
                 }}
               >
-                {/* <View
+                <View
                   style={{ backgroundColor: 'mediumpurple', borderRadius: 8 }}
                 >
-                  <Text style={{ marginHorizontal: 5, marginVertical: 2 }}>
-                    1.400 K
+                  <Text style={styles.textMarker}>
+                    {`${marker.price} ${marker.price_unit}`}
                   </Text>
                 </View>
-                <View style={{ justifyContent: 'center' }}>
-                  <Icon name="ios-play" style={iconStyle2} />
-                </View> */}
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Icon
+                    name="ios-play"
+                    style={[styles.iconStyle2, styles.iconHighlight2]}
+                  />
+                </View>
 
-                <Icon name="md-pin" style={iconStyle} />
+                {/* <Icon name="md-pin" style={iconStyle} /> */}
               </Marker>
             );
           })}
@@ -407,7 +422,7 @@ class Map extends React.Component {
           onPress={this._requestRecenter}
           style={[
             styles.pointer,
-            { top: 70, backgroundColor: pointBackground }
+            { top: responsiveFontSize(100), backgroundColor: pointBackground }
           ]}
         >
           <Icon name="ios-locate-outline" color={pointColor} size={24} />

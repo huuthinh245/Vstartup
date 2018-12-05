@@ -31,7 +31,7 @@ const dataSelect = [
   { id: 2, value: '2' },
   { id: 3, value: '3' },
   { id: 4, value: '4' },
-  { id: 5, value: '>= 5' }
+  { id: 5, value: '5+' }
 ];
 
 class Filter extends React.Component {
@@ -153,7 +153,7 @@ class Filter extends React.Component {
       Object.assign(result, {
         utils: opts.utils.map(item => item.id).toString()
       });
-    }else {
+    } else {
       delete result.utils;
     }
     if (
@@ -442,10 +442,9 @@ class Filter extends React.Component {
                     item => item.name
                   )}
                   defaultIndex={parseInt(this.state.realtyType, 10)}
-                  onSelect={(index) => {
+                  onSelect={index => {
                     this.setState({ realtyType: parseInt(index, 10) });
-                  }
-                  }
+                  }}
                 >
                   <Text style={[styles.value, { flex: 1 }]}>
                     {

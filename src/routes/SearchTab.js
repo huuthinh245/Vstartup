@@ -19,6 +19,7 @@ import {
 
 import * as routes from './routes';
 import Map from '../components/map';
+import TabFilter from '../components/TabFilter';
 
 json = obj => JSON.stringify(obj);
 
@@ -225,13 +226,16 @@ class SearchTab extends React.Component {
           <FlipView
             style={{ flex: 1 }}
             front={
-              <Map
-                {...mapRealty}
-                init={[DEFAULT_LAT, DEFAULT_LON]}
-                options={this.convertRealtyTypes(this.state.options)}
-                navigation={navigation}
-                auth={auth}
-              />
+              <View style={{ flex: 1 }}>
+                {/* <TabFilter /> */}
+                <Map
+                  {...mapRealty}
+                  init={[DEFAULT_LAT, DEFAULT_LON]}
+                  options={this.convertRealtyTypes(this.state.options)}
+                  navigation={navigation}
+                  auth={auth}
+                />
+              </View>
             }
             back={
               <SearchBack
