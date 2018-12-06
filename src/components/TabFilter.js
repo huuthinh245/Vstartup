@@ -7,18 +7,21 @@ import {
   TouchableOpacity,
   Animated
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import { responsiveFontSize, _colors, _dims } from '../utils/constants';
+import { responsiveFontSize, _colors, _dims, _ios } from '../utils/constants';
+import strings from '../localization/filter';
+import emitter from '../emitter';
 
 class TabFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       arr: [
-        { id: 1, name: 'Loại bất động sản', value: 'any' },
-        { id: 2, name: 'Giá', value: 'any' },
-        { id: 3, name: 'Phòng ngủ', value: 'any' }
+        { id: 1, name: strings.projectType, value: 'any' },
+        { id: 2, name: strings.price, value: 'any' },
+        { id: 3, name: strings.bedroom, value: 'any' }
       ],
       bedArr: [
         { id: 0, value: '0+' },
@@ -29,10 +32,94 @@ class TabFilter extends React.Component {
         { id: 5, value: '5+' }
       ],
       checkId: null,
+      checkIdProject: null,
       checkBedId: null,
-      translateY: new Animated.Value(0)
+      translateY: new Animated.Value(0),
+      flexible: false,
+      priceRange: [0, 20]
     };
   }
+
+  componentDidMount() {
+    this._changeFilterTab = emitter.addListener(
+      'changeFilterTab',
+      dataFilter => {
+        const { options } = this.props;
+        if (dataFilter) {
+          const dataConvert = this.convertRealtyTypes(dataFilter);
+
+          const data = options.data.realtyTypes.filter(
+            item => item.id === parseInt(dataConvert.type, 0)
+          );
+          const new_state = Object.assign({}, this.state);
+          const new_arr = new_state.arr;
+          Object.assign(new_arr[0], {
+            value: data.length > 0 ? data[0].name : 'any'
+          });
+          const newPrice = dataFilter.price
+            ? dataFilter.price.split(',').map(Number)
+            : [];
+          Object.assign(new_arr[1], {
+            value:
+              newPrice[0] === 0
+                ? `~ ${newPrice[1]} tỉ`
+                : `${newPrice[0]} tỉ ~ ${newPrice[1]} tỉ`
+          });
+          this.setState({
+            checkIdProject: parseInt(dataConvert.type, 0),
+            arr: new_arr,
+            priceRange: newPrice
+          });
+        } else {
+          const new_state = Object.assign({}, this.state);
+          const new_arr = new_state.arr;
+          Object.assign(new_arr[0], {
+            value: 'any'
+          });
+          Object.assign(new_arr[1], {
+            value: 'any'
+          });
+          this.setState({
+            checkIdProject: null,
+            arr: new_arr
+          });
+        }
+      }
+    );
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      this.props.dataFilter !== nextProps.dataFilter ||
+      this.state !== nextState
+    ) {
+      // const dataOptions = Object.assign({}, options);
+      // const data = dataOptions.data.projectTypes.filter(
+      //   item => item.id === nextProps.dataFilter.type
+      // );
+
+      // Object.assign(this.state.arr[0], {
+      //   value: data.length > 0 ? data[0].name : 'any'
+      // });
+      return true;
+    }
+    return false;
+  }
+
+  componentWillUnmount() {
+    this._changeFilterTab.remove();
+  }
+
+  convertRealtyTypes = info => {
+    const { options } = this.props;
+    const data = Object.assign({}, info);
+    if (data.type) {
+      Object.assign(data, {
+        type: options.data.realtyTypes[parseInt(data.type, 0)].id
+      });
+    }
+    return data;
+  };
 
   _keyExtractor = item => item.id.toString();
   _checkId = item => {
@@ -44,13 +131,74 @@ class TabFilter extends React.Component {
       this.setState({ checkId: item.id });
     }
   };
-  _translate = value => {
-    Animated.timing(this.state.translateY, {
-      toValue: value,
-      duration: 600,
-      useNativeDriver: true
-    }).start();
+  _checkIdProjectFromFilter = item => {
+    this.setState({
+      checkIdProject: item.id
+    });
   };
+  _checkIdProject = item => {
+    const { options } = this.props;
+    if (item.id === this.state.checkIdProject) {
+      this.setState({ checkIdProject: null });
+      this.state.arr[0].value = 'any';
+      // this.setState({
+      //   arr: this.state.arr
+      // });
+    } else {
+      const dataProject = options.data.realtyTypes.filter(
+        realtyTypes => realtyTypes.id === item.id
+      );
+      const new_state = Object.assign({}, this.state);
+      const new_arr = new_state.arr;
+      new_arr.filter(arr => {
+        if (arr.id === this.state.checkId) {
+          return Object.assign(arr, { value: dataProject[0].name });
+        }
+        return arr;
+      });
+      this.setState({
+        checkIdProject: item.id,
+        arr: new_arr
+      });
+    }
+  };
+  _translate = value => {
+    if (_ios) {
+      Animated.timing(this.state.translateY, {
+        toValue: value,
+        duration: 400,
+        useNativeDriver: true
+      }).start();
+    } else if (value && !this.state.flexible) {
+      this.setState({ flexible: true });
+      Animated.timing(this.state.translateY, {
+        toValue: value,
+        duration: 400,
+        useNativeDriver: true
+      }).start();
+    } else if (value && this.state.flexible) {
+      Animated.timing(this.state.translateY, {
+        toValue: value,
+        duration: 400,
+        useNativeDriver: true
+      }).start();
+    } else {
+      Animated.timing(this.state.translateY, {
+        toValue: value,
+        duration: 400,
+        useNativeDriver: true
+      }).start(() => this.setState({ flexible: false }));
+    }
+  };
+  // _anim = (value, callback = () => {}) => {
+  //   Animated.timing(this.state.translateY, {
+  //     toValue: value,
+  //     duration: 400,
+  //     useNativeDriver: true
+  //   }).start(() => {
+  //     callback();
+  //   });
+  // };
   _renderItem = ({ item }) => {
     return (
       <TouchableOpacity
@@ -73,32 +221,72 @@ class TabFilter extends React.Component {
       </TouchableOpacity>
     );
   };
+  _closeModal = () => {
+    this.setState({ checkId: null });
+    this._translate(0);
+  };
+
+  _valueSliderChange = data => {
+    const new_state = Object.assign({}, this.state);
+    const new_arr = new_state.arr;
+    Object.assign(new_arr[1], {
+      value: data[0] === 0 ? `~ ${data[1]} tỉ` : `${data[0]} tỉ ~ ${data[1]} tỉ`
+    });
+    this.setState({
+      arr: new_arr
+    });
+  };
   _renderFilterData = () => {
     const { options } = this.props;
     const { bedArr, checkBedId } = this.state;
     switch (this.state.checkId) {
       case 1:
-        return options.data.projectTypes.map(item => {
-          return <Text key={item.id}>{item.name}</Text>;
-        });
+        return (
+          <View>
+            {options.data.realtyTypes.map(item => {
+              return (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={this._checkIdProject.bind(this, item)}
+                >
+                  <Text style={styles.projectItemStyle}>{item.name}</Text>
+                  {item.id === this.state.checkIdProject && (
+                    <Icon
+                      name="ios-checkmark-outline"
+                      size={36}
+                      color="green"
+                      style={{ position: 'absolute', right: 5 }}
+                    />
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+            <TouchableOpacity
+              style={styles.buttonDoneStyle}
+              onPress={this._closeModal}
+            >
+              <Text style={[styles.projectItemStyle, styles.buttonText]}>
+                {strings.done}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        );
       case 2:
         return (
           <View style={styles.sliderWrapper}>
             <MultiSlider
               sliderLength={_dims.screenWidth - _dims.defaultPadding * 4}
-              // onValuesChangeStart={this._disableScroll}
-              // onValuesChangeFinish={this._enableScroll}
-              // onValuesChange={values => this.setState({ priceRange: values })}
+              onValuesChange={this._valueSliderChange}
               selectedStyle={styles.selectedStyle}
               unselectedStyle={styles.unselectedStyle}
-              values={[0, 1000]}
+              values={this.state.priceRange}
               containerStyle={styles.sliderContainerStyle}
               trackStyle={styles.trackStyle}
               markerStyle={styles.markerStyle}
               min={0}
-              max={1000}
-              step={100}
-              allowOverlap
+              max={20}
+              step={1}
+              // allowOverlap
               snapped
             />
             <View style={styles.sliderValueWrapper}>
@@ -110,27 +298,14 @@ class TabFilter extends React.Component {
       // eslint-disable-next-line no-fallthrough
       case 3:
         return (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginVertical: 10
-            }}
-          >
+          <View style={styles.wrapperBed}>
             {bedArr.map(item => {
               return (
                 <TouchableOpacity
                   onPress={() => this.setState({ checkBedId: item.id })}
                   key={item.id}
                   style={[
-                    {
-                      borderWidth: 1,
-                      borderColor: _colors.mainColor,
-                      width: responsiveFontSize(14) * 4,
-                      height: responsiveFontSize(14) * 4,
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    },
+                    styles.wrapperBedItem,
                     checkBedId === item.id && {
                       backgroundColor: _colors.mainColor
                     }
@@ -160,18 +335,14 @@ class TabFilter extends React.Component {
       inputRange: [0, 1],
       outputRange: [-500, 0]
     });
-    const { options } = this.props;
     return (
-      <View style={{ zIndex: 10001, backgroundColor: 'yellow' }}>
-        <View
-          style={{
-            borderBottomWidth: 1,
-            borderColor: 'silver',
-            backgroundColor: '#fff',
-            zIndex: 10000,
-            height: responsiveFontSize(45)
-          }}
-        >
+      <Animated.View
+        style={[
+          styles.wrapperBody,
+          !_ios && this.state.flexible && { flex: 1 }
+        ]}
+      >
+        <View style={styles.wrapperList}>
           <FlatList
             style={{ margin: 5 }}
             data={this.state.arr}
@@ -183,7 +354,7 @@ class TabFilter extends React.Component {
                 onPress={() => alert('go filter')}
                 style={[styles.wrapperItem, { marginLeft: 5 }]}
               >
-                <Text style={styles.textItem}>lọc</Text>
+                <Text style={styles.textItem}>{strings.filter}</Text>
               </TouchableOpacity>
             )}
             showsHorizontalScrollIndicator={false}
@@ -192,28 +363,38 @@ class TabFilter extends React.Component {
         </View>
 
         <Animated.View
-          style={{
-            position: 'absolute',
-            width: '100%',
-            top: responsiveFontSize(45),
-            backgroundColor: '#fff',
-            transform: [{ translateY }]
-          }}
+          style={[styles.modalStyle, { transform: [{ translateY }] }]}
         >
           {this._renderFilterData()}
         </Animated.View>
-      </View>
+      </Animated.View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  wrapperBody: {
+    zIndex: 100001,
+    backgroundColor: 'rgba(0,0,0,0)'
+  },
+  wrapperList: {
+    borderBottomWidth: 1,
+    borderColor: 'silver',
+    backgroundColor: '#fff',
+    zIndex: 10000,
+    height: responsiveFontSize(45)
+  },
   wrapperItem: {
     borderWidth: 1,
     borderColor: 'silver',
     borderRadius: 4
   },
-
+  modalStyle: {
+    position: 'absolute',
+    width: '100%',
+    top: responsiveFontSize(45),
+    backgroundColor: '#fff'
+  },
   textItem: {
     fontSize: responsiveFontSize(16),
     color: _colors.mainColor,
@@ -254,6 +435,34 @@ const styles = StyleSheet.create({
   sliderValue: {
     alignSelf: 'flex-start',
     color: '#555'
+  },
+  wrapperBed: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 10
+  },
+  wrapperBedItem: {
+    borderWidth: 1,
+    borderColor: _colors.mainColor,
+    width: responsiveFontSize(14) * 4,
+    height: responsiveFontSize(14) * 4,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  projectItemStyle: {
+    marginVertical: 10,
+    marginHorizontal: 10
+  },
+  buttonDoneStyle: {
+    borderTopWidth: 1,
+    borderTopColor: _colors.mainColor,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    color: _colors.mainColor,
+    fontSize: responsiveFontSize(16)
   }
 });
 

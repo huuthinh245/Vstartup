@@ -351,7 +351,7 @@ class Map extends React.Component {
     const pointColor = [0, 2].indexOf(mapType) > -1 ? 'rgb(0,122,255)' : '#fff';
     return (
       <View style={styles.main}>
-        <TabFilter options={this.props.options} />
+        <TabFilter dataFilter={this.props.options} />
         <MapView
           ref={map => {
             this.map = map;

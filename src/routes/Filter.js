@@ -24,6 +24,7 @@ import {
 import Header from '../navigators/headers/CommonHeader';
 import headerStrings from '../localization/header';
 import strings from '../localization/filter';
+import emitter from '../emitter';
 
 const dataSelect = [
   { id: 0, value: '_' },
@@ -132,6 +133,7 @@ class Filter extends React.Component {
       lat: options.lat,
       lng: options.lng
     };
+    emitter.emit('changeFilterTab');
     this.props.navigation.state.params.onDone(opts);
     this.props.navigation.goBack();
   };
@@ -160,6 +162,7 @@ class Filter extends React.Component {
       JSON.stringify(this.props.navigation.state.params.options) !==
       JSON.stringify(result)
     ) {
+      emitter.emit('changeFilterTab', result);
       this.props.navigation.state.params.onDone(result);
     }
     this.props.navigation.goBack();

@@ -18,7 +18,8 @@ const strings = new LocalizedStrings({
     moreThanFive: 'More than 5',
     pleaseSelect: '--- Select ---',
     clear: 'Clear filters',
-    cancel: 'Cancel filters'
+    cancel: 'Cancel filters',
+    done: 'Done'
   },
   vni: {
     filter: 'Lọc',
@@ -36,7 +37,8 @@ const strings = new LocalizedStrings({
     moreThanFive: 'Nhiều hơn 5',
     pleaseSelect: '--- Lựa chọn ---',
     clear: 'Chọn lại',
-    cancel: 'Bỏ bộ lọc'
+    cancel: 'Bỏ bộ lọc',
+    done: 'Đóng'
   }
 });
 
