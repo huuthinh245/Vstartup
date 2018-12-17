@@ -20,6 +20,7 @@ import {
 import * as routes from './routes';
 import Map from '../components/map';
 import TabFilter from '../components/TabFilter';
+import PickObjOnMap from './PickObjOnMap';
 
 json = obj => JSON.stringify(obj);
 
@@ -48,7 +49,6 @@ class SearchTab extends React.Component {
     };
     this._watchPosition();
   }
-
   componentDidMount() {
     emitter.addListener('flip', () => this.setState({ isFlipped: false }));
     emitter.addListener('mapFly', obj => {
@@ -144,8 +144,8 @@ class SearchTab extends React.Component {
             address: val.address
           });
           this.setState({ options });
-          getSearchRealtyAction(options);
-          getMapRealtyAction(options);
+          // getSearchRealtyAction(options);
+          // getMapRealtyAction(options);
           emitter.emit('mapFly', {
             lat: val.latitude,
             lng: val.longitude
@@ -201,6 +201,27 @@ class SearchTab extends React.Component {
       this.props.navigation.navigate('HistoryTab');
     }
   };
+  _listenDataChange = options => {
+    const state = Object.assign({}, this.state.options);
+    const new_data = Object.assign({}, state, options);
+    if (!this.convertRealtyTypes(options).type) {
+      delete new_data.type;
+    }
+    if (!options.bedroom) {
+      delete new_data.bedroom;
+    }
+    if (!options.price) {
+      delete new_data.price;
+    }
+    if (JSON.stringify(new_data) !== JSON.stringify(this.state.options)) {
+      getSearchRealtyAction(this.convertRealtyTypes(new_data));
+      refreshMapRealtyAction(this.convertRealtyTypes(new_data));
+      this.setState({ options: new_data });
+      console.log('fetch');
+    } else {
+      console.log('nothing');
+    }
+  };
 
   render() {
     const { searchRealty, mapRealty, navigation, auth, history } = this.props;
@@ -222,7 +243,23 @@ class SearchTab extends React.Component {
           )}
           clearAddress={this._clearText}
         />
-        <View style={{ flex: 1 }}>
+        {!this.state.isFlipped && (
+          <TabFilter
+            dataFilter={this.state.options}
+            onFilterPress={this._onFilterPress}
+            listenDataChange={this._listenDataChange}
+          />
+        )}
+        <View
+          style={{
+            flex: 1,
+            position: 'absolute',
+            top: 70,
+            left: 0,
+            right: 0,
+            bottom: 0
+          }}
+        >
           <FlipView
             style={{ flex: 1 }}
             front={

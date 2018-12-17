@@ -8,8 +8,10 @@ project.ext.react = [
         //for linux
         // nodeExecutableAndArgs : ["/usr/local/bin/node"],
         //for mac os
-        nodeExecutableAndArgs: ["/Users/dfm-engineering/.nvm/versions/node/v8.11.3/bin/node"]
-
+        nodeExecutableAndArgs: ["/Users/dfm-engineering/.nvm/versions/node/v8.11.3/bin/node"],
+        // build release
+    bundleInRelease : true,
+    resourcesDirRelease : "src/release/res"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"

@@ -24,11 +24,11 @@ class TabFilter extends React.Component {
         { id: 3, name: strings.bedroom, value: 'any' }
       ],
       bedArr: [
-        { id: 0, value: '0+' },
-        { id: 1, value: '1+' },
-        { id: 2, value: '2+' },
-        { id: 3, value: '3+' },
-        { id: 4, value: '4+' },
+        { id: 0, value: '-' },
+        { id: 1, value: '1' },
+        { id: 2, value: '2' },
+        { id: 3, value: '3' },
+        { id: 4, value: '4' },
         { id: 5, value: '5+' }
       ],
       checkId: null,
@@ -56,10 +56,16 @@ class TabFilter extends React.Component {
           Object.assign(new_arr[0], {
             value: data.length > 0 ? data[0].name : 'any'
           });
+          Object.assign(new_arr[2], {
+            value: dataConvert.bedroom
+              ? this.state.bedArr[dataConvert.bedroom].value
+              : 'any'
+          });
+
           const newPrice = dataFilter.price
             ? dataFilter.price.split(',').map(Number)
             : [];
-          Object.assign(new_arr[1], {
+          Object.assign(new_state.bedArr, {
             value:
               newPrice[0] === 0
                 ? `~ ${newPrice[1]} tỉ`
@@ -68,7 +74,8 @@ class TabFilter extends React.Component {
           this.setState({
             checkIdProject: parseInt(dataConvert.type, 0),
             arr: new_arr,
-            priceRange: newPrice
+            priceRange: newPrice,
+            checkBedId: dataConvert.bedroom ? dataConvert.bedroom : null
           });
         } else {
           const new_state = Object.assign({}, this.state);
@@ -79,9 +86,13 @@ class TabFilter extends React.Component {
           Object.assign(new_arr[1], {
             value: 'any'
           });
+          Object.assign(new_arr[2], {
+            value: 'any'
+          });
           this.setState({
             checkIdProject: null,
-            arr: new_arr
+            arr: new_arr,
+            checkBedId: null
           });
         }
       }
@@ -89,18 +100,25 @@ class TabFilter extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (
-      this.props.dataFilter !== nextProps.dataFilter ||
-      this.state !== nextState
-    ) {
-      // const dataOptions = Object.assign({}, options);
-      // const data = dataOptions.data.projectTypes.filter(
-      //   item => item.id === nextProps.dataFilter.type
-      // );
-
-      // Object.assign(this.state.arr[0], {
-      //   value: data.length > 0 ? data[0].name : 'any'
-      // });
+    if (this.state !== nextState) {
+      const options = Object.assign({});
+      if (nextState.arr[1].value !== 'any') {
+        Object.assign(options, {
+          price:
+            nextState.arr[1].value !== 'any'
+              ? `${this.state.priceRange[0]}, ${this.state.priceRange[1]}`
+              : null
+        });
+      }
+      Object.assign(options, {
+        type: nextState.checkIdProject
+          ? `${nextState.checkIdProject - 1}`
+          : null
+      });
+      if (nextState.checkBedId) {
+        Object.assign(options, { bedroom: nextState.checkBedId });
+      }
+      this.props.listenDataChange(options);
       return true;
     }
     return false;
@@ -109,7 +127,9 @@ class TabFilter extends React.Component {
   componentWillUnmount() {
     this._changeFilterTab.remove();
   }
-
+  _onFilterPress = () => {
+    this.props.onFilterPress();
+  };
   convertRealtyTypes = info => {
     const { options } = this.props;
     const data = Object.assign({}, info);
@@ -124,8 +144,9 @@ class TabFilter extends React.Component {
   _keyExtractor = item => item.id.toString();
   _checkId = item => {
     if (item.id === this.state.checkId) {
-      this._translate(0);
       this.setState({ checkId: null });
+      this._translate(0);
+      // this.setState({ checkId: null });
     } else {
       this._translate(1);
       this.setState({ checkId: item.id });
@@ -141,9 +162,6 @@ class TabFilter extends React.Component {
     if (item.id === this.state.checkIdProject) {
       this.setState({ checkIdProject: null });
       this.state.arr[0].value = 'any';
-      // this.setState({
-      //   arr: this.state.arr
-      // });
     } else {
       const dataProject = options.data.realtyTypes.filter(
         realtyTypes => realtyTypes.id === item.id
@@ -162,7 +180,7 @@ class TabFilter extends React.Component {
       });
     }
   };
-  _translate = value => {
+  _translate = (value, callback) => {
     if (_ios) {
       Animated.timing(this.state.translateY, {
         toValue: value,
@@ -187,7 +205,9 @@ class TabFilter extends React.Component {
         toValue: value,
         duration: 400,
         useNativeDriver: true
-      }).start(() => this.setState({ flexible: false }));
+      }).start(() => {
+        this.setState({ flexible: false });
+      });
     }
   };
   // _anim = (value, callback = () => {}) => {
@@ -222,8 +242,13 @@ class TabFilter extends React.Component {
     );
   };
   _closeModal = () => {
-    this.setState({ checkId: null });
-    this._translate(0);
+    Animated.timing(this.state.translateY, {
+      toValue: 0,
+      duration: 400,
+      useNativeDriver: true
+    }).start(() => {
+      this.setState({ checkId: null });
+    });
   };
 
   _valueSliderChange = data => {
@@ -236,13 +261,32 @@ class TabFilter extends React.Component {
       arr: new_arr
     });
   };
+
+  _checkIdBedRoom = item => {
+    const new_state = Object.assign({}, this.state);
+    const new_arr = new_state.arr;
+    if (item.id === this.state.checkBedId) {
+      Object.assign(new_arr[2], {
+        value: 'any'
+      });
+      this.setState({
+        checkBedId: null,
+        arr: new_arr
+      });
+    } else {
+      Object.assign(new_arr[2], {
+        value: this.state.bedArr[item.id].value
+      });
+      this.setState({ checkBedId: item.id, arr: new_arr });
+    }
+  };
   _renderFilterData = () => {
     const { options } = this.props;
     const { bedArr, checkBedId } = this.state;
     switch (this.state.checkId) {
       case 1:
         return (
-          <View>
+          <View style={{ flex: 1 }}>
             {options.data.realtyTypes.map(item => {
               return (
                 <TouchableOpacity
@@ -261,14 +305,6 @@ class TabFilter extends React.Component {
                 </TouchableOpacity>
               );
             })}
-            <TouchableOpacity
-              style={styles.buttonDoneStyle}
-              onPress={this._closeModal}
-            >
-              <Text style={[styles.projectItemStyle, styles.buttonText]}>
-                {strings.done}
-              </Text>
-            </TouchableOpacity>
           </View>
         );
       case 2:
@@ -302,7 +338,7 @@ class TabFilter extends React.Component {
             {bedArr.map(item => {
               return (
                 <TouchableOpacity
-                  onPress={() => this.setState({ checkBedId: item.id })}
+                  onPress={() => this._checkIdBedRoom(item)}
                   key={item.id}
                   style={[
                     styles.wrapperBedItem,
@@ -351,7 +387,7 @@ class TabFilter extends React.Component {
             horizontal
             ListFooterComponent={() => (
               <TouchableOpacity
-                onPress={() => alert('go filter')}
+                onPress={this._onFilterPress}
                 style={[styles.wrapperItem, { marginLeft: 5 }]}
               >
                 <Text style={styles.textItem}>{strings.filter}</Text>
@@ -364,8 +400,19 @@ class TabFilter extends React.Component {
 
         <Animated.View
           style={[styles.modalStyle, { transform: [{ translateY }] }]}
+          ref={abc => {
+            this.abc = abc;
+          }}
         >
           {this._renderFilterData()}
+          <TouchableOpacity
+            style={styles.buttonDoneStyle}
+            onPress={this._closeModal}
+          >
+            <Text style={[styles.projectItemStyle, styles.buttonText]}>
+              {strings.done}
+            </Text>
+          </TouchableOpacity>
         </Animated.View>
       </Animated.View>
     );

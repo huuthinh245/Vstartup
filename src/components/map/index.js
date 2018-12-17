@@ -351,7 +351,10 @@ class Map extends React.Component {
     const pointColor = [0, 2].indexOf(mapType) > -1 ? 'rgb(0,122,255)' : '#fff';
     return (
       <View style={styles.main}>
-        <TabFilter dataFilter={this.props.options} />
+        {/* <TabFilter
+          dataFilter={this.props.options}
+          navigation={this.props.navigation}
+        /> */}
         <MapView
           ref={map => {
             this.map = map;
@@ -365,7 +368,7 @@ class Map extends React.Component {
           }}
           showsUserLocation
           loadingEnabled
-          zoomControlEnabled
+          // zoomControlEnabled
           mapType={types[this.state.mapType]}
           onMarkerPress={this._onMarkerPress}
           onPress={this._onMapPress}
