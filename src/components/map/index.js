@@ -5,23 +5,21 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import Awesome from 'react-native-vector-icons/FontAwesome';
 import FastImage from 'react-native-fast-image';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Carousel from 'react-native-snap-carousel';
+import _ from 'lodash';
 import emitter from '../../emitter';
 
 import * as routes from '../../routes/routes';
-import {
-  likeRealtyAction,
-  unlikeRealtyAction
-} from '../../redux/realtyDetail/actions';
+import { likeRealtyAction, unlikeRealtyAction } from '../../redux/realtyDetail/actions';
 import { _dims, responsiveFontSize, _ios } from '../../utils/constants';
 import { getMapRealtyAction } from '../../redux/mapRealty/actions';
-import TabFilter from '../../components/TabFilter';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -29,12 +27,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const borderRadius = 5;
-const types = [
-  'hybrid',
-  _ios ? 'mutedStandard' : 'terrain',
-  'satellite',
-  'standard'
-];
+const types = ['hybrid', _ios ? 'mutedStandard' : 'terrain', 'satellite', 'standard'];
 
 const styles = StyleSheet.create({
   main: {
@@ -222,6 +215,10 @@ class Map extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    clearTimeout(this._timeOut);
+  }
+
   _toggleCarousel = toValue => {
     Animated.timing(this.carouselBottom, {
       toValue,
@@ -257,8 +254,10 @@ class Map extends React.Component {
     this.setState({ currentMarkerSelectedId: id });
     const index = this.props.data.findIndex(i => `${i.id}` === id);
     // this.slider.scrollBy(index, true);
-    this._carousel.snapToItem(index, true);
     this._toggleCarousel(1);
+    this._timeOut = setTimeout(() => {
+      this._carousel.snapToItem(index, true);
+    }, 400);
   };
 
   _goToDetail = item => {
@@ -267,11 +266,7 @@ class Map extends React.Component {
 
   _renderCarouselItem = ({ item }) => {
     return (
-      <TouchableOpacity
-        onPress={() => this._goToDetail(item)}
-        style={styles.slider}
-        key={item.id}
-      >
+      <TouchableOpacity onPress={() => this._goToDetail(item)} style={styles.slider} key={item.id}>
         <FastImage
           style={styles.sliderImage}
           source={{
@@ -279,10 +274,7 @@ class Map extends React.Component {
           }}
           resizeMode={FastImage.resizeMode.cover}
         />
-        <TouchableOpacity
-          onPress={() => this._likeRealty(item)}
-          style={styles.heart}
-        >
+        <TouchableOpacity onPress={() => this._likeRealty(item)} style={styles.heart}>
           <Icon
             name={item.is_favorite ? 'ios-heart' : 'ios-heart-outline'}
             size={24}
@@ -308,13 +300,10 @@ class Map extends React.Component {
   };
 
   _onRegionChangeComplete = coords => {
-    const distance = calculateDistanceFromCoordinate(
-      this.currentCoords,
-      coords
-    );
+    const distance = calculateDistanceFromCoordinate(this.currentCoords, coords);
     this.currentCoords = coords;
 
-    if (distance >= 2) {
+    if (distance >= 2 && !this.props.fetching) {
       const _option = Object.assign({}, this.props.options, {
         lat: coords.latitude,
         lng: coords.longitude
@@ -345,16 +334,11 @@ class Map extends React.Component {
       outputRange: [-(_dims.screenHeight - 100) / 3, 0]
     });
     const { mapType } = this.state;
-    const pointBackground =
-      [0, 2].indexOf(mapType) > -1 ? 'rgba(255,255,255,0.8)' : '#333';
+    const pointBackground = [0, 2].indexOf(mapType) > -1 ? 'rgba(255,255,255,0.8)' : '#333';
 
     const pointColor = [0, 2].indexOf(mapType) > -1 ? 'rgb(0,122,255)' : '#fff';
     return (
       <View style={styles.main}>
-        {/* <TabFilter
-          dataFilter={this.props.options}
-          navigation={this.props.navigation}
-        /> */}
         <MapView
           ref={map => {
             this.map = map;
@@ -390,12 +374,8 @@ class Map extends React.Component {
                   longitude: marker.coordinate.lng
                 }}
               >
-                <View
-                  style={{ backgroundColor: 'mediumpurple', borderRadius: 8 }}
-                >
-                  <Text style={styles.textMarker}>
-                    {`${marker.price} ${marker.price_unit}`}
-                  </Text>
+                <View style={{ backgroundColor: 'mediumpurple', borderRadius: 8 }}>
+                  <Text style={styles.textMarker}>{`${marker.price} ${marker.price_unit}`}</Text>
                 </View>
                 <View
                   style={{
@@ -403,10 +383,7 @@ class Map extends React.Component {
                     justifyContent: 'center'
                   }}
                 >
-                  <Icon
-                    name="ios-play"
-                    style={[styles.iconStyle2, styles.iconHighlight2]}
-                  />
+                  <Icon name="ios-play" style={[styles.iconStyle2, styles.iconHighlight2]} />
                 </View>
 
                 {/* <Icon name="md-pin" style={iconStyle} /> */}
@@ -439,9 +416,7 @@ class Map extends React.Component {
             renderItem={this._renderCarouselItem}
             sliderWidth={_dims.screenWidth}
             itemWidth={_dims.screenWidth * 0.8}
-            onSnapToItem={i =>
-              this.setState({ currentMarkerSelectedId: data[i].id })
-            }
+            onSnapToItem={i => this.setState({ currentMarkerSelectedId: data[i].id })}
           />
         </Animated.View>
       </View>

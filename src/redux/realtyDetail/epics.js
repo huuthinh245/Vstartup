@@ -25,10 +25,7 @@ import * as routes from '../../routes/routes';
 const getRealtyDetail = actions$ =>
   actions$.ofType(GET_REALTY_DETAIL).switchMap(async action => {
     try {
-      const resp = await realtyApi.viewRealty(
-        action.payload.id,
-        action.payload.opts
-      );
+      const resp = await realtyApi.viewRealty(action.payload.id, action.payload.opts);
       return { type: GET_REALTY_DETAIL_SUCCESS, payload: resp.body };
     } catch (error) {
       handleError(error, true);
@@ -73,10 +70,10 @@ const postRealty = (actions$, store) =>
   actions$.ofType(POST_REALTY).switchMap(async action => {
     const resp = await RNFetchBlob.fetch(
       'POST',
-      'https://rems.dfm-engineering.com/api/v1/realty',
+      'https://vishome.com.vn/api/v1/realty',
       {
         Authorization: `Bearer ${action.payload.token}}`,
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data'
       },
       action.payload.data
     );
@@ -113,9 +110,4 @@ const postRealty = (actions$, store) =>
     }
   });
 
-export const realtyDetailEpic = combineEpics(
-  getRealtyDetail,
-  likeRealty,
-  unlikeRealty,
-  postRealty
-);
+export const realtyDetailEpic = combineEpics(getRealtyDetail, likeRealty, unlikeRealty, postRealty);

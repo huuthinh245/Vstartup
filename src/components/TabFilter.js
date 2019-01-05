@@ -36,7 +36,8 @@ class TabFilter extends React.Component {
       checkBedId: null,
       translateY: new Animated.Value(0),
       flexible: false,
-      priceRange: [0, 20]
+      priceRange: [0, 20],
+      moveSlider: false
     };
   }
 
@@ -92,7 +93,8 @@ class TabFilter extends React.Component {
           this.setState({
             checkIdProject: null,
             arr: new_arr,
-            checkBedId: null
+            checkBedId: null,
+            priceRange: [0, 20]
           });
         }
       }
@@ -118,7 +120,9 @@ class TabFilter extends React.Component {
       if (nextState.checkBedId) {
         Object.assign(options, { bedroom: nextState.checkBedId });
       }
-      this.props.listenDataChange(options);
+      if (!nextState.moveSlider) {
+        this.props.listenDataChange(options);
+      }
       return true;
     }
     return false;
@@ -142,7 +146,7 @@ class TabFilter extends React.Component {
   };
 
   _keyExtractor = item => item.id.toString();
-  _checkId = item => {
+  _checkId = item => () => {
     if (item.id === this.state.checkId) {
       this.setState({ checkId: null });
       this._translate(0);
@@ -157,7 +161,7 @@ class TabFilter extends React.Component {
       checkIdProject: item.id
     });
   };
-  _checkIdProject = item => {
+  _checkIdProject = item => () => {
     const { options } = this.props;
     if (item.id === this.state.checkIdProject) {
       this.setState({ checkIdProject: null });
@@ -222,7 +226,7 @@ class TabFilter extends React.Component {
   _renderItem = ({ item }) => {
     return (
       <TouchableOpacity
-        onPress={this._checkId.bind(this, item)}
+        onPress={this._checkId(item)}
         style={[
           styles.wrapperItem,
           this.state.checkId === item.id && {
@@ -258,14 +262,26 @@ class TabFilter extends React.Component {
       value: data[0] === 0 ? `~ ${data[1]} tỉ` : `${data[0]} tỉ ~ ${data[1]} tỉ`
     });
     this.setState({
-      arr: new_arr
+      arr: new_arr,
+      priceRange: data
     });
   };
 
-  _checkIdBedRoom = item => {
+  _onValuesChangeStart = () => {
+    this.setState({
+      moveSlider: true
+    });
+  };
+  _onValuesChangeFinish = () => {
+    this.setState({
+      moveSlider: false
+    });
+  };
+
+  _checkIdBedRoom = item => () => {
     const new_state = Object.assign({}, this.state);
     const new_arr = new_state.arr;
-    if (item.id === this.state.checkBedId) {
+    if (item.id === this.state.checkBedId || item.id === 0) {
       Object.assign(new_arr[2], {
         value: 'any'
       });
@@ -291,7 +307,7 @@ class TabFilter extends React.Component {
               return (
                 <TouchableOpacity
                   key={item.id}
-                  onPress={this._checkIdProject.bind(this, item)}
+                  onPress={this._checkIdProject(item)}
                 >
                   <Text style={styles.projectItemStyle}>{item.name}</Text>
                   {item.id === this.state.checkIdProject && (
@@ -312,7 +328,9 @@ class TabFilter extends React.Component {
           <View style={styles.sliderWrapper}>
             <MultiSlider
               sliderLength={_dims.screenWidth - _dims.defaultPadding * 4}
+              onValuesChangeStart={this._onValuesChangeStart}
               onValuesChange={this._valueSliderChange}
+              onValuesChangeFinish={this._onValuesChangeFinish}
               selectedStyle={styles.selectedStyle}
               unselectedStyle={styles.unselectedStyle}
               values={this.state.priceRange}
@@ -338,7 +356,7 @@ class TabFilter extends React.Component {
             {bedArr.map(item => {
               return (
                 <TouchableOpacity
-                  onPress={() => this._checkIdBedRoom(item)}
+                  onPress={this._checkIdBedRoom(item)}
                   key={item.id}
                   style={[
                     styles.wrapperBedItem,

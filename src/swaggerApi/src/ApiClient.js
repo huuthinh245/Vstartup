@@ -13,7 +13,7 @@
  *
  */
 
-(function (root, factory) {
+(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define(['superagent', 'querystring'], factory);
@@ -46,19 +46,16 @@
     /**
      * The base URL against which to resolve every API call's (relative) path.
      * @type {String}
-     * @default http://rems.dfm-engineering.com/api/v1
+     * @default https://vishome.com.vn/api/v1
      */
-    this.basePath = 'http://rems.dfm-engineering.com/api/v1'.replace(
-      /\/+$/,
-      ''
-    );
+    this.basePath = 'https://vishome.com.vn/api/v1'.replace(/\/+$/, '');
 
     /**
      * The authentication methods to be included for all API calls.
      * @type {Array.<String>}
      */
     this.authentications = {
-      Bearer: { type: 'apiKey', in: 'header', name: 'Authorization' }
+      'Bearer': {type: 'apiKey', 'in': 'header', name: 'Authorization'}
     };
     /**
      * The default HTTP headers to be included for all API calls.
@@ -155,9 +152,7 @@
    * @returns {Boolean} <code>true</code> if <code>contentType</code> represents JSON, otherwise <code>false</code>.
    */
   exports.prototype.isJsonMime = function(contentType) {
-    return Boolean(
-      contentType != null && contentType.match(/^application\/json(;.*)?$/i)
-    );
+    return Boolean(contentType != null && contentType.match(/^application\/json(;.*)?$/i));
   };
 
   /**
@@ -218,11 +213,7 @@
   exports.prototype.normalizeParams = function(params) {
     var newParams = {};
     for (var key in params) {
-      if (
-        params.hasOwnProperty(key) &&
-        params[key] != undefined &&
-        params[key] != null
-      ) {
+      if (params.hasOwnProperty(key) && params[key] != undefined && params[key] != null) {
         var value = params[key];
         if (this.isFileParam(value) || Array.isArray(value)) {
           newParams[key] = value;
@@ -274,10 +265,7 @@
    * @returns {String|Array} A string representation of the supplied collection, using the specified delimiter. Returns
    * <code>param</code> as is if <code>collectionFormat</code> is <code>multi</code>.
    */
-  exports.prototype.buildCollectionParam = function buildCollectionParam(
-    param,
-    collectionFormat
-  ) {
+  exports.prototype.buildCollectionParam = function buildCollectionParam(param, collectionFormat) {
     if (param == null) {
       return null;
     }
@@ -330,7 +318,7 @@
           break;
         case 'oauth2':
           if (auth.accessToken) {
-            request.set({ Authorization: 'Bearer ' + auth.accessToken });
+            request.set({'Authorization': 'Bearer ' + auth.accessToken});
           }
           break;
         default:
@@ -355,12 +343,7 @@
     // Rely on SuperAgent for parsing response body.
     // See http://visionmedia.github.io/superagent/#parsing-response-bodies
     var data = response.body;
-    if (
-      data == null ||
-      (typeof data === 'object' &&
-        typeof data.length === 'undefined' &&
-        !Object.keys(data).length)
-    ) {
+    if (data == null || (typeof data === 'object' && typeof data.length === 'undefined' && !Object.keys(data).length)) {
       // SuperAgent does not always produce a body; use the unparsed response as a fallback
       data = response.text;
     }
@@ -393,21 +376,10 @@
    * @param {module:ApiClient~callApiCallback} callback The callback function.
    * @returns {Object} The SuperAgent request object.
    */
-  exports.prototype.callApi = function callApi(
-    path,
-    httpMethod,
-    pathParams,
-    queryParams,
-    collectionQueryParams,
-    headerParams,
-    formParams,
-    bodyParam,
-    authNames,
-    contentTypes,
-    accepts,
-    returnType,
-    callback
-  ) {
+  exports.prototype.callApi = function callApi(path, httpMethod, pathParams,
+      queryParams, collectionQueryParams, headerParams, formParams, bodyParam, authNames, contentTypes, accepts,
+      returnType, callback) {
+
     var _this = this;
     var url = this.buildUrl(path, pathParams);
     var request = superagent(httpMethod, url);
@@ -424,30 +396,25 @@
           // commas are used as delimiters for the 'csv' collectionFormat so they must not be encoded. We
           // must therefore construct and encode 'csv' collection query parameters manually.
           if (param.value != null) {
-            var value = param.value
-              .map(this.paramToString)
-              .map(encodeURIComponent)
-              .join(',');
-            request.query(encodeURIComponent(key) + '=' + value);
+            var value = param.value.map(this.paramToString).map(encodeURIComponent).join(',');
+            request.query(encodeURIComponent(key) + "=" + value);
           }
         } else {
           // All other collection query parameters should be treated as ordinary query parameters.
-          queryParams[key] = this.buildCollectionParam(
-            param.value,
-            param.collectionFormat
-          );
+          queryParams[key] = this.buildCollectionParam(param.value, param.collectionFormat);
         }
       }
     }
 
     // set query parameters
     if (httpMethod.toUpperCase() === 'GET' && this.cache === false) {
-      queryParams['_'] = new Date().getTime();
+        queryParams['_'] = new Date().getTime();
     }
     request.query(this.normalizeParams(queryParams));
 
     // set header parameters
     request.set(this.defaultHeaders).set(this.normalizeParams(headerParams));
+
 
     // set requestAgent if it is set by user
     if (this.requestAgent) {
@@ -460,7 +427,7 @@
     var contentType = this.jsonPreferredMime(contentTypes);
     if (contentType) {
       // Issue with superagent and multipart/form-data (https://github.com/visionmedia/superagent/issues/746)
-      if (contentType != 'multipart/form-data') {
+      if(contentType != 'multipart/form-data') {
         request.type(contentType);
       }
     } else if (!request.header['Content-Type']) {
@@ -497,13 +464,15 @@
     }
 
     // Attach previously saved cookies, if enabled
-    if (this.enableCookies) {
+    if (this.enableCookies){
       if (typeof window === 'undefined') {
         this.agent.attachCookies(request);
-      } else {
+      }
+      else {
         request.withCredentials();
       }
     }
+
 
     // request.end(function(error, response) {
     //   if (callback) {
@@ -521,6 +490,7 @@
     //     callback(error, data, response);
     //   }
     // });
+
     return request;
   };
 
@@ -543,7 +513,8 @@
    * @returns An instance of the specified type or null or undefined if data is null or undefined.
    */
   exports.convertToType = function(data, type) {
-    if (data === null || data === undefined) return data;
+    if (data === null || data === undefined)
+      return data
 
     switch (type) {
       case 'Boolean':
@@ -557,7 +528,7 @@
       case 'Date':
         return this.parseDate(String(data));
       case 'Blob':
-        return data;
+      	return data;
       default:
         if (type === Object) {
           // generic object, return directly

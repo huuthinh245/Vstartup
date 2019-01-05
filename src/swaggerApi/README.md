@@ -115,7 +115,7 @@ api.listAgency(opts, callback);
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://rems.dfm-engineering.com/api/v1*
+All URIs are relative to *https://vishome.com.vn/api/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------

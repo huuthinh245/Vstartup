@@ -23,7 +23,7 @@ const getMapRealtyEpic = actions$ =>
         payload: resp.body
       };
     } catch (error) {
-      handleError(error, true);
+      // handleError(error, true);
       return { type: GET_MAP_REALTY_FAILURE, payload: error };
     }
   });

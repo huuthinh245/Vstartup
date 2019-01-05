@@ -202,6 +202,7 @@ class SearchTab extends React.Component {
     }
   };
   _listenDataChange = options => {
+    console.log(options);
     const state = Object.assign({}, this.state.options);
     const new_data = Object.assign({}, state, options);
     if (!this.convertRealtyTypes(options).type) {

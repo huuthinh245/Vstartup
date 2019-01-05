@@ -190,7 +190,7 @@ const updateAvatarEpic = actions$ =>
   actions$.ofType(UPDATE_AVATAR).switchMap(async action => {
     const resp = await RNFetchBlob.fetch(
       'POST',
-      'https://rems.dfm-engineering.com/api/v1/user/avatar',
+      'https://vishome.com.vn/api/v1/user/avatar',
       {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${action.payload.token}}`
